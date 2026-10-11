@@ -148,6 +148,8 @@ class AppPreferences internal constructor(
     val protectionLevel: Flow<String> get() = filter.protectionLevel
     val safeSearchEnabled: Flow<Boolean> get() = filter.safeSearchEnabled
     val youtubeRestrictedMode: Flow<Boolean> get() = filter.youtubeRestrictedMode
+    val geoIpCustomUrl: Flow<String> get() = filter.geoIpCustomUrl
+    val geoIpAutoUpdate: Flow<Boolean> get() = filter.geoIpAutoUpdate
 
     // ── WireGuard Flows ──────────────────────────────────────────────────
     val routingMode: Flow<String> get() = wireguard.routingMode
@@ -226,6 +228,8 @@ class AppPreferences internal constructor(
     suspend fun setProtectionLevel(level: String) = filter.setProtectionLevel(level)
     suspend fun setSafeSearchEnabled(enabled: Boolean) = filter.setSafeSearchEnabled(enabled)
     suspend fun setYoutubeRestrictedMode(enabled: Boolean) = filter.setYoutubeRestrictedMode(enabled)
+    suspend fun setGeoIpCustomUrl(url: String) = filter.setGeoIpCustomUrl(url)
+    suspend fun setGeoIpAutoUpdate(enabled: Boolean) = filter.setGeoIpAutoUpdate(enabled)
 
     suspend fun setRoutingMode(mode: String) {
         wireguard.setRoutingMode(mode)

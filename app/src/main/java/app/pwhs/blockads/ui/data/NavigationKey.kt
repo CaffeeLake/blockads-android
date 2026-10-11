@@ -79,3 +79,6 @@ data object ElementRulesKey : NavKey
 
 @Serializable
 data object CertInstallationWizardKey : NavKey
+
+@Serializable
+data object GeoIpKey : NavKey

@@ -60,7 +60,9 @@ import app.pwhs.blockads.ui.data.FireWallKey
 import app.pwhs.blockads.ui.data.HomeKey
 import app.pwhs.blockads.ui.data.HttpsFilteringKey
 import app.pwhs.blockads.ui.data.CertInstallationWizardKey
+import app.pwhs.blockads.ui.data.GeoIpKey
 import app.pwhs.blockads.ui.httpsfiltering.wizard.CertInstallationWizardScreen
+import app.pwhs.blockads.ui.settings.geoip.GeoIpScreen
 import app.pwhs.blockads.ui.data.LogsKey
 import app.pwhs.blockads.ui.data.ProfileKey
 import app.pwhs.blockads.ui.data.SettingsKey
@@ -291,6 +293,10 @@ fun HomeApp(
                         onNavigateToDNSProvider = {
                             showBottomBar = false
                             settingsStack.add(DnsProviderKey)
+                        },
+                        onNavigateToGeoIp = {
+                            showBottomBar = false
+                            settingsStack.add(GeoIpKey)
                         }
                     )
                 }
@@ -419,6 +425,13 @@ fun HomeApp(
                 }
                 entry<ElementRulesKey> {
                     ElementRulesScreen(
+                        onNavigateBack = {
+                            safePop(currentBackStack)
+                        }
+                    )
+                }
+                entry<GeoIpKey> {
+                    GeoIpScreen(
                         onNavigateBack = {
                             safePop(currentBackStack)
                         }

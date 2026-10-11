@@ -305,5 +305,30 @@
     <string name="rule_docs_matches_label">Khớp với:</string>
     <string name="rule_docs_not_matches_label">Không khớp:</string>
     <string name="rule_docs_usage_label">Phù hợp khi:</string>
+
+    <!-- GeoIP Management -->
+    <string name="settings_geoip_title">Cơ sở dữ liệu GeoIP</string>
+    <string name="settings_geoip_subtitle">Dữ liệu vị trí IP cho thống kê lưu lượng và quy tắc định tuyến</string>
+    <string name="geoip_status_ready">Đã sẵn sàng (%s dải IP)</string>
+    <string name="geoip_status_empty">Chưa tải về</string>
+    <string name="geoip_status_downloading">Đang cập nhật...</string>
+    <string name="geoip_status_importing">Đang nhập...</string>
+    <string name="geoip_records_count">%s dải IP</string>
+    <string name="geoip_size_label">Dung lượng: %s</string>
+    <string name="geoip_last_updated">Cập nhật lần cuối: %s</string>
+    <string name="geoip_never_updated">Chưa cập nhật</string>
+    <string name="geoip_action_update">Cập nhật từ máy chủ</string>
+    <string name="geoip_action_import">Nhập từ tệp tin (.bin / .bin.gz)</string>
+    <string name="geoip_action_reset">Đặt lại về mặc định</string>
+    <string name="geoip_auto_update_title">Tự động cập nhật hàng tuần</string>
+    <string name="geoip_auto_update_desc">Tự động kiểm tra và cập nhật cơ sở dữ liệu nền định kỳ hàng tuần</string>
+    <string name="geoip_custom_url_title">URL nguồn tùy chỉnh</string>
+    <string name="geoip_custom_url_desc">Để trống để sử dụng máy chủ mirror phát hành chính thức</string>
+    <string name="geoip_custom_url_dialog_title">Chỉnh sửa URL nguồn</string>
+    <string name="geoip_custom_url_hint">https://example.com/geoip_ipv4.bin.gz</string>
+    <string name="geoip_source_credit">Nguồn: sapics/ip-location-db (CC0 1.0 Universal)</string>
+    <string name="geoip_import_success">Đã nhập thành công %s dải IP</string>
+    <string name="geoip_import_invalid">Tệp cơ sở dữ liệu GeoIP không đúng định dạng</string>
+    <string name="geoip_update_success">Đã cập nhật cơ sở dữ liệu GeoIP thành công</string>
 </resources>
 

@@ -55,6 +55,7 @@ fun SettingsScreen(
     onNavigateToWireGuardImport: () -> Unit = { },
     onNavigateToHttpsFiltering: () -> Unit = { },
     onNavigateToDNSProvider: () -> Unit = { },
+    onNavigateToGeoIp: () -> Unit = { },
 ) {
     val autoReconnect by viewModel.autoReconnect.collectAsStateWithLifecycle()
     val autoUpdateEnabled by viewModel.autoUpdateEnabled.collectAsStateWithLifecycle()
@@ -149,7 +150,8 @@ fun SettingsScreen(
                 onSetAutoUpdateWifiOnly = { viewModel.setAutoUpdateWifiOnly(it) },
                 onSetAutoUpdateFrequency = { viewModel.setAutoUpdateFrequency(it) },
                 onSetAutoUpdateNotification = { viewModel.setAutoUpdateNotification(it) },
-                onSetAutoUpdateEnable = { viewModel.setAutoUpdateEnabled(it) }
+                onSetAutoUpdateEnable = { viewModel.setAutoUpdateEnabled(it) },
+                onNavigateToGeoIp = onNavigateToGeoIp
             )
 
             Spacer(modifier = Modifier.height(20.dp))

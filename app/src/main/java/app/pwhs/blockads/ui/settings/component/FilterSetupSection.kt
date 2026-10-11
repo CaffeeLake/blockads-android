@@ -30,6 +30,7 @@ fun FilterSetupSection(
     onSetAutoUpdateFrequency: (String) -> Unit = {},
     onSetAutoUpdateNotification: (String) -> Unit = {},
     onSetAutoUpdateEnable: (Boolean) -> Unit = {},
+    onNavigateToGeoIp: () -> Unit = {},
 ) {
     var showFrequencyDialog by remember { mutableStateOf(false) }
     var showNotificationDialog by remember { mutableStateOf(false) }
@@ -100,9 +101,19 @@ fun FilterSetupSection(
                         iconTint = Color(0xFF059669),
                         title = stringResource(R.string.settings_auto_update_notification),
                         desc = notificationDesc,
-                        onClick = { showNotificationDialog = true }
                     )
                 }
+
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
+
+                // GeoIP Database Management
+                SettingItem(
+                    iconPainter = painterResource(R.drawable.ic_settings_network_delay),
+                    iconTint = Color(0xFF2563EB),
+                    title = stringResource(R.string.settings_geoip_title),
+                    desc = stringResource(R.string.settings_geoip_subtitle),
+                    onClick = onNavigateToGeoIp
+                )
             }
         }
     }

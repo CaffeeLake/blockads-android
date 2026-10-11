@@ -21,6 +21,8 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_SAFE_SEARCH_ENABLED = booleanPreferencesKey("safe_search_enabled")
         val KEY_YOUTUBE_RESTRICTED_MODE = booleanPreferencesKey("youtube_restricted_mode")
         val KEY_STARRED_FILTER_URLS = stringSetPreferencesKey("starred_filter_urls")
+        val KEY_GEOIP_CUSTOM_URL = stringPreferencesKey("geoip_custom_url")
+        val KEY_GEOIP_AUTO_UPDATE = booleanPreferencesKey("geoip_auto_update")
 
         const val DEFAULT_FILTER_URL =
             "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
@@ -117,6 +119,26 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
     suspend fun setYoutubeRestrictedMode(enabled: Boolean) {
         dataStore.edit { prefs ->
             prefs[KEY_YOUTUBE_RESTRICTED_MODE] = enabled
+        }
+    }
+
+    val geoIpCustomUrl: Flow<String> = dataStore.data.map { prefs ->
+        prefs[KEY_GEOIP_CUSTOM_URL] ?: ""
+    }
+
+    val geoIpAutoUpdate: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_GEOIP_AUTO_UPDATE] ?: true
+    }
+
+    suspend fun setGeoIpCustomUrl(url: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_GEOIP_CUSTOM_URL] = url
+        }
+    }
+
+    suspend fun setGeoIpAutoUpdate(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[KEY_GEOIP_AUTO_UPDATE] = enabled
         }
     }
 

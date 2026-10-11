@@ -345,5 +345,30 @@
     <string name="rule_docs_matches_label">Matches:</string>
     <string name="rule_docs_not_matches_label">Doesn\'t match:</string>
     <string name="rule_docs_usage_label">Best for:</string>
+
+    <!-- GeoIP Management -->
+    <string name="settings_geoip_title">GeoIP Database</string>
+    <string name="settings_geoip_subtitle">IP location lookup for destination analytics &amp; routing rules</string>
+    <string name="geoip_status_ready">Ready (%s records)</string>
+    <string name="geoip_status_empty">Not downloaded</string>
+    <string name="geoip_status_downloading">Updating...</string>
+    <string name="geoip_status_importing">Importing...</string>
+    <string name="geoip_records_count">%s IP ranges</string>
+    <string name="geoip_size_label">File size: %s</string>
+    <string name="geoip_last_updated">Last updated: %s</string>
+    <string name="geoip_never_updated">Never updated</string>
+    <string name="geoip_action_update">Update from Remote</string>
+    <string name="geoip_action_import">Import Local File (.bin / .bin.gz)</string>
+    <string name="geoip_action_reset">Reset to Default</string>
+    <string name="geoip_auto_update_title">Weekly Auto-Update</string>
+    <string name="geoip_auto_update_desc">Automatically check and update the database weekly in the background</string>
+    <string name="geoip_custom_url_title">Custom Source URL</string>
+    <string name="geoip_custom_url_desc">Leave empty to use the official release mirror</string>
+    <string name="geoip_custom_url_dialog_title">Edit Source URL</string>
+    <string name="geoip_custom_url_hint">https://example.com/geoip_ipv4.bin.gz</string>
+    <string name="geoip_source_credit">Source: sapics/ip-location-db (CC0 1.0 Universal)</string>
+    <string name="geoip_import_success">Imported %s IP ranges successfully</string>
+    <string name="geoip_import_invalid">Invalid GeoIP database file</string>
+    <string name="geoip_update_success">GeoIP database updated successfully</string>
 </resources>
 

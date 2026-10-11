@@ -120,4 +120,25 @@ class GeoIpManagerTest {
         assertTrue(result.isSuccess)
         assertFalse(result.getOrNull() == true) // false indicates skipped
     }
+
+    @Test
+    fun `importFromStream accepts valid gzipped custom database`() = runTest {
+        val sampleBytes = createSampleGeoIpBytes()
+        val gzipped = gzip(sampleBytes)
+
+        val client = HttpClient(MockEngine) {
+            engine { addHandler { respond("OK") } }
+        }
+
+        val manager = GeoIpManager(context, client)
+        val result = manager.importFromStream(gzipped.inputStream())
+
+        assertTrue(result.isSuccess)
+        val count = result.getOrNull() ?: 0
+        assertTrue(count == 200)
+
+        val info = manager.getDatabaseInfo()
+        assertTrue(info.isAvailable)
+        assertTrue(info.recordCount == 200)
+    }
 }

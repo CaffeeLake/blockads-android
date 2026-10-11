@@ -9,6 +9,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import app.pwhs.blockads.data.geoip.GeoIpManager
+import kotlinx.coroutines.flow.first
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -23,6 +24,7 @@ class GeoIpUpdateWorker(
 ) : CoroutineWorker(context, params), KoinComponent {
 
     private val geoIpManager: GeoIpManager by inject()
+    private val appPreferences: app.pwhs.blockads.data.datastore.AppPreferences by inject()
 
     companion object {
         const val WORK_NAME = "geoip_update_work"
@@ -51,7 +53,16 @@ class GeoIpUpdateWorker(
     override suspend fun doWork(): Result {
         return try {
             Timber.d("Starting background GeoIP database update work")
-            val result = geoIpManager.checkAndUpdate(force = false)
+            val autoUpdate = appPreferences.geoIpAutoUpdate.first()
+            if (!autoUpdate) {
+                Timber.d("GeoIP auto-update is disabled by user, skipping")
+                return Result.success()
+            }
+
+            val customUrl = appPreferences.geoIpCustomUrl.first()
+                .trim().takeIf { it.isNotEmpty() }
+
+            val result = geoIpManager.checkAndUpdate(customUrl = customUrl, force = false)
             if (result.isSuccess) {
                 Result.success()
             } else {

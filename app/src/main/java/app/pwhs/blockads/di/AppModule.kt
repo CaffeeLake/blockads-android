@@ -304,5 +304,12 @@ val appModule = module {
             elementRuleDao = get()
         )
     }
+    viewModel {
+        app.pwhs.blockads.ui.settings.geoip.GeoIpViewModel(
+            application = androidApplication(),
+            geoIpManager = get(),
+            appPreferences = get()
+        )
+    }
 }
 
