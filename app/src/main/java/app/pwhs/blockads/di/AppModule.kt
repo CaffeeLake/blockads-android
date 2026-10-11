@@ -231,7 +231,8 @@ val appModule = module {
             appPreferences = get(),
             customDnsRuleDao = get(),
             whitelistDomainDao = get(),
-            filterListDao = get()
+            filterListDao = get(),
+            firewallRuleDao = get()
         )
     }
     viewModel {

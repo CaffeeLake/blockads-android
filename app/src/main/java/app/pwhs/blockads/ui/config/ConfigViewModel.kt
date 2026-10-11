@@ -24,12 +24,14 @@ import timber.log.Timber
 
 import app.pwhs.blockads.data.dao.CustomDnsRuleDao
 import app.pwhs.blockads.data.dao.FilterListDao
+import app.pwhs.blockads.data.dao.FirewallRuleDao
 import app.pwhs.blockads.data.dao.WhitelistDomainDao
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
 import app.pwhs.blockads.data.entities.DnsProviders
 import app.pwhs.blockads.utils.ConfigRuleHelper
 import app.pwhs.blockads.utils.ProfileMigrationHelper
+import app.pwhs.blockads.utils.ProfileUnifiedConfigHelper
 import kotlinx.coroutines.flow.first
 
 class ConfigViewModel(
@@ -40,6 +42,7 @@ class ConfigViewModel(
     private val customDnsRuleDao: CustomDnsRuleDao? = null,
     private val whitelistDomainDao: WhitelistDomainDao? = null,
     private val filterListDao: FilterListDao? = null,
+    private val firewallRuleDao: FirewallRuleDao? = null,
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(ConfigUiState(isLoading = true))
@@ -152,7 +155,19 @@ class ConfigViewModel(
     private fun selectActive(configId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             configDao.setActive(configId)
-            configDao.getById(configId)?.let { syncProfileDnsToAppPrefs(it.content) }
+            configDao.getById(configId)?.let { profile ->
+                if (appPreferences != null) {
+                    ProfileUnifiedConfigHelper.applyProfileToSystem(
+                        content = profile.content,
+                        appPrefs = appPreferences,
+                        whitelistDomainDao = whitelistDomainDao,
+                        customDnsRuleDao = customDnsRuleDao,
+                        filterListDao = filterListDao,
+                        firewallRuleDao = firewallRuleDao,
+                        context = getApplication()
+                    )
+                }
+            }
             _effects.emit(ConfigUiEffect.ShowToast(R.string.config_activated))
         }
     }
@@ -220,8 +235,16 @@ class ConfigViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val existing = configDao.getById(configId) ?: return@launch
             configDao.update(existing.copy(name = name.trim(), content = content))
-            if (existing.isActive) {
-                syncProfileDnsToAppPrefs(content)
+            if (existing.isActive && appPreferences != null) {
+                ProfileUnifiedConfigHelper.applyProfileToSystem(
+                    content = content,
+                    appPrefs = appPreferences,
+                    whitelistDomainDao = whitelistDomainDao,
+                    customDnsRuleDao = customDnsRuleDao,
+                    filterListDao = filterListDao,
+                    firewallRuleDao = firewallRuleDao,
+                    context = getApplication()
+                )
             }
             _uiState.update { it.copy(editingConfig = null) }
             _effects.emit(ConfigUiEffect.ShowToast(R.string.config_updated))
@@ -273,15 +296,38 @@ class ConfigViewModel(
             try {
                 withContext(Dispatchers.IO) {
                     val dnsId = appPreferences?.dnsProviderId?.first()
+                    val upstream = appPreferences?.upstreamDns?.first() ?: ""
+                    val fallback = appPreferences?.fallbackDns?.first() ?: ""
                     val customRules = customDnsRuleDao?.getAll() ?: emptyList()
                     val whitelist = whitelistDomainDao?.getAll()?.first() ?: emptyList()
                     val filterLists = filterListDao?.getEnabled() ?: emptyList()
+                    val whitelistedApps = appPreferences?.getWhitelistedAppsSnapshot() ?: emptySet()
+                    val firewallRules = firewallRuleDao?.getEnabledRules() ?: emptyList()
+                    val autoReconnect = appPreferences?.autoReconnect?.first() ?: true
+                    val safeSearch = appPreferences?.safeSearchEnabled?.first() ?: false
+                    val youtubeRestricted = appPreferences?.youtubeRestrictedMode?.first() ?: false
+                    val firewallEnabled = appPreferences?.firewallEnabled?.first() ?: false
+                    val dailySummary = appPreferences?.dailySummaryEnabled?.first() ?: true
+                    val milestoneNotifs = appPreferences?.milestoneNotificationsEnabled?.first() ?: false
+                    val themeMode = appPreferences?.themeMode?.first() ?: AppPreferences.THEME_SYSTEM
+                    val appLanguage = appPreferences?.appLanguage?.first() ?: AppPreferences.LANGUAGE_SYSTEM
 
-                    val content = ProfileMigrationHelper.generateProfileFromCurrentSettings(
+                    val content = ProfileUnifiedConfigHelper.generateFullProfile(
                         selectedDnsProviderId = dnsId,
+                        customDnsIps = listOf(upstream, fallback),
                         customRules = customRules,
                         whitelistDomains = whitelist,
-                        enabledFilterLists = filterLists
+                        enabledFilterLists = filterLists,
+                        whitelistedApps = whitelistedApps,
+                        firewallRules = firewallRules,
+                        autoReconnect = autoReconnect,
+                        safeSearchEnabled = safeSearch,
+                        youtubeRestrictedMode = youtubeRestricted,
+                        firewallEnabled = firewallEnabled,
+                        dailySummaryEnabled = dailySummary,
+                        milestoneNotificationsEnabled = milestoneNotifs,
+                        themeMode = themeMode,
+                        appLanguage = appLanguage
                     )
 
                     val profile = ConfigProfile(

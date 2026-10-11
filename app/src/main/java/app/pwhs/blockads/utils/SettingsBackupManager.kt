@@ -36,60 +36,75 @@ class SettingsBackupManager(
     private val filterRepo: FilterListRepository,
 ) {
 
-    private val jsonPretty = Json { prettyPrint = true }
+    private val jsonPretty = Json {
+        prettyPrint = true
+        encodeDefaults = false
+    }
     private val jsonLenient = Json { ignoreUnknownKeys = true }
 
     suspend fun exportBackup(uri: Uri) = withContext(Dispatchers.IO) {
-        val configProfiles = configDao.getAll().map { c ->
-            ConfigProfileBackup(
-                name = c.name,
-                content = c.content,
-                remoteUrl = c.remoteUrl,
-                autoUpdate = c.autoUpdate,
-                isActive = c.isActive,
-                isBuiltIn = c.isBuiltIn,
-                icon = c.icon
+        val currentDnsId = appPrefs.dnsProviderId.first()
+        val currentUpstream = appPrefs.upstreamDns.first()
+        val currentFallback = appPrefs.fallbackDns.first()
+        val customRules = customDnsRuleDao.getAll()
+        val whitelistDomains = whitelistDomainDao.getAll().first()
+        val filterLists = filterListDao.getEnabled()
+        val whitelistedApps = appPrefs.getWhitelistedAppsSnapshot()
+        val firewallRules = firewallRuleDao.getEnabledRules()
+        val autoReconnect = appPrefs.autoReconnect.first()
+        val safeSearch = appPrefs.safeSearchEnabled.first()
+        val youtubeRestricted = appPrefs.youtubeRestrictedMode.first()
+        val firewallEnabled = appPrefs.firewallEnabled.first()
+        val dailySummary = appPrefs.dailySummaryEnabled.first()
+        val milestoneNotifs = appPrefs.milestoneNotificationsEnabled.first()
+        val themeMode = appPrefs.themeMode.first()
+        val appLanguage = appPrefs.appLanguage.first()
+
+        val fullActiveContent = ProfileUnifiedConfigHelper.generateFullProfile(
+            selectedDnsProviderId = currentDnsId,
+            customDnsIps = listOf(currentUpstream, currentFallback),
+            customRules = customRules,
+            whitelistDomains = whitelistDomains,
+            enabledFilterLists = filterLists,
+            whitelistedApps = whitelistedApps,
+            firewallRules = firewallRules,
+            autoReconnect = autoReconnect,
+            safeSearchEnabled = safeSearch,
+            youtubeRestrictedMode = youtubeRestricted,
+            firewallEnabled = firewallEnabled,
+            dailySummaryEnabled = dailySummary,
+            milestoneNotificationsEnabled = milestoneNotifs,
+            themeMode = themeMode,
+            appLanguage = appLanguage
+        )
+
+        val existingProfiles = configDao.getAll()
+        val configProfiles = if (existingProfiles.isEmpty()) {
+            listOf(
+                ConfigProfileBackup(
+                    name = ConfigProfile.DEFAULT_NAME,
+                    content = fullActiveContent,
+                    isActive = true,
+                    isBuiltIn = true
+                )
             )
+        } else {
+            val active = configDao.getActive() ?: existingProfiles.first()
+            existingProfiles.map { c ->
+                ConfigProfileBackup(
+                    name = c.name,
+                    content = if (c.id == active.id) fullActiveContent else c.content,
+                    remoteUrl = c.remoteUrl,
+                    autoUpdate = c.autoUpdate,
+                    isActive = c.isActive,
+                    isBuiltIn = c.isBuiltIn,
+                    icon = c.icon
+                )
+            }
         }
 
         val backup = SettingsBackup(
-            upstreamDns = appPrefs.upstreamDns.first(),
-            fallbackDns = appPrefs.fallbackDns.first(),
-            autoReconnect = appPrefs.autoReconnect.first(),
-            themeMode = appPrefs.themeMode.first(),
-            appLanguage = appPrefs.appLanguage.first(),
-            safeSearchEnabled = appPrefs.safeSearchEnabled.first(),
-            youtubeRestrictedMode = appPrefs.youtubeRestrictedMode.first(),
-            dailySummaryEnabled = appPrefs.dailySummaryEnabled.first(),
-            milestoneNotificationsEnabled = appPrefs.milestoneNotificationsEnabled.first(),
-            activeProfileType = "",
-            firewallEnabled = appPrefs.firewallEnabled.first(),
-            filterLists = filterListDao.getAllSync().map { f ->
-                FilterListBackup(name = f.name, url = f.url, isEnabled = f.isEnabled)
-            },
-            whitelistDomains = whitelistDomainDao.getAllDomains()
-                .map { it.trim().lowercase() }
-                .filter { it.isNotBlank() }
-                .distinct(),
-            blocklistDomains = customDnsRuleDao.getBlockDomains()
-                .map { it.trim().lowercase() }
-                .filter { it.isNotBlank() }
-                .distinct(),
-            whitelistedApps = appPrefs.getWhitelistedAppsSnapshot().toList(),
-            customRules = customDnsRuleDao.getAll().map { it.rule }.distinct(),
-            firewallRules = firewallRuleDao.getEnabledRules().map { r ->
-                FirewallRuleBackup(
-                    packageName = r.packageName,
-                    blockWifi = r.blockWifi,
-                    blockMobileData = r.blockMobileData,
-                    scheduleEnabled = r.scheduleEnabled,
-                    scheduleStartHour = r.scheduleStartHour,
-                    scheduleStartMinute = r.scheduleStartMinute,
-                    scheduleEndHour = r.scheduleEndHour,
-                    scheduleEndMinute = r.scheduleEndMinute,
-                    isEnabled = r.isEnabled
-                )
-            },
+            version = 2,
             configProfiles = configProfiles
         )
 
@@ -105,7 +120,96 @@ class SettingsBackupManager(
 
         val backup = jsonLenient.decodeFromString(SettingsBackup.serializer(), jsonStr)
 
-        // 1. Preferences
+        // 1. Config profiles — restore all profiles and apply active profile's .conf
+        if (backup.configProfiles.isNotEmpty()) {
+            val existingProfiles = configDao.getAll()
+            var activeProfileIdToSet: Long? = null
+            var activeProfileContent: String? = null
+
+            for (p in backup.configProfiles) {
+                val cleanedContent = ConfigRuleHelper.stripUnsupportedSections(p.content)
+                val existing = existingProfiles.firstOrNull { it.name.equals(p.name, ignoreCase = true) }
+                if (existing != null) {
+                    configDao.update(
+                        existing.copy(
+                            content = cleanedContent,
+                            remoteUrl = p.remoteUrl,
+                            autoUpdate = p.autoUpdate,
+                            icon = p.icon ?: existing.icon
+                        )
+                    )
+                    if (p.isActive) {
+                        activeProfileIdToSet = existing.id
+                        activeProfileContent = cleanedContent
+                    }
+                } else {
+                    val newId = configDao.insert(
+                        ConfigProfile(
+                            name = p.name,
+                            content = cleanedContent,
+                            remoteUrl = p.remoteUrl,
+                            autoUpdate = p.autoUpdate,
+                            isActive = p.isActive,
+                            isBuiltIn = p.isBuiltIn,
+                            icon = p.icon
+                        )
+                    )
+                    if (p.isActive) {
+                        activeProfileIdToSet = newId
+                        activeProfileContent = cleanedContent
+                    }
+                }
+            }
+
+            if (activeProfileIdToSet != null) {
+                configDao.setActive(activeProfileIdToSet)
+            } else {
+                val firstProfile = configDao.getAll().firstOrNull()
+                if (firstProfile != null) {
+                    configDao.setActive(firstProfile.id)
+                    activeProfileContent = firstProfile.content
+                }
+            }
+
+            if (activeProfileContent != null) {
+                ProfileUnifiedConfigHelper.applyProfileToSystem(
+                    content = activeProfileContent,
+                    appPrefs = appPrefs,
+                    whitelistDomainDao = whitelistDomainDao,
+                    customDnsRuleDao = customDnsRuleDao,
+                    filterListDao = filterListDao,
+                    firewallRuleDao = firewallRuleDao,
+                    context = context
+                )
+            }
+        }
+
+        // 2. Backward-compatible fallback for legacy v1 backups
+        if (backup.version == 1 || backup.configProfiles.isEmpty()) {
+            restoreLegacySettings(backup)
+            if (backup.configProfiles.isEmpty()) {
+                val active = configDao.getActive() ?: configDao.getAll().firstOrNull()
+                if (active != null) {
+                    val migratedContent = ProfileUnifiedConfigHelper.generateFullProfile(
+                        selectedDnsProviderId = appPrefs.dnsProviderId.first(),
+                        customDnsIps = listOf(backup.upstreamDns, backup.fallbackDns),
+                        customRules = customDnsRuleDao.getAll(),
+                        whitelistDomains = whitelistDomainDao.getAll().first(),
+                        enabledFilterLists = filterListDao.getEnabled(),
+                        whitelistedApps = appPrefs.getWhitelistedAppsSnapshot(),
+                        firewallRules = firewallRuleDao.getEnabledRules()
+                    )
+                    configDao.update(active.copy(content = migratedContent))
+                }
+            }
+        }
+
+        // 3. Reload repository in-memory caches
+        filterRepo.loadWhitelist()
+        filterRepo.loadCustomRules()
+    }
+
+    private suspend fun restoreLegacySettings(backup: SettingsBackup) {
         appPrefs.setUpstreamDns(backup.upstreamDns)
         appPrefs.setFallbackDns(backup.fallbackDns)
         appPrefs.setAutoReconnect(backup.autoReconnect)
@@ -122,7 +226,6 @@ class SettingsBackupManager(
         appPrefs.setMilestoneNotificationsEnabled(backup.milestoneNotificationsEnabled)
         appPrefs.setFirewallEnabled(backup.firewallEnabled)
 
-        // 2. Filter lists — add new or update isEnabled
         backup.filterLists.forEach { f ->
             val existing = filterListDao.getByUrl(f.url)
             if (existing != null) {
@@ -134,7 +237,6 @@ class SettingsBackupManager(
             }
         }
 
-        // 3. Whitelist domains
         backup.whitelistDomains.forEach { domain ->
             val clean = domain.trim().lowercase()
             if (clean.isNotBlank() && whitelistDomainDao.exists(clean) == 0) {
@@ -142,7 +244,6 @@ class SettingsBackupManager(
             }
         }
 
-        // 4. Blocklist domains
         val existingRules = customDnsRuleDao.getAll().map { it.rule }.toSet()
         backup.blocklistDomains.forEach { domain ->
             val clean = domain.trim().lowercase()
@@ -161,11 +262,9 @@ class SettingsBackupManager(
             }
         }
 
-        // 5. Whitelisted apps
         val current = appPrefs.getWhitelistedAppsSnapshot()
         appPrefs.setWhitelistedApps(current + backup.whitelistedApps.toSet())
 
-        // 6. Custom rules
         val updatedRules = customDnsRuleDao.getAll().map { it.rule }.toSet()
         backup.customRules.forEach { ruleText ->
             val trimmed = ruleText.trim()
@@ -177,7 +276,6 @@ class SettingsBackupManager(
             }
         }
 
-        // 7. Firewall rules
         backup.firewallRules.forEach { r ->
             if (firewallRuleDao.getByPackageName(r.packageName) == null) {
                 firewallRuleDao.insert(
@@ -195,65 +293,5 @@ class SettingsBackupManager(
                 )
             }
         }
-
-        // 8. Config profiles
-        if (backup.configProfiles.isNotEmpty()) {
-            val existingProfiles = configDao.getAll()
-            var activeProfileIdToSet: Long? = null
-
-            for (p in backup.configProfiles) {
-                val cleanedContent = ConfigRuleHelper.stripUnsupportedSections(p.content)
-                val existing = existingProfiles.firstOrNull { it.name.equals(p.name, ignoreCase = true) }
-                if (existing != null) {
-                    configDao.update(
-                        existing.copy(
-                            content = cleanedContent,
-                            remoteUrl = p.remoteUrl,
-                            autoUpdate = p.autoUpdate,
-                            icon = p.icon ?: existing.icon
-                        )
-                    )
-                    if (p.isActive) {
-                        activeProfileIdToSet = existing.id
-                    }
-                } else {
-                    val newId = configDao.insert(
-                        ConfigProfile(
-                            name = p.name,
-                            content = cleanedContent,
-                            remoteUrl = p.remoteUrl,
-                            autoUpdate = p.autoUpdate,
-                            isActive = p.isActive,
-                            isBuiltIn = p.isBuiltIn,
-                            icon = p.icon
-                        )
-                    )
-                    if (p.isActive) {
-                        activeProfileIdToSet = newId
-                    }
-                }
-            }
-
-            if (activeProfileIdToSet != null) {
-                configDao.setActive(activeProfileIdToSet)
-            }
-        } else {
-            // Backward-compatible: If backup lacked profiles, sync active profile from restored settings
-            val active = configDao.getActive() ?: configDao.getAll().firstOrNull()
-            if (active != null) {
-                val migratedContent = ProfileMigrationHelper.generateProfileFromCurrentSettings(
-                    selectedDnsProviderId = appPrefs.dnsProviderId.first(),
-                    customDnsIps = listOf(backup.upstreamDns, backup.fallbackDns),
-                    customRules = customDnsRuleDao.getAll(),
-                    whitelistDomains = whitelistDomainDao.getAll().first(),
-                    enabledFilterLists = filterListDao.getEnabled()
-                )
-                configDao.update(active.copy(content = migratedContent))
-            }
-        }
-
-        // 9. Reload repository in-memory caches
-        filterRepo.loadWhitelist()
-        filterRepo.loadCustomRules()
     }
 }
