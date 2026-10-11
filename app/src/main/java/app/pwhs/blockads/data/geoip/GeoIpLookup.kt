@@ -16,6 +16,7 @@ import java.util.Locale
  */
 object GeoIpLookup {
 
+    private const val FILE_NAME = "geoip_ipv4.bin"
     private const val ASSET_FILE = "preset/geoip_ipv4.bin"
     private const val RECORD_SIZE = 10 // 4 bytes start_ip + 4 bytes end_ip + 2 bytes country_code
 
@@ -27,6 +28,59 @@ object GeoIpLookup {
 
     @Volatile
     private var isInitialized = false
+
+    private fun getStorageFile(context: Context): java.io.File =
+        java.io.File(context.filesDir, FILE_NAME)
+
+    /**
+     * Initialize the GeoIP buffer from local storage (or bundled asset fallback).
+     */
+    fun init(context: Context) {
+        if (isInitialized) return
+        synchronized(this) {
+            if (isInitialized) return
+            loadDatabase(context)
+        }
+    }
+
+    /**
+     * Reload the GeoIP buffer from local storage after an update is downloaded.
+     */
+    fun reload(context: Context) {
+        synchronized(this) {
+            loadDatabase(context)
+        }
+    }
+
+    private fun loadDatabase(context: Context) {
+        val file = getStorageFile(context)
+        if (file.exists() && file.length() > 0) {
+            try {
+                val bytes = file.readBytes()
+                val buf = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN)
+                buffer = buf
+                recordCount = bytes.size / RECORD_SIZE
+                isInitialized = true
+                Timber.d("GeoIpLookup loaded from local storage with $recordCount records")
+                return
+            } catch (e: Exception) {
+                Timber.w(e, "Failed to load GeoIP database from local storage")
+            }
+        }
+
+        try {
+            context.assets.open(ASSET_FILE).use { input ->
+                val bytes = input.readBytes()
+                val buf = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN)
+                buffer = buf
+                recordCount = bytes.size / RECORD_SIZE
+                isInitialized = true
+                Timber.d("GeoIpLookup loaded from asset with $recordCount records")
+            }
+        } catch (_: Exception) {
+            Timber.d("No bundled GeoIP asset found (using ccTLD fallback until downloaded)")
+        }
+    }
 
     /**
      * Common Country Code Top-Level Domains (ccTLDs) used as fallback.
@@ -89,27 +143,7 @@ object GeoIpLookup {
         "IL" to Pair(31.0461f, 34.8516f)
     )
 
-    /**
-     * Initialize the GeoIP buffer from app assets.
-     */
-    fun init(context: Context) {
-        if (isInitialized) return
-        synchronized(this) {
-            if (isInitialized) return
-            try {
-                context.assets.open(ASSET_FILE).use { input ->
-                    val bytes = input.readBytes()
-                    val buf = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN)
-                    buffer = buf
-                    recordCount = bytes.size / RECORD_SIZE
-                    isInitialized = true
-                    Timber.d("GeoIpLookup initialized with $recordCount records")
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to load GeoIP database asset")
-            }
-        }
-    }
+
 
     /**
      * Load raw bytes directly (used in tests or custom streams).

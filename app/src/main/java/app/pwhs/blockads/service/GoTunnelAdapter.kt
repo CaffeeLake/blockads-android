@@ -42,6 +42,13 @@ class GoTunnelAdapter(
         TunnelRuleLoader.loadGeoIPDatabase(context, engine)
     }
 
+    /**
+     * Hot-reload the GeoIP database into the Go engine when a new version is downloaded.
+     */
+    fun reloadGeoIp() {
+        TunnelRuleLoader.loadGeoIPDatabase(context, engine)
+    }
+
     @Volatile
     private var isRunning = false
 

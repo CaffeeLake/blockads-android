@@ -90,6 +90,14 @@ object TunnelRuleLoader {
 
     fun loadGeoIPDatabase(context: Context, engine: tunnel.Engine) {
         try {
+            val localFile = java.io.File(context.filesDir, "geoip_ipv4.bin")
+            if (localFile.exists() && localFile.length() > 0) {
+                val data = localFile.readBytes()
+                engine.setGeoIPDatabaseBytes(data)
+                Timber.d("GeoIP database loaded into Go engine from local storage (${data.size} bytes)")
+                return
+            }
+
             val loaded = BlocklistInfo.fromAsset(context, "preset/geoip_ipv4.bin")?.use { info ->
                 engine.setGeoIPDatabaseFromFd(info.fd, info.startOffset, info.length)
                 true
@@ -98,9 +106,11 @@ object TunnelRuleLoader {
                 val data = context.assets.open("preset/geoip_ipv4.bin").use { it.readBytes() }
                 engine.setGeoIPDatabaseBytes(data)
             }
-            Timber.d("GeoIP database loaded into Go engine")
+            Timber.d("GeoIP database loaded into Go engine from asset")
+        } catch (_: java.io.FileNotFoundException) {
+            Timber.d("GeoIP database not yet downloaded, engine running without GeoIP ruleset")
         } catch (e: Exception) {
-            Timber.w(e, "Failed to load GeoIP database asset into Go engine")
+            Timber.w(e, "Failed to load GeoIP database into Go engine")
         }
     }
 

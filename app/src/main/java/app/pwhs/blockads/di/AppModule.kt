@@ -121,6 +121,14 @@ val appModule = module {
         )
     }
 
+    // GeoIP Database Manager
+    single {
+        app.pwhs.blockads.data.geoip.GeoIpManager(
+            context = androidContext(),
+            client = get()
+        )
+    }
+
     // ViewModels
     viewModel {
         HomeViewModel(

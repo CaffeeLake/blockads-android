@@ -19,12 +19,16 @@ import struct
 import sys
 import urllib.request
 
-# Pinned immutable commit hash of sapics/ip-location-db to ensure 100% reproducible builds.
-# Never use mutable branches ('main') or dynamic release tags ('latest').
-DATA_COMMIT = "a6167da0594fa6e3da6b3d9b858122d98fc50638"
-DATA_URL = f"https://raw.githubusercontent.com/sapics/ip-location-db/{DATA_COMMIT}/user-country/user-country-ipv4.csv"
+import argparse
+import gzip
+import os
+import socket
+import struct
+import sys
+import urllib.request
 
-OUTPUT_PATH = os.path.join(
+PINNED_COMMIT = "a6167da0594fa6e3da6b3d9b858122d98fc50638"
+DEFAULT_OUTPUT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "app", "src", "main", "assets", "preset", "geoip_ipv4.bin"
 )
@@ -38,16 +42,32 @@ def parse_ip(val: str) -> int:
 
 
 def main():
-    # Allow passing local CSV path as first argument or via GEOIP_CSV_PATH env var (useful for offline F-Droid srclibs)
-    local_csv = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("GEOIP_CSV_PATH")
+    parser = argparse.ArgumentParser(description="GeoIP IPv4 Database Generator for BlockAds")
+    parser.add_argument("csv_path", nargs="?", default=None, help="Optional local CSV file path")
+    parser.add_argument("-o", "--output", default=DEFAULT_OUTPUT, help="Output .bin file path")
+    parser.add_argument("-z", "--gzip", action="store_true", help="Also generate .bin.gz compressed file")
+    parser.add_argument("--latest", action="store_true", help="Download latest master commit instead of pinned commit")
+    parser.add_argument("--url", default=None, help="Custom data source URL")
+
+    args = parser.parse_args()
+
+    local_csv = args.csv_path or os.environ.get("GEOIP_CSV_PATH")
+    output_path = os.path.abspath(args.output)
 
     if local_csv and os.path.isfile(local_csv):
         print(f"Reading IPv4 GeoIP data from local file: {local_csv}")
         with open(local_csv, "r", encoding="utf-8") as f:
             data = f.read()
     else:
-        print(f"Downloading IPv4 GeoIP data from pinned commit: {DATA_URL}...")
-        req = urllib.request.Request(DATA_URL, headers={"User-Agent": "BlockAds-GeoIP-Builder/1.0"})
+        if args.url:
+            data_url = args.url
+        elif args.latest:
+            data_url = "https://raw.githubusercontent.com/sapics/ip-location-db/master/user-country/user-country-ipv4.csv"
+        else:
+            data_url = f"https://raw.githubusercontent.com/sapics/ip-location-db/{PINNED_COMMIT}/user-country/user-country-ipv4.csv"
+
+        print(f"Downloading IPv4 GeoIP data from: {data_url}...")
+        req = urllib.request.Request(data_url, headers={"User-Agent": "BlockAds-GeoIP-Builder/1.0"})
         with urllib.request.urlopen(req) as resp:
             data = resp.read().decode("utf-8")
 
@@ -76,14 +96,22 @@ def main():
         else:
             merged.append(r)
 
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "wb") as f:
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "wb") as f:
         for s, e, cc in merged:
             f.write(struct.pack(">II2s", s, e, cc.encode("ascii")))
 
-    file_size = os.path.getsize(OUTPUT_PATH)
-    print(f"Successfully generated {OUTPUT_PATH} with {len(merged)} records ({file_size} bytes).")
+    file_size = os.path.getsize(output_path)
+    print(f"Successfully generated {output_path} with {len(merged)} records ({file_size} bytes).")
+
+    if args.gzip:
+        gz_path = output_path + ".gz" if not output_path.endswith(".gz") else output_path
+        with open(output_path, "rb") as f_in, gzip.open(gz_path, "wb", compresslevel=9) as f_out:
+            f_out.write(f_in.read())
+        gz_size = os.path.getsize(gz_path)
+        print(f"Successfully compressed {gz_path} ({gz_size} bytes).")
 
 
 if __name__ == "__main__":
     main()
+

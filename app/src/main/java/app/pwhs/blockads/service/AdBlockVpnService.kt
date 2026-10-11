@@ -101,6 +101,7 @@ class AdBlockVpnService : VpnService() {
     private lateinit var configDao: ConfigDao
     private lateinit var appNameResolver: AppNameResolver
     private lateinit var session: VpnSessionController
+    private lateinit var geoIpManager: app.pwhs.blockads.data.geoip.GeoIpManager
 
     val connectingPhase: String get() = if (::session.isInitialized) session.connectingPhase else ""
 
@@ -114,6 +115,7 @@ class AdBlockVpnService : VpnService() {
         dnsLogDao = koin.get()
         firewallRuleDao = koin.get()
         configDao = koin.get()
+        geoIpManager = koin.get()
 
         appNameResolver = AppNameResolver(this)
         batteryMonitor = BatteryMonitor(this)
@@ -214,6 +216,14 @@ class AdBlockVpnService : VpnService() {
                 if (::goTunnelAdapter.isInitialized) {
                     val count = goTunnelAdapter.setRulesetConfig(activeConfig?.content ?: "")
                     Timber.d("Active ruleset config updated in Go engine: %s (%d rules)", activeConfig?.name, count)
+                }
+            }
+        }
+        serviceScope.launch {
+            geoIpManager.updateEvents.collect {
+                if (::goTunnelAdapter.isInitialized) {
+                    Timber.i("GeoIP database updated on disk, reloading Go engine")
+                    goTunnelAdapter.reloadGeoIp()
                 }
             }
         }

@@ -94,6 +94,7 @@ class AdBlockVpnServiceShellTest {
                 single { dnsLogDao }
                 single<FirewallRuleDao> { mockk(relaxed = true) }
                 single<ConfigDao> { mockk(relaxed = true) }
+                single<app.pwhs.blockads.data.geoip.GeoIpManager> { mockk(relaxed = true) }
             })
         }
         mockkStatic(Tunnel::class)

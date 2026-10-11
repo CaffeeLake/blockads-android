@@ -2,11 +2,11 @@
 
 This directory contains preset offline assets bundled with the BlockAds application.
 
-### `geoip_ipv4.bin`
-- **Purpose**: Fast on-device binary lookup mapping IPv4 address ranges to ISO 3166-1 alpha-2 country codes for offline traffic destination analytics.
+### `geoip_ipv4.bin` (Dynamic Download)
+- **Distribution**: No longer bundled in the APK to maintain lightweight package size (F-Droid & Play Store friendly). Downloaded on-demand at first app launch and refreshed weekly via WorkManager.
+- **Workflow**: Auto-built and released weekly via GitHub Actions (`.github/workflows/update_geoip.yml`).
 - **Source Data**: [sapics/ip-location-db](https://github.com/sapics/ip-location-db) (`user-country/user-country-ipv4.csv`).
-- **Pinned Commit**: [`a6167da0594fa6e3da6b3d9b858122d98fc50638`](https://github.com/sapics/ip-location-db/commit/a6167da0594fa6e3da6b3d9b858122d98fc50638) (ensures 100% deterministic, reproducible builds).
-- **License**: [PDDL 1.0 (Public Domain Dedication and License)](https://opendatacommons.org/licenses/pddl/1-0/) (free use without attribution).
+- **License**: [PDDL 1.0 (Public Domain Dedication and License)](https://opendatacommons.org/licenses/pddl/1-0/) / CC0.
 - **Generator Script**: [`scripts/generate_geoip.py`](../../../scripts/generate_geoip.py).
 - **Format**: Binary array of 10-byte records (`>II2s`):
   - 4 bytes uint32: start IP
