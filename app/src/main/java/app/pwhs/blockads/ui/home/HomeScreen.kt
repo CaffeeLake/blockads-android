@@ -1,7 +1,5 @@
 package app.pwhs.blockads.ui.home
 
-import android.graphics.drawable.Drawable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +25,6 @@ import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -79,13 +76,18 @@ import app.pwhs.blockads.ui.theme.DangerRed
 import app.pwhs.blockads.ui.theme.SecurityOrange
 import app.pwhs.blockads.ui.logs.data.LogFilterStatus
 import app.pwhs.blockads.ui.theme.TextSecondary
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import app.pwhs.blockads.ui.event.UiEventEffect
-import app.pwhs.blockads.ui.home.component.BlockedDomainActionSheet
+import app.pwhs.blockads.ui.home.component.HomeBlockedDomainHandler
 import app.pwhs.blockads.ui.home.component.HomeAmbientBackground
+import app.pwhs.blockads.ui.home.component.HomeActiveTipCard
+import app.pwhs.blockads.ui.home.component.HomeFeatureTipType
+import app.pwhs.blockads.ui.home.component.isVisible
+import app.pwhs.blockads.ui.home.component.rememberHomeTipState
 import app.pwhs.blockads.ui.home.component.HomeStatusHeader
 import app.pwhs.blockads.ui.home.component.PrivateDnsWarningCard
 import app.pwhs.blockads.ui.home.component.SelectedBlockedDomain
@@ -112,6 +114,7 @@ fun HomeScreen(
     onNavigateToLogsWithQuery: (String) -> Unit = {},
     onNavigateToProfileScreen: () -> Unit = {},
     onNavigateToBrowser: (String) -> Unit = {},
+    onNavigateToFeature: (HomeFeatureTipType) -> Unit = {},
 ) {
     val vpnEnabled by viewModel.vpnEnabled.collectAsStateWithLifecycle()
     val vpnConnecting by viewModel.vpnConnecting.collectAsStateWithLifecycle()
@@ -174,37 +177,42 @@ fun HomeScreen(
                 )
             }
         ) { innerPadding ->
-            Column(
+            val isRootMode = routingMode == AppPreferences.ROUTING_MODE_ROOT
+            val tipState = rememberHomeTipState(viewModel, routingMode, onNavigateToFeature)
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(innerPadding)
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-            Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = if (tipState.isVisible) 100.dp else 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            // Private DNS warning — DoT bypasses BlockAds filtering (#145)
-            if (privateDnsWarning) {
-                PrivateDnsWarningCard()
-            }
-
-            if (showRevokedWarning) {
-                VpnRevokedWarningCard(
-                    onReconnect = {
-                        viewModel.dismissVpnRevokedWarning()
-                        if (!vpnConnecting && !vpnStopping) {
-                            onRequestVpnPermission()
-                        }
-                    },
-                    onDismiss = {
-                        viewModel.dismissVpnRevokedWarning()
+                    if (privateDnsWarning) {
+                        PrivateDnsWarningCard()
                     }
-                )
-            }
 
-            val isRootMode = routingMode == AppPreferences.ROUTING_MODE_ROOT
-            HomeStatusHeader(
+                    if (showRevokedWarning) {
+                        VpnRevokedWarningCard(
+                            onReconnect = {
+                                viewModel.dismissVpnRevokedWarning()
+                                if (!vpnConnecting && !vpnStopping) {
+                                    onRequestVpnPermission()
+                                }
+                            },
+                            onDismiss = {
+                                viewModel.dismissVpnRevokedWarning()
+                            }
+                        )
+                    }
+
+                    HomeStatusHeader(
                 vpnStopping = vpnStopping,
                 vpnConnecting = vpnConnecting,
                 vpnEnabled = vpnEnabled,
@@ -276,8 +284,6 @@ fun HomeScreen(
             )
 
             Spacer(modifier = Modifier.height(36.dp))
-
-
             // Stats cards
             val totalChartData = remember(hourlyStats) {
                 MiniBarChartDefaults.createSparklineData(hourlyStats, isBlocked = false)
@@ -443,6 +449,18 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
         }
 
+        AnimatedVisibility(
+            visible = tipState.isVisible,
+            enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            HomeActiveTipCard(tipState = tipState)
+        }
+        }
+
         milestoneReached?.let { milestone ->
             MilestoneBottomSheet(
                 milestone = milestone,
@@ -452,20 +470,13 @@ fun HomeScreen(
 
         selectedBlockedDomain?.let { target ->
             val isWhitelisted = whitelistedDomains.contains(target.domain.lowercase())
-            BlockedDomainActionSheet(
-                domain = target.domain,
+            HomeBlockedDomainHandler(
+                target = target,
                 isWhitelisted = isWhitelisted,
-                isBlocked = target.isBlocked,
-                count = target.count,
-                appName = target.appName,
-                packageName = target.packageName,
                 onDismiss = { selectedBlockedDomain = null },
                 onToggleWhitelist = {
-                    if (isWhitelisted) {
-                        viewModel.removeFromWhitelist(target.domain)
-                    } else {
-                        viewModel.addToWhitelist(target.domain)
-                    }
+                    if (isWhitelisted) viewModel.removeFromWhitelist(target.domain)
+                    else viewModel.addToWhitelist(target.domain)
                     selectedBlockedDomain = null
                 },
                 onAddWildcardWhitelist = {
@@ -474,12 +485,6 @@ fun HomeScreen(
                 },
                 onAddToCustomBlockRules = {
                     viewModel.addToCustomBlockRules(target.domain)
-                    selectedBlockedDomain = null
-                },
-                onCopyDomain = {
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    clipboard.setPrimaryClip(ClipData.newPlainText("domain", target.domain))
-                    Toast.makeText(context, R.string.domain_copied, Toast.LENGTH_SHORT).show()
                     selectedBlockedDomain = null
                 },
                 onViewInLogs = {

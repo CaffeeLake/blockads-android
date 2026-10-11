@@ -116,6 +116,11 @@ class AppPreferences internal constructor(
     val pausedTrustedSsid: Flow<String> get() = vpnSecurity.pausedTrustedSsid
     val filterHttp3: Flow<Boolean> get() = vpnSecurity.filterHttp3
     val vpnRevokedByAnotherApp: Flow<Boolean> get() = vpnSecurity.vpnRevokedByAnotherApp
+    val stabilityTipDismissed: Flow<Boolean> get() = vpnSecurity.stabilityTipDismissed
+    val stabilityTipDismissedAt: Flow<Long> get() = vpnSecurity.stabilityTipDismissedAt
+    val stabilityTipLastBatteryIgnored: Flow<Boolean> get() = vpnSecurity.stabilityTipLastBatteryIgnored
+    val stabilityTipLastAlwaysOn: Flow<Boolean> get() = vpnSecurity.stabilityTipLastAlwaysOn
+    val dismissedFeatureTips: Flow<Set<String>> get() = vpnSecurity.dismissedFeatureTips
 
     // ── DNS Flows ────────────────────────────────────────────────────────
     val upstreamDns: Flow<String> get() = dns.upstreamDns
@@ -190,6 +195,12 @@ class AppPreferences internal constructor(
     suspend fun setPausedByTrusted(value: Boolean, ssid: String = "") = vpnSecurity.setPausedByTrusted(value, ssid)
     suspend fun getPausedByTrustedSnapshot(): Boolean = vpnSecurity.getPausedByTrustedSnapshot()
     suspend fun setVpnRevokedByAnotherApp(value: Boolean) = vpnSecurity.setVpnRevokedByAnotherApp(value)
+    suspend fun setStabilityTipDismissed(value: Boolean) = vpnSecurity.setStabilityTipDismissed(value)
+    suspend fun recordStabilityTipDismissed(batteryIgnored: Boolean, alwaysOn: Boolean) =
+        vpnSecurity.recordStabilityTipDismissed(batteryIgnored, alwaysOn)
+    suspend fun updateStabilityTipHardwareState(batteryIgnored: Boolean, alwaysOn: Boolean) =
+        vpnSecurity.updateStabilityTipHardwareState(batteryIgnored, alwaysOn)
+    suspend fun dismissFeatureTip(tipId: String) = vpnSecurity.dismissFeatureTip(tipId)
 
     suspend fun setUpstreamDns(dnsServer: String) = dns.setUpstreamDns(dnsServer)
     suspend fun setFallbackDns(dnsServer: String) = dns.setFallbackDns(dnsServer)

@@ -39,6 +39,33 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_PAUSED_BY_TRUSTED = booleanPreferencesKey("paused_by_trusted")
         val KEY_PAUSED_TRUSTED_SSID = stringPreferencesKey("paused_trusted_ssid")
         val KEY_VPN_REVOKED_BY_ANOTHER_APP = booleanPreferencesKey("vpn_revoked_by_another_app")
+        val KEY_STABILITY_TIP_DISMISSED = booleanPreferencesKey("stability_tip_dismissed")
+        val KEY_STABILITY_TIP_DISMISSED_AT = longPreferencesKey("stability_tip_dismissed_at")
+        val KEY_STABILITY_TIP_LAST_BATTERY_IGNORED =
+            booleanPreferencesKey("stability_tip_last_battery_ignored")
+        val KEY_STABILITY_TIP_LAST_ALWAYS_ON =
+            booleanPreferencesKey("stability_tip_last_always_on")
+        val KEY_DISMISSED_FEATURE_TIPS = stringSetPreferencesKey("dismissed_feature_tips")
+    }
+
+    val stabilityTipDismissed: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_STABILITY_TIP_DISMISSED] ?: false
+    }
+
+    val stabilityTipDismissedAt: Flow<Long> = dataStore.data.map { prefs ->
+        prefs[KEY_STABILITY_TIP_DISMISSED_AT] ?: 0L
+    }
+
+    val stabilityTipLastBatteryIgnored: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_STABILITY_TIP_LAST_BATTERY_IGNORED] ?: false
+    }
+
+    val stabilityTipLastAlwaysOn: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_STABILITY_TIP_LAST_ALWAYS_ON] ?: false
+    }
+
+    val dismissedFeatureTips: Flow<Set<String>> = dataStore.data.map { prefs ->
+        prefs[KEY_DISMISSED_FEATURE_TIPS] ?: emptySet()
     }
 
     val vpnRevokedByAnotherApp: Flow<Boolean> = dataStore.data.map { prefs ->
@@ -261,6 +288,48 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
     suspend fun setVpnRevokedByAnotherApp(value: Boolean) {
         dataStore.edit { prefs ->
             prefs[KEY_VPN_REVOKED_BY_ANOTHER_APP] = value
+        }
+    }
+
+    suspend fun setStabilityTipDismissed(value: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[KEY_STABILITY_TIP_DISMISSED] = value
+            if (value) {
+                prefs[KEY_STABILITY_TIP_DISMISSED_AT] = System.currentTimeMillis()
+            } else {
+                prefs[KEY_STABILITY_TIP_DISMISSED_AT] = 0L
+            }
+        }
+    }
+
+    suspend fun recordStabilityTipDismissed(batteryIgnored: Boolean, alwaysOn: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[KEY_STABILITY_TIP_DISMISSED_AT] = System.currentTimeMillis()
+            prefs[KEY_STABILITY_TIP_LAST_BATTERY_IGNORED] = batteryIgnored
+            prefs[KEY_STABILITY_TIP_LAST_ALWAYS_ON] = alwaysOn
+            prefs[KEY_STABILITY_TIP_DISMISSED] = true
+        }
+    }
+
+    suspend fun updateStabilityTipHardwareState(batteryIgnored: Boolean, alwaysOn: Boolean) {
+        dataStore.edit { prefs ->
+            val lastBattery = prefs[KEY_STABILITY_TIP_LAST_BATTERY_IGNORED]
+            val lastAlwaysOn = prefs[KEY_STABILITY_TIP_LAST_ALWAYS_ON]
+
+            if ((lastBattery == true && !batteryIgnored) || (lastAlwaysOn == true && !alwaysOn)) {
+                prefs[KEY_STABILITY_TIP_DISMISSED_AT] = 0L
+                prefs[KEY_STABILITY_TIP_DISMISSED] = false
+            }
+
+            prefs[KEY_STABILITY_TIP_LAST_BATTERY_IGNORED] = batteryIgnored
+            prefs[KEY_STABILITY_TIP_LAST_ALWAYS_ON] = alwaysOn
+        }
+    }
+
+    suspend fun dismissFeatureTip(tipId: String) {
+        dataStore.edit { prefs ->
+            val current = prefs[KEY_DISMISSED_FEATURE_TIPS] ?: emptySet()
+            prefs[KEY_DISMISSED_FEATURE_TIPS] = current + tipId
         }
     }
 }

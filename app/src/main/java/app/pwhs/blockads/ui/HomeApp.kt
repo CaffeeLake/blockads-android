@@ -74,6 +74,7 @@ import app.pwhs.blockads.ui.filter.FilterSetupScreen
 import app.pwhs.blockads.ui.filter.detail.FilterDetailScreen
 import app.pwhs.blockads.ui.firewall.FirewallScreen
 import app.pwhs.blockads.ui.home.HomeScreen
+import app.pwhs.blockads.ui.home.component.HomeFeatureTipType
 import app.pwhs.blockads.ui.httpsfiltering.HttpsFilteringScreen
 import app.pwhs.blockads.ui.logs.LogsScreen
 import app.pwhs.blockads.ui.config.ConfigScreen
@@ -231,6 +232,15 @@ fun HomeApp(
                         },
                         onNavigateToBrowser = { url ->
                             context.startActivity(BrowserActivity.createIntent(context, url))
+                        },
+                        onNavigateToFeature = { featureType ->
+                            showBottomBar = false
+                            when (featureType) {
+                                HomeFeatureTipType.APP_MANAGEMENT -> homeStack.add(AppManagementKey)
+                                HomeFeatureTipType.TRUSTED_NETWORKS -> homeStack.add(TrustedNetworksKey)
+                                HomeFeatureTipType.HTTPS_FILTERING -> homeStack.add(HttpsFilteringKey)
+                                HomeFeatureTipType.WIREGUARD -> homeStack.add(WireGuardImportKey)
+                            }
                         }
                     )
                 }
@@ -343,31 +353,31 @@ fun HomeApp(
                 entry<AppManagementKey> {
                     AppManagementScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         }
                     )
                 }
                 entry<DnsProviderKey> {
                     DnsProviderScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         }
                     )
                 }
                 entry<TrustedNetworksKey> {
                     app.pwhs.blockads.ui.trustednetworks.TrustedNetworksScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         }
                     )
                 }
                 entry<WireGuardImportKey> {
                     WireGuardImportScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         },
                         onEditProfile = { profileId ->
-                            settingsStack.add(WireGuardEditKey(profileId))
+                            currentBackStack.add(WireGuardEditKey(profileId))
                         },
                     )
                 }
@@ -375,24 +385,24 @@ fun HomeApp(
                     WireGuardEditScreen(
                         profileId = key.profileId,
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         },
                     )
                 }
                 entry<HttpsFilteringKey> {
                     HttpsFilteringScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         },
                         onNavigateToWizard = {
-                            settingsStack.add(CertInstallationWizardKey)
+                            currentBackStack.add(CertInstallationWizardKey)
                         }
                     )
                 }
                 entry<CertInstallationWizardKey> {
                     CertInstallationWizardScreen(
                         onNavigateBack = {
-                            safePop(settingsStack)
+                            safePop(currentBackStack)
                         }
                     )
                 }

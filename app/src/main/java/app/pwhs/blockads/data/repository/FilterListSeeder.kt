@@ -37,8 +37,8 @@ class FilterListSeeder(
         val existingBuiltIns = filterListDao.getAllSync().count { it.isBuiltIn }
         if (existingBuiltIns < 50) {
             seedFromBundledAsset()
+            fetchAndSyncRemoteFilterLists()
         }
-        fetchAndSyncRemoteFilterLists()
     }
 
     suspend fun seedFromBundledAsset() = withContext(Dispatchers.IO) {

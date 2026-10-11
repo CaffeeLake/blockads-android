@@ -32,118 +32,114 @@ enum class FilterCategoryTab(
     CUSTOM(R.string.filter_custom, Icons.Outlined.Tune)
 }
 
-fun FilterList.matchesCategory(tab: FilterCategoryTab, starredUrls: Set<String> = emptySet()): Boolean {
-    if (tab == FilterCategoryTab.ALL) {
-        return true
-    }
-
-    if (tab == FilterCategoryTab.STARRED) {
-        return starredUrls.contains(url)
-    }
-
-    if (!isBuiltIn) {
-        return tab == FilterCategoryTab.CUSTOM
-    }
+fun FilterList.resolvedCategory(): FilterCategoryTab {
+    if (!isBuiltIn) return FilterCategoryTab.CUSTOM
 
     val lowerCat = category.lowercase()
     val lowerName = name.lowercase()
     val lowerUrl = url.lowercase()
 
+    // 1. Annoyances
+    if (lowerCat == "annoyances" ||
+        lowerName.contains("annoyance") ||
+        lowerName.contains("cookie") ||
+        lowerName.contains("popup") ||
+        lowerName.contains("banner") ||
+        lowerName.contains("antiadblock") ||
+        lowerName.contains("anti-adblock") ||
+        lowerName.contains("anti adblock") ||
+        lowerName.contains("warning removal") ||
+        lowerName.contains("stevo's ai") ||
+        lowerUrl.contains("annoyance") ||
+        lowerUrl.contains("cookiemonster")
+    ) {
+        return FilterCategoryTab.ANNOYANCES
+    }
+
+    // 2. Security
+    if (lowerCat == "security" ||
+        lowerCat == FilterList.CATEGORY_SECURITY.lowercase() ||
+        lowerName.contains("security") ||
+        lowerName.contains("malware") ||
+        lowerName.contains("phish") ||
+        lowerName.contains("tif") ||
+        lowerName.contains("urlhaus") ||
+        lowerName.contains("badware") ||
+        lowerName.contains("scam")
+    ) {
+        return FilterCategoryTab.SECURITY
+    }
+
+    // 3. Privacy
+    if (lowerCat == "privacy" ||
+        lowerName.contains("privacy") ||
+        lowerName.contains("tracking") ||
+        lowerName.contains("tracker") ||
+        lowerName.contains("peter lowe") ||
+        lowerName.contains("shortener") ||
+        lowerName.contains("anti-facebook") ||
+        lowerUrl.contains("easyprivacy")
+    ) {
+        return FilterCategoryTab.PRIVACY
+    }
+
+    // 4. Social
+    if (lowerCat == "social" ||
+        lowerName.contains("social") ||
+        lowerUrl.contains("social")
+    ) {
+        return FilterCategoryTab.SOCIAL
+    }
+
+    // 5. Regional
+    if (lowerCat == "regional" ||
+        lowerName.contains("abpvn") ||
+        lowerName.contains("hostsvn") ||
+        lowerName.contains("vietnam") ||
+        lowerName.contains("china") ||
+        lowerName.contains("chinese") ||
+        lowerName.contains("russia") ||
+        lowerName.contains("german") ||
+        lowerName.contains("japan") ||
+        lowerName.contains("korea") ||
+        lowerName.contains("french") ||
+        lowerName.contains("italian") ||
+        lowerName.contains("spanish") ||
+        lowerName.contains("dutch") ||
+        lowerName.contains("polish") ||
+        lowerName.contains("turk") ||
+        lowerName.contains("ukrain") ||
+        lowerName.contains("indonesia") ||
+        lowerName.contains("india") ||
+        lowerUrl.contains("abpvn") ||
+        lowerUrl.contains("hostsvn")
+    ) {
+        return FilterCategoryTab.REGIONAL
+    }
+
+    // 6. Other
+    if (lowerCat == "other" ||
+        lowerName.contains("gambling") ||
+        lowerName.contains("porn") ||
+        lowerName.contains("adult") ||
+        lowerName.contains("ultimate") ||
+        lowerName.contains("pro++") ||
+        lowerName.contains("experimental") ||
+        lowerName.contains("font") ||
+        lowerName.contains("unblocking search")
+    ) {
+        return FilterCategoryTab.OTHER
+    }
+
+    // 7. Ads (default)
+    return FilterCategoryTab.ADS
+}
+
+fun FilterList.matchesCategory(tab: FilterCategoryTab, starredUrls: Set<String> = emptySet()): Boolean {
     return when (tab) {
-        FilterCategoryTab.STARRED -> false
-        FilterCategoryTab.CUSTOM -> false
-
-        FilterCategoryTab.ANNOYANCES -> {
-            lowerCat == "annoyances" ||
-                lowerName.contains("annoyance") ||
-                lowerName.contains("cookie") ||
-                lowerName.contains("popup") ||
-                lowerName.contains("banner") ||
-                lowerName.contains("antiadblock") ||
-                lowerName.contains("anti-adblock") ||
-                lowerName.contains("anti adblock") ||
-                lowerName.contains("warning removal") ||
-                lowerName.contains("stevo's ai") ||
-                lowerUrl.contains("annoyance") ||
-                lowerUrl.contains("cookiemonster")
-        }
-
-        FilterCategoryTab.SECURITY -> {
-            lowerCat == "security" ||
-                lowerCat == FilterList.CATEGORY_SECURITY.lowercase() ||
-                lowerName.contains("security") ||
-                lowerName.contains("malware") ||
-                lowerName.contains("phish") ||
-                lowerName.contains("tif") ||
-                lowerName.contains("urlhaus") ||
-                lowerName.contains("badware") ||
-                lowerName.contains("scam")
-        }
-
-        FilterCategoryTab.PRIVACY -> {
-            if (matchesCategory(FilterCategoryTab.SECURITY) || matchesCategory(FilterCategoryTab.ANNOYANCES)) return false
-            lowerCat == "privacy" ||
-                lowerName.contains("privacy") ||
-                lowerName.contains("tracking") ||
-                lowerName.contains("tracker") ||
-                lowerName.contains("peter lowe") ||
-                lowerName.contains("shortener") ||
-                lowerName.contains("anti-facebook") ||
-                lowerUrl.contains("easyprivacy")
-        }
-
-        FilterCategoryTab.SOCIAL -> {
-            if (matchesCategory(FilterCategoryTab.SECURITY) || matchesCategory(FilterCategoryTab.ANNOYANCES)) return false
-            lowerCat == "social" ||
-                lowerName.contains("social") ||
-                lowerUrl.contains("social")
-        }
-
-        FilterCategoryTab.REGIONAL -> {
-            if (matchesCategory(FilterCategoryTab.SECURITY) || matchesCategory(FilterCategoryTab.ANNOYANCES) || matchesCategory(FilterCategoryTab.PRIVACY) || matchesCategory(FilterCategoryTab.SOCIAL)) return false
-            lowerCat == "regional" ||
-                lowerName.contains("abpvn") ||
-                lowerName.contains("hostsvn") ||
-                lowerName.contains("vietnam") ||
-                lowerName.contains("china") ||
-                lowerName.contains("chinese") ||
-                lowerName.contains("russia") ||
-                lowerName.contains("german") ||
-                lowerName.contains("japan") ||
-                lowerName.contains("korea") ||
-                lowerName.contains("french") ||
-                lowerName.contains("italian") ||
-                lowerName.contains("spanish") ||
-                lowerName.contains("dutch") ||
-                lowerName.contains("polish") ||
-                lowerName.contains("turk") ||
-                lowerName.contains("ukrain") ||
-                lowerName.contains("indonesia") ||
-                lowerName.contains("india") ||
-                lowerUrl.contains("abpvn") ||
-                lowerUrl.contains("hostsvn")
-        }
-
-        FilterCategoryTab.OTHER -> {
-            if (matchesCategory(FilterCategoryTab.SECURITY) || matchesCategory(FilterCategoryTab.ANNOYANCES)) return false
-            lowerCat == "other" ||
-                lowerName.contains("gambling") ||
-                lowerName.contains("porn") ||
-                lowerName.contains("adult") ||
-                lowerName.contains("ultimate") ||
-                lowerName.contains("pro++") ||
-                lowerName.contains("experimental") ||
-                lowerName.contains("font") ||
-                lowerName.contains("unblocking search")
-        }
-
-        FilterCategoryTab.ADS -> {
-            !matchesCategory(FilterCategoryTab.ANNOYANCES) &&
-                !matchesCategory(FilterCategoryTab.SECURITY) &&
-                !matchesCategory(FilterCategoryTab.PRIVACY) &&
-                !matchesCategory(FilterCategoryTab.SOCIAL) &&
-                !matchesCategory(FilterCategoryTab.REGIONAL) &&
-                !matchesCategory(FilterCategoryTab.OTHER)
-        }
+        FilterCategoryTab.ALL -> true
+        FilterCategoryTab.STARRED -> starredUrls.contains(url)
+        FilterCategoryTab.CUSTOM -> !isBuiltIn
+        else -> resolvedCategory() == tab
     }
 }

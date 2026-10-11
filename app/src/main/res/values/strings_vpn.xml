@@ -86,4 +86,30 @@
     <string name="vpn_notification_action_retry">Retry</string>
     <string name="vpn_notification_no_internet_title">No internet connection</string>
     <string name="vpn_notification_no_internet_text">Waiting for network connection…</string>
+
+    <!-- Stability Tip Card -->
+    <string name="home_tip_stability_title">Keep Protection Stable</string>
+    <string name="home_tip_stability_desc">Prevent Android from killing BlockAds in background and keep 24/7 protection.</string>
+    <string name="home_tip_battery_title">Background Activity</string>
+    <string name="home_tip_battery_desc">Disable battery optimization</string>
+    <string name="home_tip_battery_action">Allow</string>
+    <string name="home_tip_battery_enabled">Allowed</string>
+    <string name="home_tip_always_on_title">Always-on VPN</string>
+    <string name="home_tip_always_on_desc">Enable in Android system VPN settings</string>
+    <string name="home_tip_always_on_action">Configure</string>
+    <string name="home_tip_always_on_enabled">Enabled</string>
+    <string name="home_tip_step_format">Tip %1$d/%2$d</string>
+    <string name="home_tip_feature_badge">Feature Tip</string>
+    <string name="home_tip_feature_app_title">App Management</string>
+    <string name="home_tip_feature_app_desc">Bypass banking or games from VPN filtering</string>
+    <string name="home_tip_feature_app_action">Manage</string>
+    <string name="home_tip_feature_trusted_title">Trusted Networks</string>
+    <string name="home_tip_feature_trusted_desc">Pause VPN on trusted home Wi-Fi to save battery</string>
+    <string name="home_tip_feature_trusted_action">Configure</string>
+    <string name="home_tip_feature_https_title">HTTPS Filtering</string>
+    <string name="home_tip_feature_https_desc">Block intrusive web and popup ads thoroughly</string>
+    <string name="home_tip_feature_https_action">Explore</string>
+    <string name="home_tip_feature_wireguard_title">WireGuard VPN</string>
+    <string name="home_tip_feature_wireguard_desc">Use your personal VPN server alongside BlockAds</string>
+    <string name="home_tip_feature_wireguard_action">Try now</string>
 </resources>

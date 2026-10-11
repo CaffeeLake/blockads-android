@@ -306,3 +306,36 @@ data class SelectedBlockedDomain(
     val blockedBy: String = "",
     val isBlocked: Boolean = true
 )
+
+@Composable
+fun HomeBlockedDomainHandler(
+    target: SelectedBlockedDomain,
+    isWhitelisted: Boolean,
+    onDismiss: () -> Unit,
+    onToggleWhitelist: () -> Unit,
+    onAddWildcardWhitelist: () -> Unit,
+    onAddToCustomBlockRules: () -> Unit,
+    onViewInLogs: () -> Unit
+) {
+    val context = LocalContext.current
+    BlockedDomainActionSheet(
+        domain = target.domain,
+        isWhitelisted = isWhitelisted,
+        isBlocked = target.isBlocked,
+        count = target.count,
+        appName = target.appName,
+        packageName = target.packageName,
+        onDismiss = onDismiss,
+        onToggleWhitelist = onToggleWhitelist,
+        onAddWildcardWhitelist = onAddWildcardWhitelist,
+        onAddToCustomBlockRules = onAddToCustomBlockRules,
+        onCopyDomain = {
+            val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            clipboard.setPrimaryClip(android.content.ClipData.newPlainText("domain", target.domain))
+            android.widget.Toast.makeText(context, R.string.domain_copied, android.widget.Toast.LENGTH_SHORT).show()
+            onDismiss()
+        },
+        onViewInLogs = onViewInLogs
+    )
+}
+

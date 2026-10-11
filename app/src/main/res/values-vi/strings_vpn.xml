@@ -85,4 +85,30 @@
     <string name="vpn_notification_action_retry">Thử lại</string>
     <string name="vpn_notification_no_internet_title">Mất kết nối Internet</string>
     <string name="vpn_notification_no_internet_text">Đang chờ mạng khả dụng…</string>
+
+    <!-- Stability Tip Card -->
+    <string name="home_tip_stability_title">Mẹo giữ kết nối ổn định</string>
+    <string name="home_tip_stability_desc">Tránh bị Android tắt BlockAds khi chạy ngầm và duy trì bảo vệ liên tục 24/7.</string>
+    <string name="home_tip_battery_title">Hoạt động chạy ngầm</string>
+    <string name="home_tip_battery_desc">Tắt tối ưu hóa pin</string>
+    <string name="home_tip_battery_action">Cho phép</string>
+    <string name="home_tip_battery_enabled">Đã bật</string>
+    <string name="home_tip_always_on_title">VPN luôn bật</string>
+    <string name="home_tip_always_on_desc">Bật tính năng này trong cài đặt VPN hệ thống</string>
+    <string name="home_tip_always_on_action">Cài đặt</string>
+    <string name="home_tip_always_on_enabled">Đã bật</string>
+    <string name="home_tip_step_format">Mẹo %1$d/%2$d</string>
+    <string name="home_tip_feature_badge">Mẹo hay</string>
+    <string name="home_tip_feature_app_title">Bỏ qua ứng dụng</string>
+    <string name="home_tip_feature_app_desc">Loại trừ app ngân hàng, ví điện tử khỏi bộ lọc VPN</string>
+    <string name="home_tip_feature_app_action">Quản lý</string>
+    <string name="home_tip_feature_trusted_title">Mạng Wi-Fi tin cậy</string>
+    <string name="home_tip_feature_trusted_desc">Tự động tạm dừng VPN khi dùng Wi-Fi gia đình</string>
+    <string name="home_tip_feature_trusted_action">Cài đặt</string>
+    <string name="home_tip_feature_https_title">Lọc HTTPS nâng cao</string>
+    <string name="home_tip_feature_https_desc">Chặn quảng cáo web và mạng xã hội triệt để</string>
+    <string name="home_tip_feature_https_action">Khám phá</string>
+    <string name="home_tip_feature_wireguard_title">Tích hợp WireGuard</string>
+    <string name="home_tip_feature_wireguard_desc">Dùng server VPN riêng của bạn cùng BlockAds</string>
+    <string name="home_tip_feature_wireguard_action">Thử ngay</string>
 </resources>

@@ -37,12 +37,13 @@ import app.pwhs.blockads.data.entities.FilterList as FilterListEntity
 import app.pwhs.blockads.ui.event.UiEventEffect
 import app.pwhs.blockads.ui.filter.component.AddFilterDialog
 import app.pwhs.blockads.ui.filter.component.CustomTabContent
-import app.pwhs.blockads.ui.filter.component.FilterListCard
+import app.pwhs.blockads.ui.filter.component.filterListItems
 import app.pwhs.blockads.ui.filter.component.FilterSearchBar
 import app.pwhs.blockads.ui.filter.component.FilterTabRow
 import app.pwhs.blockads.ui.filter.component.FilterTopBar
 import app.pwhs.blockads.ui.filter.data.FilterCategoryTab
 import app.pwhs.blockads.ui.filter.data.matchesCategory
+import app.pwhs.blockads.ui.filter.data.resolvedCategory
 import app.pwhs.blockads.ui.theme.TextSecondary
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -76,9 +77,24 @@ fun FilterSetupScreen(
     }
 
     val activeCounts = remember(allLists, starredUrls) {
-        FilterCategoryTab.entries.associateWith { tab ->
-            allLists.count { it.matchesCategory(tab, starredUrls) && it.isEnabled }
+        val counts = mutableMapOf<FilterCategoryTab, Int>()
+        for (tab in FilterCategoryTab.entries) {
+            counts[tab] = 0
         }
+        for (filter in allLists) {
+            if (!filter.isEnabled) continue
+            counts[FilterCategoryTab.ALL] = (counts[FilterCategoryTab.ALL] ?: 0) + 1
+            if (starredUrls.contains(filter.url)) {
+                counts[FilterCategoryTab.STARRED] = (counts[FilterCategoryTab.STARRED] ?: 0) + 1
+            }
+            if (!filter.isBuiltIn) {
+                counts[FilterCategoryTab.CUSTOM] = (counts[FilterCategoryTab.CUSTOM] ?: 0) + 1
+            } else {
+                val cat = filter.resolvedCategory()
+                counts[cat] = (counts[cat] ?: 0) + 1
+            }
+        }
+        counts
     }
 
     Scaffold(
@@ -123,8 +139,8 @@ fun FilterSetupScreen(
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 val currentTab = FilterCategoryTab.entries[page]
-                val tabFilters = filterLists.filter { it.matchesCategory(currentTab, starredUrls) }
-                val displayFilters = remember(tabFilters, currentTab) {
+                val displayFilters = remember(filterLists, currentTab, starredUrls) {
+                    val tabFilters = filterLists.filter { it.matchesCategory(currentTab, starredUrls) }
                     if (currentTab == FilterCategoryTab.ALL) {
                         tabFilters.sortedWith(compareByDescending<FilterListEntity> { it.isEnabled }.thenBy { it.name })
                     } else {
@@ -133,7 +149,7 @@ fun FilterSetupScreen(
                 }
 
                 if (currentTab == FilterCategoryTab.CUSTOM) {
-                    if (isSearching && tabFilters.isEmpty()) {
+                    if (isSearching && displayFilters.isEmpty()) {
                         EmptyCategorySearch(searchQuery)
                     } else {
                         LazyColumn(
@@ -142,7 +158,7 @@ fun FilterSetupScreen(
                         ) {
                             item {
                                 CustomTabContent(
-                                    customFilters = tabFilters,
+                                    customFilters = displayFilters,
                                     onToggle = { viewModel.toggleFilterList(it) },
                                     onDelete = { viewModel.deleteFilterList(it) },
                                     onFilterClick = onNavigateToFilterDetail,
@@ -154,25 +170,23 @@ fun FilterSetupScreen(
                             }
                         }
                     }
-                } else if (currentTab == FilterCategoryTab.STARRED && tabFilters.isEmpty() && !isSearching) {
+                } else if (currentTab == FilterCategoryTab.STARRED && displayFilters.isEmpty() && !isSearching) {
                     EmptyStarredFilter()
                 } else {
-                    if (isSearching && tabFilters.isEmpty()) {
+                    if (isSearching && displayFilters.isEmpty()) {
                         EmptyCategorySearch(searchQuery)
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp)
                         ) {
-                            item {
-                                FilterListCard(
-                                    filters = displayFilters,
-                                    onToggle = { viewModel.toggleFilterList(it) },
-                                    onFilterClick = onNavigateToFilterDetail,
-                                    starredUrls = starredUrls,
-                                    onToggleStar = { viewModel.toggleStarredFilter(it) }
-                                )
-                            }
+                            filterListItems(
+                                filters = displayFilters,
+                                onToggle = { viewModel.toggleFilterList(it) },
+                                onFilterClick = onNavigateToFilterDetail,
+                                starredUrls = starredUrls,
+                                onToggleStar = { viewModel.toggleStarredFilter(it) }
+                            )
                         }
                     }
                 }

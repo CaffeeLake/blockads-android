@@ -77,9 +77,51 @@ class HomeViewModel(
     val vpnRevokedByAnotherApp: StateFlow<Boolean> = appPrefs.vpnRevokedByAnotherApp
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
+    val stabilityTipDismissed: StateFlow<Boolean> = appPrefs.stabilityTipDismissed
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val stabilityTipDismissedAt: StateFlow<Long> = appPrefs.stabilityTipDismissedAt
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0L)
+
+    val stabilityTipLastBatteryIgnored: StateFlow<Boolean> = appPrefs.stabilityTipLastBatteryIgnored
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val stabilityTipLastAlwaysOn: StateFlow<Boolean> = appPrefs.stabilityTipLastAlwaysOn
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     fun dismissVpnRevokedWarning() {
         viewModelScope.launch {
             appPrefs.setVpnRevokedByAnotherApp(false)
+        }
+    }
+
+    fun dismissStabilityTip(batteryIgnored: Boolean = false, alwaysOn: Boolean = false) {
+        markTipDismissedThisSession()
+        viewModelScope.launch {
+            appPrefs.recordStabilityTipDismissed(batteryIgnored, alwaysOn)
+        }
+    }
+
+    fun updateStabilityTipHardwareState(batteryIgnored: Boolean, alwaysOn: Boolean) {
+        viewModelScope.launch {
+            appPrefs.updateStabilityTipHardwareState(batteryIgnored, alwaysOn)
+        }
+    }
+
+    val dismissedFeatureTips: StateFlow<Set<String>> = appPrefs.dismissedFeatureTips
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
+
+    private val _hasInteractedWithTipThisSession = MutableStateFlow(false)
+    val hasInteractedWithTipThisSession: StateFlow<Boolean> = _hasInteractedWithTipThisSession.asStateFlow()
+
+    fun markTipDismissedThisSession() {
+        _hasInteractedWithTipThisSession.value = true
+    }
+
+    fun dismissFeatureTip(tipId: String) {
+        markTipDismissedThisSession()
+        viewModelScope.launch {
+            appPrefs.dismissFeatureTip(tipId)
         }
     }
 
