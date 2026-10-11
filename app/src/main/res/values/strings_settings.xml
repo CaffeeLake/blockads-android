@@ -359,7 +359,9 @@
     <string name="geoip_never_updated">Never updated</string>
     <string name="geoip_action_update">Update from Remote</string>
     <string name="geoip_action_import">Import Local File (.bin / .bin.gz)</string>
+    <string name="geoip_action_import_desc">Select a custom .bin or .bin.gz database</string>
     <string name="geoip_action_reset">Reset to Default</string>
+    <string name="geoip_action_reset_desc">Delete database and reset to bundled minimal map</string>
     <string name="geoip_auto_update_title">Weekly Auto-Update</string>
     <string name="geoip_auto_update_desc">Automatically check and update the database weekly in the background</string>
     <string name="geoip_custom_url_title">Custom Source URL</string>

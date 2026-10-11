@@ -319,7 +319,9 @@
     <string name="geoip_never_updated">Chưa cập nhật</string>
     <string name="geoip_action_update">Cập nhật từ máy chủ</string>
     <string name="geoip_action_import">Nhập từ tệp tin (.bin / .bin.gz)</string>
+    <string name="geoip_action_import_desc">Chọn tệp cơ sở dữ liệu .bin hoặc .bin.gz</string>
     <string name="geoip_action_reset">Đặt lại về mặc định</string>
+    <string name="geoip_action_reset_desc">Xóa cơ sở dữ liệu và đặt lại về mặc định</string>
     <string name="geoip_auto_update_title">Tự động cập nhật hàng tuần</string>
     <string name="geoip_auto_update_desc">Tự động kiểm tra và cập nhật cơ sở dữ liệu nền định kỳ hàng tuần</string>
     <string name="geoip_custom_url_title">URL nguồn tùy chỉnh</string>

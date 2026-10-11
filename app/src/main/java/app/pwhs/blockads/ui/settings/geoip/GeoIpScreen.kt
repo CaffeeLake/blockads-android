@@ -181,7 +181,7 @@ fun GeoIpScreenContent(
                         icon = Icons.Default.FileOpen,
                         iconTint = Color(0xFF7C3AED),
                         title = stringResource(R.string.geoip_action_import),
-                        desc = stringResource(R.string.rule_field_param_hint),
+                        desc = stringResource(R.string.geoip_action_import_desc),
                         statusValue = if (uiState.isImporting) "..." else null,
                         onClick = {
                             if (!uiState.isUpdating && !uiState.isImporting) {
@@ -208,7 +208,7 @@ fun GeoIpScreenContent(
                         icon = Icons.Default.SettingsBackupRestore,
                         iconTint = Color(0xFFEF4444),
                         title = stringResource(R.string.geoip_action_reset),
-                        desc = stringResource(R.string.geoip_custom_url_desc),
+                        desc = stringResource(R.string.geoip_action_reset_desc),
                         onClick = { onIntent(GeoIpUiIntent.ResetToDefault) }
                     )
                 }
