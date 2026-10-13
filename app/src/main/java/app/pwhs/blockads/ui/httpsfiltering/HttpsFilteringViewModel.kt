@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.service.AdBlockVpnService
 import app.pwhs.blockads.service.ServiceController
+import app.pwhs.blockads.utils.SystemCertificateInstaller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +30,6 @@ import timber.log.Timber
 import java.io.File
 
 // Models, CertStatus, and HttpsFilteringEvent are in HttpsFilteringContract.kt
-
-
 // ── ViewModel ───────────────────────────────────────────────────────────────
 
 class HttpsFilteringViewModel(
@@ -197,6 +196,11 @@ class HttpsFilteringViewModel(
                     Timber.d("Cert verification: found matching CA in trust store (alias=$alias, isSystem=$isSystem)")
                     return true
                 }
+            }
+
+            if (SystemCertificateInstaller.isModuleInstalled(caPem)) {
+                Timber.d("Cert verification: found matching CA in Magisk module")
+                return true
             }
 
             Timber.d("Cert verification: CA not found in user/system trust store")

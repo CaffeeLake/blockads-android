@@ -108,4 +108,16 @@ class SystemCertificateInstallerShellTest {
         assertTrue(SystemCertificateInstaller.installToSystemStore("not a cert").isFailure)
         assertFalse(shell.batches.isNotEmpty())
     }
+
+    @Test
+    fun `isModuleInstalled reports true when module cert exists`() {
+        shell.respond = { FakeResult(isSuccess = true, out = listOf("1")) }
+        assertTrue(SystemCertificateInstaller.isModuleInstalled(pem))
+    }
+
+    @Test
+    fun `isModuleInstalled reports false when module cert does not exist`() {
+        shell.respond = { FakeResult(isSuccess = true, out = listOf("0")) }
+        assertFalse(SystemCertificateInstaller.isModuleInstalled(pem))
+    }
 }

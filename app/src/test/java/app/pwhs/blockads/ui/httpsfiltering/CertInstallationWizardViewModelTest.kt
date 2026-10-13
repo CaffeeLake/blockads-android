@@ -51,6 +51,7 @@ class CertInstallationWizardViewModelTest {
         every { f.engine.getMitmCACert(any()) } returns existingCa
         mockkObject(SystemCertificateInstaller)
         every { SystemCertificateInstaller.isRootAvailable() } returns rootAvailable
+        every { SystemCertificateInstaller.isModuleInstalled(any()) } returns false
         val vm = CertInstallationWizardViewModel(f.app)
         awaitTrue(message = "initial cert check") { vm.uiState.value.certStatus != CertStatus.UNKNOWN }
         val effects = Collections.synchronizedList(mutableListOf<CertInstallationWizardUiEffect>())

@@ -172,7 +172,8 @@ object SystemCertificateInstaller {
 
             val commands = mutableListOf<String>()
 
-            // 1. Prepare Magisk / KernelSU module structure
+            // 1. Prepare Magisk / KernelSU module structure (clean out old certs first)
+            commands.add("rm -f $MODULE_DIR/system/etc/security/cacerts/* $MODULE_DIR/system/apex/com.android.conscrypt/cacerts/*")
             commands.add("mkdir -p $MODULE_DIR/system/etc/security/cacerts")
             commands.add("mkdir -p $MODULE_DIR/system/apex/com.android.conscrypt/cacerts")
 
@@ -244,6 +245,26 @@ object SystemCertificateInstaller {
         } catch (e: Exception) {
             Timber.e(e, "Exception during system CA installation")
             Result.failure(e)
+        }
+    }
+
+    /**
+     * Checks if the given CA certificate is present in the Magisk / KernelSU module on disk.
+     */
+    fun isModuleInstalled(caPem: String): Boolean {
+        if (!isRootAvailable()) return false
+        return try {
+            val certFactory = CertificateFactory.getInstance("X.509")
+            val cert = certFactory.generateCertificate(
+                ByteArrayInputStream(caPem.toByteArray())
+            ) as X509Certificate
+            val hashOld = computeSubjectHashOld(cert)
+            val certPath = "$MODULE_DIR/system/etc/security/cacerts/$hashOld.0"
+            val res = shell.exec("[ -f $certPath ] && echo 1 || echo 0")
+            res.isSuccess && res.out.any { it.trim() == "1" }
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to check if module is installed")
+            false
         }
     }
 }

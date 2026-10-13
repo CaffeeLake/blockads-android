@@ -247,6 +247,11 @@ class CertInstallationWizardViewModel(
                     return true
                 }
             }
+
+            if (SystemCertificateInstaller.isModuleInstalled(caPem)) {
+                Timber.d("Wizard: found matching CA in Magisk module")
+                return true
+            }
             false
         } catch (e: Exception) {
             Timber.e(e, "Wizard: verification failed")

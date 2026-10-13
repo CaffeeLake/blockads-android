@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Bolt
@@ -311,8 +314,9 @@ private fun RootInstallCard(
                         onClick = onInstallFast,
                         modifier = Modifier
                             .weight(1f)
-                            .height(44.dp),
-                        shape = RoundedCornerShape(12.dp)
+                            .defaultMinSize(minHeight = 44.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Bolt,
@@ -323,7 +327,9 @@ private fun RootInstallCard(
                         Text(
                             text = stringResource(R.string.https_wizard_root_fast),
                             style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 
@@ -331,8 +337,9 @@ private fun RootInstallCard(
                         onClick = onInstallModule,
                         modifier = Modifier
                             .weight(1f)
-                            .height(44.dp),
+                            .defaultMinSize(minHeight = 44.dp),
                         shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.primary
@@ -348,7 +355,9 @@ private fun RootInstallCard(
                         Text(
                             text = stringResource(R.string.https_wizard_root_module),
                             style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
