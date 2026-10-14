@@ -2,13 +2,24 @@
 <issues format="6" by="lint 8.13.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.2)" variant="all" version="8.13.2">
 
     <issue
+        id="OldTargetApi"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+        errorLine1="        targetSdk = 36"
+        errorLine2="        ~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle.kts"
+            line="39"
+            column="9"/>
+    </issue>
+
+    <issue
         id="UnusedAttribute"
         message="Attribute `localeConfig` is only used in API level 33 and higher (current min is 24)"
         errorLine1="        android:localeConfig=&quot;@xml/locales_config&quot;"
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="28"
+            line="30"
             column="9"/>
     </issue>
 
@@ -114,23 +125,23 @@
     <issue
         id="BatteryLife"
         message="Use of `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` violates the Play Store Content Policy regarding acceptable use cases, as described in https://developer.android.com/training/monitoring-device-state/doze-standby.html"
+        errorLine1="    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {"
+        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="362"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="BatteryLife"
+        message="Use of `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` violates the Play Store Content Policy regarding acceptable use cases, as described in https://developer.android.com/training/monitoring-device-state/doze-standby.html"
         errorLine1="        val intent1 = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {"
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/onboarding/OnboardingScreen.kt"
-            line="136"
+            line="134"
             column="39"/>
-    </issue>
-
-    <issue
-        id="PictureInPictureIssue"
-        message="An activity in this app supports picture-in-picture and the targetSdkVersion is 31 or above; it is therefore strongly recommended to call both `setAutoEnterEnabled(true)` and `setSourceRectHint(...)`"
-        errorLine1="    &lt;application"
-        errorLine2="     ~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="21"
-            column="6"/>
     </issue>
 
     <issue
@@ -168,11 +179,11 @@
 
     <issue
         id="AndroidGradlePluginVersion"
-        message="A newer version of Gradle than 8.14.3 is available: 8.14.5"
+        message="A newer version of Gradle than 8.14.3 is available: 8.14.6"
         errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.3-bin.zip"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="../gradle/wrapper/gradle-wrapper.properties"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/wrapper/gradle-wrapper.properties"
             line="4"
             column="17"/>
     </issue>
@@ -183,8 +194,19 @@
         errorLine1="agp = &quot;8.13.2&quot;"
         errorLine2="      ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="2"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.devtools.ksp than 2.3.6 is available: 2.3.12"
+        errorLine1="ksp = &quot;2.3.6&quot;"
+        errorLine2="      ~~~~~~~">
+        <location
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
+            line="5"
             column="7"/>
     </issue>
 
@@ -194,7 +216,7 @@
         errorLine1="coreKtx = &quot;1.18.0&quot;"
         errorLine2="          ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="6"
             column="11"/>
     </issue>
@@ -205,7 +227,7 @@
         errorLine1="lifecycleRuntimeKtx = &quot;2.10.0&quot;"
         errorLine2="                      ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="10"
             column="23"/>
     </issue>
@@ -216,7 +238,7 @@
         errorLine1="lifecycleRuntimeKtx = &quot;2.10.0&quot;"
         errorLine2="                      ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="10"
             column="23"/>
     </issue>
@@ -227,7 +249,7 @@
         errorLine1="composeBom = &quot;2026.05.00&quot;"
         errorLine2="             ~~~~~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="12"
             column="14"/>
     </issue>
@@ -238,7 +260,7 @@
         errorLine1="room = &quot;2.8.4&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="13"
             column="8"/>
     </issue>
@@ -249,7 +271,7 @@
         errorLine1="room = &quot;2.8.4&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="13"
             column="8"/>
     </issue>
@@ -260,7 +282,7 @@
         errorLine1="room = &quot;2.8.4&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="13"
             column="8"/>
     </issue>
@@ -271,7 +293,7 @@
         errorLine1="room = &quot;2.8.4&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="13"
             column="8"/>
     </issue>
@@ -282,7 +304,7 @@
         errorLine1="workManager = &quot;2.11.2&quot;"
         errorLine2="              ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="28"
             column="15"/>
     </issue>
@@ -293,7 +315,7 @@
         errorLine1="workManager = &quot;2.11.2&quot;"
         errorLine2="              ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="28"
             column="15"/>
     </issue>
@@ -304,7 +326,7 @@
         errorLine1="lifecycleRuntimeCompose = &quot;2.10.0&quot;"
         errorLine2="                          ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="30"
             column="27"/>
     </issue>
@@ -315,7 +337,7 @@
         errorLine1="nav3Core = &quot;1.1.1&quot;"
         errorLine2="           ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="31"
             column="12"/>
     </issue>
@@ -326,7 +348,7 @@
         errorLine1="nav3Core = &quot;1.1.1&quot;"
         errorLine2="           ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="31"
             column="12"/>
     </issue>
@@ -337,7 +359,7 @@
         errorLine1="appcompat = &quot;1.7.1&quot;"
         errorLine2="            ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="34"
             column="13"/>
     </issue>
@@ -348,7 +370,7 @@
         errorLine1="tvFoundation = &quot;1.0.0-alpha07&quot;"
         errorLine2="               ~~~~~~~~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="35"
             column="16"/>
     </issue>
@@ -359,40 +381,40 @@
         errorLine1="tvMaterial = &quot;1.0.0-alpha07&quot;"
         errorLine2="             ~~~~~~~~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="36"
             column="14"/>
     </issue>
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of org.jetbrains.kotlin.android than 2.3.10 is available: 2.4.20"
+        message="A newer version of org.jetbrains.kotlin.android than 2.3.10 is available: 2.4.21"
         errorLine1="kotlin = &quot;2.3.10&quot;"
         errorLine2="         ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="4"
             column="10"/>
     </issue>
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of org.jetbrains.kotlin.plugin.compose than 2.3.10 is available: 2.4.20"
+        message="A newer version of org.jetbrains.kotlin.plugin.compose than 2.3.10 is available: 2.4.21"
         errorLine1="kotlin = &quot;2.3.10&quot;"
         errorLine2="         ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="4"
             column="10"/>
     </issue>
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of org.jetbrains.kotlin.plugin.serialization than 2.3.10 is available: 2.4.20"
+        message="A newer version of org.jetbrains.kotlin.plugin.serialization than 2.3.10 is available: 2.4.21"
         errorLine1="kotlin = &quot;2.3.10&quot;"
         errorLine2="         ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="4"
             column="10"/>
     </issue>
@@ -403,7 +425,7 @@
         errorLine1="ktor = &quot;3.4.3&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="15"
             column="8"/>
     </issue>
@@ -414,7 +436,7 @@
         errorLine1="ktor = &quot;3.4.3&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="15"
             column="8"/>
     </issue>
@@ -425,7 +447,7 @@
         errorLine1="ktor = &quot;3.4.3&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="15"
             column="8"/>
     </issue>
@@ -436,7 +458,7 @@
         errorLine1="ktor = &quot;3.4.3&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="15"
             column="8"/>
     </issue>
@@ -447,7 +469,7 @@
         errorLine1="koin = &quot;4.2.1&quot;"
         errorLine2="       ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="17"
             column="8"/>
     </issue>
@@ -458,7 +480,7 @@
         errorLine1="okhttp = &quot;4.12.0&quot;"
         errorLine2="         ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="25"
             column="10"/>
     </issue>
@@ -469,9 +491,20 @@
         errorLine1="okhttp = &quot;4.12.0&quot;"
         errorLine2="         ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="25"
             column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of org.jetbrains.kotlinx.kover than 0.9.9 is available: 0.9.11"
+        errorLine1="kover = &quot;0.9.9&quot;"
+        errorLine2="        ~~~~~~~">
+        <location
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
+            line="26"
+            column="9"/>
     </issue>
 
     <issue
@@ -480,29 +513,29 @@
         errorLine1="composeCharts = &quot;0.2.5&quot;"
         errorLine2="                ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="29"
             column="17"/>
     </issue>
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of io.sentry.android.gradle than 6.6.0 is available: 6.22.0"
+        message="A newer version of io.sentry.android.gradle than 6.6.0 is available: 6.23.0"
         errorLine1="sentry = &quot;6.6.0&quot;"
         errorLine2="         ~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="32"
             column="10"/>
     </issue>
 
     <issue
         id="NewerVersionAvailable"
-        message="A newer version of io.sentry:sentry-android than 8.41.0 is available: 8.58.0"
+        message="A newer version of io.sentry:sentry-android than 8.41.0 is available: 8.60.0"
         errorLine1="sentry-android = &quot;8.41.0&quot;"
         errorLine2="                 ~~~~~~~~">
         <location
-            file="../gradle/libs.versions.toml"
+            file="$HOME/AndroidStudioProjects/blockads-android/gradle/libs.versions.toml"
             line="33"
             column="18"/>
     </issue>
@@ -513,8 +546,19 @@
         errorLine1="    modifier: Modifier = Modifier"
         errorLine2="    ~~~~~~~~">
         <location
+            file="src/main/java/app/pwhs/blockads/ui/domainrules/dialog/AddFilterRuleDialog.kt"
+            line="400"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
             file="src/main/java/app/pwhs/blockads/ui/settings/component/ApplicationsSection.kt"
-            line="24"
+            line="23"
             column="5"/>
     </issue>
 
@@ -525,94 +569,6 @@
         errorLine2="    ~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserBentoMenuSheet.kt"
-            line="70"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserBottomBar.kt"
-            line="35"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/BrowserScreen.kt"
-            line="63"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserShieldSheet.kt"
-            line="66"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserShortcuts.kt"
-            line="76"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserTopBar.kt"
-            line="74"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/dnsprovider/component/CustomDnsDialog.kt"
-            line="40"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/logs/component/DomainDetailBottomSheet.kt"
-            line="59"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/elementrules/ElementRulesScreen.kt"
             line="72"
             column="5"/>
     </issue>
@@ -623,8 +579,118 @@
         errorLine1="    modifier: Modifier = Modifier"
         errorLine2="    ~~~~~~~~">
         <location
-            file="src/main/java/app/pwhs/blockads/ui/dnsprovider/component/FallbackDnsDialog.kt"
-            line="30"
+            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserBottomOmnibox.kt"
+            line="66"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/BrowserScreen.kt"
+            line="80"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserShortcuts.kt"
+            line="78"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserWebView.kt"
+            line="50"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/logs/component/DomainDetailBottomSheet.kt"
+            line="62"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/domainrules/component/DomainItem.kt"
+            line="55"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/domainrules/dialog/EditFilterRuleDialog.kt"
+            line="16"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/elementrules/ElementRulesScreen.kt"
+            line="74"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/filter/component/FilterListCard.kt"
+            line="72"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/domainrules/dialog/FilterRuleFormComponents.kt"
+            line="34"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/domainrules/dialog/FilterRuleFormComponents.kt"
+            line="64"
             column="5"/>
     </issue>
 
@@ -651,14 +717,1323 @@
     </issue>
 
     <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/config/component/ProfileHeader.kt"
+            line="54"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/TopBlockedSection.kt"
+            line="33"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="ModifierParameter"
+        message="Modifier parameter should be the first optional parameter"
+        errorLine1="    modifier: Modifier = Modifier"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/statistics/destinations/TrafficDestinationsSection.kt"
+            line="57"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;trusted_networks_use_system_dns_toggle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;trusted_networks_use_system_dns_toggle&quot;>Use system DNS on trusted networks&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="69"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;trusted_networks_use_system_dns_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;trusted_networks_use_system_dns_desc&quot;>Keep ad blocking active but use the Wi-Fi network\&apos;s local DNS server to resolve internal domains.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="70"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;trusted_networks_paused_text_generic&quot; is not translated in &quot;vi&quot; (Vietnamese)"
+        errorLine1="    &lt;string name=&quot;trusted_networks_paused_text_generic&quot;>BlockAds is paused on a trusted Wi-Fi network — it resumes automatically when you leave.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="77"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_activated&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_activated&quot;>Configuration activated&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="78"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_added&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_added&quot;>Configuration added&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="79"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_updated&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_updated&quot;>Configuration updated&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="80"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_deleted&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_deleted&quot;>Configuration deleted&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="81"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_fetch_failed&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_fetch_failed&quot;>Failed to download configuration&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="82"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_add_dialog_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_add_dialog_title&quot;>Add Configuration&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="83"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_name_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_name_label&quot;>Name&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="84"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_url_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_url_label&quot;>Subscription URL (.conf / .snippet)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="85"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_content_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_content_label&quot;>Raw Config Content&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="86"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_add_remote_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_add_remote_title&quot;>Add Remote Subscription&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="87"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_refresh_remote&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_refresh_remote&quot;>Update&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="88"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_save&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_save&quot;>Save&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="89"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_subtitle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_subtitle&quot;>The main profile contains all the proxies, filters and other settings.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="91"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_snippets&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_snippets&quot;>Snippets&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="92"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_edit&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_edit&quot;>Edit&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="93"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_import&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_import&quot;>Import&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="94"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_export&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_export&quot;>Export&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="95"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_download&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_download&quot;>Download&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="96"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_sample&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_sample&quot;>Sample&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="97"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_reset&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_reset&quot;>Reset&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="98"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_panel_toolbar&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_panel_toolbar&quot;>Switch Profile&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="99"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_misc_settings&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_misc_settings&quot;>Misc Settings&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="100"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_to_section&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_to_section&quot;>To Section&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="101"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_reset_confirm_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_reset_confirm_title&quot;>Reset Configuration&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="102"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_reset_confirm_msg&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_reset_confirm_msg&quot;>Are you sure you want to reset configuration to defaults?&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="103"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_copied_to_clipboard&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_copied_to_clipboard&quot;>Copied to clipboard&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="104"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_sample_loaded&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_sample_loaded&quot;>Sample configuration loaded&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="105"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_subscriptions_rulesets&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_subscriptions_rulesets&quot;>Subscriptions &amp;amp; Rulesets&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="106"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_subscriptions_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_subscriptions_desc&quot;>Remote subscription rulesets and sync status&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="107"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_action_migrate&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_action_migrate&quot;>Migrate App Settings&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="108"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_migrate_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_migrate_desc&quot;>Generate config profile from current DNS and adblock filters&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="109"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_migrated_success&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_migrated_success&quot;>Successfully generated profile from app settings&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="110"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_no_subscriptions&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_no_subscriptions&quot;>No remote subscriptions&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="111"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_no_subscriptions_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_no_subscriptions_desc&quot;>Profiles with remote URLs or filter rulesets will appear here&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="112"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_tap_to_switch&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_tap_to_switch&quot;>Active Profile • Tap to switch&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="113"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_import_file&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_import_file&quot;>Import File&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="114"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_choose_file&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_choose_file&quot;>Choose File&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="115"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_choose_file_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_choose_file_desc&quot;>Select a .conf, .snippet, or .txt file&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="116"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_change_file&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;vi&quot; (Vietnamese), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_change_file&quot;>Change&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="117"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_choose_icon&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_choose_icon&quot;>Choose Profile Icon&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="118"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;profile_icon_updated&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;profile_icon_updated&quot;>Profile icon updated&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="119"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;app_management_filter_all&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;app_management_filter_all&quot;>All&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="190"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;app_management_filter_protected&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;app_management_filter_protected&quot;>Protected&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="191"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;app_management_filter_whitelisted&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;app_management_filter_whitelisted&quot;>Bypassed&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="192"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;app_management_bypass_notice&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;app_management_bypass_notice&quot;>Bypassed apps connect directly to the internet without filtering or VPN protection.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="193"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;filter_rule_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;filter_rule_title&quot;>Filter Rule&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="266"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;filter_rule_subtitle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;filter_rule_subtitle&quot;>The detail of the filter.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="267"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_type&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_type&quot;>Type&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="268"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_param&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_param&quot;>Param&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="269"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_param_hint&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_param_hint&quot;>The param for this type of filter.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="270"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_policy&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_policy&quot;>Policy&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="271"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_policy_hint&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_policy_hint&quot;>Choose the policy.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="272"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_field_save_to&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_field_save_to&quot;>Save To&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="273"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;config_rule_added&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;config_rule_added&quot;>Rule added to profile: %s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="274"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_host_suffix&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_host_suffix&quot;>e.g. example.com (matches *.example.com)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="275"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_host&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_host&quot;>e.g. ads.example.com (exact host only)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="276"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_host_keyword&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_host_keyword&quot;>e.g. analytics, adservice, tracker&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="277"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_ip_cidr&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_ip_cidr&quot;>e.g. 192.168.1.0/24 or 10.0.0.1/32&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="278"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_ip_cidr6&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_ip_cidr6&quot;>e.g. 2001:db8::/32&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="279"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_geoip&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_geoip&quot;>e.g. VN, US, JP (2-letter country code)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="280"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_user_agent&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_user_agent&quot;>e.g. *Spotify*, *MicroMessenger*&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="281"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_param_hint_final&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_param_hint_final&quot;>No parameter needed (matches all remaining)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="282"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_title&quot;>Rule Types &amp;amp; Syntax Guide&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="285"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_subtitle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_subtitle&quot;>Understand how each rule type and policy evaluates traffic.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="286"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_action_tooltip&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_action_tooltip&quot;>Rule Guide&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="287"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_category_all&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_category_all&quot;>All&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="288"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_category_domain&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_category_domain&quot;>Domain&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="289"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_category_ip&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_category_ip&quot;>IP &amp;amp; Geo&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="290"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_category_other&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_category_other&quot;>Other&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="291"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_category_policy&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_category_policy&quot;>Policy&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="292"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_example_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_example_label&quot;>Example:&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="293"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_matches_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_matches_label&quot;>Matches:&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="294"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_not_matches_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_not_matches_label&quot;>Doesn\&apos;t match:&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="295"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;rule_docs_usage_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;rule_docs_usage_label&quot;>Best for:&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="296"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;settings_geoip_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;settings_geoip_title&quot;>GeoIP Database&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="299"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;settings_geoip_subtitle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;settings_geoip_subtitle&quot;>IP location lookup for destination analytics &amp;amp; routing rules&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="300"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_status_empty&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_status_empty&quot;>Not downloaded&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="301"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_status_downloading&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_status_downloading&quot;>Updating...&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="302"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_records_count&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_records_count&quot;>%s IP ranges&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="303"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_size_label&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_size_label&quot;>File size: %s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="304"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_last_updated&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_last_updated&quot;>Last updated: %s&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="305"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_never_updated&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_never_updated&quot;>Never updated&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="306"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_action_update&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_action_update&quot;>Update from Remote&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="307"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_action_import&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_action_import&quot;>Import Local File (.bin / .bin.gz)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="308"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_action_import_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_action_import_desc&quot;>Select a custom .bin or .bin.gz database&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="309"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_action_reset&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_action_reset&quot;>Reset to Default&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="310"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_action_reset_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_action_reset_desc&quot;>Delete database and reset to bundled minimal map&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="311"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_auto_update_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_auto_update_title&quot;>Weekly Auto-Update&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="312"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_auto_update_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_auto_update_desc&quot;>Automatically check and update the database weekly in the background&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="313"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_custom_url_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_custom_url_title&quot;>Custom Source URL&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="314"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_custom_url_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_custom_url_desc&quot;>Leave empty to use the official release mirror&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="315"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_custom_url_dialog_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_custom_url_dialog_title&quot;>Edit Source URL&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="316"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_custom_url_hint&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_custom_url_hint&quot;>https://example.com/geoip_ipv4.bin.gz&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="317"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_source_credit&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_source_credit&quot;>Source: sapics/ip-location-db (CC0 1.0 Universal)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="318"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_import_success&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_import_success&quot;>Imported %s IP ranges successfully&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="319"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_import_invalid&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_import_invalid&quot;>Invalid GeoIP database file&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="320"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;geoip_update_success&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;geoip_update_success&quot;>GeoIP database updated successfully&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="321"
+            column="13"/>
+    </issue>
+
+    <issue
         id="Typos"
         message="Repeated word &quot;passo&quot; in message: possible typo"
         errorLine1="    &lt;string name=&quot;https_wizard_install_instructions_title&quot;>Guida passo passo&lt;/string>"
         errorLine2="                                                                 ~~~~~~~~~~~">
         <location
             file="src/main/res/values-it/strings_filters.xml"
-            line="175"
+            line="171"
             column="66"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_tab_builtin&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_tab_builtin&quot;>Có sẵn&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="209"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_tab_custom&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_tab_custom&quot;>Tùy chỉnh&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="210"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_active_hero_title&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_active_hero_title&quot;>Máy chủ DNS đang dùng&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="211"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_protocol_label&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_protocol_label&quot;>Giao thức&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="212"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_fallback_label&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_fallback_label&quot;>DNS dự phòng&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="213"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_category_all&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_category_all&quot;>Tất cả&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="214"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_configure_btn&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_configure_btn&quot;>Cấu hình DNS tùy chỉnh&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="215"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_sheet_title&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_sheet_title&quot;>Cấu hình DNS &amp;amp; Giao thức&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="216"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_sheet_desc&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_sheet_desc&quot;>Chọn giao thức và cấu hình máy chủ DNS upstream của bạn.&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="217"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_target_url&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_target_url&quot;>Target URL (Resolver)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="218"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_relay_url&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_relay_url&quot;>Relay URL (Proxy ẩn danh - Tùy chọn)&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="219"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_relay_hint&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_relay_hint&quot;>Máy chủ proxy HTTP chuyển tiếp gói tin mã hóa giấu IP của bạn&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="220"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_server_ip&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_server_ip&quot;>Địa chỉ máy chủ&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="221"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_presets&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_presets&quot;>Mẫu cấu hình nhanh&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="222"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_preset_cf_odoh&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_preset_cf_odoh&quot;>Cloudflare ODoH&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="223"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="Untranslatable"
+        message="The resource string &quot;dns_custom_active_badge&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
+        errorLine1="    &lt;string name=&quot;dns_custom_active_badge&quot;>Đang dùng DNS tùy chỉnh&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="224"
+            column="13"/>
     </issue>
 
     <issue
@@ -670,6 +2045,50 @@
             file="src/main/java/app/pwhs/blockads/utils/FileLoggingTree.kt"
             line="53"
             column="13"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;domains&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;browser_rule_stats_domains&quot;>%1$d domains&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_browser.xml"
+            line="30"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;domains&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;browser_rules_updated_format&quot;>Filter rules updated to v%1$d (%2$d domains)&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_browser.xml"
+            line="67"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;element&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;element_rules_hiding_count&quot;>Hiding %1$d element(s)&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_browser.xml"
+            line="83"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;website&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;element_rules_domains_count&quot;>Applied across %1$d website(s)&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_browser.xml"
+            line="84"
+            column="5"/>
     </issue>
 
     <issue
@@ -690,7 +2109,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="35"
+            line="39"
             column="5"/>
     </issue>
 
@@ -701,7 +2120,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="47"
+            line="51"
             column="5"/>
     </issue>
 
@@ -712,7 +2131,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="65"
+            line="69"
             column="5"/>
     </issue>
 
@@ -723,7 +2142,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="74"
+            line="83"
             column="5"/>
     </issue>
 
@@ -734,7 +2153,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="94"
+            line="111"
             column="5"/>
     </issue>
 
@@ -751,22 +2170,22 @@
 
     <issue
         id="PluralsCandidate"
-        message="Formatting %d followed by words (&quot;apps&quot;): This should probably be a plural rather than a string"
-        errorLine1="    &lt;string name=&quot;whitelist_apps_count&quot;>%d apps whitelisted&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Formatting %d followed by words (&quot;queries&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;stats_destinations_queries_count&quot;>%d queries&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/values/strings_settings.xml"
-            line="6"
+            file="src/main/res/values/strings_logs.xml"
+            line="57"
             column="5"/>
     </issue>
 
     <issue
         id="PluralsCandidate"
-        message="Formatting %d followed by words (&quot;active&quot;): This should probably be a plural rather than a string"
-        errorLine1="    &lt;string name=&quot;settings_filter_lists&quot;>Filter Lists (%d active)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Formatting %d followed by words (&quot;blocked&quot;): This should probably be a plural rather than a string"
+        errorLine1="    &lt;string name=&quot;stats_block_reasons_blocked_count&quot;>%d blocked&lt;/string>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/values/strings_settings.xml"
+            file="src/main/res/values/strings_logs.xml"
             line="64"
             column="5"/>
     </issue>
@@ -778,7 +2197,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_settings.xml"
-            line="146"
+            line="177"
             column="5"/>
     </issue>
 
@@ -789,7 +2208,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_settings.xml"
-            line="147"
+            line="178"
             column="5"/>
     </issue>
 
@@ -800,7 +2219,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_settings.xml"
-            line="163"
+            line="197"
             column="5"/>
     </issue>
 
@@ -811,7 +2230,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_vpn.xml"
-            line="35"
+            line="39"
             column="5"/>
     </issue>
 
@@ -822,11 +2241,11 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-de/strings_onboarding.xml"
-            line="34"
+            line="26"
             column="5"/>
         <location
             file="src/main/res/values/strings_onboarding.xml"
-            line="34"
+            line="26"
             column="5"
             message="Conflicting number of arguments (0) here"/>
     </issue>
@@ -838,7 +2257,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="28"
+            line="30"
             column="31"/>
     </issue>
 
@@ -849,7 +2268,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="28"
+            line="30"
             column="31"/>
     </issue>
 
@@ -860,7 +2279,7 @@
         errorLine2="         ~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="122"
+            line="129"
             column="10"/>
     </issue>
 
@@ -878,12 +2297,34 @@
     <issue
         id="ObsoleteSdkInt"
         message="Unnecessary; `SDK_INT` is always >= 24"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/media/BrowserMediaService.kt"
+            line="184"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 24"
         errorLine1="    private val deContext: Context = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {"
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/data/datastore/DirectBootPreferences.kt"
             line="17"
             column="42"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 24"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/utils/LogcatExporter.kt"
+            line="59"
+            column="13"/>
     </issue>
 
     <issue
@@ -904,7 +2345,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/appmanagement/AppManagementScreen.kt"
-            line="73"
+            line="74"
             column="36"/>
     </issue>
 
@@ -998,6 +2439,17 @@
 
     <issue
         id="UnusedResources"
+        message="The resource `R.drawable.ic_pip` appears to be unused"
+        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/drawable/ic_pip.xml"
+            line="1"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
         message="The resource `R.drawable.ic_power` appears to be unused"
         errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
         errorLine2="^">
@@ -1009,12 +2461,23 @@
 
     <issue
         id="UnusedResources"
+        message="The resource `R.drawable.ic_settings_filter_lists` appears to be unused"
+        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/drawable/ic_settings_filter_lists.xml"
+            line="1"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
         message="The resource `R.string.https_filtering_root_install_desc` appears to be unused"
         errorLine1="    &lt;string name=&quot;https_filtering_root_install_desc&quot;>Device has root access (Magisk/KernelSU). Install directly to system store for automatic trusted filtering.&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="134"
+            line="149"
             column="13"/>
     </issue>
 
@@ -1025,7 +2488,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="155"
+            line="170"
             column="13"/>
     </issue>
 
@@ -1036,7 +2499,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="156"
+            line="171"
             column="13"/>
     </issue>
 
@@ -1047,7 +2510,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="165"
+            line="180"
             column="13"/>
     </issue>
 
@@ -1058,7 +2521,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="172"
+            line="187"
             column="13"/>
     </issue>
 
@@ -1069,7 +2532,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="180"
+            line="195"
             column="13"/>
     </issue>
 
@@ -1080,7 +2543,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="197"
+            line="212"
             column="13"/>
     </issue>
 
@@ -1091,7 +2554,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="199"
+            line="214"
             column="13"/>
     </issue>
 
@@ -1102,7 +2565,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_filters.xml"
-            line="201"
+            line="216"
             column="13"/>
     </issue>
 
@@ -1113,8 +2576,30 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings_settings.xml"
-            line="11"
+            line="8"
             column="13"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;geoip_status_downloading&quot;>Đang cập nhật...&lt;/string>"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values-vi/strings_settings.xml"
+            line="263"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="TypographyEllipsis"
+        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
+        errorLine1="    &lt;string name=&quot;geoip_status_downloading&quot;>Updating...&lt;/string>"
+        errorLine2="                                            ~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings_settings.xml"
+            line="302"
+            column="45"/>
     </issue>
 
     <issue
@@ -1124,7 +2609,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-ar/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1135,7 +2620,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-cs/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1146,7 +2631,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-de/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1157,7 +2642,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-es/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1168,7 +2653,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-fr/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1179,7 +2664,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-in/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1190,7 +2675,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-it/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1201,7 +2686,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-iw/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1212,7 +2697,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-ja/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1223,7 +2708,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-kk/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1234,7 +2719,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-ko/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1245,7 +2730,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-pl/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1256,7 +2741,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-pt-rBR/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1267,7 +2752,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-ru/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1278,7 +2763,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-th/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1289,7 +2774,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-tr/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1300,7 +2785,7 @@
         errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-uk/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1311,7 +2796,7 @@
         errorLine2="                                                     ~~~~~~~~~~~">
         <location
             file="src/main/res/values-zh/strings_vpn.xml"
-            line="79"
+            line="83"
             column="54"/>
     </issue>
 
@@ -1339,13 +2824,35 @@
 
     <issue
         id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="                            getSharedPreferences(&quot;browser_settings&quot;, Context.MODE_PRIVATE)"
+        errorLine2="                            ^">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/BrowserActivity.kt"
+            line="112"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
         message="Use the KTX extension function `String.toUri` instead?"
         errorLine1="            val uri = Uri.parse(displayUrl)"
         errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserBottomOmnibox.kt"
-            line="68"
+            line="70"
             column="23"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Bitmap.scale` instead?"
+        errorLine1="                        Bitmap.createScaledBitmap(rawBmp, w, h, true)"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/browser/media/BrowserMediaService.kt"
+            line="211"
+            column="25"/>
     </issue>
 
     <issue
@@ -1355,7 +2862,7 @@
         errorLine2="                                                                ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/BrowserScreen.kt"
-            line="93"
+            line="200"
             column="65"/>
     </issue>
 
@@ -1366,30 +2873,8 @@
         errorLine2="                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/BrowserScreen.kt"
-            line="304"
+            line="446"
             column="53"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="        val uri = android.net.Uri.parse(currentUrl)"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserShieldSheet.kt"
-            line="69"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="            val uri = android.net.Uri.parse(displayUrl)"
-        errorLine2="                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserTopBar.kt"
-            line="83"
-            column="23"/>
     </issue>
 
     <issue
@@ -1399,7 +2884,7 @@
         errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/BrowserViewModel.kt"
-            line="142"
+            line="143"
             column="48"/>
     </issue>
 
@@ -1410,30 +2895,19 @@
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserWebView.kt"
-            line="93"
+            line="96"
             column="33"/>
     </issue>
 
     <issue
         id="UseKtx"
         message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="                        val request = DownloadManager.Request(Uri.parse(downloadUrl)).apply {"
-        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                                val host = runCatching { Uri.parse(webView.url ?: uiState.displayUrl).host }.getOrNull().orEmpty()"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserWebView.kt"
-            line="229"
-            column="63"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl)))"
-        errorLine2="                                                                             ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/browser/component/BrowserWebView.kt"
-            line="245"
-            column="78"/>
+            line="171"
+            column="58"/>
     </issue>
 
     <issue
@@ -1483,11 +2957,77 @@
     <issue
         id="UseKtx"
         message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="        data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="363"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="        data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="363"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="373"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="373"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="390"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                data = Uri.parse(&quot;package:${context.packageName}&quot;)"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/app/pwhs/blockads/ui/home/component/HomeBackgroundVpnTipCard.kt"
+            line="390"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
         errorLine1="        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(&quot;https://www.example.com&quot;))"
         errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/httpsfiltering/HttpsFilteringViewModel.kt"
-            line="438"
+            line="442"
             column="56"/>
     </issue>
 
@@ -1498,7 +3038,7 @@
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/theme/Theme.kt"
-            line="71"
+            line="107"
             column="37"/>
     </issue>
 
@@ -1509,7 +3049,7 @@
         errorLine2="                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/app/pwhs/blockads/ui/theme/Theme.kt"
-            line="74"
+            line="110"
             column="51"/>
     </issue>
 

@@ -33,9 +33,11 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +48,6 @@ import app.pwhs.blockads.ui.settings.component.SettingIconBadge
 import app.pwhs.blockads.ui.theme.AccentBluePreset
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +60,10 @@ fun ConfigSnippetsSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val remoteConfigs = configs.filter { !it.remoteUrl.isNullOrEmpty() }
-    val dateFormat = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault())
+    val locale = LocalLocale.current.platformLocale
+    val dateFormat = remember(locale) {
+        SimpleDateFormat("MMM dd, HH:mm", locale)
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
