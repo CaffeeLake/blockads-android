@@ -6,7 +6,6 @@ import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
 import app.pwhs.blockads.data.entities.DnsProvider
 import app.pwhs.blockads.data.entities.DnsProviders
-import app.pwhs.blockads.ui.onboarding.data.ProtectionLevel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,15 +17,8 @@ class OnboardingViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val _selectedProtectionLevel = MutableStateFlow(ProtectionLevel.STANDARD)
-    val selectedProtectionLevel: StateFlow<ProtectionLevel> = _selectedProtectionLevel.asStateFlow()
-
     private val _selectedDnsProvider = MutableStateFlow(DnsProviders.SYSTEM)
     val selectedDnsProvider: StateFlow<DnsProvider> = _selectedDnsProvider.asStateFlow()
-
-    fun selectProtectionLevel(level: ProtectionLevel) {
-        _selectedProtectionLevel.value = level
-    }
 
     fun selectDnsProvider(provider: DnsProvider) {
         _selectedDnsProvider.value = provider
@@ -41,9 +33,6 @@ class OnboardingViewModel(
     }
 
     suspend fun completeOnboarding() {
-        // Save protection level
-        appPrefs.setProtectionLevel(_selectedProtectionLevel.value.name)
-
         // Save DNS provider
         val provider = _selectedDnsProvider.value
         appPrefs.setDnsProviderId(provider.id)

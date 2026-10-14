@@ -6,14 +6,6 @@
     <string name="onboarding_next">다음</string>
     <string name="onboarding_get_started">시작하기</string>
     <string name="onboarding_recommended">★ 추천</string>
-    <string name="onboarding_protection_title">보호 수준 선택</string>
-    <string name="onboarding_protection_desc">광고 및 추적기를 얼마나 강력하게 차단할지 선택하세요</string>
-    <string name="onboarding_protection_basic">기본</string>
-    <string name="onboarding_protection_basic_desc">주요 광고 네트워크를 차단합니다. 웹사이트 기능에 최소한의 영향을 줍니다.</string>
-    <string name="onboarding_protection_standard">표준</string>
-    <string name="onboarding_protection_standard_desc">광고, 추적기, 분석 도구를 차단합니다. 보호와 호환성의 적절한 균형을 제공합니다.</string>
-    <string name="onboarding_protection_strict">엄격</string>
-    <string name="onboarding_protection_strict_desc">최대 수준의 차단. 일부 웹사이트 기능에 영향을 줄 수 있지만 가장 강력한 보호를 제공합니다.</string>
     <string name="onboarding_dns_title">DNS 서버 선택</string>
     <string name="onboarding_dns_desc">도메인 이름 확인을 위한 DNS 서버를 선택하세요. 나중에 설정에서 변경할 수 있습니다.</string>
     <string name="onboarding_vpn_title">VPN 권한 필요</string>

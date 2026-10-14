@@ -8,14 +8,6 @@
     <string name="onboarding_next">&quot;Sonraki&quot;</string>
     <string name="onboarding_get_started">&quot;Başlayın&quot;</string>
     <string name="onboarding_recommended">&quot;★ Tavsiye Edilir&quot;</string>
-    <string name="onboarding_protection_title">&quot;Koruma Seviyesini Seçin&quot;</string>
-    <string name="onboarding_protection_desc">&quot;Reklamları ve izleyicileri ne kadar agresif bir şekilde engellemek istediğinizi seçin.&quot;</string>
-    <string name="onboarding_protection_basic">&quot;Temel&quot;</string>
-    <string name="onboarding_protection_basic_desc">&quot;Başlıca reklam ağlarını engeller. Web sitesi işlevselliği üzerinde minimum etki yaratır.&quot;</string>
-    <string name="onboarding_protection_standard">&quot;Standart&quot;</string>
-    <string name="onboarding_protection_standard_desc">&quot;Reklamları, izleyicileri ve analiz araçlarını engelleyin. Koruma ve uyumluluk arasında iyi bir denge.&quot;</string>
-    <string name="onboarding_protection_strict">&quot;Sıkı&quot;</string>
-    <string name="onboarding_protection_strict_desc">&quot;Maksimum engelleme. Bazı web sitesi işlevlerini etkileyebilir ancak en güçlü korumayı sağlar.&quot;</string>
     <string name="onboarding_dns_title">&quot;DNS Sunucusu Seçin&quot;</string>
     <string name="onboarding_dns_desc">&quot;Alan adlarını çözümlemek için bir DNS sunucusu seçin. Bunu daha sonra Ayarlar'da değiştirebilirsiniz.&quot;</string>
     <string name="onboarding_vpn_title">&quot;VPN İzni Gerekli&quot;</string>

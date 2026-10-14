@@ -6,14 +6,6 @@
     <string name="onboarding_next">Dalej</string>
     <string name="onboarding_get_started">Rozpocznij</string>
     <string name="onboarding_recommended">★ Zalecane</string>
-    <string name="onboarding_protection_title">Wybierz poziom ochrony</string>
-    <string name="onboarding_protection_desc">Wybierz, jak agresywnie chcesz blokować reklamy i moduły śledzące</string>
-    <string name="onboarding_protection_basic">Podstawowy</string>
-    <string name="onboarding_protection_basic_desc">Blokuje główne sieci reklamowe. Minimalny wpływ na funkcjonalność stron.</string>
-    <string name="onboarding_protection_standard">Standardowy</string>
-    <string name="onboarding_protection_standard_desc">Blokuje reklamy, śledzenie i analitykę. Dobry balans między ochroną a kompatybilnością.</string>
-    <string name="onboarding_protection_strict">Restrykcyjny</string>
-    <string name="onboarding_protection_strict_desc">Maksymalne blokowanie. Może wpływać na działanie niektórych stron, ale zapewnia najsilniejszą ochronę.</string>
     <string name="onboarding_dns_title">Wybierz serwer DNS</string>
     <string name="onboarding_dns_desc">Wybierz serwer DNS do rozwiązywania nazw domen. Możesz to zmienić później w Ustawieniach.</string>
     <string name="onboarding_vpn_title">Wymagane uprawnienie VPN</string>

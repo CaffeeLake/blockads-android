@@ -6,14 +6,6 @@
     <string name="onboarding_next">下一步</string>
     <string name="onboarding_get_started">开始使用</string>
     <string name="onboarding_recommended">★ 推荐</string>
-    <string name="onboarding_protection_title">选择保护级别</string>
-    <string name="onboarding_protection_desc">选择您希望拦截广告和跟踪器的力度</string>
-    <string name="onboarding_protection_basic">基本</string>
-    <string name="onboarding_protection_basic_desc">拦截主要广告网络。对网站功能影响最小。</string>
-    <string name="onboarding_protection_standard">标准</string>
-    <string name="onboarding_protection_standard_desc">拦截广告、跟踪器和分析工具。在保护和兼容性之间取得良好平衡。</string>
-    <string name="onboarding_protection_strict">严格</string>
-    <string name="onboarding_protection_strict_desc">最大程度拦截。可能影响部分网站功能，但提供最强保护。</string>
     <string name="onboarding_dns_title">选择DNS服务器</string>
     <string name="onboarding_dns_desc">选择用于解析域名的DNS服务器。稍后可在设置中更改。</string>
     <string name="onboarding_vpn_title">需要VPN权限</string>

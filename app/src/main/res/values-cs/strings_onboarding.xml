@@ -6,14 +6,6 @@
     <string name="onboarding_next">Další</string>
     <string name="onboarding_get_started">Začít</string>
     <string name="onboarding_recommended">★ Doporučeno</string>
-    <string name="onboarding_protection_title">Zvolte úroveň ochrany</string>
-    <string name="onboarding_protection_desc">Vyberte, jak agresivně chcete blokovat reklamy a sledovače</string>
-    <string name="onboarding_protection_basic">Základní</string>
-    <string name="onboarding_protection_basic_desc">Blokuje hlavní reklamní sítě. Minimální dopad na funkčnost webu.</string>
-    <string name="onboarding_protection_standard">Standardní</string>
-    <string name="onboarding_protection_standard_desc">Blokuje reklamy, sledovače a analytiku. Dobrá rovnováha mezi ochranou a kompatibilitou.</string>
-    <string name="onboarding_protection_strict">Striktní</string>
-    <string name="onboarding_protection_strict_desc">Maximální blokování. Může ovlivnit funkčnost některých webů, ale poskytuje nejsilnější ochranu.</string>
     <string name="onboarding_dns_title">Zvolte DNS server</string>
     <string name="onboarding_dns_desc">Vyberte DNS server pro překlad doménových jmen. To můžete později změnit v Nastavení.</string>
     <string name="onboarding_vpn_title">Vyžadováno povolení VPN</string>

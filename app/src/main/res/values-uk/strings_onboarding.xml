@@ -6,14 +6,6 @@
     <string name="onboarding_next">Далі</string>
     <string name="onboarding_get_started">Почати</string>
     <string name="onboarding_recommended">★ Рекомендовано</string>
-    <string name="onboarding_protection_title">Виберіть рівень захисту</string>
-    <string name="onboarding_protection_desc">Виберіть, наскільки агресивно ви хочете блокувати рекламу та трекери</string>
-    <string name="onboarding_protection_basic">Базовий</string>
-    <string name="onboarding_protection_basic_desc">Блокує основні рекламні мережі. Мінімальний вплив на функціональність вебсайтів.</string>
-    <string name="onboarding_protection_standard">Стандартний</string>
-    <string name="onboarding_protection_standard_desc">Блокує рекламу, трекери та аналітику. Хороший баланс між захистом і сумісністю.</string>
-    <string name="onboarding_protection_strict">Строгий</string>
-    <string name="onboarding_protection_strict_desc">Максимальне блокування. Може вплинути на функціональність деяких сайтів, але забезпечує найсильніший захист.</string>
     <string name="onboarding_dns_title">Виберіть DNS-сервер</string>
     <string name="onboarding_dns_desc">Виберіть DNS-сервер для визначення доменних імен. Ви зможете змінити це пізніше в Налаштуваннях.</string>
     <string name="onboarding_vpn_title">Потрібен дозвіл на VPN</string>

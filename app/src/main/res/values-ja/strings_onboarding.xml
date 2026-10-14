@@ -6,14 +6,6 @@
     <string name="onboarding_next">次へ</string>
     <string name="onboarding_get_started">始める</string>
     <string name="onboarding_recommended">★ おすすめ</string>
-    <string name="onboarding_protection_title">保護レベルを選択</string>
-    <string name="onboarding_protection_desc">広告やトラッカーをどの程度強力にブロックするか選択してください</string>
-    <string name="onboarding_protection_basic">基本</string>
-    <string name="onboarding_protection_basic_desc">主要な広告ネットワークをブロックします。ウェブサイトの機能への影響は最小限です。</string>
-    <string name="onboarding_protection_standard">標準</string>
-    <string name="onboarding_protection_standard_desc">広告、トラッカー、アナリティクスをブロックします。保護と互換性のバランスが良好です。</string>
-    <string name="onboarding_protection_strict">厳格</string>
-    <string name="onboarding_protection_strict_desc">最大限のブロック。一部のウェブサイト機能に影響する場合がありますが、最も強力な保護を提供します。</string>
     <string name="onboarding_dns_title">DNSサーバーを選択</string>
     <string name="onboarding_dns_desc">ドメイン名を解決するDNSサーバーを選択してください。後で設定から変更できます。</string>
     <string name="onboarding_vpn_title">VPN権限が必要です</string>

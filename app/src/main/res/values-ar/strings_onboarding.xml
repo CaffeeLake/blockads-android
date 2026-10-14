@@ -17,14 +17,6 @@
     <string name="onboarding_notification_grant">السماح بالإشعارات</string>
     <string name="onboarding_notification_title">ابق على اطلاع</string>
     <string name="onboarding_permission_granted">✓ تم منح الإذن</string>
-    <string name="onboarding_protection_basic">أساسي</string>
-    <string name="onboarding_protection_basic_desc">حظر شبكات الإعلانات الرئيسية. تأثير ضئيل على وظائف موقع الويب.</string>
-    <string name="onboarding_protection_desc">حدد مدى قوة حظر الإعلانات والمتتبعات التي تريدها</string>
-    <string name="onboarding_protection_standard">قياسي</string>
-    <string name="onboarding_protection_standard_desc">حظر الإعلانات والمتتبعات والتحليلات. توازن جيد بين الحماية والتوافق.</string>
-    <string name="onboarding_protection_strict">صارم</string>
-    <string name="onboarding_protection_strict_desc">أقصى حظر. قد يؤثر على وظائف بعض مواقع الويب ولكنه يوفر أقوى حماية.</string>
-    <string name="onboarding_protection_title">اختر مستوى الحماية</string>
     <string name="onboarding_recommended">★ موصى به</string>
     <string name="onboarding_skip">تخطي</string>
     <string name="onboarding_title_1">حظر الإعلانات بذكاء</string>

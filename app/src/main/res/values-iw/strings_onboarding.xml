@@ -6,14 +6,6 @@
     <string name="onboarding_next">הבא</string>
     <string name="onboarding_get_started">בואו נתחיל</string>
     <string name="onboarding_recommended">★ מומלץ</string>
-    <string name="onboarding_protection_title">בחר רמת הגנה</string>
-    <string name="onboarding_protection_desc">בחר עד כמה אגרסיבית תהיה חסימת הפרסומות והעוקבים</string>
-    <string name="onboarding_protection_basic">בסיסית</string>
-    <string name="onboarding_protection_basic_desc">חוסם רשתות פרסום גדולות. השפעה מינימלית על תפקוד האתרים.</string>
-    <string name="onboarding_protection_standard">רגילה</string>
-    <string name="onboarding_protection_standard_desc">חוסם פרסומות, עוקבים ומערכות אנליטיקה. איזון טוב בין הגנה לתאימות.</string>
-    <string name="onboarding_protection_strict">מחמירה</string>
-    <string name="onboarding_protection_strict_desc">חסימה מקסימלית. עלול להשפיע על תפקוד של אתרים מסוימים אך מספק את ההגנה החזקה ביותר.</string>
     <string name="onboarding_dns_title">בחר שרת DNS</string>
     <string name="onboarding_dns_desc">בחר שרת DNS לפענוח שמות דומיין. תוכל לשנות זאת מאוחר יותר בהגדרות.</string>
     <string name="onboarding_vpn_title">נדרשת הרשאת VPN</string>

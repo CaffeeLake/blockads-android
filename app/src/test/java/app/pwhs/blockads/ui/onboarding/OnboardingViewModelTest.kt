@@ -5,7 +5,6 @@ import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
 import app.pwhs.blockads.data.entities.DnsProviders
 import app.pwhs.blockads.ui.MainDispatcherRule
-import app.pwhs.blockads.ui.onboarding.data.ProtectionLevel
 import app.pwhs.blockads.utils.CrashReportingManager
 import io.mockk.Runs
 import io.mockk.coVerify
@@ -35,18 +34,15 @@ class OnboardingViewModelTest {
     fun tearDown() = unmockkAll()
 
     @Test
-    fun `defaults are standard protection with system DNS`() {
-        assertEquals(ProtectionLevel.STANDARD, vm.selectedProtectionLevel.value)
+    fun `default DNS is system DNS`() {
         assertEquals(DnsProviders.SYSTEM, vm.selectedDnsProvider.value)
     }
 
     @Test
-    fun `completing with a DoH provider saves level, provider, protocol and url, then marks done`() = runTest {
-        vm.selectProtectionLevel(ProtectionLevel.STRICT)
+    fun `completing with a DoH provider saves provider, protocol and url, then marks done`() = runTest {
         vm.selectDnsProvider(DnsProviders.CLOUDFLARE)
         vm.completeOnboarding()
         coVerifyOrder {
-            appPrefs.setProtectionLevel("STRICT")
             appPrefs.setDnsProviderId("cloudflare")
             appPrefs.setUpstreamDns("1.1.1.1")
             appPrefs.setDnsProtocol(DnsProtocol.DOH)

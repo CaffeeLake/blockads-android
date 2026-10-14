@@ -6,14 +6,6 @@
     <string name="onboarding_next">Siguiente</string>
     <string name="onboarding_get_started">Comenzar</string>
     <string name="onboarding_recommended">★ Recomendado</string>
-    <string name="onboarding_protection_title">Elige el nivel de protección</string>
-    <string name="onboarding_protection_desc">Selecciona qué tan agresivamente deseas bloquear anuncios y rastreadores</string>
-    <string name="onboarding_protection_basic">Básico</string>
-    <string name="onboarding_protection_basic_desc">Bloquea las principales redes de anuncios. Impacto mínimo en la funcionalidad de los sitios web.</string>
-    <string name="onboarding_protection_standard">Estándar</string>
-    <string name="onboarding_protection_standard_desc">Bloquea anuncios, rastreadores y analíticas. Buen equilibrio entre protección y compatibilidad.</string>
-    <string name="onboarding_protection_strict">Estricto</string>
-    <string name="onboarding_protection_strict_desc">Bloqueo máximo. Puede afectar algunas funciones de sitios web, pero ofrece la protección más sólida.</string>
     <string name="onboarding_dns_title">Elige un servidor DNS</string>
     <string name="onboarding_dns_desc">Selecciona un servidor DNS para resolver nombres de dominio. Puedes cambiarlo más tarde en los ajustes.</string>
     <string name="onboarding_vpn_title">Se requiere permiso de VPN</string>

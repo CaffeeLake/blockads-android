@@ -6,14 +6,6 @@
     <string name="onboarding_next">Lanjut</string>
     <string name="onboarding_get_started">Mulai</string>
     <string name="onboarding_recommended">★ Direkomendasikan</string>
-    <string name="onboarding_protection_title">Pilih Tingkat Perlindungan</string>
-    <string name="onboarding_protection_desc">Pilih seberapa agresif Anda ingin memblokir iklan dan pelacak</string>
-    <string name="onboarding_protection_basic">Dasar</string>
-    <string name="onboarding_protection_basic_desc">Blokir jaringan iklan utama. Dampak minimal pada fungsionalitas situs web.</string>
-    <string name="onboarding_protection_standard">Standar</string>
-    <string name="onboarding_protection_standard_desc">Blokir iklan, pelacak, dan analitik. Keseimbangan yang baik antara perlindungan dan kompatibilitas.</string>
-    <string name="onboarding_protection_strict">Ketat</string>
-    <string name="onboarding_protection_strict_desc">Pemblokiran maksimal. Mungkin memengaruhi beberapa fungsionalitas situs web tetapi memberikan perlindungan terkuat.</string>
     <string name="onboarding_dns_title">Pilih Server DNS</string>
     <string name="onboarding_dns_desc">Pilih server DNS untuk menyelesaikan nama domain. Anda dapat mengubahnya nanti di Pengaturan.</string>
     <string name="onboarding_vpn_title">Izin VPN Diperlukan</string>
