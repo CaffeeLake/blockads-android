@@ -37,8 +37,8 @@ android {
         applicationId = "app.pwhs.blockads"
         minSdk = 24
         targetSdk = 36
-        versionCode = 55
-        versionName = "6.9.0"
+        versionCode = 56
+        versionName = "7.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
