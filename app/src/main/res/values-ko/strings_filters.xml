@@ -57,8 +57,6 @@
     <string name="firewall_title">방화벽</string>
     <string name="firewall_count">%d개 앱 차단됨</string>
     <string name="firewall_search">앱 검색…</string>
-    <string name="firewall_enable">방화벽 활성화</string>
-    <string name="firewall_enable_desc">DNS를 통해 선택한 앱의 인터넷 액세스 차단</string>
     <string name="firewall_block_wifi">Wi-Fi 차단</string>
     <string name="firewall_block_mobile">모바일 데이터 차단</string>
     <string name="firewall_schedule">일정</string>
@@ -78,8 +76,6 @@
     <string name="filter_error_invalid_url">올바른 URL을 입력하세요 (http:// 또는 https://)</string>
     <string name="filter_error_duplicate_url">이 필터 목록은 이미 존재합니다</string>
     <string name="filter_chip_all">전체</string>
-    <string name="filter_chip_enabled">활성화</string>
-    <string name="filter_chip_disabled">비활성화</string>
     <string name="blocklist_domains_empty">차단된 도메인 없음</string>
     <string name="blocklist_domain_added">도메인 차단됨: %s</string>
     <string name="blocklist_domain_removed">차단 목록에서 도메인 제거됨</string>

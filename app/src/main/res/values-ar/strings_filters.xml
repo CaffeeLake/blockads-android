@@ -61,8 +61,6 @@
     <string name="firewall_block_wifi">حظر Wi-Fi</string>
     <string name="firewall_configure">تكوين القاعدة</string>
     <string name="firewall_count">تم حظر %d تطبيق</string>
-    <string name="firewall_enable">تمكين جدار الحماية</string>
-    <string name="firewall_enable_desc">حظر الوصول إلى الإنترنت للتطبيقات المحددة عبر DNS</string>
     <string name="firewall_network_all">الكل</string>
     <string name="firewall_network_mobile">الجوال</string>
     <string name="firewall_schedule">الجدول الزمني</string>
@@ -91,8 +89,6 @@
     <string name="whitelist_domain_added">تمت إضافة النطاق إلى القائمة البيضاء: %s</string>
     <string name="whitelist_domain_removed">تمت إزالة النطاق من القائمة البيضاء</string>
     <string name="filter_chip_all">الكل</string>
-    <string name="filter_chip_enabled">مفعّل</string>
-    <string name="filter_chip_disabled">معطّل</string>
     <string name="blocklist_domains_empty">لا توجد نطاقات محظورة</string>
     <string name="blocklist_domain_added">تم حظر النطاق: %s</string>
     <string name="blocklist_domain_removed">تم إزالة النطاق من قائمة الحظر</string>

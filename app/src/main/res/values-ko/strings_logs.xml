@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">전체 차단</string>
     <string name="stats_today_queries">오늘 쿼리</string>
     <string name="stats_today_blocked">오늘 차단</string>
-    <string name="stats_today_security">Today Threats</string>
     <string name="stats_charts">활동 차트</string>
     <string name="stats_chart_4w">4주</string>
     <string name="stats_chart_12m">12개월</string>
     <string name="stats_per_app">앱별 통계</string>
-    <string name="log_record_logs">로그 기록</string>
     <string name="log_filter_by_app">앱별 필터</string>
     <string name="log_search_app_hint">앱 검색…</string>
     <string name="log_reset_filters">초기화</string>

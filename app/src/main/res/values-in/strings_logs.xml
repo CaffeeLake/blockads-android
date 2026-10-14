@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Diblokir Sepanjang Waktu</string>
     <string name="stats_today_queries">Kueri Hari Ini</string>
     <string name="stats_today_blocked">Diblokir Hari Ini</string>
-    <string name="stats_today_security">Ancaman Hari Ini</string>
     <string name="stats_charts">Bagan Aktivitas</string>
     <string name="stats_chart_4w">4 Minggu</string>
     <string name="stats_chart_12m">12 Bulan</string>
     <string name="stats_per_app">Statistik Per-Aplikasi</string>
-    <string name="log_record_logs">Rekam Log</string>
     <string name="log_filter_by_app">Filter berdasarkan Aplikasi</string>
     <string name="log_search_app_hint">Cari aplikasi…</string>
     <string name="log_reset_filters">Atur Ulang</string>

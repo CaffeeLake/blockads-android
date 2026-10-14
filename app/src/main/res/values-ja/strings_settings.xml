@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">ホワイトリスト登録済みアプリ</string>
-    <string name="whitelist_apps_search">アプリを検索…</string>
     <string name="whitelist_apps_empty">インストール済みアプリはありません</string>
-    <string name="whitelist_apps_count">%d 個のアプリがホワイトリストに登録済み</string>
     <string name="whitelist_tab_user">ユーザーアプリ</string>
     <string name="whitelist_tab_system">システムアプリ</string>
     <string name="about_title">アプリについて</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">アプリのメインカラーをカスタマイズ</string>
     <string name="accent_dynamic">ダイナミック (Material You)</string>
     <string name="accent_dynamic_desc">壁紙の色を使用します</string>
-    <string name="settings_filter_lists">フィルターリスト (%d 件有効)</string>
     <string name="settings_add_custom_filter">カスタムフィルターリストを追加</string>
     <string name="settings_updating">更新中…</string>
     <string name="settings_update_all">すべてのフィルターを更新</string>
-    <string name="settings_whitelist_apps">ホワイトリスト登録済みアプリ</string>
-    <string name="settings_whitelist_apps_desc">広告ブロックからアプリを除外</string>
     <string name="settings_whitelist_domains">ホワイトリスト登録済みドメイン</string>
     <string name="settings_export">エクスポート</string>
     <string name="settings_import">インポート</string>
@@ -67,12 +61,6 @@
     <string name="dns_error_duplicate">フォールバックDNSをカスタムDNSと同じにすることはできません</string>
     <string name="dns_category_fallback">フォールバック</string>
     <string name="settings_fallback_dns_not_set">未設定（バックアップなし）</string>
-    <string name="settings_custom_dns_server">カスタムDNSサーバー</string>
-    <string name="settings_custom_dns_hint">プレーンDNSにはIP、DoHにはhttps://、DoTにはtls://、DoQにはquic://を入力</string>
-    <string name="settings_detected_plain">プレーンDNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">DNS応答タイプ</string>
     <string name="dns_response_nxdomain_desc">ドメインが存在しません (標準)</string>
     <string name="dns_response_refused_desc">クエリ拒否 (互換性が向上)</string>
@@ -97,7 +85,6 @@
     <string name="dns_category_standard">標準</string>
     <string name="dns_category_privacy">プライバシー重視</string>
     <string name="dns_category_family">ファミリーセーフ</string>
-    <string name="dns_category_custom">カスタム</string>
     <string name="dns_custom_title">カスタムDNS</string>
     <string name="dns_custom_description">独自のDNSサーバーアドレスを入力してください</string>
     <string name="dns_custom_save">保存</string>
@@ -107,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d / %2$d 個のアプリ</string>
     <string name="app_management_desc">アプリごとのVPNルーティング管理と統計情報の確認</string>
     <string name="app_management_search">アプリを検索…</string>
-    <string name="app_management_loading">アプリを読み込み中…</string>
     <string name="app_management_refresh">更新</string>
     <string name="app_management_sort">並べ替え</string>
     <string name="app_management_sort_name">名前で並べ替え</string>
@@ -119,34 +105,7 @@
     <string name="app_management_vpn_toggle">%s のVPNルーティング</string>
     <string name="settings_firewall">ファイアウォール</string>
     <string name="profile_title">保護プロファイル</string>
-    <string name="profile_section_profiles">プロファイル</string>
-    <string name="profile_section_schedules">スケジュール</string>
     <string name="profile_name_default">デフォルト</string>
-    <string name="profile_desc_default">広告と基本的なトラッカーをブロック</string>
-    <string name="profile_desc_strict">すべての広告、トラッカー、アナリティクスをブロック</string>
-    <string name="profile_desc_family">広告 + アダルトコンテンツ + ギャンブルをブロック</string>
-    <string name="profile_desc_gaming">ゲーム用に最適化された設定で広告をブロック</string>
-    <string name="profile_desc_custom">カスタムプロファイル設定</string>
-    <string name="profile_active">アクティブ</string>
-    <string name="profile_switched">プロファイルを切り替えました</string>
-    <string name="profile_created">プロファイルを作成しました</string>
-    <string name="profile_deleted">プロファイルを削除しました</string>
-    <string name="profile_create_custom">カスタムプロファイルを作成</string>
-    <string name="profile_name_label">プロファイル名</string>
-    <string name="profile_add_schedule">スケジュールを追加</string>
-    <string name="profile_schedule_start">開始時間</string>
-    <string name="profile_schedule_end">終了時間</string>
-    <string name="profile_schedule_days">曜日</string>
-    <string name="profile_schedule_added">スケジュールを追加しました</string>
-    <string name="profile_schedule_deleted">スケジュールを削除しました</string>
-    <string name="profile_schedule_every_day">毎日</string>
-    <string name="profile_day_mon">月</string>
-    <string name="profile_day_tue">火</string>
-    <string name="profile_day_wed">水</string>
-    <string name="profile_day_thu">木</string>
-    <string name="profile_day_fri">金</string>
-    <string name="profile_day_sat">土</string>
-    <string name="profile_day_sun">日</string>
     <string name="daily_summary_channel_name">日次サマリー</string>
     <string name="daily_summary_channel_description">1日の終わりの広告ブロックサマリー</string>
     <string name="daily_summary_title">日次保護サマリー</string>
@@ -166,7 +125,6 @@
     <string name="settings_community">コミュニティ</string>
     <string name="settings_reddit_desc">Redditのコミュニティに参加する</string>
     <string name="settings_telegram_desc">Telegramのチャットに参加する</string>
-    <string name="profile_desc_strict_family">最大限のブロック: 広告、トラッカー、アダルトコンテンツ、ギャンブル</string>
     <string name="settings_show_bottom_nav_labels">ボトムナビゲーションのラベルを表示</string>
     <string name="settings_show_bottom_nav_labels_desc">ボトムナビゲーションのアイコンの下にテキストを表示する</string>
     <string name="clear_logs_confirm_message">すべてのDNSログを消去してもよろしいですか？この操作は元に戻せません。</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">ローカルログのエクスポート</string>
     <string name="settings_export_logs_subtitle">オフラインのデバッグログをメールやTelegramなどで直接共有します。</string>
     <string name="settings_export_logs_chooser_title">ログを共有</string>
-    <string name="settings_export_logs_not_found">エクスポートするログが見つかりません</string>
     <string name="custom_color_title">カスタムカラー</string>
     <string name="split_dns_title">Split DNSゾーン</string>
     <string name="split_dns_description">WireGuard DNSで解決するカンマ区切りのドメインゾーン（上流の代わり）（例: internal,local,lan）</string>

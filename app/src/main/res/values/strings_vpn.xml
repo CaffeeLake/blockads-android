@@ -88,8 +88,6 @@
     <string name="vpn_notification_no_internet_text">Waiting for network connection…</string>
 
     <!-- Stability Tip Card -->
-    <string name="home_tip_stability_title">Keep Protection Stable</string>
-    <string name="home_tip_stability_desc">Prevent Android from killing BlockAds in background and keep 24/7 protection.</string>
     <string name="home_tip_battery_title">Background Activity</string>
     <string name="home_tip_battery_desc">Disable battery optimization</string>
     <string name="home_tip_battery_action">Allow</string>

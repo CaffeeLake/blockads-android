@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">มีแอป VPN อื่นเชื่อมต่อแล้ว ปริมาณข้อมูลของคุณจะไม่ถูกกรองโดย BlockAds อีกต่อไป</string>
     <string name="vpn_revoked_action_reconnect">เชื่อมต่อใหม่</string>
     <string name="vpn_revoked_action_dismiss">ปิด</string>
-    <string name="home_tip_stability_title">รักษาการป้องกันให้เสถียร</string>
-    <string name="home_tip_stability_desc">ป้องกันไม่ให้ Android ปิด BlockAds ในพื้นหลังเพื่อคงการป้องกันตลอด 24 ชั่วโมง</string>
     <string name="home_tip_battery_title">กิจกรรมในพื้นหลัง</string>
     <string name="home_tip_battery_desc">ปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่</string>
     <string name="home_tip_battery_action">อนุญาต</string>

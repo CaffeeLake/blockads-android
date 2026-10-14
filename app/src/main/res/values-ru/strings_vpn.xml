@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">Подключено другое VPN-приложение. Трафик больше не фильтруется BlockAds.</string>
     <string name="vpn_revoked_action_reconnect">Переподключить</string>
     <string name="vpn_revoked_action_dismiss">Закрыть</string>
-    <string name="home_tip_stability_title">Стабильная защита</string>
-    <string name="home_tip_stability_desc">Запретите Android закрывать BlockAds в фоне для круглосуточной защиты 24/7.</string>
     <string name="home_tip_battery_title">Работа в фоне</string>
     <string name="home_tip_battery_desc">Отключить оптимизацию батареи</string>
     <string name="home_tip_battery_action">Разрешить</string>

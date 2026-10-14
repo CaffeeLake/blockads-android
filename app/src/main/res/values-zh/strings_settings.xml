@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">已加入白名单的应用</string>
-    <string name="whitelist_apps_search">搜索应用…</string>
     <string name="whitelist_apps_empty">没有已安装的应用</string>
-    <string name="whitelist_apps_count">%d 个应用已加入白名单</string>
     <string name="whitelist_tab_user">用户应用</string>
     <string name="whitelist_tab_system">系统应用</string>
     <string name="about_title">关于</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">自定义应用的主题色</string>
     <string name="accent_dynamic">动态 (Material You)</string>
     <string name="accent_dynamic_desc">使用您的壁纸颜色</string>
-    <string name="settings_filter_lists">过滤列表（%d 个已启用）</string>
     <string name="settings_add_custom_filter">添加自定义过滤列表</string>
     <string name="settings_updating">更新中…</string>
     <string name="settings_update_all">更新所有过滤器</string>
-    <string name="settings_whitelist_apps">已加入白名单的应用</string>
-    <string name="settings_whitelist_apps_desc">将应用从广告拦截中排除</string>
     <string name="settings_whitelist_domains">已加入白名单的域名</string>
     <string name="settings_export">导出</string>
     <string name="settings_import">导入</string>
@@ -91,7 +85,6 @@
     <string name="dns_category_standard">标准</string>
     <string name="dns_category_privacy">注重隐私</string>
     <string name="dns_category_family">家庭安全</string>
-    <string name="dns_category_custom">自定义</string>
     <string name="dns_custom_title">自定义DNS</string>
     <string name="dns_custom_description">输入您自己的DNS服务器地址</string>
     <string name="dns_custom_save">保存</string>
@@ -101,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d / %2$d 个应用</string>
     <string name="app_management_desc">管理各应用的VPN路由并查看统计信息</string>
     <string name="app_management_search">搜索应用…</string>
-    <string name="app_management_loading">正在加载应用…</string>
     <string name="app_management_refresh">刷新</string>
     <string name="app_management_sort">排序</string>
     <string name="app_management_sort_name">按名称排序</string>
@@ -113,35 +105,7 @@
     <string name="app_management_vpn_toggle">%s 的VPN路由</string>
     <string name="settings_firewall">防火墙</string>
     <string name="profile_title">防护配置</string>
-    <string name="profile_section_profiles">配置文件</string>
-    <string name="profile_section_schedules">计划</string>
     <string name="profile_name_default">默认</string>
-    <string name="profile_desc_default">平衡拦截：基础广告和跟踪器</string>
-    <string name="profile_desc_strict">强力拦截：广告、跟踪器、分析和遥测数据</string>
-    <string name="profile_desc_family">安全浏览：广告、成人内容、赌博</string>
-    <string name="profile_desc_gaming">轻度拦截：仅基础广告，为低延迟优化</string>
-    <string name="profile_desc_custom">您的个性化保护规则</string>
-    <string name="profile_desc_strict_family">最大程度拦截：广告、跟踪器、成人内容和赌博</string>
-    <string name="profile_active">已激活</string>
-    <string name="profile_switched">配置已切换</string>
-    <string name="profile_created">配置已创建</string>
-    <string name="profile_deleted">配置已删除</string>
-    <string name="profile_create_custom">创建自定义配置</string>
-    <string name="profile_name_label">配置名称</string>
-    <string name="profile_add_schedule">添加计划</string>
-    <string name="profile_schedule_start">开始时间</string>
-    <string name="profile_schedule_end">结束时间</string>
-    <string name="profile_schedule_days">重复</string>
-    <string name="profile_schedule_added">计划已添加</string>
-    <string name="profile_schedule_deleted">计划已删除</string>
-    <string name="profile_schedule_every_day">每天</string>
-    <string name="profile_day_mon">周一</string>
-    <string name="profile_day_tue">周二</string>
-    <string name="profile_day_wed">周三</string>
-    <string name="profile_day_thu">周四</string>
-    <string name="profile_day_fri">周五</string>
-    <string name="profile_day_sat">周六</string>
-    <string name="profile_day_sun">周日</string>
     <string name="daily_summary_channel_name">每日摘要</string>
     <string name="daily_summary_channel_description">每日结束时的广告拦截总结</string>
     <string name="daily_summary_title">每日防护总结</string>
@@ -161,12 +125,6 @@
     <string name="settings_community">社区</string>
     <string name="settings_reddit_desc">加入我们的 Reddit 社区</string>
     <string name="settings_telegram_desc">加入我们的 Telegram 群聊</string>
-    <string name="settings_custom_dns_server">自定义 DNS 服务器</string>
-    <string name="settings_custom_dns_hint">输入 IP 使用普通 DNS，https:// 使用 DoH，tls:// 使用 DoT，quic:// 使用 DoQ</string>
-    <string name="settings_detected_plain">普通 DNS (Plain)</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_show_bottom_nav_labels">显示底部导航标签</string>
     <string name="settings_show_bottom_nav_labels_desc">在底部导航栏的图标下方显示文字</string>
     <string name="clear_logs_confirm_message">您确定要清除所有 DNS 日志吗？此操作无法撤销。</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">导出本地日志</string>
     <string name="settings_export_logs_subtitle">直接通过电子邮件、Telegram 等分享离线调试日志。</string>
     <string name="settings_export_logs_chooser_title">分享日志</string>
-    <string name="settings_export_logs_not_found">未找到可导出的日志</string>
     <string name="custom_color_title">自定义颜色</string>
     <string name="split_dns_title">分离 DNS 区域</string>
     <string name="split_dns_description">以逗号分隔的域名区域，通过 WireGuard DNS 而非上游解析（例如 internal,local,lan）</string>

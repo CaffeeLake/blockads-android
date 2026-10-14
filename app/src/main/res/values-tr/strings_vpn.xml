@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">Başka bir VPN uygulaması bağlandı. Trafiğiniz artık BlockAds tarafından filtrelenmiyor.</string>
     <string name="vpn_revoked_action_reconnect">Yeniden Bağlan</string>
     <string name="vpn_revoked_action_dismiss">Kapat</string>
-    <string name="home_tip_stability_title">Korumayı Kararlı Tutun</string>
-    <string name="home_tip_stability_desc">Android\'in BlockAds\'i arka planda kapatmasını önleyin ve 7/24 kesintisiz koruma sağlayın.</string>
     <string name="home_tip_battery_title">Arka Plan Etkinliği</string>
     <string name="home_tip_battery_desc">Pil optimizasyonunu devre dışı bırak</string>
     <string name="home_tip_battery_action">İzin Ver</string>

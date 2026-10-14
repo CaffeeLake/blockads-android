@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">Un\'altra app VPN è connessa. Il tuo traffico non è più filtrato da BlockAds.</string>
     <string name="vpn_revoked_action_reconnect">Riconnetti</string>
     <string name="vpn_revoked_action_dismiss">Ignora</string>
-    <string name="home_tip_stability_title">Mantieni la protezione stabile</string>
-    <string name="home_tip_stability_desc">Impedisci ad Android di chiudere BlockAds in background per una protezione continua 24/7.</string>
     <string name="home_tip_battery_title">Attività in background</string>
     <string name="home_tip_battery_desc">Disattiva ottimizzazione batteria</string>
     <string name="home_tip_battery_action">Consenti</string>

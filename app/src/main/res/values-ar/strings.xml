@@ -16,7 +16,6 @@
     <string name="home_protected_desc">جهازك محمي من الإعلانات</string>
     <string name="home_protection_uptime">وقت التشغيل</string>
     <string name="home_recent_blocked">المحظور مؤخرًا</string>
-    <string name="home_security_threats">التهديدات المحظورة</string>
     <string name="home_top_blocked">أعلى النطاقات المحظورة</string>
     <string name="home_unprotected_desc">انقر على الزر لتمكين حظر الإعلانات</string>
     <string name="nav_filter">تصفية</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">جاري إيقاف Root Proxy…</string>
     <string name="home_paused_trusted_short">متوقف مؤقتًا على شبكة موثوقة</string>
     <string name="nav_browser">المتصفح</string>
-    <string name="home_download_speed">سرعة التنزيل</string>
-    <string name="home_upload_speed">سرعة الرفع</string>
     <string name="home_downloaded">تم التنزيل</string>
     <string name="home_uploaded">تم الرفع</string>
 </resources>

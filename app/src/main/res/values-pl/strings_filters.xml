@@ -73,8 +73,6 @@
     <string name="firewall_title">Zapora (Firewall)</string>
     <string name="firewall_count">Zablokowane aplikacje: %d</string>
     <string name="firewall_search">Szukaj aplikacji…</string>
-    <string name="firewall_enable">Włącz Firewall</string>
-    <string name="firewall_enable_desc">Blokuj dostęp do internetu dla wybranych aplikacji przez DNS</string>
     <string name="firewall_block_wifi">Blokuj Wi-Fi</string>
     <string name="firewall_block_mobile">Blokuj dane komórkowe</string>
     <string name="firewall_schedule">Harmonogram</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Wprowadź prawidłowy adres URL (http:// lub https://)</string>
     <string name="filter_error_duplicate_url">Ta lista filtrów już istnieje</string>
     <string name="filter_chip_all">Wszystkie</string>
-    <string name="filter_chip_enabled">Włączone</string>
-    <string name="filter_chip_disabled">Wyłączone</string>
     <string name="https_filtering_title">Filtrowanie HTTPS</string>
     <string name="https_filtering_toggle_label">Filtr kosmetyczny HTTPS</string>
     <string name="https_filtering_status_active">Aktywne — Ukrywanie reklam</string>

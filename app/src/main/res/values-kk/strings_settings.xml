@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Ақ тізімдегі қолданбалар</string>
-    <string name="whitelist_apps_search">Қолданбаларды іздеу…</string>
     <string name="whitelist_apps_empty">Орнатылған қолданбалар жоқ</string>
-    <string name="whitelist_apps_count">Ақ тізімде %d қолданба</string>
     <string name="whitelist_tab_user">Пайдаланушы қолданбалары</string>
     <string name="whitelist_tab_system">Жүйелік қолданбалар</string>
     <string name="about_title">Қолданба туралы</string>
@@ -40,12 +37,9 @@
     <string name="settings_accent_color_desc">Қолданбаның негізгі түсін реттеңіз</string>
     <string name="accent_dynamic">Динамикалық (Material You)</string>
     <string name="accent_dynamic_desc">Тұсқағаз түстерін пайдаланады</string>
-    <string name="settings_filter_lists">Сүзгі тізімдері (%d белсенді)</string>
     <string name="settings_add_custom_filter">Жеке сүзгі тізімін қосу</string>
     <string name="settings_updating">Жаңартылуда…</string>
     <string name="settings_update_all">Барлық сүзгілерді жаңарту</string>
-    <string name="settings_whitelist_apps">Ақ тізімдегі қолданбалар</string>
-    <string name="settings_whitelist_apps_desc">Қолданбаларды жарнама бұғаттаудан алып тастау</string>
     <string name="trusted_networks_title">Сенімді желілер</string>
     <string name="trusted_networks_settings_desc">Таңдалған Wi-Fi желілерінде BlockAds-ты автоматты кідірту</string>
     <string name="trusted_networks_toggle">Сенімді желілерде кідірту</string>
@@ -80,12 +74,6 @@
     <string name="dns_error_duplicate">Қосалқы DNS жеке DNS-пен бірдей бола алмайды</string>
     <string name="dns_category_fallback">Қосалқы</string>
     <string name="settings_fallback_dns_not_set">Орнатылмаған (қосалқысыз)</string>
-    <string name="settings_custom_dns_server">Жеке DNS сервері</string>
-    <string name="settings_custom_dns_hint">Қарапайым DNS үшін IP, DoH үшін https://, DoT үшін tls:// немесе DoQ үшін quic:// енгізіңіз</string>
-    <string name="settings_detected_plain">Қарапайым DNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">DNS жауабының түрі</string>
     <string name="dns_response_nxdomain_desc">Домен жоқ (стандартты)</string>
     <string name="dns_response_refused_desc">Сұрау қабылданбайды (үйлесімділігі жақсырақ)</string>
@@ -111,7 +99,6 @@
     <string name="dns_category_standard">Стандартты</string>
     <string name="dns_category_privacy">Құпиялылыққа бағытталған</string>
     <string name="dns_category_family">Отбасыға қауіпсіз</string>
-    <string name="dns_category_custom">Жеке</string>
     <string name="dns_custom_title">Жеке DNS</string>
     <string name="dns_custom_description">Өз DNS серверлеріңіздің мекенжайларын енгізіңіз</string>
     <string name="dns_custom_save">Сақтау</string>
@@ -121,7 +108,6 @@
     <string name="app_management_subtitle_filtered">%2$d ішінен %1$d қолданба</string>
     <string name="app_management_desc">Әр қолданбаның VPN маршруттауын басқарыңыз және статистиканы көріңіз</string>
     <string name="app_management_search">Қолданбаларды іздеу…</string>
-    <string name="app_management_loading">Қолданбалар жүктелуде…</string>
     <string name="app_management_refresh">Жаңарту</string>
     <string name="app_management_sort">Сұрыптау</string>
     <string name="app_management_sort_name">Атауы бойынша сұрыптау</string>
@@ -146,35 +132,7 @@
     <string name="settings_milestone_notifications">Жетістік хабарландырулары</string>
     <string name="settings_milestone_notifications_desc">Бұғаттау межелеріне жеткенде хабарлау</string>
     <string name="profile_title">Қорғаныс профильдері</string>
-    <string name="profile_section_profiles">Профильдер</string>
-    <string name="profile_section_schedules">Кестелер</string>
     <string name="profile_name_default">Әдепкі</string>
-    <string name="profile_desc_strict_family">Барынша қатаң бұғаттау: жарнама, трекерлер, 18+ мазмұн және құмар ойындар</string>
-    <string name="profile_desc_default">Теңгерімді бұғаттау: негізгі жарнама мен трекерлер</string>
-    <string name="profile_desc_strict">Агрессивті бұғаттау: жарнама, трекерлер, аналитика, телеметрия</string>
-    <string name="profile_desc_family">Қауіпсіз шолу: жарнама, 18+ мазмұн, құмар ойындар</string>
-    <string name="profile_desc_gaming">Жеңіл бұғаттау: тек негізгі жарнама, төмен кідіріске оңтайландырылған</string>
-    <string name="profile_desc_custom">Сіздің жеке қорғаныс ережелеріңіз</string>
-    <string name="profile_active">Белсенді</string>
-    <string name="profile_switched">Профиль ауыстырылды</string>
-    <string name="profile_created">Профиль жасалды</string>
-    <string name="profile_deleted">Профиль жойылды</string>
-    <string name="profile_create_custom">Жеке профиль жасау</string>
-    <string name="profile_name_label">Профиль атауы</string>
-    <string name="profile_add_schedule">Кесте қосу</string>
-    <string name="profile_schedule_start">Басталу уақыты</string>
-    <string name="profile_schedule_end">Аяқталу уақыты</string>
-    <string name="profile_schedule_days">Күндер</string>
-    <string name="profile_schedule_added">Кесте қосылды</string>
-    <string name="profile_schedule_deleted">Кесте жойылды</string>
-    <string name="profile_schedule_every_day">Күн сайын</string>
-    <string name="profile_day_mon">Дс</string>
-    <string name="profile_day_tue">Сс</string>
-    <string name="profile_day_wed">Ср</string>
-    <string name="profile_day_thu">Бс</string>
-    <string name="profile_day_fri">Жм</string>
-    <string name="profile_day_sat">Сб</string>
-    <string name="profile_day_sun">Жс</string>
     <string name="settings_firewall">Брандмауэр</string>
     <string name="settings_sponsor">Бізді қолдау</string>
     <string name="settings_sponsor_desc">BlockAds әзірлеуін GitHub-та қолдаңыз</string>
@@ -190,7 +148,6 @@
     <string name="settings_export_logs_title">Жергілікті журналдарды экспорттау</string>
     <string name="settings_export_logs_subtitle">Оффлайн жөндеу журналдарын Email, Telegram және т.б. арқылы бөлісіңіз.</string>
     <string name="settings_export_logs_chooser_title">Журналдармен бөлісу</string>
-    <string name="settings_export_logs_not_found">Экспорттауға журнал табылмады</string>
     <string name="custom_color_title">Жеке түс</string>
     <string name="split_dns_title">Бөлінген DNS аймақтары</string>
     <string name="split_dns_description">Негізгі DNS орнына WireGuard DNS арқылы анықталатын домен аймақтары, үтірмен бөлінген (мысалы, internal,local,lan)</string>

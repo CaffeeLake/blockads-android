@@ -73,8 +73,6 @@
     <string name="firewall_title">Firewall</string>
     <string name="firewall_count">%d aplikasi diblokir</string>
     <string name="firewall_search">Cari aplikasi…</string>
-    <string name="firewall_enable">Aktifkan Firewall</string>
-    <string name="firewall_enable_desc">Blokir akses internet untuk aplikasi terpilih melalui DNS</string>
     <string name="firewall_block_wifi">Blokir Wi-Fi</string>
     <string name="firewall_block_mobile">Blokir Data Seluler</string>
     <string name="firewall_schedule">Jadwal</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Harap masukkan URL yang valid (http:// atau https://)</string>
     <string name="filter_error_duplicate_url">Daftar filter ini sudah ada</string>
     <string name="filter_chip_all">Semua</string>
-    <string name="filter_chip_enabled">Diaktifkan</string>
-    <string name="filter_chip_disabled">Dinonaktifkan</string>
     <string name="https_filtering_title">Pemfilteran HTTPS</string>
     <string name="https_filtering_toggle_label">Filter Kosmetik HTTPS</string>
     <string name="https_filtering_status_active">Aktif — Menyembunyikan iklan</string>

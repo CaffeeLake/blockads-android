@@ -57,8 +57,6 @@
     <string name="firewall_title">ไฟร์วอลล์</string>
     <string name="firewall_count">บล็อกแล้ว %d แอป</string>
     <string name="firewall_search">ค้นหาแอป…</string>
-    <string name="firewall_enable">เปิดใช้งานไฟร์วอลล์</string>
-    <string name="firewall_enable_desc">บล็อกการเข้าถึงอินเทอร์เน็ตสำหรับแอปที่เลือกผ่าน DNS</string>
     <string name="firewall_block_wifi">บล็อก Wi-Fi</string>
     <string name="firewall_block_mobile">บล็อกข้อมูลมือถือ</string>
     <string name="firewall_schedule">ตารางเวลา</string>
@@ -78,8 +76,6 @@
     <string name="filter_error_invalid_url">กรุณากรอก URL ที่ถูกต้อง (http:// หรือ https://)</string>
     <string name="filter_error_duplicate_url">มีรายการตัวกรองนี้อยู่แล้ว</string>
     <string name="filter_chip_all">ทั้งหมด</string>
-    <string name="filter_chip_enabled">เปิดใช้งาน</string>
-    <string name="filter_chip_disabled">ปิดใช้งาน</string>
     <string name="blocklist_domains_empty">ไม่มีโดเมนที่ถูกบล็อก</string>
     <string name="blocklist_domain_added">บล็อกโดเมนแล้ว: %s</string>
     <string name="blocklist_domain_removed">ลบโดเมนออกจากรายการบล็อกแล้ว</string>

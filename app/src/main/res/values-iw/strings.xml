@@ -21,7 +21,6 @@
     <string name="add">הוסף</string>
     <string name="delete">מחק</string>
     <string name="cancel">ביטול</string>
-    <string name="home_security_threats">איומים שנחסמו</string>
     <string name="nav_statistics">סטטיסטיקות</string>
     <string name="open_settings">פתח הגדרות</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">עוצר את Root Proxy…</string>
     <string name="home_paused_trusted_short">מושהה ברשת מהימנה</string>
     <string name="nav_browser">דפדפן</string>
-    <string name="home_download_speed">מהירות הורדה</string>
-    <string name="home_upload_speed">מהירות העלאה</string>
     <string name="home_downloaded">הורדו</string>
     <string name="home_uploaded">הועלו</string>
 </resources>

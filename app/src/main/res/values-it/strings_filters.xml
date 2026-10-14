@@ -59,8 +59,6 @@
     <string name="firewall_title">Firewall</string>
     <string name="firewall_count">%d app bloccate</string>
     <string name="firewall_search">Cerca app…</string>
-    <string name="firewall_enable">Abilita Firewall</string>
-    <string name="firewall_enable_desc">Blocca l\'accesso a internet per app selezionate tramite DNS</string>
     <string name="firewall_block_wifi">Blocca Wi-Fi</string>
     <string name="firewall_block_mobile">Blocca Dati Mobili</string>
     <string name="firewall_schedule">Programmazione</string>
@@ -78,8 +76,6 @@
     <string name="filter_error_invalid_url">Inserisci un URL valido (http:// o https://)</string>
     <string name="filter_error_duplicate_url">Questa lista filtri esiste già</string>
     <string name="filter_chip_all">Tutti</string>
-    <string name="filter_chip_enabled">Attivati</string>
-    <string name="filter_chip_disabled">Disattivati</string>
     <string name="blocklist_domains_empty">Nessun dominio bloccato</string>
     <string name="blocklist_domain_added">Dominio bloccato: %s</string>
     <string name="blocklist_domain_removed">Dominio rimosso dalla lista di blocco</string>

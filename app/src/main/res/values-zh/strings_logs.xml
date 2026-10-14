@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">累计拦截数</string>
     <string name="stats_today_queries">今日查询数</string>
     <string name="stats_today_blocked">今日拦截数</string>
-    <string name="stats_today_security">Today Threats</string>
     <string name="stats_charts">活动图表</string>
     <string name="stats_chart_4w">4周</string>
     <string name="stats_chart_12m">12个月</string>
     <string name="stats_per_app">各应用统计</string>
-    <string name="log_record_logs">记录日志</string>
     <string name="log_filter_by_app">按应用过滤</string>
     <string name="log_search_app_hint">搜索应用…</string>
     <string name="log_reset_filters">重置</string>

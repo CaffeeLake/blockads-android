@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Заблоковано за весь час</string>
     <string name="stats_today_queries">Запитів сьогодні</string>
     <string name="stats_today_blocked">Заблоковано сьогодні</string>
-    <string name="stats_today_security">Загроз сьогодні</string>
     <string name="stats_charts">Графіки активності</string>
     <string name="stats_chart_4w">4 Тижні</string>
     <string name="stats_chart_12m">12 Місяців</string>
     <string name="stats_per_app">Статистика за додатками</string>
-    <string name="log_record_logs">Записувати журнали</string>
     <string name="log_filter_by_app">Фільтрувати за програмою</string>
     <string name="log_search_app_hint">Пошук програми…</string>
     <string name="log_reset_filters">Скинути</string>

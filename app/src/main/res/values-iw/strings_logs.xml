@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">חסימות (כל הזמן)</string>
     <string name="stats_today_queries">שאילתות (היום)</string>
     <string name="stats_today_blocked">נחסמו היום</string>
-    <string name="stats_today_security">איומים היום</string>
     <string name="stats_charts">תרשימי פעילות</string>
     <string name="stats_chart_4w">4 שבועות</string>
     <string name="stats_chart_12m">12 חודשים</string>
     <string name="stats_per_app">סטטיסטיקות לפי אפליקציה</string>
-    <string name="log_record_logs">רשום יומנים</string>
     <string name="log_filter_by_app">סנן לפי יישום</string>
     <string name="log_search_app_hint">חיפוש יישום…</string>
     <string name="log_reset_filters">אפס</string>

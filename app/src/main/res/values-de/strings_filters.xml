@@ -73,8 +73,6 @@
     <string name="firewall_title">Firewall</string>
     <string name="firewall_count">%d Apps blockiert</string>
     <string name="firewall_search">Apps suchen…</string>
-    <string name="firewall_enable">Firewall aktivieren</string>
-    <string name="firewall_enable_desc">Internetugriff für ausgewählte Apps via DNS blockieren</string>
     <string name="firewall_block_wifi">Wi-Fi blockieren</string>
     <string name="firewall_block_mobile">Mobile Daten blockieren</string>
     <string name="firewall_schedule">Zeitplan</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Bitte geben Sie eine gültige URL ein (http:// oder https://)</string>
     <string name="filter_error_duplicate_url">Diese Filterliste existiert bereits</string>
     <string name="filter_chip_all">Alle</string>
-    <string name="filter_chip_enabled">Aktiviert</string>
-    <string name="filter_chip_disabled">Deaktiviert</string>
     <string name="https_filtering_title">HTTPS-Filterung</string>
     <string name="https_filtering_toggle_label">Kosmetischer HTTPS-Filter</string>
     <string name="https_filtering_status_active">Aktiv — Werbung wird ausgeblendet</string>

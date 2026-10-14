@@ -59,8 +59,6 @@
     <string name="firewall_title">Брандмауэр</string>
     <string name="firewall_count">Заблокировано приложений: %d</string>
     <string name="firewall_search">Поиск приложений…</string>
-    <string name="firewall_enable">Включить брандмауэр</string>
-    <string name="firewall_enable_desc">Блокировать доступ в интернет для выбранных приложений через DNS</string>
     <string name="firewall_block_wifi">Блокировать Wi‑Fi</string>
     <string name="firewall_block_mobile">Блокировать мобильный интернет</string>
     <string name="firewall_schedule">Расписание</string>
@@ -78,8 +76,6 @@
     <string name="filter_error_invalid_url">Введите корректный URL (http:// или https://)</string>
     <string name="filter_error_duplicate_url">Этот список фильтров уже существует</string>
     <string name="filter_chip_all">Все</string>
-    <string name="filter_chip_enabled">Включённые</string>
-    <string name="filter_chip_disabled">Отключённые</string>
     <string name="blocklist_domains_empty">Нет заблокированных доменов</string>
     <string name="blocklist_domain_added">Домен заблокирован: %s</string>
     <string name="blocklist_domain_removed">Домен удален из списка блокировки</string>

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Povolené aplikace</string>
-    <string name="whitelist_apps_search">Hledat aplikace…</string>
     <string name="whitelist_apps_empty">Nejsou nainstalovány žádné aplikace</string>
-    <string name="whitelist_apps_count">Povolených aplikací: %d</string>
     <string name="whitelist_tab_user">Uživatelské</string>
     <string name="whitelist_tab_system">Systémové</string>
     <string name="about_title">O aplikaci</string>
@@ -37,12 +34,9 @@
     <string name="settings_accent_color_desc">Přizpůsobit hlavní barvu aplikace</string>
     <string name="accent_dynamic">Dynamická (Material You)</string>
     <string name="accent_dynamic_desc">Použije barvy vaší tapety</string>
-    <string name="settings_filter_lists">Seznamy filtrů (%d aktivních)</string>
     <string name="settings_add_custom_filter">Přidat vlastní seznam filtrů</string>
     <string name="settings_updating">Aktualizace…</string>
     <string name="settings_update_all">Aktualizovat všechny filtry</string>
-    <string name="settings_whitelist_apps">Povolené aplikace</string>
-    <string name="settings_whitelist_apps_desc">Vyloučit aplikace z blokování reklam</string>
     <string name="settings_whitelist_domains">Povolené domény</string>
     <string name="settings_export">Exportovat</string>
     <string name="settings_import">Importovat</string>
@@ -55,8 +49,6 @@
     <string name="settings_fallback_dns">Záložní DNS server</string>
     <string name="settings_fallback_dns_desc">Použije se, když primární DNS server selže.</string>
     <string name="settings_fallback_dns_short_desc">Záloha při selhání primárního DNS</string>
-    <string name="settings_custom_dns_server">Vlastní DNS server</string>
-    <string name="settings_custom_dns_hint">Zadejte IP pro Plain DNS, https:// pro DoH, tls:// pro DoT, nebo quic:// pro DoQ</string>
     <string name="settings_dns_response_type">Typ DNS odpovědi</string>
     <string name="dns_response_nxdomain_desc">Doména neexistuje (standardní)</string>
     <string name="dns_response_refused_desc">Dotaz odmítnut (lepší kompatibilita)</string>
@@ -69,7 +61,6 @@
     <string name="app_management_subtitle_filtered">%1$d z %2$d aplikací</string>
     <string name="app_management_desc">Správa směrování VPN pro aplikace a statistiky</string>
     <string name="app_management_search">Hledat aplikace…</string>
-    <string name="app_management_loading">Načítání aplikací…</string>
     <string name="app_management_refresh">Obnovit</string>
     <string name="app_management_sort">Seřadit</string>
     <string name="app_management_sort_name">Podle názvu</string>
@@ -94,35 +85,7 @@
     <string name="settings_milestone_notifications">Upozornění na milníky</string>
     <string name="settings_milestone_notifications_desc">Upozornit při dosažení milníku v blokování</string>
     <string name="profile_title">Profily ochrany</string>
-    <string name="profile_section_profiles">Profily</string>
-    <string name="profile_section_schedules">Plány</string>
     <string name="profile_name_default">Výchozí</string>
-    <string name="profile_desc_strict_family">Maximální blokování: reklamy, sledovače, obsah pro dospělé a hazard</string>
-    <string name="profile_desc_default">Vyvážené blokování: základní reklamy a sledovače</string>
-    <string name="profile_desc_strict">Agresivní blokování: reklamy, sledovače, analytika, telemetrie</string>
-    <string name="profile_desc_family">Bezpečné prohlížení: reklamy, obsah pro dospělé, hazard</string>
-    <string name="profile_desc_gaming">Lehké blokování: pouze základní reklamy, optimalizováno pro nízkou odezvu</string>
-    <string name="profile_desc_custom">Vaše osobní pravidla ochrany</string>
-    <string name="profile_active">Aktivní</string>
-    <string name="profile_switched">Profil přepnut</string>
-    <string name="profile_created">Profil vytvořen</string>
-    <string name="profile_deleted">Profil smazán</string>
-    <string name="profile_create_custom">Vytvořit vlastní profil</string>
-    <string name="profile_name_label">Název profilu</string>
-    <string name="profile_add_schedule">Přidat plán</string>
-    <string name="profile_schedule_start">Čas zahájení</string>
-    <string name="profile_schedule_end">Čas ukončení</string>
-    <string name="profile_schedule_days">Dny</string>
-    <string name="profile_schedule_added">Plán přidán</string>
-    <string name="profile_schedule_deleted">Plán smazán</string>
-    <string name="profile_schedule_every_day">Každý den</string>
-    <string name="profile_day_mon">Po</string>
-    <string name="profile_day_tue">Út</string>
-    <string name="profile_day_wed">St</string>
-    <string name="profile_day_thu">Čt</string>
-    <string name="profile_day_fri">Pá</string>
-    <string name="profile_day_sat">So</string>
-    <string name="profile_day_sun">Ne</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Podpořte nás</string>
     <string name="settings_sponsor_desc">Podpořte vývoj BlockAds na GitHubu</string>
@@ -140,10 +103,6 @@
     <string name="dns_error_duplicate">Záložní DNS nemůže být stejné jako vlastní DNS</string>
     <string name="dns_category_fallback">Záložní</string>
     <string name="settings_fallback_dns_not_set">Nenastaveno (žádná záloha)</string>
-    <string name="settings_detected_plain">Standardní DNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_auto_update_enabled">Povolit automatickou aktualizaci</string>
     <string name="settings_auto_update_enabled_desc">Automaticky aktualizovat seznamy filtrů na pozadí</string>
     <string name="settings_auto_update_frequency">Frekvence aktualizace</string>
@@ -162,7 +121,6 @@
     <string name="dns_category_standard">Standardní</string>
     <string name="dns_category_privacy">Zaměřeno na soukromí</string>
     <string name="dns_category_family">Bezpečné pro rodinu</string>
-    <string name="dns_category_custom">Vlastní</string>
     <string name="dns_custom_title">Vlastní DNS</string>
     <string name="dns_custom_description">Zadejte vlastní adresy DNS serverů</string>
     <string name="dns_custom_save">Uložit</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Exportovat místní protokoly</string>
     <string name="settings_export_logs_subtitle">Sdílejte offline protokoly ladění přímo přes e-mail, Telegram atd.</string>
     <string name="settings_export_logs_chooser_title">Sdílet protokoly</string>
-    <string name="settings_export_logs_not_found">Nebyly nalezeny žádné protokoly k exportu</string>
     <string name="custom_color_title">Vlastní barva</string>
     <string name="split_dns_title">Rozdělené DNS zóny</string>
     <string name="split_dns_description">Domény oddělené čárkami pro překlad přes WireGuard DNS místo nadřazeného serveru (např. internal,local,lan)</string>

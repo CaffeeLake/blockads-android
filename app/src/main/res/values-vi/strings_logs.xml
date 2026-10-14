@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Tổng đã chặn</string>
     <string name="stats_today_queries">Hôm nay truy vấn</string>
     <string name="stats_today_blocked">Hôm nay đã chặn</string>
-    <string name="stats_today_security">Hôm nay mối đe dọa</string>
     <string name="stats_charts">Biểu đồ hoạt động</string>
     <string name="stats_chart_4w">4 Tuần</string>
     <string name="stats_chart_12m">12 Tháng</string>
     <string name="stats_per_app">Thống kê theo ứng dụng</string>
-    <string name="log_record_logs">Ghi nhật ký</string>
     <string name="log_filter_by_app">Lọc theo ứng dụng</string>
     <string name="log_search_app_hint">Tìm ứng dụng…</string>
     <string name="log_reset_filters">Đặt lại</string>

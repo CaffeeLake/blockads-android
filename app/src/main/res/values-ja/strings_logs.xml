@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">累計ブロック数</string>
     <string name="stats_today_queries">今日のクエリ数</string>
     <string name="stats_today_blocked">今日のブロック数</string>
-    <string name="stats_today_security">Today Threats</string>
     <string name="stats_charts">アクティビティチャート</string>
     <string name="stats_chart_4w">4週間</string>
     <string name="stats_chart_12m">12か月</string>
     <string name="stats_per_app">アプリごとの統計</string>
-    <string name="log_record_logs">ログを記録</string>
     <string name="log_filter_by_app">アプリで絞り込み</string>
     <string name="log_search_app_hint">アプリを検索…</string>
     <string name="log_reset_filters">リセット</string>

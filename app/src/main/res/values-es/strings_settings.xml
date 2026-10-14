@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Aplicaciones en lista blanca</string>
-    <string name="whitelist_apps_search">Buscar aplicaciones…</string>
     <string name="whitelist_apps_empty">No hay aplicaciones instaladas</string>
-    <string name="whitelist_apps_count">%d aplicaciones en lista blanca</string>
     <string name="whitelist_tab_user">Apps de usuario</string>
     <string name="whitelist_tab_system">Apps del sistema</string>
     <string name="about_title">Acerca de la aplicación</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">Personaliza el color principal de la app</string>
     <string name="accent_dynamic">Dinámico (Material You)</string>
     <string name="accent_dynamic_desc">Usa los colores de tu fondo de pantalla</string>
-    <string name="settings_filter_lists">Listas de filtros (%d activas)</string>
     <string name="settings_add_custom_filter">Añadir lista de filtros personalizada</string>
     <string name="settings_updating">Actualizando…</string>
     <string name="settings_update_all">Actualizar todos los filtros</string>
-    <string name="settings_whitelist_apps">Aplicaciones en lista blanca</string>
-    <string name="settings_whitelist_apps_desc">Excluir aplicaciones del bloqueo de anuncios</string>
     <string name="settings_whitelist_domains">Dominios en lista blanca</string>
     <string name="settings_export">Exportar</string>
     <string name="settings_import">Importar</string>
@@ -67,12 +61,6 @@
     <string name="dns_error_duplicate">El DNS de respaldo no puede ser igual al DNS personalizado</string>
     <string name="dns_category_fallback">Respaldo</string>
     <string name="settings_fallback_dns_not_set">No configurado (sin respaldo)</string>
-    <string name="settings_custom_dns_server">Servidor DNS personalizado</string>
-    <string name="settings_custom_dns_hint">Introduce IP para DNS simple, https:// para DoH, tls:// para DoT o quic:// para DoQ</string>
-    <string name="settings_detected_plain">DNS simple</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">Tipo de respuesta DNS</string>
     <string name="dns_response_nxdomain_desc">El dominio no existe (estándar)</string>
     <string name="dns_response_refused_desc">Consulta rechazada (mejor compatibilidad)</string>
@@ -97,7 +85,6 @@
     <string name="dns_category_standard">Estándar</string>
     <string name="dns_category_privacy">Enfocado en privacidad</string>
     <string name="dns_category_family">Seguro para la familia</string>
-    <string name="dns_category_custom">Personalizado</string>
     <string name="dns_custom_title">DNS personalizado</string>
     <string name="dns_custom_description">Introduce la dirección de tu propio servidor DNS</string>
     <string name="dns_custom_save">Guardar</string>
@@ -107,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d de %2$d aplicaciones</string>
     <string name="app_management_desc">Gestionar el enrutamiento VPN por aplicación y ver estadísticas</string>
     <string name="app_management_search">Buscar aplicaciones…</string>
-    <string name="app_management_loading">Cargando aplicaciones…</string>
     <string name="app_management_refresh">Actualizar</string>
     <string name="app_management_sort">Ordenar</string>
     <string name="app_management_sort_name">Ordenar por nombre</string>
@@ -119,34 +105,7 @@
     <string name="app_management_vpn_toggle">Enrutamiento VPN para %s</string>
     <string name="settings_firewall">Firewall</string>
     <string name="profile_title">Perfiles de protección</string>
-    <string name="profile_section_profiles">Perfiles</string>
-    <string name="profile_section_schedules">Horarios</string>
     <string name="profile_name_default">Predeterminado</string>
-    <string name="profile_desc_default">Bloquear anuncios y rastreadores básicos</string>
-    <string name="profile_desc_strict">Bloquear todos los anuncios, rastreadores y análisis</string>
-    <string name="profile_desc_family">Bloquear anuncios + contenido para adultos + apuestas</string>
-    <string name="profile_desc_gaming">Bloquear anuncios con configuración optimizada para juegos</string>
-    <string name="profile_desc_custom">Configuración de perfil personalizado</string>
-    <string name="profile_active">Activo</string>
-    <string name="profile_switched">Perfil cambiado</string>
-    <string name="profile_created">Perfil creado</string>
-    <string name="profile_deleted">Perfil eliminado</string>
-    <string name="profile_create_custom">Crear perfil personalizado</string>
-    <string name="profile_name_label">Nombre del perfil</string>
-    <string name="profile_add_schedule">Añadir horario</string>
-    <string name="profile_schedule_start">Hora de inicio</string>
-    <string name="profile_schedule_end">Hora de finalización</string>
-    <string name="profile_schedule_days">Días</string>
-    <string name="profile_schedule_added">Horario añadido</string>
-    <string name="profile_schedule_deleted">Horario eliminado</string>
-    <string name="profile_schedule_every_day">Todos los días</string>
-    <string name="profile_day_mon">Lun</string>
-    <string name="profile_day_tue">Mar</string>
-    <string name="profile_day_wed">Mié</string>
-    <string name="profile_day_thu">Jue</string>
-    <string name="profile_day_fri">Vie</string>
-    <string name="profile_day_sat">Sáb</string>
-    <string name="profile_day_sun">Dom</string>
     <string name="daily_summary_channel_name">Resumen diario</string>
     <string name="daily_summary_channel_description">Resumen de bloqueo de anuncios al final del día</string>
     <string name="daily_summary_title">Resumen de protección diario</string>
@@ -166,7 +125,6 @@
     <string name="settings_community">Comunidad</string>
     <string name="settings_reddit_desc">Únete a nuestra comunidad en Reddit</string>
     <string name="settings_telegram_desc">Únete a nuestro chat en Telegram</string>
-    <string name="profile_desc_strict_family">Bloqueo máximo: anuncios, rastreadores, contenido para adultos &amp; apuestas</string>
     <string name="settings_show_bottom_nav_labels">Mostrar etiquetas de navegación inferior</string>
     <string name="settings_show_bottom_nav_labels_desc">Mostrar texto debajo de los iconos en la barra de navegación inferior</string>
     <string name="clear_logs_confirm_message">¿Estás seguro de que quieres borrar todos los registros DNS? Esta acción no se puede deshacer.</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Exportar registros locales</string>
     <string name="settings_export_logs_subtitle">Comparte registros de depuración sin conexión directamente por correo electrónico, Telegram, etc.</string>
     <string name="settings_export_logs_chooser_title">Compartir registros</string>
-    <string name="settings_export_logs_not_found">No se encontraron registros para exportar</string>
     <string name="custom_color_title">Color personalizado</string>
     <string name="split_dns_title">Zonas DNS divididas</string>
     <string name="split_dns_description">Zonas de dominio separadas por comas para resolver a través de DNS de WireGuard en lugar del servidor principal (ej. internal,local,lan)</string>

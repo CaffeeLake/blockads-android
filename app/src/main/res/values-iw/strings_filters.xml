@@ -73,8 +73,6 @@
     <string name="firewall_title">חומת אש (Firewall)</string>
     <string name="firewall_count">%d אפליקציות חסומות</string>
     <string name="firewall_search">חפש אפליקציות…</string>
-    <string name="firewall_enable">הפעל חומת אש</string>
-    <string name="firewall_enable_desc">חסום גישה לאינטרנט עבור אפליקציות נבחרות דרך DNS</string>
     <string name="firewall_block_wifi">חסום Wi-Fi</string>
     <string name="firewall_block_mobile">חסום נתונים סלולריים</string>
     <string name="firewall_schedule">לוח זמנים</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">אנא הזן כתובת URL חוקית (http:// או https://)</string>
     <string name="filter_error_duplicate_url">רשימת סינון זו כבר קיימת</string>
     <string name="filter_chip_all">הכל</string>
-    <string name="filter_chip_enabled">מופעל</string>
-    <string name="filter_chip_disabled">מושבת</string>
     <string name="https_filtering_title">סינון HTTPS</string>
     <string name="https_filtering_toggle_label">מסנן קוסמטי HTTPS</string>
     <string name="https_filtering_status_active">פעיל — מסתיר פרסומות</string>

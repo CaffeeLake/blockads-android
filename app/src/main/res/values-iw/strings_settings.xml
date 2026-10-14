@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">אפליקציות מורשות</string>
-    <string name="whitelist_apps_search">חפש אפליקציות…</string>
     <string name="whitelist_apps_empty">אין אפליקציות מותקנות</string>
-    <string name="whitelist_apps_count">%d אפליקציות מורשות</string>
     <string name="whitelist_tab_user">אפליקציות משתמש</string>
     <string name="whitelist_tab_system">אפליקציות מערכת</string>
     <string name="about_title">אודות</string>
@@ -40,12 +37,9 @@
     <string name="settings_accent_color_desc">התאם אישית את צבע הנושא של האפליקציה</string>
     <string name="accent_dynamic">דינמי (Material You)</string>
     <string name="accent_dynamic_desc">משתמש בצבעי הטפט שלך</string>
-    <string name="settings_filter_lists">רשימות סינון (%d פעילות)</string>
     <string name="settings_add_custom_filter">הוסף רשימת סינון מותאמת אישית</string>
     <string name="settings_updating">מעדכן…</string>
     <string name="settings_update_all">עדכן את כל המסננים</string>
-    <string name="settings_whitelist_apps">אפליקציות מורשות</string>
-    <string name="settings_whitelist_apps_desc">החרג אפליקציות מחסימת פרסומות</string>
     <string name="settings_whitelist_domains">דומיינים מורשים</string>
     <string name="settings_export">ייצוא</string>
     <string name="settings_import">ייבוא</string>
@@ -69,12 +63,6 @@
     <string name="dns_error_duplicate">שרת הגיבוי אינו יכול להיות זהה לשרת המותאם אישית</string>
     <string name="dns_category_fallback">גיבוי</string>
     <string name="settings_fallback_dns_not_set">לא מוגדר (ללא גיבוי)</string>
-    <string name="settings_custom_dns_server">שרת DNS מותאם אישית</string>
-    <string name="settings_custom_dns_hint">הזן IP עבור DNS רגיל, https:// עבור DoH, tls:// עבור DoT, או quic:// עבור DoQ</string>
-    <string name="settings_detected_plain">DNS רגיל</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">סוג תגובת DNS</string>
     <string name="dns_response_nxdomain_desc">הדומיין אינו קיים (סטנדרטי)</string>
     <string name="dns_response_refused_desc">השאילתה נדחתה (תאימות טובה יותר)</string>
@@ -100,7 +88,6 @@
     <string name="dns_category_standard">רגיל</string>
     <string name="dns_category_privacy">ממוקד פרטיות</string>
     <string name="dns_category_family">בטוח למשפחה</string>
-    <string name="dns_category_custom">מותאם אישית</string>
     <string name="dns_custom_title">DNS מותאם אישית</string>
     <string name="dns_custom_description">הזן את כתובות שרתי ה-DNS שלך</string>
     <string name="dns_custom_save">שמור</string>
@@ -110,7 +97,6 @@
     <string name="app_management_subtitle_filtered">%1$d מתוך %2$d אפליקציות</string>
     <string name="app_management_desc">נהל ניתוב VPN לכל אפליקציה וצפה בסטטיסטיקות</string>
     <string name="app_management_search">חפש אפליקציות…</string>
-    <string name="app_management_loading">טוען אפליקציות…</string>
     <string name="app_management_refresh">רענון</string>
     <string name="app_management_sort">מיון</string>
     <string name="app_management_sort_name">מיין לפי שם</string>
@@ -135,35 +121,7 @@
     <string name="settings_milestone_notifications">התראות ציוני דרך</string>
     <string name="settings_milestone_notifications_desc">הודע לי כאשר אני מגיע לציוני דרך בחסימה</string>
     <string name="profile_title">פרופילי הגנה</string>
-    <string name="profile_section_profiles">פרופילים</string>
-    <string name="profile_section_schedules">לוחות זמנים</string>
     <string name="profile_name_default">ברירת מחדל</string>
-    <string name="profile_desc_strict_family">חסימה מקסימלית: פרסומות, עוקבים, תוכן למבוגרים והימורים</string>
-    <string name="profile_desc_default">חסימה מאוזנת: פרסומות ועוקבים בסיסיים</string>
-    <string name="profile_desc_strict">חסימה אגרסיבית: פרסומות, עוקבים, אנליטיקה, טלמטריה</string>
-    <string name="profile_desc_family">גלישה בטוחה: פרסומות, תוכן למבוגרים, הימורים</string>
-    <string name="profile_desc_gaming">חסימה קלה: פרסומות בסיסיות בלבד, מותאם לשיהוי נמוך</string>
-    <string name="profile_desc_custom">כללי ההגנה האישיים שלך</string>
-    <string name="profile_active">פעיל</string>
-    <string name="profile_switched">הפרופיל הוחלף</string>
-    <string name="profile_created">הפרופיל נוצר</string>
-    <string name="profile_deleted">הפרופיל נמחק</string>
-    <string name="profile_create_custom">צור פרופיל מותאם אישית</string>
-    <string name="profile_name_label">שם הפרופיל</string>
-    <string name="profile_add_schedule">הוסף לוח זמנים</string>
-    <string name="profile_schedule_start">שעת התחלה</string>
-    <string name="profile_schedule_end">שעת סיום</string>
-    <string name="profile_schedule_days">ימים</string>
-    <string name="profile_schedule_added">לוח הזמנים נוסף</string>
-    <string name="profile_schedule_deleted">לוח הזמנים נמחק</string>
-    <string name="profile_schedule_every_day">כל יום</string>
-    <string name="profile_day_mon">ב\'</string>
-    <string name="profile_day_tue">ג\'</string>
-    <string name="profile_day_wed">ד\'</string>
-    <string name="profile_day_thu">ה\'</string>
-    <string name="profile_day_fri">ו\'</string>
-    <string name="profile_day_sat">שבת</string>
-    <string name="profile_day_sun">א\'</string>
     <string name="settings_firewall">חומת אש</string>
     <string name="settings_sponsor">תמוך בנו (Sponsor)</string>
     <string name="settings_sponsor_desc">תמוך בפיתוח של BlockAds ב-GitHub</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">ייצוא יומנים מקומיים</string>
     <string name="settings_export_logs_subtitle">שתף יומני איתור באגים לא מקוונים ישירות דרך דוא&quot;ל, Telegram וכו\'.</string>
     <string name="settings_export_logs_chooser_title">שתף יומנים</string>
-    <string name="settings_export_logs_not_found">לא נמצאו יומנים לייצוא</string>
     <string name="custom_color_title">צבע מותאם אישית</string>
     <string name="split_dns_title">אזורי DNS מפוצלים</string>
     <string name="split_dns_description">אזורי דומיין מופרדים בפסיקים לפתרון דרך DNS של WireGuard במקום upstream (לדוגמה: internal,local,lan)</string>

@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Барлық уақытта бұғатталды</string>
     <string name="stats_today_queries">Бүгінгі сұраулар</string>
     <string name="stats_today_blocked">Бүгін бұғатталды</string>
-    <string name="stats_today_security">Бүгінгі қатерлер</string>
     <string name="stats_charts">Белсенділік диаграммалары</string>
     <string name="stats_chart_4w">4 апта</string>
     <string name="stats_chart_12m">12 ай</string>
     <string name="stats_per_app">Қолданбалар бойынша статистика</string>
-    <string name="log_record_logs">Журналдарды жазу</string>
     <string name="log_filter_by_app">Қолданба бойынша сүзу</string>
     <string name="log_search_app_hint">Қолданбаны іздеу…</string>
     <string name="log_reset_filters">Қалпына келтіру</string>

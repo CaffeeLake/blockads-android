@@ -36,14 +36,12 @@
     <string name="stats_all_time_blocked">Blokováno celkem</string>
     <string name="stats_today_queries">Dnešní dotazy</string>
     <string name="stats_today_blocked">Dnes blokováno</string>
-    <string name="stats_today_security">Dnešní hrozby</string>
     <string name="stats_charts">Grafy aktivity</string>
     <string name="stats_chart_4w">4 týdny</string>
     <string name="stats_chart_12m">12 měsíců</string>
     <string name="stats_per_app">Statistiky podle aplikací</string>
     <string name="log_wildcard_whitelist_domain">Povolit všechny subdomény</string>
     <string name="log_wildcard_whitelisted">Doména %1$s a všechny její subdomény byly přidány na seznam povolených</string>
-    <string name="log_record_logs">Zaznamenávat protokoly</string>
     <string name="log_filter_by_app">Filtrovat podle aplikace</string>
     <string name="log_search_app_hint">Hledat aplikaci…</string>
     <string name="log_reset_filters">Obnovit</string>

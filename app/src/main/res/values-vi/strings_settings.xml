@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Ứng dụng được phép</string>
-    <string name="whitelist_apps_search">Tìm ứng dụng…</string>
     <string name="whitelist_apps_empty">Không có ứng dụng nào</string>
-    <string name="whitelist_apps_count">%d ứng dụng được phép</string>
     <string name="whitelist_tab_user">Ứng dụng người dùng</string>
     <string name="whitelist_tab_system">Ứng dụng hệ thống</string>
     <string name="about_title">Giới thiệu</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">Tùy chỉnh màu chủ đạo của ứng dụng</string>
     <string name="accent_dynamic">Động (Material You)</string>
     <string name="accent_dynamic_desc">Sử dụng màu từ hình nền của bạn</string>
-    <string name="settings_filter_lists">Danh sách bộ lọc (%d đang bật)</string>
     <string name="settings_add_custom_filter">Thêm bộ lọc tùy chỉnh</string>
     <string name="settings_updating">Đang cập nhật…</string>
     <string name="settings_update_all">Cập nhật tất cả bộ lọc</string>
-    <string name="settings_whitelist_apps">Ứng dụng được phép</string>
-    <string name="settings_whitelist_apps_desc">Loại trừ ứng dụng khỏi chặn quảng cáo</string>
     <string name="settings_whitelist_domains">Tên miền được phép</string>
     <string name="settings_export">Xuất</string>
     <string name="settings_import">Nhập</string>
@@ -67,12 +61,6 @@
     <string name="dns_error_duplicate">DNS dự phòng không được trùng với DNS tuỳ chỉnh</string>
     <string name="dns_category_fallback">Dự phòng</string>
     <string name="settings_fallback_dns_not_set">Chưa đặt (không có dự phòng)</string>
-    <string name="settings_custom_dns_server">Máy chủ DNS tùy chỉnh</string>
-    <string name="settings_custom_dns_hint">Nhập IP cho DNS thường, https:// cho DoH, tls:// cho DoT, hoặc quic:// cho DoQ</string>
-    <string name="settings_detected_plain">DNS thường</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">Loại phản hồi DNS</string>
     <string name="dns_response_nxdomain_desc">Tên miền không tồn tại (chuẩn)</string>
     <string name="dns_response_refused_desc">Từ chối truy vấn (tương thích tốt hơn)</string>
@@ -97,7 +85,6 @@
     <string name="dns_category_standard">Tiêu chuẩn</string>
     <string name="dns_category_privacy">Tập trung bảo mật</string>
     <string name="dns_category_family">An toàn cho gia đình</string>
-    <string name="dns_category_custom">Tùy chỉnh</string>
     <string name="dns_custom_title">DNS tùy chỉnh</string>
     <string name="dns_custom_description">Nhập địa chỉ máy chủ DNS của riêng bạn</string>
     <string name="dns_custom_save">Lưu</string>
@@ -107,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d / %2$d ứng dụng</string>
     <string name="app_management_desc">Quản lý VPN theo ứng dụng và xem thống kê</string>
     <string name="app_management_search">Tìm ứng dụng…</string>
-    <string name="app_management_loading">Đang tải ứng dụng…</string>
     <string name="app_management_refresh">Làm mới</string>
     <string name="app_management_sort">Sắp xếp</string>
     <string name="app_management_sort_name">Sắp xếp theo tên</string>
@@ -140,35 +126,7 @@
     <string name="settings_daily_summary_desc">Hiển thị tóm tắt chặn cuối ngày</string>
     <string name="settings_milestone_notifications">Thông báo cột mốc</string>
     <string name="settings_milestone_notifications_desc">Thông báo khi đạt cột mốc chặn</string>
-    <string name="profile_section_profiles">Hồ sơ</string>
-    <string name="profile_section_schedules">Lịch trình</string>
     <string name="profile_name_default">Mặc định</string>
-    <string name="profile_desc_default">Chặn cân bằng: quảng cáo cơ bản và trình theo dõi</string>
-    <string name="profile_desc_strict">Chặn triệt để: quảng cáo, trình theo dõi, phân tích, dữ liệu từ xa</string>
-    <string name="profile_desc_family">Duyệt web an toàn: quảng cáo, nội dung người lớn, cờ bạc</string>
-    <string name="profile_desc_gaming">Chặn nhẹ: chỉ quảng cáo cơ bản, tối ưu cho độ trễ thấp</string>
-    <string name="profile_desc_custom">Quy tắc bảo vệ cá nhân hóa của bạn</string>
-    <string name="profile_desc_strict_family">Chặn tối đa: quảng cáo, trình theo dõi, nội dung người lớn &amp; cờ bạc</string>
-    <string name="profile_active">Đang hoạt động</string>
-    <string name="profile_switched">Đã chuyển hồ sơ</string>
-    <string name="profile_created">Đã tạo hồ sơ</string>
-    <string name="profile_deleted">Đã xóa hồ sơ</string>
-    <string name="profile_create_custom">Tạo hồ sơ tùy chỉnh</string>
-    <string name="profile_name_label">Tên hồ sơ</string>
-    <string name="profile_add_schedule">Thêm lịch trình</string>
-    <string name="profile_schedule_start">Thời gian bắt đầu</string>
-    <string name="profile_schedule_end">Thời gian kết thúc</string>
-    <string name="profile_schedule_days">Ngày</string>
-    <string name="profile_schedule_added">Đã thêm lịch trình</string>
-    <string name="profile_schedule_deleted">Đã xóa lịch trình</string>
-    <string name="profile_schedule_every_day">Hàng ngày</string>
-    <string name="profile_day_mon">T2</string>
-    <string name="profile_day_tue">T3</string>
-    <string name="profile_day_wed">T4</string>
-    <string name="profile_day_thu">T5</string>
-    <string name="profile_day_fri">T6</string>
-    <string name="profile_day_sat">T7</string>
-    <string name="profile_day_sun">CN</string>
     <string name="settings_firewall">Tường lửa</string>
     <string name="settings_sponsor">Tài trợ</string>
     <string name="settings_sponsor_desc">Hỗ trợ phát triển BlockAds trên GitHub</string>
@@ -188,7 +146,6 @@
     <string name="settings_export_logs_title">Xuất nhật ký cục bộ</string>
     <string name="settings_export_logs_subtitle">Chia sẻ trực tiếp tệp nhật ký ngoại tuyến qua Email, Telegram, v.v.</string>
     <string name="settings_export_logs_chooser_title">Chia sẻ nhật ký</string>
-    <string name="settings_export_logs_not_found">Không tìm thấy nhật ký để xuất</string>
     <string name="custom_color_title">Màu tùy chỉnh</string>
     <string name="split_dns_title">Vùng DNS phân tách</string>
     <string name="split_dns_description">Các vùng tên miền phân tách bằng dấu phẩy để phân giải qua DNS WireGuard thay vì upstream (ví dụ: internal,local,lan)</string>
@@ -208,7 +165,6 @@
     <string name="trusted_networks_empty">Chưa có mạng tin cậy nào. Thêm mạng đang dùng để tạm dừng BlockAds tại đó.</string>
     <string name="trusted_networks_paused_title">Đã tạm dừng ở mạng tin cậy</string>
     <string name="trusted_networks_paused_text">BlockAds đang tạm dừng ở &quot;%1$s&quot; — tự bật lại khi bạn rời mạng này.</string>
-    <string name="config_title">Quy tắc &amp; Cấu hình</string>
     <string name="config_activated">Đã kích hoạt cấu hình</string>
     <string name="config_added">Đã thêm cấu hình</string>
     <string name="config_updated">Đã cập nhật cấu hình</string>
@@ -218,8 +174,6 @@
     <string name="config_name_label">Tên cấu hình</string>
     <string name="config_url_label">URL Subscription (.conf / .snippet)</string>
     <string name="config_content_label">Nội dung cấu hình</string>
-    <string name="config_edit_dialog_title">Chỉnh sửa cấu hình</string>
-    <string name="config_empty_desc">Chưa có cấu hình tùy chỉnh nào. Hãy thêm subscription từ URL hoặc quy tắc snippet.</string>
     <string name="config_save">Lưu</string>
     <string name="profile_title">Hồ sơ Cấu hình</string>
     <string name="profile_subtitle">Cấu hình chính chứa toàn bộ proxy, bộ lọc và các thiết lập khác.</string>
@@ -241,7 +195,6 @@
     <string name="profile_migrate_desc">Tạo profile cấu hình từ DNS và bộ lọc chặn hiện tại</string>
     <string name="profile_migrated_success">Đã tạo profile mới từ cài đặt hiện tại của app</string>
     <string name="profile_choose_icon">Chọn biểu tượng</string>
-    <string name="profile_change_icon">Đổi biểu tượng</string>
     <string name="profile_icon_updated">Đã cập nhật biểu tượng hồ sơ</string>
 
     <!-- DNS Leak Protection / DoH Bypass -->
@@ -256,9 +209,7 @@
     <string name="dns_tab_builtin">Có sẵn</string>
     <string name="dns_tab_custom">Tùy chỉnh</string>
     <string name="dns_active_hero_title">Máy chủ DNS đang dùng</string>
-    <string name="dns_active_status_active">Đang hoạt động</string>
     <string name="dns_protocol_label">Giao thức</string>
-    <string name="dns_endpoint_label">Địa chỉ kết nối</string>
     <string name="dns_fallback_label">DNS dự phòng</string>
     <string name="dns_category_all">Tất cả</string>
     <string name="dns_custom_configure_btn">Cấu hình DNS tùy chỉnh</string>
@@ -281,7 +232,6 @@
     <string name="rule_field_policy">Chính sách</string>
     <string name="rule_field_policy_hint">Chọn chính sách xử lý.</string>
     <string name="rule_field_save_to">Lưu vào cấu hình</string>
-    <string name="rule_field_current_profile">Cấu hình đang kích hoạt</string>
     <string name="config_rule_added">Đã thêm quy tắc vào: %s</string>
     <string name="rule_param_hint_host_suffix">vd: example.com (khớp cả *.example.com)</string>
     <string name="rule_param_hint_host">vd: ads.example.com (chỉ khớp chính xác tên miền này)</string>
@@ -309,10 +259,8 @@
     <!-- GeoIP Management -->
     <string name="settings_geoip_title">Cơ sở dữ liệu GeoIP</string>
     <string name="settings_geoip_subtitle">Dữ liệu vị trí IP cho thống kê lưu lượng và quy tắc định tuyến</string>
-    <string name="geoip_status_ready">Đã sẵn sàng (%s dải IP)</string>
     <string name="geoip_status_empty">Chưa tải về</string>
     <string name="geoip_status_downloading">Đang cập nhật...</string>
-    <string name="geoip_status_importing">Đang nhập...</string>
     <string name="geoip_records_count">%s dải IP</string>
     <string name="geoip_size_label">Dung lượng: %s</string>
     <string name="geoip_last_updated">Cập nhật lần cuối: %s</string>

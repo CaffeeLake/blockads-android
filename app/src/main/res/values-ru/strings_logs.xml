@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Заблокировано за всё время</string>
     <string name="stats_today_queries">Запросов сегодня</string>
     <string name="stats_today_blocked">Заблокировано сегодня</string>
-    <string name="stats_today_security">Угроз сегодня</string>
     <string name="stats_charts">Графики активности</string>
     <string name="stats_chart_4w">4 недели</string>
     <string name="stats_chart_12m">12 месяцев</string>
     <string name="stats_per_app">Статистика по приложениям</string>
-    <string name="log_record_logs">Записывать журналы</string>
     <string name="log_filter_by_app">Фильтр по приложению</string>
     <string name="log_search_app_hint">Поиск приложения…</string>
     <string name="log_reset_filters">Сбросить</string>

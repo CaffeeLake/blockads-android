@@ -64,8 +64,6 @@
     <string name="firewall_title">Tường lửa</string>
     <string name="firewall_count">%d ứng dụng bị chặn</string>
     <string name="firewall_search">Tìm ứng dụng…</string>
-    <string name="firewall_enable">Bật tường lửa</string>
-    <string name="firewall_enable_desc">Chặn truy cập internet cho các ứng dụng đã chọn qua DNS</string>
     <string name="firewall_block_wifi">Chặn Wi-Fi</string>
     <string name="firewall_block_mobile">Chặn dữ liệu di động</string>
     <string name="firewall_schedule">Lịch trình</string>
@@ -94,8 +92,6 @@
     <string name="filter_error_invalid_url">Vui lòng nhập URL hợp lệ (http:// hoặc https://)</string>
     <string name="filter_error_duplicate_url">Danh sách bộ lọc này đã tồn tại</string>
     <string name="filter_chip_all">Tất cả</string>
-    <string name="filter_chip_enabled">Đã bật</string>
-    <string name="filter_chip_disabled">Đã tắt</string>
     <string name="blocklist_domains_empty">Không có tên miền nào bị chặn</string>
     <string name="blocklist_domain_added">Đã chặn tên miền: %s</string>
     <string name="blocklist_domain_removed">Đã gỡ tên miền khỏi danh sách chặn</string>

@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">ถูกบล็อกทั้งหมดตลอดเวลา</string>
     <string name="stats_today_queries">คิวรีวันนี้</string>
     <string name="stats_today_blocked">ถูกบล็อกวันนี้</string>
-    <string name="stats_today_security">Today Threats</string>
     <string name="stats_charts">แผนภูมิกิจกรรม</string>
     <string name="stats_chart_4w">4 สัปดาห์</string>
     <string name="stats_chart_12m">12 เดือน</string>
     <string name="stats_per_app">สถิติแต่ละแอป</string>
-    <string name="log_record_logs">บันทึกประวัติ</string>
     <string name="log_filter_by_app">กรองตามแอป</string>
     <string name="log_search_app_hint">ค้นหาแอป…</string>
     <string name="log_reset_filters">รีเซ็ต</string>

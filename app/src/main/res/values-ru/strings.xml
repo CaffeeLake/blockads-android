@@ -21,7 +21,6 @@
     <string name="add">Добавить</string>
     <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
-    <string name="home_security_threats">Угроз заблокировано</string>
     <string name="nav_statistics">Статистика</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">Назад</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Остановка Root Proxy…</string>
     <string name="home_paused_trusted_short">Пауза в доверенной сети</string>
     <string name="nav_browser">Браузер</string>
-    <string name="home_download_speed">Скорость скачивания</string>
-    <string name="home_upload_speed">Скорость отдачи</string>
     <string name="home_downloaded">Скачано</string>
     <string name="home_uploaded">Отправлено</string>
 </resources>

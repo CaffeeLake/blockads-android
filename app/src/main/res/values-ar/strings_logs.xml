@@ -41,9 +41,7 @@
     <string name="stats_title">الإحصائيات</string>
     <string name="stats_today_blocked">محظور اليوم</string>
     <string name="stats_today_queries">استعلامات اليوم</string>
-    <string name="stats_today_security">تهديدات اليوم</string>
     <string name="total_queries">إجمالي الاستعلامات</string>
-    <string name="log_record_logs">تسجيل السجلات</string>
     <string name="log_filter_by_app">تصفية حسب التطبيق</string>
     <string name="log_search_app_hint">البحث عن تطبيق…</string>
     <string name="log_reset_filters">إعادة تعيين</string>

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Whitelist-Apps</string>
-    <string name="whitelist_apps_search">Apps suchen…</string>
     <string name="whitelist_apps_empty">Keine Apps installiert</string>
-    <string name="whitelist_apps_count">%d Apps auf der Whitelist</string>
     <string name="whitelist_tab_user">Benutzer-Apps</string>
     <string name="whitelist_tab_system">System-Apps</string>
     <string name="about_title">Über</string>
@@ -40,12 +37,9 @@
     <string name="settings_accent_color_desc">Primärfarbe der App anpassen</string>
     <string name="accent_dynamic">Dynamisch (Material You)</string>
     <string name="accent_dynamic_desc">Verwendet Farben Ihres Hintergrundbildes</string>
-    <string name="settings_filter_lists">Filterlisten (%d aktiv)</string>
     <string name="settings_add_custom_filter">Eigene Filterliste hinzufügen</string>
     <string name="settings_updating">Aktualisierung…</string>
     <string name="settings_update_all">Alle Filter aktualisieren</string>
-    <string name="settings_whitelist_apps">Whitelist-Apps</string>
-    <string name="settings_whitelist_apps_desc">Apps von der Werbeblockierung ausschließen</string>
     <string name="settings_whitelist_domains">Whitelist-Domains</string>
     <string name="settings_export">Exportieren</string>
     <string name="settings_import">Importieren</string>
@@ -69,12 +63,6 @@
     <string name="dns_error_duplicate">Fallback DNS darf không identisch mit Custom DNS sein</string>
     <string name="dns_category_fallback">Fallback</string>
     <string name="settings_fallback_dns_not_set">Nicht gesetzt (kein Backup)</string>
-    <string name="settings_custom_dns_server">Eigener DNS-Server</string>
-    <string name="settings_custom_dns_hint">IP für Standard-DNS, https:// für DoH, tls:// für DoT hoặc quic:// für DoQ</string>
-    <string name="settings_detected_plain">Standard-DNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">DNS-Antworttyp</string>
     <string name="dns_response_nxdomain_desc">Domain existiert không (Standard)</string>
     <string name="dns_response_refused_desc">Anfrage abgelehnt (bessere Kompatibilität)</string>
@@ -100,7 +88,6 @@
     <string name="dns_category_standard">Standard</string>
     <string name="dns_category_privacy">Datenschutz-fokussiert</string>
     <string name="dns_category_family">Jugendschutz</string>
-    <string name="dns_category_custom">Eigene</string>
     <string name="dns_custom_title">Custom DNS</string>
     <string name="dns_custom_description">Geben Sie Ihre eigenen DNS-Serveradressen ein</string>
     <string name="dns_custom_save">Speichern</string>
@@ -110,7 +97,6 @@
     <string name="app_management_subtitle_filtered">%1$d von %2$d Apps</string>
     <string name="app_management_desc">VPN-Routing pro App verwalten und Statistiken einsehen</string>
     <string name="app_management_search">Apps suchen…</string>
-    <string name="app_management_loading">Apps werden geladen…</string>
     <string name="app_management_refresh">Aktualisieren</string>
     <string name="app_management_sort">Sortieren</string>
     <string name="app_management_sort_name">Nach Name sortieren</string>
@@ -135,35 +121,7 @@
     <string name="settings_milestone_notifications">Meilenstein-Meldungen</string>
     <string name="settings_milestone_notifications_desc">Benachrichtigung bei Erreichen von Meilensteinen</string>
     <string name="profile_title">Schutzprofile</string>
-    <string name="profile_section_profiles">Profile</string>
-    <string name="profile_section_schedules">Zeitpläne</string>
     <string name="profile_name_default">Standard</string>
-    <string name="profile_desc_strict_family">Maximaler Schutz: Werbung, Tracker, Erotik &amp; Glücksspiel</string>
-    <string name="profile_desc_default">Ausgewogen: Basis-Werbung và Tracker</string>
-    <string name="profile_desc_strict">Aggressiv: Werbung, Tracker, Analysen, Telemetrie</string>
-    <string name="profile_desc_family">Sicheres Surfen: Werbung, Erotik, Glücksspiel</string>
-    <string name="profile_desc_gaming">Leichter Schutz: Nur Basis-Werbung, optimiert für niedrige Latenz</string>
-    <string name="profile_desc_custom">Ihre persönlichen Schutzregeln</string>
-    <string name="profile_active">Aktiv</string>
-    <string name="profile_switched">Profil gewechselt</string>
-    <string name="profile_created">Profil erstellt</string>
-    <string name="profile_deleted">Profil gelöscht</string>
-    <string name="profile_create_custom">Eigenes Profil erstellen</string>
-    <string name="profile_name_label">Profilname</string>
-    <string name="profile_add_schedule">Zeitplan hinzufügen</string>
-    <string name="profile_schedule_start">Startzeit</string>
-    <string name="profile_schedule_end">Endzeit</string>
-    <string name="profile_schedule_days">Tage</string>
-    <string name="profile_schedule_added">Zeitplan hinzugefügt</string>
-    <string name="profile_schedule_deleted">Zeitplan gelöscht</string>
-    <string name="profile_schedule_every_day">Jeden Tag</string>
-    <string name="profile_day_mon">Mo</string>
-    <string name="profile_day_tue">Di</string>
-    <string name="profile_day_wed">Mi</string>
-    <string name="profile_day_thu">Do</string>
-    <string name="profile_day_fri">Fr</string>
-    <string name="profile_day_sat">Sa</string>
-    <string name="profile_day_sun">So</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsern Sie uns</string>
     <string name="settings_sponsor_desc">Unterstützen Sie die Entwicklung auf GitHub</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Lokale Protokolle exportieren</string>
     <string name="settings_export_logs_subtitle">Offline-Debug-Protokolle direkt per E-Mail, Telegram usw. teilen.</string>
     <string name="settings_export_logs_chooser_title">Protokolle teilen</string>
-    <string name="settings_export_logs_not_found">Keine Protokolle zum Exportieren gefunden</string>
     <string name="custom_color_title">Benutzerdefinierte Farbe</string>
     <string name="split_dns_title">Split-DNS-Zonen</string>
     <string name="split_dns_description">Kommagetrennte Domänenzonen, die über WireGuard DNS statt über den Upstream aufgelöst werden (z.B. internal,local,lan)</string>

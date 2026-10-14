@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Aplicativos na lista de permissões</string>
-    <string name="whitelist_apps_search">Pesquisar aplicativos…</string>
     <string name="whitelist_apps_empty">Nenhum aplicativo instalado</string>
-    <string name="whitelist_apps_count">%d aplicativos permitidos</string>
     <string name="whitelist_tab_user">Aplicativos do usuário</string>
     <string name="whitelist_tab_system">Aplicativos do sistema</string>
     <string name="about_title">Sobre</string>
@@ -40,12 +37,9 @@
     <string name="settings_accent_color_desc">Personalize a cor principal do aplicativo</string>
     <string name="accent_dynamic">Dinâmico (Material You)</string>
     <string name="accent_dynamic_desc">Usa as cores do seu papel de parede</string>
-    <string name="settings_filter_lists">Listas de filtros (%d ativas)</string>
     <string name="settings_add_custom_filter">Adicionar lista de filtros personalizada</string>
     <string name="settings_updating">Atualizando…</string>
     <string name="settings_update_all">Atualizar todos os filtros</string>
-    <string name="settings_whitelist_apps">Aplicativos permitidos</string>
-    <string name="settings_whitelist_apps_desc">Excluir aplicativos do bloqueio de anúncios</string>
     <string name="settings_whitelist_domains">Domínios permitidos</string>
     <string name="settings_export">Exportar</string>
     <string name="settings_import">Importar</string>
@@ -69,12 +63,6 @@
     <string name="dns_error_duplicate">O DNS de backup não pode ser o mesmo que o DNS personalizado</string>
     <string name="dns_category_fallback">Backup</string>
     <string name="settings_fallback_dns_not_set">Não configurado (sem backup)</string>
-    <string name="settings_custom_dns_server">Servidor DNS personalizado</string>
-    <string name="settings_custom_dns_hint">Insira o IP para DNS comum, https:// para DoH, tls:// para DoT ou quic:// para DoQ</string>
-    <string name="settings_detected_plain">DNS comum</string>
-    <string name="settings_detected_doh">DNS sobre HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS sobre TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS sobre QUIC (DoQ)</string>
     <string name="settings_dns_response_type">Tipo de resposta DNS</string>
     <string name="dns_response_nxdomain_desc">O domínio não existe (padrão)</string>
     <string name="dns_response_refused_desc">Consulta recusada (melhor compatibilidade)</string>
@@ -100,7 +88,6 @@
     <string name="dns_category_standard">Padrão</string>
     <string name="dns_category_privacy">Foco em privacidade</string>
     <string name="dns_category_family">Seguro para família</string>
-    <string name="dns_category_custom">Personalizado</string>
     <string name="dns_custom_title">DNS personalizado</string>
     <string name="dns_custom_description">Insira seus próprios endereços de servidor DNS</string>
     <string name="dns_custom_save">Salvar</string>
@@ -110,7 +97,6 @@
     <string name="app_management_subtitle_filtered">%1$d de %2$d aplicativos</string>
     <string name="app_management_desc">Gerencie o roteamento VPN por aplicativo e veja as estatísticas</string>
     <string name="app_management_search">Pesquisar aplicativos…</string>
-    <string name="app_management_loading">Carregando aplicativos…</string>
     <string name="app_management_refresh">Atualizar</string>
     <string name="app_management_sort">Ordenar</string>
     <string name="app_management_sort_name">Ordenar por Nome</string>
@@ -135,35 +121,7 @@
     <string name="settings_milestone_notifications">Notificações de conquista</string>
     <string name="settings_milestone_notifications_desc">Notificar quando você atingir metas de bloqueio</string>
     <string name="profile_title">Perfis de proteção</string>
-    <string name="profile_section_profiles">Perfis</string>
-    <string name="profile_section_schedules">Agendamentos</string>
     <string name="profile_name_default">Padrão</string>
-    <string name="profile_desc_strict_family">Bloqueio máximo: anúncios, rastreadores, conteúdo adulto e jogos de azar</string>
-    <string name="profile_desc_default">Bloqueio balanceado: anúncios básicos e rastreadores</string>
-    <string name="profile_desc_strict">Bloqueio agressivo: anúncios, rastreadores, análise, telemetria</string>
-    <string name="profile_desc_family">Navegação segura: anúncios, conteúdo adulto, jogos de azar</string>
-    <string name="profile_desc_gaming">Bloqueio leve: apenas anúncios básicos, otimizado para baixa latência</string>
-    <string name="profile_desc_custom">Suas regras de proteção personalizadas</string>
-    <string name="profile_active">Ativo</string>
-    <string name="profile_switched">Perfil alterado</string>
-    <string name="profile_created">Perfil criado</string>
-    <string name="profile_deleted">Perfil excluído</string>
-    <string name="profile_create_custom">Criar perfil personalizado</string>
-    <string name="profile_name_label">Nome do perfil</string>
-    <string name="profile_add_schedule">Adicionar agendamento</string>
-    <string name="profile_schedule_start">Hora de início</string>
-    <string name="profile_schedule_end">Hora de término</string>
-    <string name="profile_schedule_days">Dias</string>
-    <string name="profile_schedule_added">Agendamento adicionado</string>
-    <string name="profile_schedule_deleted">Agendamento excluído</string>
-    <string name="profile_schedule_every_day">Todos os dias</string>
-    <string name="profile_day_mon">Seg</string>
-    <string name="profile_day_tue">Ter</string>
-    <string name="profile_day_wed">Qua</string>
-    <string name="profile_day_thu">Qui</string>
-    <string name="profile_day_fri">Sex</string>
-    <string name="profile_day_sat">Sáb</string>
-    <string name="profile_day_sun">Dom</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Patrocine-nos</string>
     <string name="settings_sponsor_desc">Apoie o desenvolvimento do BlockAds no GitHub</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Exportar Logs Locais</string>
     <string name="settings_export_logs_subtitle">Compartilhe logs de depuração offline diretamente via Email, Telegram, etc.</string>
     <string name="settings_export_logs_chooser_title">Compartilhar Logs</string>
-    <string name="settings_export_logs_not_found">Nenhum log encontrado para exportar</string>
     <string name="custom_color_title">Cor personalizada</string>
     <string name="split_dns_title">Zonas DNS divididas</string>
     <string name="split_dns_description">Zonas de domínio separadas por vírgula para resolver via DNS do WireGuard em vez do upstream (ex.: internal,local,lan)</string>

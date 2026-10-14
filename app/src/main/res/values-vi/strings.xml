@@ -14,8 +14,6 @@
     <string name="home_recent_blocked">Chặn gần đây</string>
     <string name="home_data_saved">Dữ liệu tiết kiệm</string>
     <string name="home_protection_uptime">Thời gian bảo vệ</string>
-    <string name="home_download_speed">Tốc độ tải xuống</string>
-    <string name="home_upload_speed">Tốc độ tải lên</string>
     <string name="home_downloaded">Đã tải xuống</string>
     <string name="home_uploaded">Đã tải lên</string>
     <string name="home_chart_24h">24 Giờ</string>
@@ -25,7 +23,6 @@
     <string name="add">Thêm</string>
     <string name="delete">Xóa</string>
     <string name="cancel">Hủy</string>
-    <string name="home_security_threats">Mối đe dọa đã chặn</string>
     <string name="nav_statistics">Thống kê</string>
     <string name="nav_browser">Trình duyệt</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

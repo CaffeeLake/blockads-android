@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Blocchi Totali</string>
     <string name="stats_today_queries">Query di Oggi</string>
     <string name="stats_today_blocked">Blocchi di Oggi</string>
-    <string name="stats_today_security">Minacce di Oggi</string>
     <string name="stats_charts">Grafici Attività</string>
     <string name="stats_chart_4w">4 Settimane</string>
     <string name="stats_chart_12m">12 Mesi</string>
     <string name="stats_per_app">Statistiche per App</string>
-    <string name="log_record_logs">Registra i log</string>
     <string name="log_filter_by_app">Filtra per app</string>
     <string name="log_search_app_hint">Cerca app…</string>
     <string name="log_reset_filters">Ripristina</string>

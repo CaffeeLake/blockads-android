@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">Aplikasi VPN lain terhubung. Lalu lintas Anda tidak lagi difilter oleh BlockAds.</string>
     <string name="vpn_revoked_action_reconnect">Sambung Ulang</string>
     <string name="vpn_revoked_action_dismiss">Tutup</string>
-    <string name="home_tip_stability_title">Jaga Perlindungan Tetap Stabil</string>
-    <string name="home_tip_stability_desc">Cegah Android menghentikan BlockAds di latar belakang dan jaga perlindungan 24/7.</string>
     <string name="home_tip_battery_title">Aktivitas Latar Belakang</string>
     <string name="home_tip_battery_desc">Nonaktifkan pengoptimalan baterai</string>
     <string name="home_tip_battery_action">Izinkan</string>

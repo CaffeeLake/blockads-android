@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Aplikasi Daftar Putih</string>
-    <string name="whitelist_apps_search">Cari aplikasi…</string>
     <string name="whitelist_apps_empty">Tidak ada aplikasi yang diinstal</string>
-    <string name="whitelist_apps_count">%d aplikasi di daftar putih</string>
     <string name="whitelist_tab_user">Aplikasi Pengguna</string>
     <string name="whitelist_tab_system">Aplikasi Sistem</string>
     <string name="about_title">Tentang</string>
@@ -40,12 +37,9 @@
     <string name="settings_accent_color_desc">Sesuaikan warna utama aplikasi</string>
     <string name="accent_dynamic">Dinamis (Material You)</string>
     <string name="accent_dynamic_desc">Menggunakan warna wallpaper Anda</string>
-    <string name="settings_filter_lists">Daftar Filter (%d aktif)</string>
     <string name="settings_add_custom_filter">Tambahkan Daftar Filter Kustom</string>
     <string name="settings_updating">Memperbarui…</string>
     <string name="settings_update_all">Perbarui Semua Filter</string>
-    <string name="settings_whitelist_apps">Aplikasi Daftar Putih</string>
-    <string name="settings_whitelist_apps_desc">Kecualikan aplikasi dari pemblokiran iklan</string>
     <string name="settings_whitelist_domains">Domain Daftar Putih</string>
     <string name="settings_export">Ekspor</string>
     <string name="settings_import">Impor</string>
@@ -69,12 +63,6 @@
     <string name="dns_error_duplicate">DNS Cadangan tidak boleh sama dengan DNS Kustom</string>
     <string name="dns_category_fallback">Cadangan</string>
     <string name="settings_fallback_dns_not_set">Tidak diatur (tanpa cadangan)</string>
-    <string name="settings_custom_dns_server">Server DNS Kustom</string>
-    <string name="settings_custom_dns_hint">Masukkan IP untuk DNS Biasa, https:// untuk DoH, tls:// untuk DoT, atau quic:// untuk DoQ</string>
-    <string name="settings_detected_plain">DNS Biasa</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">Tipe respons DNS</string>
     <string name="dns_response_nxdomain_desc">Domain tidak ada (standar)</string>
     <string name="dns_response_refused_desc">Kueri ditolak (kompatibilitas lebih baik)</string>
@@ -100,7 +88,6 @@
     <string name="dns_category_standard">Standar</string>
     <string name="dns_category_privacy">Berfokus privasi</string>
     <string name="dns_category_family">Aman untuk keluarga</string>
-    <string name="dns_category_custom">Kustom</string>
     <string name="dns_custom_title">DNS Kustom</string>
     <string name="dns_custom_description">Masukkan alamat server DNS Anda sendiri</string>
     <string name="dns_custom_save">Simpan</string>
@@ -110,7 +97,6 @@
     <string name="app_management_subtitle_filtered">%1$d dari %2$d aplikasi</string>
     <string name="app_management_desc">Kelola perutean VPN per-aplikasi dan lihat statistik</string>
     <string name="app_management_search">Cari aplikasi…</string>
-    <string name="app_management_loading">Memuat aplikasi…</string>
     <string name="app_management_refresh">Segarkan</string>
     <string name="app_management_sort">Urutkan</string>
     <string name="app_management_sort_name">Urutkan berdasarkan Nama</string>
@@ -135,35 +121,7 @@
     <string name="settings_milestone_notifications">Notifikasi pencapaian</string>
     <string name="settings_milestone_notifications_desc">Beri tahu saat Anda mencapai tonggak pemblokiran</string>
     <string name="profile_title">Profil Perlindungan</string>
-    <string name="profile_section_profiles">Profil</string>
-    <string name="profile_section_schedules">Jadwal</string>
     <string name="profile_name_default">Bawaan</string>
-    <string name="profile_desc_strict_family">Pemblokiran maksimal: iklan, pelacak, konten dewasa &amp; perjudian</string>
-    <string name="profile_desc_default">Pemblokiran seimbang: iklan dan pelacak dasar</string>
-    <string name="profile_desc_strict">Pemblokiran agresif: iklan, pelacak, analitik, telemetri</string>
-    <string name="profile_desc_family">Penjelajahan aman: iklan, konten dewasa, perjudian</string>
-    <string name="profile_desc_gaming">Pemblokiran ringan: hanya iklan dasar, dioptimalkan untuk latensi rendah</string>
-    <string name="profile_desc_custom">Aturan perlindungan yang dipersonalisasi untuk Anda</string>
-    <string name="profile_active">Aktif</string>
-    <string name="profile_switched">Profil dialihkan</string>
-    <string name="profile_created">Profil dibuat</string>
-    <string name="profile_deleted">Profil dihapus</string>
-    <string name="profile_create_custom">Buat Profil Kustom</string>
-    <string name="profile_name_label">Nama Profil</string>
-    <string name="profile_add_schedule">Tambah Jadwal</string>
-    <string name="profile_schedule_start">Waktu Mulai</string>
-    <string name="profile_schedule_end">Waktu Selesai</string>
-    <string name="profile_schedule_days">Hari</string>
-    <string name="profile_schedule_added">Jadwal ditambahkan</string>
-    <string name="profile_schedule_deleted">Jadwal dihapus</string>
-    <string name="profile_schedule_every_day">Setiap hari</string>
-    <string name="profile_day_mon">Sen</string>
-    <string name="profile_day_tue">Sel</string>
-    <string name="profile_day_wed">Rab</string>
-    <string name="profile_day_thu">Kam</string>
-    <string name="profile_day_fri">Jum</string>
-    <string name="profile_day_sat">Sab</string>
-    <string name="profile_day_sun">Min</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsori Kami</string>
     <string name="settings_sponsor_desc">Dukung pengembangan BlockAds di GitHub</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Ekspor Log Lokal</string>
     <string name="settings_export_logs_subtitle">Bagikan log debug offline langsung melalui Email, Telegram, dll.</string>
     <string name="settings_export_logs_chooser_title">Bagikan Log</string>
-    <string name="settings_export_logs_not_found">Tidak ada log yang ditemukan untuk diekspor</string>
     <string name="custom_color_title">Warna Kustom</string>
     <string name="split_dns_title">Zona DNS Terpisah</string>
     <string name="split_dns_description">Zona domain yang dipisahkan koma untuk diselesaikan melalui DNS WireGuard alih-alih upstream (mis. internal,local,lan)</string>

@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">اتصل تطبيق VPN آخر. لم تعد حركة مرورك مفلترة بواسطة BlockAds.</string>
     <string name="vpn_revoked_action_reconnect">إعادة الاتصال</string>
     <string name="vpn_revoked_action_dismiss">تجاهل</string>
-    <string name="home_tip_stability_title">الحفاظ على استقرار الحماية</string>
-    <string name="home_tip_stability_desc">منع Android من إيقاف BlockAds في الخلفية والحفاظ على الحماية على مدار الساعة.</string>
     <string name="home_tip_battery_title">النشاط في الخلفية</string>
     <string name="home_tip_battery_desc">تعطيل تحسين البطارية</string>
     <string name="home_tip_battery_action">السماح</string>

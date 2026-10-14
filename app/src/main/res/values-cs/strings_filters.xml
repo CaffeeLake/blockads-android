@@ -46,8 +46,6 @@
     <string name="firewall_title">Firewall</string>
     <string name="firewall_count">%d aplikací blokováno</string>
     <string name="firewall_search">Hledat aplikace…</string>
-    <string name="firewall_enable">Zapnout Firewall</string>
-    <string name="firewall_enable_desc">Blokovat přístup k internetu pro vybrané aplikace přes DNS</string>
     <string name="firewall_block_wifi">Blokovat Wi-Fi</string>
     <string name="firewall_block_mobile">Blokovat mobilní data</string>
     <string name="firewall_schedule">Plán</string>
@@ -66,8 +64,6 @@
     <string name="filter_error_invalid_url">Zadejte prosím platnou URL (http:// nebo https://)</string>
     <string name="filter_error_duplicate_url">Tento seznam filtrů již existuje</string>
     <string name="filter_chip_all">Vše</string>
-    <string name="filter_chip_enabled">Povoleno</string>
-    <string name="filter_chip_disabled">Zakázáno</string>
     <string name="https_filtering_title">Filtrování HTTPS</string>
     <string name="https_filtering_toggle_label">Kosmetický filtr HTTPS</string>
     <string name="https_filtering_status_active">Aktivní — skrývání reklam</string>

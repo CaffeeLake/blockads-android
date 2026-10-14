@@ -21,7 +21,6 @@
     <string name="add">Tambah</string>
     <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>
-    <string name="home_security_threats">Ancaman Diblokir</string>
     <string name="nav_statistics">Statistik</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">Navigasi kembali</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Menghentikan Root Proxy…</string>
     <string name="home_paused_trusted_short">Dijeda di jaringan tepercaya</string>
     <string name="nav_browser">Browser</string>
-    <string name="home_download_speed">Kecepatan Unduh</string>
-    <string name="home_upload_speed">Kecepatan Unggah</string>
     <string name="home_downloaded">Diunduh</string>
     <string name="home_uploaded">Diunggah</string>
 </resources>

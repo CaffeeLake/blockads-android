@@ -24,15 +24,12 @@
     <string name="nav_statistics">Estadísticas</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">Volver</string>
-    <string name="home_security_threats">Amenazas bloqueadas</string>
     <string name="open_settings">Abrir Ajustes</string>
     <string name="home_disconnecting_desc">Deteniendo la conexión VPN…</string>
     <string name="home_connecting_desc_root">Estableciendo Root Proxy…</string>
     <string name="home_disconnecting_desc_root">Deteniendo Root Proxy…</string>
     <string name="home_paused_trusted_short">En pausa en red de confianza</string>
     <string name="nav_browser">Navegador</string>
-    <string name="home_download_speed">Velocidad de descarga</string>
-    <string name="home_upload_speed">Velocidad de subida</string>
     <string name="home_downloaded">Descargado</string>
     <string name="home_uploaded">Subido</string>
 </resources>

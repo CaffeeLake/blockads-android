@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">別のVPNアプリが接続されました。BlockAdsによる通信のフィルタリングは停止しています。</string>
     <string name="vpn_revoked_action_reconnect">再接続</string>
     <string name="vpn_revoked_action_dismiss">閉じる</string>
-    <string name="home_tip_stability_title">保護を安定して維持</string>
-    <string name="home_tip_stability_desc">AndroidによるBlockAdsのバックグラウンド停止を防ぎ、24時間365日の保護を維持します。</string>
     <string name="home_tip_battery_title">バックグラウンドでの動作</string>
     <string name="home_tip_battery_desc">バッテリーの最適化を無効化</string>
     <string name="home_tip_battery_action">許可</string>

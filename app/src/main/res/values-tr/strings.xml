@@ -21,7 +21,6 @@
     <string name="add">&quot;Eklemek&quot;</string>
     <string name="delete">&quot;Silmek&quot;</string>
     <string name="cancel">&quot;İptal etmek&quot;</string>
-    <string name="home_security_threats">Engellenen Tehditler</string>
     <string name="nav_statistics">İstatistikler</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">Geri git</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Root Proxy durduruluyor…</string>
     <string name="home_paused_trusted_short">Güvenilir ağda duraklatıldı</string>
     <string name="nav_browser">Tarayıcı</string>
-    <string name="home_download_speed">İndirme Hızı</string>
-    <string name="home_upload_speed">Yükleme Hızı</string>
     <string name="home_downloaded">İndirildi</string>
     <string name="home_uploaded">Yüklendi</string>
 </resources>

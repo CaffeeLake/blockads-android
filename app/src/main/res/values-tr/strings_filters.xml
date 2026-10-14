@@ -77,8 +77,6 @@ Desteklenen formatlar:
     <string name="firewall_title">Güvenlik Duvarı</string>
     <string name="firewall_count">%d uygulama engellendi</string>
     <string name="firewall_search">Uygulamaları ara…</string>
-    <string name="firewall_enable">Güvenlik Duvarını Etkinleştir</string>
-    <string name="firewall_enable_desc">DNS aracılığıyla seçilen uygulamalar için internet erişimini engelle</string>
     <string name="firewall_block_wifi">Wi-Fi\'yi Engelle</string>
     <string name="firewall_block_mobile">Mobil Veriyi Engelle</string>
     <string name="firewall_schedule">Plan</string>
@@ -96,8 +94,6 @@ Desteklenen formatlar:
     <string name="filter_error_invalid_url">Lütfen geçerli bir URL girin (http:// veya https://)</string>
     <string name="filter_error_duplicate_url">Bu filtre listesi zaten mevcut</string>
     <string name="filter_chip_all">Hepsi</string>
-    <string name="filter_chip_enabled">Etkin</string>
-    <string name="filter_chip_disabled">Devre Dışı</string>
     <string name="blocklist_domains_empty">Engellenen alan adı yok</string>
     <string name="blocklist_domain_added">Alan adı engellendi: %s</string>
     <string name="blocklist_domain_removed">Alan adı engelleme listesinden kaldırıldı</string>

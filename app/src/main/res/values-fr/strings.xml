@@ -21,7 +21,6 @@
     <string name="add">Ajouter</string>
     <string name="delete">Supprimer</string>
     <string name="cancel">Annuler</string>
-    <string name="home_security_threats">Menaces bloquées</string>
     <string name="nav_statistics">Statistiques</string>
     <string name="open_settings">Ouvrir les paramètres</string>
     <string name="accessibility_stat_card">%1$s : %2$s</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Arrêt du Root Proxy…</string>
     <string name="home_paused_trusted_short">En pause sur un réseau de confiance</string>
     <string name="nav_browser">Navigateur</string>
-    <string name="home_download_speed">Vitesse de téléchargement</string>
-    <string name="home_upload_speed">Vitesse de téléversement</string>
     <string name="home_downloaded">Téléchargé</string>
     <string name="home_uploaded">Téléversé</string>
 </resources>

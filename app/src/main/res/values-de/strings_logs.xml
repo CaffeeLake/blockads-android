@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Blockierungen insgesamt</string>
     <string name="stats_today_queries">Anfragen heute</string>
     <string name="stats_today_blocked">Heute blockiert</string>
-    <string name="stats_today_security">Bedrohungen heute</string>
     <string name="stats_charts">Aktivitätsdiagramme</string>
     <string name="stats_chart_4w">4 Wochen</string>
     <string name="stats_chart_12m">12 Monate</string>
     <string name="stats_per_app">Statistiken pro App</string>
-    <string name="log_record_logs">Protokolle aufzeichnen</string>
     <string name="log_filter_by_app">Nach App filtern</string>
     <string name="log_search_app_hint">App suchen…</string>
     <string name="log_reset_filters">Zurücksetzen</string>

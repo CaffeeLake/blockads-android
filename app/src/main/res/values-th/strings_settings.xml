@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">แอปในไวท์ลิสต์</string>
-    <string name="whitelist_apps_search">ค้นหาแอป…</string>
     <string name="whitelist_apps_empty">ไม่มีแอปที่ติดตั้ง</string>
-    <string name="whitelist_apps_count">%d แอปอยู่ในไวท์ลิสต์</string>
     <string name="whitelist_tab_user">แอปผู้ใช้</string>
     <string name="whitelist_tab_system">แอประบบ</string>
     <string name="about_title">เกี่ยวกับแอป</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">ปรับแต่งสีหลักของแอป</string>
     <string name="accent_dynamic">ไดนามิก (Material You)</string>
     <string name="accent_dynamic_desc">ใช้สีจากวอลเปเปอร์ของคุณ</string>
-    <string name="settings_filter_lists">รายการตัวกรอง (%d รายการเปิดใช้งาน)</string>
     <string name="settings_add_custom_filter">เพิ่มรายการตัวกรองที่กำหนดเอง</string>
     <string name="settings_updating">กำลังอัปเดต…</string>
     <string name="settings_update_all">อัปเดตตัวกรองทั้งหมด</string>
-    <string name="settings_whitelist_apps">แอปในไวท์ลิสต์</string>
-    <string name="settings_whitelist_apps_desc">ยกเว้นแอปจากการบล็อกโฆษณา</string>
     <string name="settings_whitelist_domains">โดเมนในไวท์ลิสต์</string>
     <string name="settings_export">ส่งออก</string>
     <string name="settings_import">นำเข้า</string>
@@ -67,12 +61,6 @@
     <string name="dns_error_duplicate">DNS สำรองไม่สามารถเป็นอันเดียวกับ DNS ที่กำหนดเองได้</string>
     <string name="dns_category_fallback">สำรอง</string>
     <string name="settings_fallback_dns_not_set">ไม่ได้ตั้งค่า (ไม่มีสำรอง)</string>
-    <string name="settings_custom_dns_server">เซิร์ฟเวอร์ DNS ที่กำหนดเอง</string>
-    <string name="settings_custom_dns_hint">ป้อน IP สำหรับ DNS ธรรมดา, https:// สำหรับ DoH, tls:// สำหรับ DoT หรือ quic:// สำหรับ DoQ</string>
-    <string name="settings_detected_plain">DNS ธรรมดา</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">ประเภทการตอบกลับ DNS</string>
     <string name="dns_response_nxdomain_desc">ไม่มีโดเมน (มาตรฐาน)</string>
     <string name="dns_response_refused_desc">ปฏิเสธคิวรี (เข้ากันได้ดีกว่า)</string>
@@ -97,7 +85,6 @@
     <string name="dns_category_standard">มาตรฐาน</string>
     <string name="dns_category_privacy">เน้นความเป็นส่วนตัว</string>
     <string name="dns_category_family">ปลอดภัยสำหรับครอบครัว</string>
-    <string name="dns_category_custom">กำหนดเอง</string>
     <string name="dns_custom_title">DNS ที่กำหนดเอง</string>
     <string name="dns_custom_description">ป้อนที่อยู่เซิร์ฟเวอร์ DNS ของคุณเอง</string>
     <string name="dns_custom_save">บันทึก</string>
@@ -107,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d / %2$d แอป</string>
     <string name="app_management_desc">จัดการการกำหนดเส้นทาง VPN ของแต่ละแอปและดูสถิติ</string>
     <string name="app_management_search">ค้นหาแอป…</string>
-    <string name="app_management_loading">กำลังโหลดแอป…</string>
     <string name="app_management_refresh">รีเฟรช</string>
     <string name="app_management_sort">เรียงลำดับ</string>
     <string name="app_management_sort_name">เรียงตามชื่อ</string>
@@ -119,35 +105,7 @@
     <string name="app_management_vpn_toggle">การกำหนดเส้นทาง VPN สำหรับ %s</string>
     <string name="settings_firewall">ไฟร์วอลล์</string>
     <string name="profile_title">โปรไฟล์การป้องกัน</string>
-    <string name="profile_section_profiles">โปรไฟล์</string>
-    <string name="profile_section_schedules">ตารางเวลา</string>
     <string name="profile_name_default">เริ่มต้น</string>
-    <string name="profile_desc_default">การบล็อกแบบสมดุล: โฆษณาและตัวติดตามพื้นฐาน</string>
-    <string name="profile_desc_strict">การบล็อกเชิงรุก: โฆษณา ตัวติดตาม การวิเคราะห์ การวัดข้อมูลระยะไกล</string>
-    <string name="profile_desc_family">การท่องเว็บอย่างปลอดภัย: โฆษณา เนื้อหาสำหรับผู้ใหญ่ การพนัน</string>
-    <string name="profile_desc_gaming">การบล็อกเบา: โฆษณาพื้นฐานเท่านั้น ปรับให้เหมาะสมสำหรับความหน่วงต่ำ</string>
-    <string name="profile_desc_custom">กฎการป้องกันส่วนบุคคลของคุณ</string>
-    <string name="profile_desc_strict_family">การบล็อกสูงสุด: โฆษณา ตัวติดตาม เนื้อหาสำหรับผู้ใหญ่ และการพนัน</string>
-    <string name="profile_active">เปิดใช้งานอยู่</string>
-    <string name="profile_switched">เปลี่ยนโปรไฟล์แล้ว</string>
-    <string name="profile_created">สร้างโปรไฟล์แล้ว</string>
-    <string name="profile_deleted">ลบโปรไฟล์แล้ว</string>
-    <string name="profile_create_custom">สร้างโปรไฟล์กำหนดเอง</string>
-    <string name="profile_name_label">ชื่อโปรไฟล์</string>
-    <string name="profile_add_schedule">เพิ่มตารางเวลา</string>
-    <string name="profile_schedule_start">เวลาเริ่ม</string>
-    <string name="profile_schedule_end">เวลาสิ้นสุด</string>
-    <string name="profile_schedule_days">วัน</string>
-    <string name="profile_schedule_added">เพิ่มตารางเวลาแล้ว</string>
-    <string name="profile_schedule_deleted">ลบตารางเวลาแล้ว</string>
-    <string name="profile_schedule_every_day">ทุกวัน</string>
-    <string name="profile_day_mon">จ.</string>
-    <string name="profile_day_tue">อ.</string>
-    <string name="profile_day_wed">พ.</string>
-    <string name="profile_day_thu">พฤ.</string>
-    <string name="profile_day_fri">ศ.</string>
-    <string name="profile_day_sat">ส.</string>
-    <string name="profile_day_sun">อา.</string>
     <string name="daily_summary_channel_name">สรุปรายวัน</string>
     <string name="daily_summary_channel_description">สรุปการบล็อกโฆษณาเมื่อสิ้นสุดวัน</string>
     <string name="daily_summary_title">สรุปการป้องกันรายวัน</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">ส่งออกบันทึกในเครื่อง</string>
     <string name="settings_export_logs_subtitle">แชร์บันทึกการแก้ไขจุดบกพร่องแบบออฟไลน์โดยตรงผ่านอีเมล, Telegram ฯลฯ</string>
     <string name="settings_export_logs_chooser_title">แชร์บันทึก</string>
-    <string name="settings_export_logs_not_found">ไม่พบบันทึกที่ต้องการส่งออก</string>
     <string name="custom_color_title">สีที่กำหนดเอง</string>
     <string name="split_dns_title">โซน DNS แยก</string>
     <string name="split_dns_description">โซนโดเมนที่คั่นด้วยเครื่องหมายจุลภาคเพื่อแก้ไขผ่าน DNS ของ WireGuard แทน upstream (เช่น internal,local,lan)</string>

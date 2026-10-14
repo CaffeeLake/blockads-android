@@ -57,8 +57,6 @@
     <string name="firewall_title">ファイアウォール</string>
     <string name="firewall_count">%d個のアプリをブロック</string>
     <string name="firewall_search">アプリを検索…</string>
-    <string name="firewall_enable">ファイアウォールを有効にする</string>
-    <string name="firewall_enable_desc">DNS経由で選択したアプリのインターネットアクセスをブロックします</string>
     <string name="firewall_block_wifi">Wi-Fiをブロック</string>
     <string name="firewall_block_mobile">モバイルデータをブロック</string>
     <string name="firewall_schedule">スケジュール</string>
@@ -78,8 +76,6 @@
     <string name="filter_error_invalid_url">有効なURLを入力してください（http:// または https://）</string>
     <string name="filter_error_duplicate_url">このフィルターリストは既に存在します</string>
     <string name="filter_chip_all">すべて</string>
-    <string name="filter_chip_enabled">有効</string>
-    <string name="filter_chip_disabled">無効</string>
     <string name="blocklist_domains_empty">ブロックされたドメインはありません</string>
     <string name="blocklist_domain_added">ドメインをブロックしました: %s</string>
     <string name="blocklist_domain_removed">ブロックリストから削除しました</string>

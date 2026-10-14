@@ -20,7 +20,6 @@
     <string name="add">Přidat</string>
     <string name="delete">Smazat</string>
     <string name="cancel">Zrušit</string>
-    <string name="home_security_threats">Zablokované hrozby</string>
     <string name="nav_statistics">Statistiky</string>
     <string name="open_settings">Otevřít nastavení</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Zastavování Root Proxy…</string>
     <string name="home_paused_trusted_short">Pozastaveno v důvěryhodné síti</string>
     <string name="nav_browser">Prohlížeč</string>
-    <string name="home_download_speed">Rychlost stahování</string>
-    <string name="home_upload_speed">Rychlost nahrávání</string>
     <string name="home_downloaded">Staženo</string>
     <string name="home_uploaded">Nahráno</string>
 </resources>

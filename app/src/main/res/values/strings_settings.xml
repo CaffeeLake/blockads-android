@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Whitelisted Apps</string>
-    <string name="whitelist_apps_search">Search apps…</string>
     <string name="whitelist_apps_empty">No apps installed</string>
-    <string name="whitelist_apps_count">%d apps whitelisted</string>
     <string name="whitelist_tab_user">User Apps</string>
     <string name="whitelist_tab_system">System Apps</string>
     <string name="about_title">About</string>
@@ -62,12 +59,9 @@
     <string name="settings_accent_color_desc">Customize the app\'s primary color</string>
     <string name="accent_dynamic">Dynamic (Material You)</string>
     <string name="accent_dynamic_desc">Uses your wallpaper colors</string>
-    <string name="settings_filter_lists">Filter Lists (%d active)</string>
     <string name="settings_add_custom_filter">Add Custom Filter List</string>
     <string name="settings_updating">Updating…</string>
     <string name="settings_update_all">Update All Filters</string>
-    <string name="settings_whitelist_apps">Whitelisted Apps</string>
-    <string name="settings_whitelist_apps_desc">Exclude apps from ad blocking</string>
     <string name="trusted_networks_title">Trusted networks</string>
     <string name="trusted_networks_settings_desc">Auto-pause BlockAds on chosen Wi-Fi networks</string>
     <string name="trusted_networks_toggle">Pause on trusted networks</string>
@@ -81,7 +75,6 @@
     <string name="trusted_networks_paused_title">Paused on trusted network</string>
     <string name="trusted_networks_paused_text">BlockAds is paused on \&quot;%1$s\&quot; — it resumes automatically when you leave this network.</string>
     <string name="trusted_networks_paused_text_generic">BlockAds is paused on a trusted Wi-Fi network — it resumes automatically when you leave.</string>
-    <string name="config_title">Rules &amp; Configurations</string>
     <string name="config_activated">Configuration activated</string>
     <string name="config_added">Configuration added</string>
     <string name="config_updated">Configuration updated</string>
@@ -91,8 +84,6 @@
     <string name="config_name_label">Name</string>
     <string name="config_url_label">Subscription URL (.conf / .snippet)</string>
     <string name="config_content_label">Raw Config Content</string>
-    <string name="config_edit_dialog_title">Edit Configuration</string>
-    <string name="config_empty_desc">No custom configurations yet. Add a remote subscription or custom snippet rules.</string>
     <string name="config_add_remote_title">Add Remote Subscription</string>
     <string name="config_refresh_remote">Update</string>
     <string name="config_save">Save</string>
@@ -125,7 +116,6 @@
     <string name="profile_choose_file_desc">Select a .conf, .snippet, or .txt file</string>
     <string name="profile_change_file">Change</string>
     <string name="profile_choose_icon">Choose Profile Icon</string>
-    <string name="profile_change_icon">Change Icon</string>
     <string name="profile_icon_updated">Profile icon updated</string>
     <string name="settings_whitelist_domains">Whitelisted Domains</string>
     <string name="settings_export">Export</string>
@@ -151,13 +141,6 @@
     <string name="dns_error_duplicate">Fallback DNS cannot be the same as Custom DNS</string>
     <string name="dns_category_fallback">Fallback</string>
     <string name="settings_fallback_dns_not_set">Not set (no backup)</string>
-    <string name="settings_custom_dns_server">Custom DNS Server</string>
-    <string name="settings_custom_dns_placeholder" translatable="false">8.8.8.8, https://…, tls://…, quic://…</string>
-    <string name="settings_custom_dns_hint">Enter IP for Plain DNS, https:// for DoH, tls:// for DoT, or quic:// for DoQ</string>
-    <string name="settings_detected_plain">Plain DNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">DNS response type</string>
     <string name="dns_response_nxdomain" translatable="false">NXDOMAIN</string>
     <string name="dns_response_nxdomain_desc">Domain does not exist (standard)</string>
@@ -185,7 +168,6 @@
     <string name="dns_category_standard">Standard</string>
     <string name="dns_category_privacy">Privacy-focused</string>
     <string name="dns_category_family">Family-safe</string>
-    <string name="dns_category_custom">Custom</string>
     <string name="dns_custom_title">Custom DNS</string>
     <string name="dns_custom_description">Enter your own DNS server addresses</string>
     <string name="dns_custom_save">Save</string>
@@ -196,7 +178,6 @@
     <string name="app_management_subtitle_filtered">%1$d of %2$d apps</string>
     <string name="app_management_desc">Manage per-app VPN routing and view stats</string>
     <string name="app_management_search">Search apps…</string>
-    <string name="app_management_loading">Loading apps…</string>
     <string name="app_management_refresh">Refresh</string>
     <string name="app_management_sort">Sort</string>
     <string name="app_management_sort_name">Sort by Name</string>
@@ -229,35 +210,7 @@
     <string name="settings_daily_summary_desc">Show end-of-day blocking summary</string>
     <string name="settings_milestone_notifications">Milestone notifications</string>
     <string name="settings_milestone_notifications_desc">Notify when you reach blocking milestones</string>
-    <string name="profile_section_profiles">Profiles</string>
-    <string name="profile_section_schedules">Schedules</string>
     <string name="profile_name_default">Default</string>
-    <string name="profile_desc_strict_family">Maximum blocking: ads, trackers, adult content &amp; gambling</string>
-    <string name="profile_desc_default">Balanced blocking: basic ads and trackers</string>
-    <string name="profile_desc_strict">Aggressive blocking: ads, trackers, analytics, telemetry</string>
-    <string name="profile_desc_family">Safe browsing: ads, adult content, gambling</string>
-    <string name="profile_desc_gaming">Light blocking: basic ads only, optimized for low latency</string>
-    <string name="profile_desc_custom">Your personalized protection rules</string>
-    <string name="profile_active">Active</string>
-    <string name="profile_switched">Profile switched</string>
-    <string name="profile_created">Profile created</string>
-    <string name="profile_deleted">Profile deleted</string>
-    <string name="profile_create_custom">Create Custom Profile</string>
-    <string name="profile_name_label">Profile Name</string>
-    <string name="profile_add_schedule">Add Schedule</string>
-    <string name="profile_schedule_start">Start Time</string>
-    <string name="profile_schedule_end">End Time</string>
-    <string name="profile_schedule_days">Days</string>
-    <string name="profile_schedule_added">Schedule added</string>
-    <string name="profile_schedule_deleted">Schedule deleted</string>
-    <string name="profile_schedule_every_day">Every day</string>
-    <string name="profile_day_mon">Mon</string>
-    <string name="profile_day_tue">Tue</string>
-    <string name="profile_day_wed">Wed</string>
-    <string name="profile_day_thu">Thu</string>
-    <string name="profile_day_fri">Fri</string>
-    <string name="profile_day_sat">Sat</string>
-    <string name="profile_day_sun">Sun</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsor Us</string>
     <string name="settings_sponsor_desc">Support BlockAds development on GitHub</string>
@@ -275,7 +228,6 @@
     <string name="settings_export_logs_title">Export Local Logs</string>
     <string name="settings_export_logs_subtitle">Share offline debug logs directly via Email, Telegram, etc.</string>
     <string name="settings_export_logs_chooser_title">Share Logs</string>
-    <string name="settings_export_logs_not_found">No logs found to export</string>
     <string name="custom_color_title">Custom Color</string>
     <string name="split_dns_title">Split DNS Zones</string>
     <string name="split_dns_description">Comma-separated domain zones to resolve via WireGuard DNS instead of upstream (e.g., internal,local,lan)</string>
@@ -296,9 +248,7 @@
     <string name="dns_tab_builtin" translatable="false">Built-in</string>
     <string name="dns_tab_custom" translatable="false">Custom</string>
     <string name="dns_active_hero_title" translatable="false">Active DNS Server</string>
-    <string name="dns_active_status_active" translatable="false">Active</string>
     <string name="dns_protocol_label" translatable="false">Protocol</string>
-    <string name="dns_endpoint_label" translatable="false">Endpoint</string>
     <string name="dns_fallback_label" translatable="false">Fallback DNS</string>
     <string name="dns_category_all" translatable="false">All</string>
     <string name="dns_custom_configure_btn" translatable="false">Configure Custom DNS</string>
@@ -321,7 +271,6 @@
     <string name="rule_field_policy">Policy</string>
     <string name="rule_field_policy_hint">Choose the policy.</string>
     <string name="rule_field_save_to">Save To</string>
-    <string name="rule_field_current_profile">Current Configuration Profile</string>
     <string name="config_rule_added">Rule added to profile: %s</string>
     <string name="rule_param_hint_host_suffix">e.g. example.com (matches *.example.com)</string>
     <string name="rule_param_hint_host">e.g. ads.example.com (exact host only)</string>
@@ -349,10 +298,8 @@
     <!-- GeoIP Management -->
     <string name="settings_geoip_title">GeoIP Database</string>
     <string name="settings_geoip_subtitle">IP location lookup for destination analytics &amp; routing rules</string>
-    <string name="geoip_status_ready">Ready (%s records)</string>
     <string name="geoip_status_empty">Not downloaded</string>
     <string name="geoip_status_downloading">Updating...</string>
-    <string name="geoip_status_importing">Importing...</string>
     <string name="geoip_records_count">%s IP ranges</string>
     <string name="geoip_size_label">File size: %s</string>
     <string name="geoip_last_updated">Last updated: %s</string>

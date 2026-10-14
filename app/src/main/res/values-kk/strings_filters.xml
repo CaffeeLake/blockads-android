@@ -73,8 +73,6 @@
     <string name="firewall_title">Брандмауэр</string>
     <string name="firewall_count">%d қолданба бұғатталды</string>
     <string name="firewall_search">Қолданбаларды іздеу…</string>
-    <string name="firewall_enable">Брандмауэрді қосу</string>
-    <string name="firewall_enable_desc">Таңдалған қолданбалар үшін интернетті DNS арқылы бұғаттау</string>
     <string name="firewall_block_wifi">Wi-Fi бұғаттау</string>
     <string name="firewall_block_mobile">Мобильді интернетті бұғаттау</string>
     <string name="firewall_schedule">Кесте</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Жарамды URL енгізіңіз (http:// немесе https://)</string>
     <string name="filter_error_duplicate_url">Бұл сүзгі тізімі бұрыннан бар</string>
     <string name="filter_chip_all">Барлығы</string>
-    <string name="filter_chip_enabled">Қосулы</string>
-    <string name="filter_chip_disabled">Өшірулі</string>
     <string name="https_filtering_wireguard_disabled">WireGuard өшірулі (HTTPS сүзгісімен үйлеспейді)</string>
     <string name="https_filtering_cert_saved_downloads">✅ Сертификат Downloads/%1$s қалтасына сақталды</string>
     <string name="https_filtering_cert_saved_legacy">Сертификат сақталды. Файл басқарушысы арқылы орнатыңыз.</string>

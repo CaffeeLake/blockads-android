@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">&quot;Beyaz Listeye Alınan Uygulamalar&quot;</string>
-    <string name="whitelist_apps_search">&quot;Arama uygulamaları…&quot;</string>
     <string name="whitelist_apps_empty">&quot;Hiçbir uygulama yüklü değil.&quot;</string>
-    <string name="whitelist_apps_count">&quot;%d uygulama beyaz listeye alındı&quot;</string>
     <string name="whitelist_tab_user">&quot;Kullanıcı Uygulamaları&quot;</string>
     <string name="whitelist_tab_system">&quot;Sistem Uygulamaları&quot;</string>
     <string name="about_title">&quot;Hakkında&quot;</string>
@@ -39,12 +36,9 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="settings_accent_color_desc">&quot;Uygulamanın ana rengini özelleştirin.&quot;</string>
     <string name="accent_dynamic">&quot;Dinamik (Materyal Siz)&quot;</string>
     <string name="accent_dynamic_desc">&quot;Duvar kağıdınızın renklerini kullanır.&quot;</string>
-    <string name="settings_filter_lists">&quot;Filtre Listeleri (%d aktif)&quot;</string>
     <string name="settings_add_custom_filter">&quot;Özel Filtre Listesi Ekle&quot;</string>
     <string name="settings_updating">&quot;Güncelleniyor…&quot;</string>
     <string name="settings_update_all">&quot;Tüm Filtreleri Güncelle&quot;</string>
-    <string name="settings_whitelist_apps">&quot;Beyaz Listeye Alınan Uygulamalar&quot;</string>
-    <string name="settings_whitelist_apps_desc">&quot;Uygulamaları reklam engellemeden hariç tut&quot;</string>
     <string name="settings_whitelist_domains">&quot;Beyaz Listeye Alınmış Alan Adları&quot;</string>
     <string name="settings_export">&quot;İhracat&quot;</string>
     <string name="settings_import">&quot;İçe aktarmak&quot;</string>
@@ -67,12 +61,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="settings_fallback_dns_short_desc">&quot;Birincil DNS sunucusu çalışmadığında yedek olarak kullanılır (düz UDP).&quot;</string>
     <string name="dns_category_fallback">&quot;Geri çekilmek&quot;</string>
     <string name="settings_fallback_dns_not_set">&quot;Ayarlanmadı (yedekleme yok)&quot;</string>
-    <string name="settings_custom_dns_server">&quot;Özel DNS Sunucusu&quot;</string>
-    <string name="settings_custom_dns_hint">&quot;Düz DNS için IP adresini, DoH için https:// adresini, DoT için tls:// adresini veya DoQ için quic:// adresini girin.&quot;</string>
-    <string name="settings_detected_plain">&quot;Düz DNS&quot;</string>
-    <string name="settings_detected_doh">&quot;DNS-over-HTTPS (DoH)&quot;</string>
-    <string name="settings_detected_dot">&quot;DNS-over-TLS (DoT)&quot;</string>
-    <string name="settings_detected_doq">&quot;DNS-over-QUIC (DoQ)&quot;</string>
     <string name="settings_dns_response_type">&quot;DNS yanıt türü&quot;</string>
     <string name="dns_response_nxdomain_desc">&quot;Alan adı mevcut değil (standart).&quot;</string>
     <string name="dns_response_refused_desc">&quot;Sorgu reddedildi (daha iyi uyumluluk)&quot;</string>
@@ -97,7 +85,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="dns_category_standard">&quot;Standart&quot;</string>
     <string name="dns_category_privacy">&quot;Gizlilik odaklı&quot;</string>
     <string name="dns_category_family">&quot;Ailece güvenli&quot;</string>
-    <string name="dns_category_custom">&quot;Gelenek&quot;</string>
     <string name="dns_custom_title">&quot;Özel DNS&quot;</string>
     <string name="dns_custom_description">&quot;Kendi DNS sunucu adreslerinizi girin.&quot;</string>
     <string name="dns_custom_save">&quot;Kaydetmek&quot;</string>
@@ -107,7 +94,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="app_management_subtitle_filtered">&quot;%1$d / %2$d uygulama&quot;</string>
     <string name="app_management_desc">&quot;Uygulama bazında VPN yönlendirmesini yönetin ve istatistikleri görüntüleyin.&quot;</string>
     <string name="app_management_search">&quot;Arama uygulamaları…&quot;</string>
-    <string name="app_management_loading">&quot;Uygulamalar yükleniyor…&quot;</string>
     <string name="app_management_refresh">Yenile</string>
     <string name="app_management_sort">&quot;Düzenlemek&quot;</string>
     <string name="app_management_sort_name">&quot;İsime göre sırala&quot;</string>
@@ -132,35 +118,7 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="settings_milestone_notifications">Kilometre taşı bildirimleri</string>
     <string name="settings_milestone_notifications_desc">Engelleme hedeflerine ulaştığınızda bildir</string>
     <string name="profile_title">Koruma Profilleri</string>
-    <string name="profile_section_profiles">Profiller</string>
-    <string name="profile_section_schedules">Planlar</string>
     <string name="profile_name_default">Varsayılan</string>
-    <string name="profile_desc_strict_family">Maksimum engelleme: reklamlar, izleyiciler, yetişkin içerik ve kumar</string>
-    <string name="profile_desc_default">Dengeli engelleme: temel reklamlar ve izleyiciler</string>
-    <string name="profile_desc_strict">Agresif engelleme: reklamlar, izleyiciler, analizler, telemetri</string>
-    <string name="profile_desc_family">Güvenli gezinme: reklamlar, yetişkin içerik, kumar</string>
-    <string name="profile_desc_gaming">Hafif engelleme: sadece temel reklamlar, düşük gecikme için optimize edilmiş</string>
-    <string name="profile_desc_custom">Kişiselleştirilmiş koruma kurallarınız</string>
-    <string name="profile_active">Aktif</string>
-    <string name="profile_switched">Profil değiştirildi</string>
-    <string name="profile_created">Profil oluşturuldu</string>
-    <string name="profile_deleted">Profil silindi</string>
-    <string name="profile_create_custom">Özel Profil Oluştur</string>
-    <string name="profile_name_label">Profil Adı</string>
-    <string name="profile_add_schedule">Plan Ekle</string>
-    <string name="profile_schedule_start">Başlangıç Saati</string>
-    <string name="profile_schedule_end">Bitiş Saati</string>
-    <string name="profile_schedule_days">Günler</string>
-    <string name="profile_schedule_added">Plan eklendi</string>
-    <string name="profile_schedule_deleted">Plan silindi</string>
-    <string name="profile_schedule_every_day">Her gün</string>
-    <string name="profile_day_mon">Pzt</string>
-    <string name="profile_day_tue">Sal</string>
-    <string name="profile_day_wed">Çar</string>
-    <string name="profile_day_thu">Per</string>
-    <string name="profile_day_fri">Cum</string>
-    <string name="profile_day_sat">Cmt</string>
-    <string name="profile_day_sun">Paz</string>
     <string name="settings_firewall">Güvenlik Duvarı</string>
     <string name="settings_sponsor">Bize Sponsor Olun</string>
     <string name="settings_sponsor_desc">GitHub\'da BlockAds gelişimini destekleyin</string>
@@ -180,7 +138,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="settings_export_logs_title">Yerel Günlükleri Dışa Aktar</string>
     <string name="settings_export_logs_subtitle">Çevrimdışı hata ayıklama günlüklerini doğrudan E-posta, Telegram vb. yoluyla paylaşın.</string>
     <string name="settings_export_logs_chooser_title">Günlükleri Paylaş</string>
-    <string name="settings_export_logs_not_found">Dışa aktarılacak günlük bulunamadı</string>
     <string name="custom_color_title">Özel Renk</string>
     <string name="split_dns_title">Bölünmüş DNS Bölgeleri</string>
     <string name="split_dns_description">WireGuard DNS üzerinden çözümlenecek virgülle ayrılmış alan adı bölgeleri (upstream yerine) (ör. internal,local,lan)</string>

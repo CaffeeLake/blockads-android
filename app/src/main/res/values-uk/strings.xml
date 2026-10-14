@@ -21,7 +21,6 @@
     <string name="add">Додати</string>
     <string name="delete">Видалити</string>
     <string name="cancel">Скасувати</string>
-    <string name="home_security_threats">Заблоковано загроз</string>
     <string name="nav_statistics">Статистика</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">Повернутися назад</string>
@@ -31,8 +30,6 @@
     <string name="home_disconnecting_desc_root">Зупинка Root Proxy…</string>
     <string name="home_paused_trusted_short">Призупинено в довіреній мережі</string>
     <string name="nav_browser">Браузер</string>
-    <string name="home_download_speed">Швидкість завантаження</string>
-    <string name="home_upload_speed">Швидкість відвантаження</string>
     <string name="home_downloaded">Завантажено</string>
     <string name="home_uploaded">Відвантажено</string>
 </resources>

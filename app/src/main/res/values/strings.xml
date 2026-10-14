@@ -16,8 +16,6 @@
     <string name="home_recent_blocked">Recently Blocked</string>
     <string name="home_data_saved">Data Saved</string>
     <string name="home_protection_uptime">Uptime</string>
-    <string name="home_download_speed">Download Speed</string>
-    <string name="home_upload_speed">Upload Speed</string>
     <string name="home_downloaded">Downloaded</string>
     <string name="home_uploaded">Uploaded</string>
     <string name="home_chart_24h">24 Hours</string>
@@ -29,7 +27,6 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="home_security_threats">Threats Blocked</string>
     <string name="nav_statistics">Stats</string>
     <string name="nav_browser">Browser</string>
     <string name="open_settings">Open Settings</string>

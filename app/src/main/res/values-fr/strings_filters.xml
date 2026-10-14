@@ -73,8 +73,6 @@
     <string name="firewall_title">Pare-feu</string>
     <string name="firewall_count">%d applications bloquées</string>
     <string name="firewall_search">Rechercher des applications…</string>
-    <string name="firewall_enable">Activer le pare-feu</string>
-    <string name="firewall_enable_desc">Bloquer l\'accès à Internet pour certaines applications via le DNS</string>
     <string name="firewall_block_wifi">Bloquer le Wi-Fi</string>
     <string name="firewall_block_mobile">Bloquer les données mobiles</string>
     <string name="firewall_schedule">Calendrier</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Veuillez saisir une URL valide (http:// ou https://)</string>
     <string name="filter_error_duplicate_url">Cette liste de filtres existe déjà</string>
     <string name="filter_chip_all">Tout</string>
-    <string name="filter_chip_enabled">Activé</string>
-    <string name="filter_chip_disabled">Désactivé</string>
     <string name="https_filtering_title">Filtrage HTTPS</string>
     <string name="https_filtering_toggle_label">Filtre cosmétique HTTPS</string>
     <string name="https_filtering_status_active">Actif — Masquage des publicités</string>

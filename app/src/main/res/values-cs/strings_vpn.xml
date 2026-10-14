@@ -85,8 +85,6 @@
     <string name="vpn_revoked_card_desc">Připojila se jiná aplikace VPN. Váš provoz již není filtrován aplikací BlockAds.</string>
     <string name="vpn_revoked_action_reconnect">Znovu připojit</string>
     <string name="vpn_revoked_action_dismiss">Zavřít</string>
-    <string name="home_tip_stability_title">Udržet ochranu stabilní</string>
-    <string name="home_tip_stability_desc">Zabraňte systému Android v ukončování BlockAds na pozadí a zajistěte ochranu 24/7.</string>
     <string name="home_tip_battery_title">Aktivita na pozadí</string>
     <string name="home_tip_battery_desc">Zakázat optimalizaci baterie</string>
     <string name="home_tip_battery_action">Povolit</string>

@@ -24,15 +24,12 @@
     <string name="nav_statistics">統計</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
     <string name="accessibility_navigate_back">戻る</string>
-    <string name="home_security_threats">ブロックされた脅威</string>
     <string name="open_settings">設定を開く</string>
     <string name="home_disconnecting_desc">VPN接続を停止しています…</string>
     <string name="home_connecting_desc_root">Root Proxyを確立中…</string>
     <string name="home_disconnecting_desc_root">Root Proxyを停止中…</string>
     <string name="home_paused_trusted_short">信頼するネットワークで一時停止中</string>
     <string name="nav_browser">ブラウザ</string>
-    <string name="home_download_speed">ダウンロード速度</string>
-    <string name="home_upload_speed">アップロード速度</string>
     <string name="home_downloaded">ダウンロード済み</string>
     <string name="home_uploaded">アップロード済み</string>
 </resources>

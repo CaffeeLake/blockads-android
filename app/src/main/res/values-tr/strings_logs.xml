@@ -38,12 +38,10 @@
     <string name="stats_all_time_blocked">Tüm Zamanların Engellenenleri</string>
     <string name="stats_today_queries">Bugünkü Sorgular</string>
     <string name="stats_today_blocked">Bugün Engellenenler</string>
-    <string name="stats_today_security">Bugünkü Tehditler</string>
     <string name="stats_charts">Aktivite Grafikleri</string>
     <string name="stats_chart_4w">4 Hafta</string>
     <string name="stats_chart_12m">12 Ay</string>
     <string name="stats_per_app">Uygulama Başına İstatistikler</string>
-    <string name="log_record_logs">Günlükleri Kaydet</string>
     <string name="log_filter_by_app">Uygulamaya göre filtrele</string>
     <string name="log_search_app_hint">Uygulama ara…</string>
     <string name="log_reset_filters">Sıfırla</string>

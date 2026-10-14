@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="whitelist_apps_title">Приложения в белом списке</string>
-    <string name="whitelist_apps_search">Поиск приложений…</string>
     <string name="whitelist_apps_empty">Приложения не установлены</string>
-    <string name="whitelist_apps_count">В белом списке: %d приложений</string>
     <string name="whitelist_tab_user">Пользовательские</string>
     <string name="whitelist_tab_system">Системные</string>
     <string name="about_title">О приложении</string>
@@ -38,12 +35,9 @@
     <string name="settings_accent_color_desc">Настройте основной цвет приложения</string>
     <string name="accent_dynamic">Динамический (Material You)</string>
     <string name="accent_dynamic_desc">Использует цвета ваших обоев</string>
-    <string name="settings_filter_lists">Списки фильтров (%d активно)</string>
     <string name="settings_add_custom_filter">Добавить пользовательский список фильтров</string>
     <string name="settings_updating">Обновление…</string>
     <string name="settings_update_all">Обновить все фильтры</string>
-    <string name="settings_whitelist_apps">Приложения в белом списке</string>
-    <string name="settings_whitelist_apps_desc">Исключить приложения из блокировки рекламы</string>
     <string name="settings_whitelist_domains">Домены в белом списке</string>
     <string name="settings_export">Экспорт</string>
     <string name="settings_import">Импорт</string>
@@ -67,12 +61,6 @@
     <string name="dns_error_duplicate">Резервный DNS не может совпадать с пользовательским DNS</string>
     <string name="dns_category_fallback">Резервный</string>
     <string name="settings_fallback_dns_not_set">Не задан (без резерва)</string>
-    <string name="settings_custom_dns_server">Пользовательский DNS-сервер</string>
-    <string name="settings_custom_dns_hint">Введите IP для обычного DNS, https:// для DoH, tls:// для DoT или quic:// для DoQ</string>
-    <string name="settings_detected_plain">Обычный DNS</string>
-    <string name="settings_detected_doh">DNS-over-HTTPS (DoH)</string>
-    <string name="settings_detected_dot">DNS-over-TLS (DoT)</string>
-    <string name="settings_detected_doq">DNS-over-QUIC (DoQ)</string>
     <string name="settings_dns_response_type">Тип DNS-ответа</string>
     <string name="dns_response_nxdomain_desc">Домен не существует (стандартно)</string>
     <string name="dns_response_refused_desc">Запрос отклонён (лучшая совместимость)</string>
@@ -97,7 +85,6 @@
     <string name="dns_category_standard">Стандартные</string>
     <string name="dns_category_privacy">С упором на приватность</string>
     <string name="dns_category_family">Семейные</string>
-    <string name="dns_category_custom">Пользовательские</string>
     <string name="dns_custom_title">Пользовательский DNS</string>
     <string name="dns_custom_description">Введите адреса своих DNS-серверов</string>
     <string name="dns_custom_save">Сохранить</string>
@@ -107,7 +94,6 @@
     <string name="app_management_subtitle_filtered">%1$d из %2$d приложений</string>
     <string name="app_management_desc">Управляйте VPN-маршрутизацией по приложениям и смотрите статистику</string>
     <string name="app_management_search">Поиск приложений…</string>
-    <string name="app_management_loading">Загрузка приложений…</string>
     <string name="app_management_refresh">Обновить</string>
     <string name="app_management_sort">Сортировка</string>
     <string name="app_management_sort_name">Сортировать по имени</string>
@@ -132,35 +118,7 @@
     <string name="settings_milestone_notifications">Уведомления о достижениях</string>
     <string name="settings_milestone_notifications_desc">Уведомлять при достижении этапов блокировки</string>
     <string name="profile_title">Профили защиты</string>
-    <string name="profile_section_profiles">Профили</string>
-    <string name="profile_section_schedules">Расписания</string>
     <string name="profile_name_default">По умолчанию</string>
-    <string name="profile_desc_default">Блокировка рекламы и базовых трекеров</string>
-    <string name="profile_desc_strict">Блокировка всей рекламы, трекеров и аналитики</string>
-    <string name="profile_desc_family">Блокировка рекламы + контент 18+ + азартные игры</string>
-    <string name="profile_desc_gaming">Блокировка рекламы с оптимизацией для игр</string>
-    <string name="profile_desc_custom">Пользовательская конфигурация профиля</string>
-    <string name="profile_desc_strict_family">Максимальная блокировка: реклама, трекеры, контент 18+ и азартные игры</string>
-    <string name="profile_active">Активен</string>
-    <string name="profile_switched">Профиль переключён</string>
-    <string name="profile_created">Профиль создан</string>
-    <string name="profile_deleted">Профиль удалён</string>
-    <string name="profile_create_custom">Создать пользовательский профиль</string>
-    <string name="profile_name_label">Название профиля</string>
-    <string name="profile_add_schedule">Добавить расписание</string>
-    <string name="profile_schedule_start">Время начала</string>
-    <string name="profile_schedule_end">Время окончания</string>
-    <string name="profile_schedule_days">Дни</string>
-    <string name="profile_schedule_added">Расписание добавлено</string>
-    <string name="profile_schedule_deleted">Расписание удалено</string>
-    <string name="profile_schedule_every_day">Каждый день</string>
-    <string name="profile_day_mon">Пн</string>
-    <string name="profile_day_tue">Вт</string>
-    <string name="profile_day_wed">Ср</string>
-    <string name="profile_day_thu">Чт</string>
-    <string name="profile_day_fri">Пт</string>
-    <string name="profile_day_sat">Сб</string>
-    <string name="profile_day_sun">Вс</string>
     <string name="settings_firewall">Брандмауэр</string>
     <string name="settings_sponsor">Поддержать проект</string>
     <string name="settings_sponsor_desc">Поддержите развитие BlockAds на GitHub</string>
@@ -179,7 +137,6 @@
     <string name="settings_export_logs_title">Экспорт локальных логов</string>
     <string name="settings_export_logs_subtitle">Поделитесь офлайн-логами отладки напрямую через Email, Telegram и т.д.</string>
     <string name="settings_export_logs_chooser_title">Поделиться логами</string>
-    <string name="settings_export_logs_not_found">Логи для экспорта не найдены</string>
     <string name="custom_color_title">Пользовательский цвет</string>
     <string name="split_dns_title">Разделённые зоны DNS</string>
     <string name="split_dns_description">Зоны доменов через запятую для разрешения через DNS WireGuard вместо вышестоящего сервера (напр. internal,local,lan)</string>

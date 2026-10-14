@@ -87,8 +87,6 @@
     <string name="vpn_notification_no_internet_text">Đang chờ mạng khả dụng…</string>
 
     <!-- Stability Tip Card -->
-    <string name="home_tip_stability_title">Mẹo giữ kết nối ổn định</string>
-    <string name="home_tip_stability_desc">Tránh bị Android tắt BlockAds khi chạy ngầm và duy trì bảo vệ liên tục 24/7.</string>
     <string name="home_tip_battery_title">Hoạt động chạy ngầm</string>
     <string name="home_tip_battery_desc">Tắt tối ưu hóa pin</string>
     <string name="home_tip_battery_action">Cho phép</string>

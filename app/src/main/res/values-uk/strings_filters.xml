@@ -73,8 +73,6 @@
     <string name="firewall_title">Брандмауер (Файрвол)</string>
     <string name="firewall_count">Заблоковано додатків: %d</string>
     <string name="firewall_search">Пошук додатків…</string>
-    <string name="firewall_enable">Увімкнути брандмауер</string>
-    <string name="firewall_enable_desc">Блокувати доступ до інтернету для вибраних додатків через DNS</string>
     <string name="firewall_block_wifi">Блокувати Wi-Fi</string>
     <string name="firewall_block_mobile">Блокувати мобільні дані</string>
     <string name="firewall_schedule">Розклад</string>
@@ -93,8 +91,6 @@
     <string name="filter_error_invalid_url">Будь ласка, введіть дійсний URL (http:// або https://)</string>
     <string name="filter_error_duplicate_url">Цей список фільтрів уже існує</string>
     <string name="filter_chip_all">Усі</string>
-    <string name="filter_chip_enabled">Увімкнені</string>
-    <string name="filter_chip_disabled">Вимкнені</string>
     <string name="https_filtering_title">Фільтрація HTTPS</string>
     <string name="https_filtering_toggle_label">Косметичний фільтр HTTPS</string>
     <string name="https_filtering_status_active">Активно — Приховування реклами</string>
