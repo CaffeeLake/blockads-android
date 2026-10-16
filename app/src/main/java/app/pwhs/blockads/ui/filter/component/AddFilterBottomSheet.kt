@@ -31,6 +31,7 @@ import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.automirrored.outlined.PlaylistAdd
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.ContentPaste
@@ -87,28 +88,51 @@ fun AddFilterBottomSheet(
     val clipboardManager = LocalClipboardManager.current
 
     var name by remember { mutableStateOf("") }
-    var url by remember { mutableStateOf("") }
+    var urlInput by remember { mutableStateOf("") }
+    var urlList by remember { mutableStateOf(emptyList<String>()) }
     var buildLocally by remember { mutableStateOf(false) }
     var showFormatsHelp by remember { mutableStateOf(false) }
 
     val nameTrimmed = name.trim()
-    val parsedUrls = remember(url) {
-        url.lines().map { it.trim() }.filter { it.isNotBlank() }
-    }
+    val inputTrimmed = urlInput.trim()
 
-    val urlError = when {
-        parsedUrls.isEmpty() && url.trim().isNotEmpty() ->
+    val urlInputError = when {
+        inputTrimmed.isEmpty() -> null
+        !inputTrimmed.startsWith("http://") && !inputTrimmed.startsWith("https://") ->
             stringResource(R.string.filter_error_invalid_url)
-        parsedUrls.any { !it.startsWith("http://") && !it.startsWith("https://") } ->
+        !Patterns.WEB_URL.matcher(inputTrimmed).matches() ->
             stringResource(R.string.filter_error_invalid_url)
-        parsedUrls.any { !Patterns.WEB_URL.matcher(it).matches() } ->
-            stringResource(R.string.filter_error_invalid_url)
-        parsedUrls.isNotEmpty() && parsedUrls.all { u -> existingUrls.any { it.equals(u, ignoreCase = true) } } ->
+        urlList.any { it.equals(inputTrimmed, ignoreCase = true) } ->
+            stringResource(R.string.filter_error_duplicate_url)
+        existingUrls.any { it.equals(inputTrimmed, ignoreCase = true) } ->
             stringResource(R.string.filter_error_duplicate_url)
         else -> null
     }
 
-    val isValid = nameTrimmed.isNotBlank() && parsedUrls.isNotEmpty() && urlError == null
+    val isInputValid = inputTrimmed.isNotEmpty() && urlInputError == null
+
+    val addUrlFromInput: (String) -> Unit = { raw ->
+        val lines = raw.lines().map { it.trim() }.filter { it.isNotBlank() }
+        val validNew = lines.filter { line ->
+            (line.startsWith("http://") || line.startsWith("https://")) &&
+            Patterns.WEB_URL.matcher(line).matches() &&
+            !urlList.any { it.equals(line, ignoreCase = true) }
+        }
+        if (validNew.isNotEmpty()) {
+            urlList = urlList + validNew
+            urlInput = ""
+        }
+    }
+
+    val effectiveUrls = remember(urlList, inputTrimmed, isInputValid) {
+        if (isInputValid && !urlList.any { it.equals(inputTrimmed, ignoreCase = true) }) {
+            urlList + inputTrimmed
+        } else {
+            urlList
+        }
+    }
+
+    val isValid = nameTrimmed.isNotBlank() && effectiveUrls.isNotEmpty() && (inputTrimmed.isEmpty() || isInputValid)
 
     val handleDismiss: () -> Unit = {
         if (!isValidating) {
@@ -233,88 +257,90 @@ fun AddFilterBottomSheet(
                 )
             )
 
-            // Filter URL Input with Paste button
-            OutlinedTextField(
-                value = url,
-                onValueChange = { url = it },
-                label = { Text(stringResource(R.string.settings_add_filter_url)) },
-                placeholder = { Text(stringResource(R.string.filter_multi_url_hint)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Link,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                trailingIcon = {
-                    if (url.isNotEmpty() && !isValidating) {
-                        IconButton(onClick = { url = "" }) {
-                            Icon(Icons.Default.Clear, contentDescription = "Clear")
-                        }
-                    } else if (url.isEmpty() && !isValidating) {
-                        IconButton(
-                            onClick = {
-                                clipboardManager.getText()?.text?.let { text ->
-                                    url = text
-                                }
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.ContentPaste,
-                                contentDescription = stringResource(R.string.filter_paste_clipboard),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-                },
-                singleLine = false,
-                minLines = 1,
-                maxLines = 4,
+            // URL Input Row + Add Button
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                isError = urlError != null,
-                supportingText = urlError?.let { err ->
-                    { Text(err, color = MaterialTheme.colorScheme.error) }
-                },
-                enabled = !isValidating,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Uri,
-                    imeAction = ImeAction.Default
-                )
-            )
-
-            // Dynamic merge badge when 2 or more URLs are entered
-            AnimatedVisibility(
-                visible = parsedUrls.size > 1,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
+                OutlinedTextField(
+                    value = urlInput,
+                    onValueChange = { urlInput = it },
+                    label = { Text(stringResource(R.string.settings_add_filter_url)) },
+                    placeholder = { Text("https://example.com/filter.txt") },
+                    leadingIcon = {
                         Icon(
-                            imageVector = Icons.Outlined.Layers,
+                            imageVector = Icons.Outlined.Link,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text(
-                            text = stringResource(R.string.filter_merge_badge, parsedUrls.size),
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    }
+                    },
+                    trailingIcon = {
+                        if (urlInput.isNotEmpty() && !isValidating) {
+                            IconButton(onClick = { urlInput = "" }) {
+                                Icon(Icons.Default.Clear, contentDescription = "Clear")
+                            }
+                        } else if (urlInput.isEmpty() && !isValidating) {
+                            IconButton(
+                                onClick = {
+                                    clipboardManager.getText()?.text?.let { text ->
+                                        if (text.contains("\n")) {
+                                            addUrlFromInput(text)
+                                        } else {
+                                            urlInput = text.trim()
+                                        }
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.ContentPaste,
+                                    contentDescription = stringResource(R.string.filter_paste_clipboard),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(14.dp),
+                    isError = urlInputError != null,
+                    supportingText = urlInputError?.let { err ->
+                        { Text(err, color = MaterialTheme.colorScheme.error) }
+                    },
+                    enabled = !isValidating,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Uri,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (isInputValid && !isValidating) {
+                                addUrlFromInput(urlInput)
+                            }
+                        }
+                    )
+                )
+
+                FilledTonalIconButton(
+                    onClick = { addUrlFromInput(urlInput) },
+                    enabled = isInputValid && !isValidating,
+                    modifier = Modifier.size(54.dp),
+                    shape = RoundedCornerShape(14.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.filter_add_url_button)
+                    )
                 }
             }
+
+            // List of added URL cards
+            FilterUrlChipList(
+                urls = urlList,
+                onRemoveUrl = { urlList = urlList - it },
+                onClearAll = { urlList = emptyList() },
+                enabled = !isValidating
+            )
 
             // Build Mode Selector Card (Local Go engine vs Cloud compiler)
             Card(
@@ -410,7 +436,7 @@ fun AddFilterBottomSheet(
                 Button(
                     onClick = {
                         if (isValid && !isValidating) {
-                            onAdd(nameTrimmed, parsedUrls.joinToString("\n"), buildLocally)
+                            onAdd(nameTrimmed, effectiveUrls.joinToString("\n"), buildLocally)
                         }
                     },
                     modifier = Modifier.weight(1f),

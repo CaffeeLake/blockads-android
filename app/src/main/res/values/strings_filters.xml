@@ -179,7 +179,9 @@
     <string name="filter_build_mode_server_desc">Cloud-accelerated build with CSS element hiding &amp; scriptlets</string>
     <string name="filter_paste_clipboard">Paste from clipboard</string>
     <string name="filter_merge_badge">Merging %1$d filter lists into one</string>
-    <string name="filter_multi_url_hint">Enter one or multiple URLs (one per line)</string>
+    <string name="filter_multi_url_hint">Enter filter URL</string>
+    <string name="filter_add_url_button">Add URL</string>
+    <string name="filter_url_list_count">%1$d filter URL(s) to merge</string>
 
     <!-- HTTPS Wizard Strings -->
     <string name="https_wizard_title">Certificate Setup</string>
