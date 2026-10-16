@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.FilterAltOff
@@ -47,6 +48,7 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.ui.logs.data.LogFilterStatus
 import app.pwhs.blockads.ui.logs.data.TimeRange
 import app.pwhs.blockads.ui.theme.DangerRed
+import app.pwhs.blockads.ui.theme.NeonGreen
 import app.pwhs.blockads.ui.theme.WhitelistAmber
 
 @Composable
@@ -65,11 +67,13 @@ fun LogFilterControlBar(
 
     val statusTabs = listOf(
         Triple(LogFilterStatus.ALL, R.string.logs_filter_all, Icons.Default.Dns),
-        Triple(LogFilterStatus.BLOCKED, R.string.logs_filter_blocked, Icons.Default.Block)
+        Triple(LogFilterStatus.BLOCKED, R.string.logs_filter_blocked, Icons.Default.Block),
+        Triple(LogFilterStatus.ALLOWED, R.string.log_status_allowed, Icons.Default.CheckCircle)
     )
     val selectedTabIndex = when (filterStatus) {
+        LogFilterStatus.ALL -> 0
         LogFilterStatus.BLOCKED -> 1
-        else -> 0
+        LogFilterStatus.ALLOWED -> 2
     }
 
     Column(
@@ -83,9 +87,14 @@ fun LogFilterControlBar(
             containerColor = MaterialTheme.colorScheme.background,
             contentColor = MaterialTheme.colorScheme.primary,
             indicator = {
+                val indicatorColor = when (selectedTabIndex) {
+                    1 -> DangerRed
+                    2 -> NeonGreen
+                    else -> MaterialTheme.colorScheme.primary
+                }
                 TabRowDefaults.SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(selectedTabIndex),
-                    color = if (selectedTabIndex == 1) DangerRed else MaterialTheme.colorScheme.primary,
+                    color = indicatorColor,
                     height = 2.5.dp
                 )
             },
@@ -93,7 +102,11 @@ fun LogFilterControlBar(
         ) {
             statusTabs.forEachIndexed { index, (status, labelRes, icon) ->
                 val isSelected = selectedTabIndex == index
-                val itemColor = if (status == LogFilterStatus.BLOCKED) DangerRed else MaterialTheme.colorScheme.primary
+                val itemColor = when (status) {
+                    LogFilterStatus.BLOCKED -> DangerRed
+                    LogFilterStatus.ALLOWED -> NeonGreen
+                    LogFilterStatus.ALL -> MaterialTheme.colorScheme.primary
+                }
                 Tab(
                     selected = isSelected,
                     onClick = { onFilterStatusChange(status) },
@@ -243,7 +256,7 @@ fun LogFilterControlBar(
             )
 
             // Reset Filter Button (visible if any custom filter is active)
-            val hasActiveFilter = isAppFiltered || timeRange != TimeRange.ALL
+            val hasActiveFilter = isAppFiltered || timeRange != TimeRange.ALL || filterStatus != LogFilterStatus.ALL
             AnimatedVisibility(
                 visible = hasActiveFilter,
                 enter = fadeIn(),

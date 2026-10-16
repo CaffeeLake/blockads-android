@@ -117,6 +117,7 @@ class LogViewModel(
             when (status) {
                 LogFilterStatus.ALL -> if (since > 0) dnsLogDao.getAllSince(since) else dnsLogDao.getAll()
                 LogFilterStatus.BLOCKED -> if (since > 0) dnsLogDao.getBlockedOnlySince(since) else dnsLogDao.getBlockedOnly()
+                LogFilterStatus.ALLOWED -> if (since > 0) dnsLogDao.getAllowedOnlySince(since) else dnsLogDao.getAllowedOnly()
             }
         }
         .combine(_searchQuery) { logs, query ->
@@ -137,10 +138,10 @@ class LogViewModel(
     }
 
     fun toggleFilter() {
-        _filterStatus.value = if (_filterStatus.value == LogFilterStatus.BLOCKED) {
-            LogFilterStatus.ALL
-        } else {
-            LogFilterStatus.BLOCKED
+        _filterStatus.value = when (_filterStatus.value) {
+            LogFilterStatus.ALL -> LogFilterStatus.BLOCKED
+            LogFilterStatus.BLOCKED -> LogFilterStatus.ALLOWED
+            LogFilterStatus.ALLOWED -> LogFilterStatus.ALL
         }
     }
 

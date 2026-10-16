@@ -58,11 +58,15 @@ class LogViewModelTest {
     private val dnsLogDao: DnsLogDao = mockk(relaxed = true) {
         every { getAll() } returns table
         every { getBlockedOnly() } returns table.map { rows -> rows.filter { it.isBlocked } }
+        every { getAllowedOnly() } returns table.map { rows -> rows.filter { !it.isBlocked } }
         every { getBlockedByReason(FilterListRepository.BLOCK_REASON_SECURITY) } returns
             table.map { rows -> rows.filter { it.blockedBy == FilterListRepository.BLOCK_REASON_SECURITY } }
         every { getAllSince(any()) } answers { sinceArgs += firstArg<Long>(); since(firstArg()) }
         every { getBlockedOnlySince(any()) } answers {
             sinceArgs += firstArg<Long>(); since(firstArg<Long>()).map { rows -> rows.filter { it.isBlocked } }
+        }
+        every { getAllowedOnlySince(any()) } answers {
+            sinceArgs += firstArg<Long>(); since(firstArg<Long>()).map { rows -> rows.filter { !it.isBlocked } }
         }
         every { getBlockedByReasonSince(any(), any()) } answers {
             sinceArgs += secondArg<Long>(); since(secondArg<Long>()).map { rows -> rows.filter { it.blockedBy == firstArg() } }
@@ -110,7 +114,21 @@ class LogViewModelTest {
 
         vm.setFilterStatus(LogFilterStatus.BLOCKED)
         vm.toggleFilter()
+        assertEquals(LogFilterStatus.ALLOWED, vm.filterStatus.value)
+        vm.toggleFilter()
         assertEquals(LogFilterStatus.ALL, vm.filterStatus.value)
+    }
+
+    @Test
+    fun `status filter picks allowed-only queries`() = runTest {
+        table.value = listOf(
+            entry(1, "ok.com", false),
+            entry(2, "ad.com", true, by = "7"),
+            entry(3, "another-ok.com", false),
+        )
+        keepHot(vm.logs)
+        vm.setFilterStatus(LogFilterStatus.ALLOWED)
+        assertEquals(listOf(1L, 3L), vm.logs.value.map { it.id })
     }
 
     @Test

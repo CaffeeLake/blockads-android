@@ -29,11 +29,17 @@ interface DnsLogDao {
     @Query("SELECT * FROM dns_logs WHERE isBlocked = 1 ORDER BY timestamp DESC")
     fun getBlockedOnly(): Flow<List<DnsLogEntry>>
 
+    @Query("SELECT * FROM dns_logs WHERE isBlocked = 0 ORDER BY timestamp DESC")
+    fun getAllowedOnly(): Flow<List<DnsLogEntry>>
+
     @Query("SELECT * FROM dns_logs WHERE timestamp > :since ORDER BY timestamp DESC")
     fun getAllSince(since: Long): Flow<List<DnsLogEntry>>
 
     @Query("SELECT * FROM dns_logs WHERE isBlocked = 1 AND timestamp > :since ORDER BY timestamp DESC")
     fun getBlockedOnlySince(since: Long): Flow<List<DnsLogEntry>>
+
+    @Query("SELECT * FROM dns_logs WHERE isBlocked = 0 AND timestamp > :since ORDER BY timestamp DESC")
+    fun getAllowedOnlySince(since: Long): Flow<List<DnsLogEntry>>
 
     @Query("SELECT DISTINCT appName FROM dns_logs WHERE appName != '' ORDER BY appName ASC")
     fun getDistinctAppNames(): Flow<List<String>>

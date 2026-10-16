@@ -192,6 +192,7 @@ fun LogsScreen(
                     viewModel.setAppFilter("")
                     viewModel.setTimeRange(TimeRange.ALL)
                     viewModel.setSearchQuery("")
+                    viewModel.setFilterStatus(LogFilterStatus.ALL)
                 }
             )
 
