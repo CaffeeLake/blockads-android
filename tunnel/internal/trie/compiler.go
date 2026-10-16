@@ -82,14 +82,62 @@ func parseDomainLine(line string) string {
 		return ""
 	}
 
+	// Cosmetic and scriptlet rules are not domains
+	if strings.Contains(line, "##") || strings.Contains(line, "#@#") || strings.Contains(line, "#?#") ||
+		strings.Contains(line, "#$#") || strings.Contains(line, "#%#") {
+		return ""
+	}
+
+	// Support Wildcard domain format: *.example.com (HaGeZi wildcard, OISD domainswild)
+	if strings.HasPrefix(line, "*.") {
+		line = strings.TrimPrefix(line, "*.")
+	}
+
+	// dnsmasq format: server=/domain.com/ or address=/domain.com/0.0.0.0
+	if strings.HasPrefix(line, "server=/") || strings.HasPrefix(line, "address=/") {
+		clean := strings.TrimPrefix(strings.TrimPrefix(line, "server=/"), "address=/")
+		if slashIdx := strings.IndexByte(clean, '/'); slashIdx != -1 {
+			line = clean[:slashIdx]
+		}
+	}
+
+	if strings.ContainsAny(line, "$/\\*") && !strings.HasPrefix(line, "||") {
+		return ""
+	}
+
 	var domain string
+	isABP := strings.HasPrefix(line, "||")
 
 	switch {
-	case strings.HasPrefix(line, "||"):
+	case isABP:
 		domain = strings.TrimPrefix(line, "||")
+
+		// Handle wildcard prefixes: ||*.example.com^ or ||*.tld^
+		domain = strings.TrimPrefix(domain, "*.")
+		domain = strings.TrimPrefix(domain, "*")
+
+		// If the rule contains wildcards (*, ?) or paths (/), it's a URL-level rule.
+		// A DNS-level blocker cannot handle this and will over-block if suffix is stripped.
 		if strings.ContainsAny(domain, "/*?") {
 			return ""
 		}
+
+		// Handle modifiers after $
+		if dollarIdx := strings.IndexByte(domain, '$'); dollarIdx != -1 {
+			options := domain[dollarIdx+1:]
+			for _, opt := range strings.Split(options, ",") {
+				opt = strings.TrimSpace(opt)
+				if opt == "" || opt == "important" || opt == "empty" || opt == "mp4" ||
+					opt == "all" || opt == "popup" || opt == "document" || opt == "doc" ||
+					opt == "dns" || strings.HasPrefix(opt, "dnstype") || opt == "cname" ||
+					opt == "network" || strings.HasPrefix(opt, "ctag") || strings.HasPrefix(opt, "denyallow") {
+					continue
+				}
+				return ""
+			}
+			domain = domain[:dollarIdx]
+		}
+
 		if idx := strings.IndexByte(domain, '^'); idx != -1 {
 			domain = domain[:idx]
 		}
@@ -112,15 +160,47 @@ func parseDomainLine(line string) string {
 
 	domain = strings.TrimSpace(strings.ToLower(domain))
 
-	if domain == "" || !strings.Contains(domain, ".") {
-		return ""
-	}
-	if domain == "localhost" || domain == "localhost.localdomain" ||
+	if domain == "" || domain == "localhost" || domain == "localhost.localdomain" ||
 		domain == "local" || domain == "broadcasthost" {
 		return ""
 	}
-	if net.ParseIP(domain) != nil {
+
+	// Single-label domains are rejected unless they come from an ABP TLD rule (e.g. ||*.actor^)
+	if !strings.Contains(domain, ".") && !isABP {
 		return ""
+	}
+
+	// Reject IP addresses
+	if domain[0] >= '0' && domain[0] <= '9' {
+		allDigitsOrDots := true
+		for _, r := range domain {
+			if (r < '0' || r > '9') && r != '.' {
+				allDigitsOrDots = false
+				break
+			}
+		}
+		if allDigitsOrDots && net.ParseIP(domain) != nil {
+			return ""
+		}
+	}
+
+	// Validate valid hostname labels [a-z0-9-_]
+	labels := strings.Split(domain, ".")
+	if len(labels) < 2 && !isABP {
+		return ""
+	}
+	for _, label := range labels {
+		if label == "" {
+			return ""
+		}
+		for i, r := range label {
+			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' && r != '_' {
+				return ""
+			}
+			if (r == '-' || r == '_') && (i == 0 || i == len(label)-1) {
+				return ""
+			}
+		}
 	}
 
 	return domain

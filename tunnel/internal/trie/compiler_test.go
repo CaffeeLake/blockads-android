@@ -19,12 +19,13 @@ func TestParseDomainLine(t *testing.T) {
 		{"||ads.example.com^|", "ads.example.com"},
 		{"||ads.example.com/path", ""},
 		{"||ads.example.com^?x", ""},
-		{"||*.example.com^", ""},
-		// Modifiers after ^ are dropped, so scoped rules block the domain everywhere.
-		{"||ads.example.com^$third-party", "ads.example.com"},
-		{"||ads.example.com^$domain=foo.com", "ads.example.com"},
-		// Without ^ the modifier stays in the "domain"; the entry can never match.
-		{"||ads.example.com$third-party", "ads.example.com$third-party"},
+		{"||*.example.com^", "example.com"},
+		{"||ads.example.com^$important", "ads.example.com"},
+		{"||ads.example.com^$all", "ads.example.com"},
+		// Scoped rules with $domain= or $third-party are rejected to prevent overblocking at DNS level
+		{"||ads.example.com^$third-party", ""},
+		{"||ads.example.com^$domain=foo.com", ""},
+		{"||ads.example.com$third-party", ""},
 		{"@@||ads.example.com^", ""},
 		{"@@ads.example.com", ""},
 
@@ -45,28 +46,39 @@ func TestParseDomainLine(t *testing.T) {
 		{"0.0.0.0 0.0.0.0", ""},
 		{"0.0.0.0", ""},
 
-		// Plain domain lists
+		// Plain domain lists and wildcards
 		{"ads.example.com", "ads.example.com"},
 		{"  ads.example.com  ", "ads.example.com"},
 		{"ADS.EXAMPLE.COM", "ads.example.com"},
-		{"*.example.com", "*.example.com"},
+		{"*.example.com", "example.com"},
+		{"*.telemetry.001-studio.com", "telemetry.001-studio.com"},
+		{"*.0-02.net", "0-02.net"},
 		{"ads.example.com # tracker", ""}, // inline comments only work on hosts lines
 		{"localhost", ""},
 		{"example", ""},
 		{"1.2.3.4", ""},
 		{"2001:db8::1", ""},
 
-		// Kept verbatim: trailing/leading dots add an empty label, so these never match a lookup.
-		{"ads.example.com.", "ads.example.com."},
-		{"0.0.0.0 ads.example.com.", "ads.example.com."},
-		{".example.com", ".example.com"},
+		// Trailing/leading dots are invalid hostname labels
+		{"ads.example.com.", ""},
+		{"0.0.0.0 ads.example.com.", ""},
+		{".example.com", ""},
+
+		// dnsmasq format
+		{"server=/adikteev.com/", "adikteev.com"},
+		{"address=/beacon.krxd.net/0.0.0.0", "beacon.krxd.net"},
+
+		// TLD wildcard rules (e.g. from spam-tlds.txt)
+		{"||*.actor^", "actor"},
+		{"||*.africa^$denyallow=nation.africa", "africa"},
 
 		// Comments and cosmetic rules
 		{"", ""},
 		{"# comment", ""},
 		{"! comment", ""},
 		{"##.ad-banner", ""},
-		{"example.com##.ad", "example.com##.ad"},
+		{"example.com##.ad", ""},
+		{"$removeparam=pjclid", ""},
 	}
 	for _, c := range cases {
 		if got := parseDomainLine(c.line); got != c.want {
@@ -84,7 +96,7 @@ func FuzzParseDomainLine(f *testing.F) {
 		if d == "" {
 			return
 		}
-		if !strings.Contains(d, ".") || d != strings.TrimSpace(d) || net.ParseIP(d) != nil {
+		if d != strings.TrimSpace(d) || net.ParseIP(d) != nil {
 			t.Fatalf("parseDomainLine(%q) = %q", line, d)
 		}
 	})
@@ -121,7 +133,7 @@ func TestCompileLoadRoundTrip(t *testing.T) {
 		"@@||allowed.example.net^",
 		"metrics.example.net",
 		"*.wild.example.io",
-		"trailing.example.dev.",
+		"server=/dnsmasq.example.dev/",
 		"",
 	}, "\n")
 	tr, n := compile(t, list)
@@ -138,7 +150,9 @@ func TestCompileLoadRoundTrip(t *testing.T) {
 		"deep.sub.metrics.example.net": true,
 		"a.wild.example.io":            true,
 		"a.b.wild.example.io":          true,
-		"wild.example.io":              false, // wildcard needs at least one label
+		"wild.example.io":              true, // wildcard domain matches both apex and subdomains
+		"dnsmasq.example.dev":          true,
+		"sub.dnsmasq.example.dev":      true,
 		"example.com":                  false,
 		"com":                          false,
 		"racker.example.com":           false,
@@ -148,7 +162,7 @@ func TestCompileLoadRoundTrip(t *testing.T) {
 		"allowed.example.net":          false,
 		"localhost":                    false,
 		"":                             false,
-		"trailing.example.dev":         false, // compiled with an empty label; see TestParseDomainLine
+		"trailing.example.dev":         false,
 	}
 	for d, want := range cases {
 		if got := tr.ContainsOrParent(d); got != want {

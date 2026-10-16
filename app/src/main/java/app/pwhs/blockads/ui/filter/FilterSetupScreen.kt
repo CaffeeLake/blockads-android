@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.FilterList as FilterListEntity
 import app.pwhs.blockads.ui.event.UiEventEffect
-import app.pwhs.blockads.ui.filter.component.AddFilterDialog
+import app.pwhs.blockads.ui.filter.component.AddFilterBottomSheet
 import app.pwhs.blockads.ui.filter.component.CustomTabContent
 import app.pwhs.blockads.ui.filter.component.filterListItems
 import app.pwhs.blockads.ui.filter.component.FilterSearchBar
@@ -195,7 +195,7 @@ fun FilterSetupScreen(
 
         val isAddingCustomFilter by viewModel.isAddingCustomFilter.collectAsStateWithLifecycle()
         if (showAddDialog) {
-            AddFilterDialog(
+            AddFilterBottomSheet(
                 onDismiss = { if (!isAddingCustomFilter) showAddDialog = false },
                 onAdd = { name, url, buildLocally ->
                     if (!isAddingCustomFilter) {

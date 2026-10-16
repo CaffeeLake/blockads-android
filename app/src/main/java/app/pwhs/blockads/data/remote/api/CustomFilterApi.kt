@@ -56,7 +56,8 @@ class CustomFilterApi(
                 Timber.d("Build API response: $responseText")
 
                 if (response.status.value != 200) {
-                    val errorMsg = extractString(responseText, "error")
+                    val errorMsg = extractString(responseText, "message")
+                        ?: extractString(responseText, "error")
                         ?: "Server returned ${response.status.value}"
                     throw CustomFilterException("Build failed: $errorMsg")
                 }

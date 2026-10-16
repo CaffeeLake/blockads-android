@@ -10,6 +10,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
 
@@ -45,5 +46,24 @@ class CustomFilterApiTest {
 
         assertEquals("https://cdn.example/x.zip?a=1&b=2", build.downloadUrl)
         assertEquals(42, build.ruleCount)
+    }
+
+    @Test
+    fun `extracts message from error response`() = runTest {
+        val client = HttpClient(
+            MockEngine {
+                respond(
+                    """{"error":"No rules found","message":"No domains, CSS rules, or scriptlets found in filter list"}""",
+                    HttpStatusCode.BadRequest
+                )
+            }
+        )
+        val api = CustomFilterApi(client)
+        val result = runCatching { api.buildFilter("https://example.com/empty.txt") }
+        assertTrue(result.isFailure)
+        assertEquals(
+            "Build failed: No domains, CSS rules, or scriptlets found in filter list",
+            result.exceptionOrNull()?.message
+        )
     }
 }

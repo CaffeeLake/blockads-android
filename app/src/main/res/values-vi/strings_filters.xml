@@ -155,6 +155,21 @@
     <string name="filter_compile_success_title">Biên dịch bộ lọc thành công</string>
     <string name="filter_compile_failed_title">Biên dịch bộ lọc thất bại</string>
     <string name="filter_compile_channel_name">Biên dịch bộ lọc</string>
+    <string name="filter_supported_formats_title">Định dạng hỗ trợ</string>
+    <string name="filter_supported_formats_desc">BlockAds hỗ trợ đầy đủ các định dạng danh sách chặn phổ biến:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Tệp Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Tên miền &amp; Wildcard</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">Chặn toàn bộ TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Danh sách spam TLD)</string>
+    <string name="filter_build_mode_local_desc">Biên dịch trực tiếp trên máy qua Go engine (chỉ chặn DNS, offline 100%)</string>
+    <string name="filter_build_mode_server_desc">Biên dịch qua server đám mây, hỗ trợ thêm CSS ẩn phần tử và scriptlet</string>
+    <string name="filter_paste_clipboard">Dán từ bảng tạm</string>
     <string name="https_filtering_wireguard_disabled">Đã tắt WireGuard (không tương thích với lọc HTTPS)</string>
     <string name="https_filtering_cert_saved_downloads">✅ Đã lưu chứng chỉ vào Downloads/%1$s</string>
     <string name="https_filtering_cert_saved_legacy">Đã lưu chứng chỉ. Hãy cài đặt từ trình quản lý tệp.</string>
