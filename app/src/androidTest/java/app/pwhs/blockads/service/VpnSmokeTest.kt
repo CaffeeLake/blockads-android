@@ -19,7 +19,7 @@ import app.pwhs.blockads.data.entities.CustomDnsRule
 import app.pwhs.blockads.data.entities.DnsLogEntry
 import app.pwhs.blockads.data.entities.RuleType
 import app.pwhs.blockads.pollUntil
-import app.pwhs.blockads.ui.customrules.CustomRulesViewModel
+import app.pwhs.blockads.ui.domainrules.DomainRulesViewModel
 import app.pwhs.blockads.waitUntil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -213,7 +213,7 @@ class VpnSmokeTest {
         waitUntil("$BLOCKED to resolve through the tunnel", 30_000) { resolvesNormally(BLOCKED) }
         val states = recordStates()
 
-        getKoin().get<CustomRulesViewModel>().addRule("||$BLOCKED^")
+        getKoin().get<DomainRulesViewModel>().addBlocklistDomain(BLOCKED)
 
         waitUntil("$BLOCKED to be sinkholed", 30_000) { sinkholed(BLOCKED) }
         waitUntil("the restart to finish", 30_000) {

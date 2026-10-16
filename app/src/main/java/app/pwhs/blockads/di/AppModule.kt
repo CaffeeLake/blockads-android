@@ -19,7 +19,6 @@ import app.pwhs.blockads.ui.appearance.AppearanceViewModel
 import app.pwhs.blockads.ui.settings.SettingsViewModel
 import app.pwhs.blockads.ui.statistics.StatisticsViewModel
 import app.pwhs.blockads.ui.appmanagement.AppManagementViewModel
-import app.pwhs.blockads.ui.customrules.CustomRulesViewModel
 import app.pwhs.blockads.ui.domainrules.DomainRulesViewModel
 import app.pwhs.blockads.ui.firewall.FirewallViewModel
 import app.pwhs.blockads.ui.splash.SplashViewModel
@@ -201,13 +200,6 @@ val appModule = module {
     viewModel {
         app.pwhs.blockads.ui.trustednetworks.TrustedNetworksViewModel(
             appPrefs = get(),
-            application = androidApplication()
-        )
-    }
-    viewModel {
-        CustomRulesViewModel(
-            customDnsRuleDao = get(),
-            filterListRepository = get(),
             application = androidApplication()
         )
     }

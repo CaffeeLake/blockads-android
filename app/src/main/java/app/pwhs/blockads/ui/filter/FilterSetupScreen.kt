@@ -53,8 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 fun FilterSetupScreen(
     modifier: Modifier = Modifier,
     viewModel: FilterSetupViewModel = koinViewModel(),
-    onNavigateToFilterDetail: (filterId: Long) -> Unit = {},
-    onNavigateToCustomRules: () -> Unit = {}
+    onNavigateToFilterDetail: (filterId: Long) -> Unit = {}
 ) {
     val allLists by viewModel.filterLists.collectAsStateWithLifecycle()
     val filterLists by viewModel.filteredFilterLists.collectAsStateWithLifecycle()
@@ -163,7 +162,6 @@ fun FilterSetupScreen(
                                     onDelete = { viewModel.deleteFilterList(it) },
                                     onFilterClick = onNavigateToFilterDetail,
                                     onShowAddDialog = { showAddDialog = true },
-                                    onNavigateToCustomRules = onNavigateToCustomRules,
                                     starredUrls = starredUrls,
                                     onToggleStar = { viewModel.toggleStarredFilter(it) }
                                 )

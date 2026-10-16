@@ -58,10 +58,6 @@ data object AppearanceKey : NavKey
 @Serializable
 data object DomainRulesKey : NavKey
 
-
-@Serializable
-data object CustomRuleKey : NavKey
-
 @Serializable
 data object WireGuardImportKey : NavKey
 

@@ -41,7 +41,6 @@ import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.ui.about.AboutScreen
 import app.pwhs.blockads.ui.appearance.AppearanceScreen
 import app.pwhs.blockads.ui.appmanagement.AppManagementScreen
-import app.pwhs.blockads.ui.customrules.CustomRulesScreen
 import app.pwhs.blockads.ui.data.AboutKey
 import app.pwhs.blockads.ui.data.AppManagementKey
 import app.pwhs.blockads.ui.data.AppearanceKey
@@ -51,7 +50,6 @@ import app.pwhs.blockads.ui.browser.elementrules.ElementRulesScreen
 import app.pwhs.blockads.ui.data.BottomBarScreen
 import app.pwhs.blockads.ui.data.BrowserKey
 import app.pwhs.blockads.ui.data.ElementRulesKey
-import app.pwhs.blockads.ui.data.CustomRuleKey
 import app.pwhs.blockads.ui.data.DnsProviderKey
 import app.pwhs.blockads.ui.data.DomainRulesKey
 import app.pwhs.blockads.ui.data.FilterDetailKey
@@ -251,10 +249,6 @@ fun HomeApp(
                         onNavigateToFilterDetail = { filterId ->
                             showBottomBar = false
                             filterStack.add(FilterDetailKey(filterId))
-                        },
-                        onNavigateToCustomRules = {
-                            showBottomBar = false
-                            filterStack.add(CustomRuleKey)
                         }
                     )
                 }
@@ -330,13 +324,6 @@ fun HomeApp(
                 entry<FilterDetailKey> {
                     FilterDetailScreen(
                         filterId = it.filterId,
-                        onNavigateBack = {
-                            safePop(filterStack)
-                        }
-                    )
-                }
-                entry<CustomRuleKey> {
-                    CustomRulesScreen(
                         onNavigateBack = {
                             safePop(filterStack)
                         }

@@ -163,7 +163,7 @@ fun AddFilterBottomSheet(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = stringResource(R.string.custom_rules),
+                            text = stringResource(R.string.filter_custom),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
