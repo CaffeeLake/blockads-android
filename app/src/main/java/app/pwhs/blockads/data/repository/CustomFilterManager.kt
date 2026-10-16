@@ -46,12 +46,26 @@ class CustomFilterManager(
      * @return The saved [FilterList] entity on success
      * @throws CustomFilterException on API errors
      */
-    suspend fun addCustomFilter(url: String, displayName: String? = null): Result<FilterList> = withContext(Dispatchers.IO) {
-        val trimmedUrl = url.trim()
+    suspend fun addCustomFilter(url: String, displayName: String? = null): Result<FilterList> =
+        addCustomFilter(listOf(url), displayName)
+
+    /**
+     * Adds a custom filter by compiling or merging one or multiple raw filter list URLs.
+     *
+     * @param urls The list of raw filter URLs to merge
+     * @param displayName Optional display name
+     * @return The saved [FilterList] entity on success
+     */
+    suspend fun addCustomFilter(urls: List<String>, displayName: String? = null): Result<FilterList> = withContext(Dispatchers.IO) {
+        val cleanUrls = urls.map { it.trim() }.filter { it.isNotBlank() }
+        if (cleanUrls.isEmpty()) {
+            return@withContext Result.failure(CustomFilterException("No URLs provided"))
+        }
+        val combinedUrl = cleanUrls.joinToString("\n")
 
         try {
             // ── Step 0: Check for duplicate ──────────────────────────────
-            val existing = filterListDao.getByOriginalUrl(trimmedUrl)
+            val existing = filterListDao.getByOriginalUrl(combinedUrl)
             if (existing != null) {
                 return@withContext Result.failure(
                     CustomFilterException("Filter already exists: ${existing.name}")
@@ -59,12 +73,12 @@ class CustomFilterManager(
             }
 
             // ── Step 1: Call backend API to compile ──────────────────────
-            Timber.d("Building custom filter for URL: $trimmedUrl")
-            val buildResponse = customFilterApi.buildFilter(trimmedUrl)
+            Timber.d("Building custom filter for URLs: $cleanUrls")
+            val buildResponse = customFilterApi.buildFilter(cleanUrls, displayName?.trim())
             Timber.d("Build success: downloadUrl=${buildResponse.downloadUrl}, rules=${buildResponse.ruleCount}")
 
             // ── Step 2: Create temp extraction directory ─────────────────
-            val sanitizedName = sanitizeName(trimmedUrl)
+            val sanitizedName = if (cleanUrls.size == 1) sanitizeName(cleanUrls.first()) else "merged_${System.currentTimeMillis()}"
             val extractDir = File(context.filesDir, "$CUSTOM_FILTERS_DIR/$sanitizedName")
             if (extractDir.exists()) {
                 extractDir.deleteRecursively()
@@ -86,8 +100,8 @@ class CustomFilterManager(
             } else {
                 // Fallback: derive info from the build response
                 FilterInfo(
-                    name = deriveFilterName(trimmedUrl),
-                    url = trimmedUrl,
+                    name = if (cleanUrls.size == 1) deriveFilterName(cleanUrls.first()) else "Merged Filter (${cleanUrls.size})",
+                    url = combinedUrl,
                     ruleCount = buildResponse.ruleCount,
                     updatedAt = System.currentTimeMillis().toString()
                 )
@@ -98,8 +112,8 @@ class CustomFilterManager(
             // ── Step 5: Insert entity to get auto-generated ID ──────────
             val filterEntity = FilterList(
                 name = finalName,
-                url = trimmedUrl,
-                description = "Custom filter: $finalName",
+                url = combinedUrl,
+                description = if (cleanUrls.size > 1) "Merged from ${cleanUrls.size} filter lists" else "Custom filter: $finalName",
                 isEnabled = true,
                 isBuiltIn = false,
                 category = FilterList.CATEGORY_AD,
@@ -108,7 +122,7 @@ class CustomFilterManager(
                 bloomUrl = "",   // Will be set after file copy
                 trieUrl = "",    // Will be set after file copy
                 cssUrl = "",     // Will be set after file copy
-                originalUrl = trimmedUrl,
+                originalUrl = combinedUrl,
                 lastUpdated = System.currentTimeMillis()
             )
 
@@ -157,10 +171,10 @@ class CustomFilterManager(
             Result.success(updatedEntity)
         } catch (e: CustomFilterException) {
             Timber.e(e, "Custom filter API error, trying local compile")
-            addCustomFilterLocally(trimmedUrl, displayName)
+            addCustomFilterLocally(cleanUrls, displayName)
         } catch (e: Exception) {
             Timber.e(e, "Failed to add custom filter via API, trying local compile")
-            addCustomFilterLocally(trimmedUrl, displayName)
+            addCustomFilterLocally(cleanUrls, displayName)
         }
     }
 
@@ -293,13 +307,14 @@ class CustomFilterManager(
             }
 
             try {
-                val url = filter.originalUrl.ifEmpty { filter.url }
+                val rawUrl = filter.originalUrl.ifEmpty { filter.url }
+                val urls = rawUrl.lines().map { it.trim() }.filter { it.isNotBlank() }
 
                 // Re-compile via API
-                val buildResponse = customFilterApi.buildFilter(url)
+                val buildResponse = customFilterApi.buildFilter(urls, filter.name)
 
                 // Download & extract
-                val sanitizedName = sanitizeName(url)
+                val sanitizedName = if (urls.size == 1) sanitizeName(urls.first()) else "merged_${filter.id}"
                 val extractDir = File(context.filesDir, "$CUSTOM_FILTERS_DIR/$sanitizedName")
                 if (extractDir.exists()) extractDir.deleteRecursively()
 
@@ -352,19 +367,23 @@ class CustomFilterManager(
      * Re-downloads and re-compiles a locally-built custom filter.
      */
     private suspend fun updateCustomFilterLocally(filter: FilterList): Result<FilterList> {
-        val url = filter.originalUrl.ifEmpty { filter.url }
+        val rawUrl = filter.originalUrl.ifEmpty { filter.url }
+        val urls = rawUrl.lines().map { it.trim() }.filter { it.isNotBlank() }
         val remoteFilterDir = File(context.filesDir, REMOTE_FILTERS_DIR).apply { mkdirs() }
         val tempFile = File(context.cacheDir, "filter_update_${System.currentTimeMillis()}.txt")
 
         return try {
-            Timber.d("Local update: downloading $url")
-            val response = client.get(url)
-            val channel = response.bodyAsChannel()
             tempFile.outputStream().use { output ->
-                val buffer = ByteArray(8 * 1024)
-                while (!channel.isClosedForRead) {
-                    val read = channel.readAvailable(buffer)
-                    if (read > 0) output.write(buffer, 0, read)
+                for (u in urls) {
+                    Timber.d("Local update: downloading $u")
+                    val response = client.get(u)
+                    val channel = response.bodyAsChannel()
+                    val buffer = ByteArray(8 * 1024)
+                    while (!channel.isClosedForRead) {
+                        val read = channel.readAvailable(buffer)
+                        if (read > 0) output.write(buffer, 0, read)
+                    }
+                    output.write("\n".toByteArray())
                 }
             }
 
@@ -397,19 +416,23 @@ class CustomFilterManager(
      * Used when switching from server to local build mode.
      */
     suspend fun recompileLocally(filter: FilterList): Result<FilterList> = withContext(Dispatchers.IO) {
-        val url = filter.originalUrl.ifEmpty { filter.url }
+        val rawUrl = filter.originalUrl.ifEmpty { filter.url }
+        val urls = rawUrl.lines().map { it.trim() }.filter { it.isNotBlank() }
         val remoteFilterDir = File(context.filesDir, REMOTE_FILTERS_DIR).apply { mkdirs() }
         val tempFile = File(context.cacheDir, "filter_recompile_${System.currentTimeMillis()}.txt")
 
         try {
-            Timber.d("Recompile locally: downloading $url")
-            val response = client.get(url)
-            val channel = response.bodyAsChannel()
             tempFile.outputStream().use { output ->
-                val buffer = ByteArray(8 * 1024)
-                while (!channel.isClosedForRead) {
-                    val read = channel.readAvailable(buffer)
-                    if (read > 0) output.write(buffer, 0, read)
+                for (u in urls) {
+                    Timber.d("Recompile locally: downloading $u")
+                    val response = client.get(u)
+                    val channel = response.bodyAsChannel()
+                    val buffer = ByteArray(8 * 1024)
+                    while (!channel.isClosedForRead) {
+                        val read = channel.readAvailable(buffer)
+                        if (read > 0) output.write(buffer, 0, read)
+                    }
+                    output.write("\n".toByteArray())
                 }
             }
 
@@ -445,8 +468,11 @@ class CustomFilterManager(
      * Downloads a filter list and compiles .trie/.bloom locally using the Go compiler.
      * Used as fallback when the backend API is unreachable.
      */
-    suspend fun addCustomFilterLocally(url: String, displayName: String?): Result<FilterList> = withContext(Dispatchers.IO) {
-        val trimmedUrl = url.trim()
+    suspend fun addCustomFilterLocally(urls: List<String>, displayName: String?): Result<FilterList> = withContext(Dispatchers.IO) {
+        val cleanUrls = urls.map { it.trim() }.filter { it.isNotBlank() }
+        if (cleanUrls.isEmpty()) {
+            return@withContext Result.failure(CustomFilterException("URL cannot be empty"))
+        }
         val remoteFilterDir = File(context.filesDir, REMOTE_FILTERS_DIR).apply { mkdirs() }
         val tempFile = File(context.cacheDir, "filter_download_${System.currentTimeMillis()}.txt")
         // Use a temp ID for compilation, insert DB only after success
@@ -454,15 +480,17 @@ class CustomFilterManager(
         val tempBloomFile = File(context.cacheDir, "compile_${System.currentTimeMillis()}.bloom")
 
         try {
-            // Download filter list to temp file
-            Timber.d("Local compile: downloading $trimmedUrl")
-            val response = client.get(trimmedUrl)
-            val channel = response.bodyAsChannel()
             tempFile.outputStream().use { output ->
-                val buffer = ByteArray(8 * 1024)
-                while (!channel.isClosedForRead) {
-                    val read = channel.readAvailable(buffer)
-                    if (read > 0) output.write(buffer, 0, read)
+                for (url in cleanUrls) {
+                    Timber.d("Local compile: downloading $url")
+                    val response = client.get(url)
+                    val channel = response.bodyAsChannel()
+                    val buffer = ByteArray(8 * 1024)
+                    while (!channel.isClosedForRead) {
+                        val read = channel.readAvailable(buffer)
+                        if (read > 0) output.write(buffer, 0, read)
+                    }
+                    output.write("\n".toByteArray())
                 }
             }
 
@@ -473,12 +501,14 @@ class CustomFilterManager(
 
             Timber.d("Local compile: $ruleCount rules")
 
-            val finalName = displayName?.takeIf { it.isNotBlank() } ?: deriveFilterName(trimmedUrl)
+            val combinedUrl = cleanUrls.joinToString("\n")
+            val finalName = displayName?.takeIf { it.isNotBlank() }
+                ?: if (cleanUrls.size > 1) "Merged Filter (${cleanUrls.size})" else deriveFilterName(cleanUrls.first())
 
             // Only insert to DB after successful compile
             val filterEntity = FilterList(
                 name = finalName,
-                url = trimmedUrl,
+                url = combinedUrl,
                 description = "Custom filter: $finalName",
                 isEnabled = true,
                 isBuiltIn = false,
@@ -488,7 +518,7 @@ class CustomFilterManager(
                 bloomUrl = "",
                 trieUrl = "",
                 cssUrl = "",
-                originalUrl = trimmedUrl,
+                originalUrl = combinedUrl,
                 lastUpdated = System.currentTimeMillis()
             )
             val insertedId = filterListDao.insert(filterEntity)
@@ -517,6 +547,9 @@ class CustomFilterManager(
             tempBloomFile.delete()
         }
     }
+
+    suspend fun addCustomFilterLocally(url: String, displayName: String?): Result<FilterList> =
+        addCustomFilterLocally(listOf(url), displayName)
 
     // ── WorkManager-based local compile ────────────────────────────────
 

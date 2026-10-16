@@ -53,6 +53,8 @@ class FilterSetupViewModelTest {
     fun setUp() {
         mockkObject(ServiceController)
         every { ServiceController.requestRestart(any()) } just Runs
+        coEvery { dao.getByUrl(any()) } returns null
+        coEvery { dao.getByOriginalUrl(any()) } returns null
     }
 
     @After
@@ -93,13 +95,13 @@ class FilterSetupViewModelTest {
             vm.addFilterList("x", "  https://mine  ")
             assertEquals(UiEvent.ToastRes(R.string.filter_error_duplicate_url), awaitItem())
         }
-        coVerify(exactly = 0) { customFilters.addCustomFilter(any(), any()) }
+        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any()) }
     }
 
     @Test
     fun `adding a remote filter saves the profile, reloads and signals success`() = runTest {
         coEvery { dao.getByUrl(any()) } returns null
-        coEvery { customFilters.addCustomFilter("https://new", "New") } returns Result.success(FilterList(name = "New", url = "https://new"))
+        coEvery { customFilters.addCustomFilter(listOf("https://new"), "New") } returns Result.success(FilterList(name = "New", url = "https://new"))
         vm.filterAddedEvent.test {
             vm.events.test {
                 vm.addFilterList(" New ", " https://new ")
@@ -115,7 +117,7 @@ class FilterSetupViewModelTest {
     @Test
     fun `a failed remote add reports failure and changes nothing`() = runTest {
         coEvery { dao.getByUrl(any()) } returns null
-        coEvery { customFilters.addCustomFilter(any(), any()) } returns Result.failure(RuntimeException("404"))
+        coEvery { customFilters.addCustomFilter(any<List<String>>(), any()) } returns Result.failure(RuntimeException("404"))
         vm.events.test {
             vm.addFilterList("n", "https://bad")
             assertEquals(UiEvent.ToastRes(R.string.filter_update_failed), awaitItem())
@@ -134,7 +136,7 @@ class FilterSetupViewModelTest {
             awaitItem()
         }
         coVerify { customFilters.enqueueLocalCompile("https://local", "Local") }
-        coVerify(exactly = 0) { customFilters.addCustomFilter(any(), any()) }
+        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any()) }
     }
 
     @Test

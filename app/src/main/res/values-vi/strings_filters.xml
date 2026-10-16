@@ -170,6 +170,8 @@
     <string name="filter_build_mode_local_desc">Biên dịch trực tiếp trên máy qua Go engine (chỉ chặn DNS, offline 100%)</string>
     <string name="filter_build_mode_server_desc">Biên dịch qua server đám mây, hỗ trợ thêm CSS ẩn phần tử và scriptlet</string>
     <string name="filter_paste_clipboard">Dán từ bảng tạm</string>
+    <string name="filter_merge_badge">Hợp nhất %1$d bộ lọc thành một</string>
+    <string name="filter_multi_url_hint">Nhập một hoặc nhiều URL (mỗi dòng một URL)</string>
     <string name="https_filtering_wireguard_disabled">Đã tắt WireGuard (không tương thích với lọc HTTPS)</string>
     <string name="https_filtering_cert_saved_downloads">✅ Đã lưu chứng chỉ vào Downloads/%1$s</string>
     <string name="https_filtering_cert_saved_legacy">Đã lưu chứng chỉ. Hãy cài đặt từ trình quản lý tệp.</string>

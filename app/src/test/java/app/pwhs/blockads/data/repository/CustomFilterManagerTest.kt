@@ -38,7 +38,7 @@ class CustomFilterManagerTest {
     @Before
     fun setUp() {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).allowMainThreadQueries().build()
-        coEvery { api.buildFilter(any()) } returns BuildResponse("https://cdn.example/mine.zip", 3, 0)
+        coEvery { api.buildFilter(any<List<String>>(), any()) } returns BuildResponse("https://cdn.example/mine.zip", 3, 0)
     }
 
     @After

@@ -74,15 +74,23 @@ class FilterCompileWorker(
         try {
             showProgressNotification(name)
 
-            // Download
-            Timber.d("FilterCompileWorker: downloading $url")
-            val response = client.get(url)
-            val channel = response.bodyAsChannel()
+            // Download (supports multi-line URLs for merged filters)
+            val urls = url.lines().map { it.trim() }.filter { it.isNotBlank() }
+            if (urls.isEmpty()) {
+                showResultNotification(name, false, "No valid URL provided")
+                return Result.failure()
+            }
             tempFile.outputStream().use { output ->
-                val buffer = ByteArray(8 * 1024)
-                while (!channel.isClosedForRead) {
-                    val read = channel.readAvailable(buffer)
-                    if (read > 0) output.write(buffer, 0, read)
+                for (u in urls) {
+                    Timber.d("FilterCompileWorker: downloading $u")
+                    val response = client.get(u)
+                    val channel = response.bodyAsChannel()
+                    val buffer = ByteArray(8 * 1024)
+                    while (!channel.isClosedForRead) {
+                        val read = channel.readAvailable(buffer)
+                        if (read > 0) output.write(buffer, 0, read)
+                    }
+                    output.write("\n".toByteArray())
                 }
             }
 

@@ -27,7 +27,6 @@ class CustomFilterApiTest {
         )
     )
 
-    @Ignore("known bug: build request JSON is not escaped")
     @Test
     fun `request body escapes quotes and backslashes in the URL`() = runTest {
         val url = """https://lists.example/a"b\c.txt"""
@@ -35,6 +34,22 @@ class CustomFilterApiTest {
 
         val sent = runCatching { Json.parseToJsonElement(sentBody).jsonObject["url"]?.jsonPrimitive?.content }
         assertEquals("body: $sentBody", url, sent.getOrNull())
+    }
+
+    @Test
+    fun `request body formats multi-URL merge request correctly`() = runTest {
+        val urls = listOf("https://example.com/1.txt", "https://example.com/2.txt")
+        runCatching {
+            api("""{"status":"success","downloadUrl":"https://cdn.example/merged.zip","ruleCount":100}""")
+                .buildFilter(urls, name = "My Merged List")
+        }
+
+        val json = Json.parseToJsonElement(sentBody).jsonObject
+        assertEquals("My Merged List", json["name"]?.jsonPrimitive?.content)
+        val sentUrls = json["urls"]?.let {
+            kotlinx.serialization.json.JsonArray(it as kotlinx.serialization.json.JsonArray).map { el -> el.jsonPrimitive.content }
+        }
+        assertEquals(urls, sentUrls)
     }
 
     @Ignore("known bug: regex parser does not decode JSON escapes")

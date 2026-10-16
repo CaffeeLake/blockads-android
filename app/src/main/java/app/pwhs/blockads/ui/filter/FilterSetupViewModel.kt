@@ -91,10 +91,15 @@ class FilterSetupViewModel(
 
     fun addFilterList(name: String, url: String, buildLocally: Boolean = false) {
         viewModelScope.launch {
-            val trimmedUrl = url.trim()
+            val rawUrls = url.lines().map { it.trim() }.filter { it.isNotBlank() }
+            if (rawUrls.isEmpty()) {
+                _events.toast(R.string.filter_error_invalid_url)
+                return@launch
+            }
+            val combinedUrl = rawUrls.joinToString("\n")
 
             // Check duplicate
-            val existing = filterListDao.getByUrl(trimmedUrl)
+            val existing = filterListDao.getByUrl(combinedUrl) ?: filterListDao.getByOriginalUrl(combinedUrl)
             if (existing != null) {
                 _events.toast(R.string.filter_error_duplicate_url)
                 return@launch
@@ -102,12 +107,12 @@ class FilterSetupViewModel(
 
             if (buildLocally) {
                 // Enqueue WorkManager job — returns immediately, compiles in background
-                customFilterManager.enqueueLocalCompile(trimmedUrl, name.trim())
+                customFilterManager.enqueueLocalCompile(combinedUrl, name.trim())
                 _events.toast(R.string.filter_compile_enqueued)
                 _filterAddedEvent.tryEmit(Unit)
             } else {
                 _isAddingCustomFilter.value = true
-                val result = customFilterManager.addCustomFilter(trimmedUrl, name.trim())
+                val result = customFilterManager.addCustomFilter(rawUrls, name.trim())
                 _isAddingCustomFilter.value = false
 
                 result.fold(

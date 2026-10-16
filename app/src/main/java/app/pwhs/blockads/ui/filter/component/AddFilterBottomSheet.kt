@@ -34,6 +34,7 @@ import androidx.compose.material.icons.automirrored.outlined.PlaylistAdd
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.ContentPaste
+import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.Button
@@ -49,6 +50,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -89,21 +91,24 @@ fun AddFilterBottomSheet(
     var buildLocally by remember { mutableStateOf(false) }
     var showFormatsHelp by remember { mutableStateOf(false) }
 
-    val urlTrimmed = url.trim()
     val nameTrimmed = name.trim()
+    val parsedUrls = remember(url) {
+        url.lines().map { it.trim() }.filter { it.isNotBlank() }
+    }
 
     val urlError = when {
-        urlTrimmed.isEmpty() -> null
-        !urlTrimmed.startsWith("http://") && !urlTrimmed.startsWith("https://") ->
+        parsedUrls.isEmpty() && url.trim().isNotEmpty() ->
             stringResource(R.string.filter_error_invalid_url)
-        !Patterns.WEB_URL.matcher(urlTrimmed).matches() ->
+        parsedUrls.any { !it.startsWith("http://") && !it.startsWith("https://") } ->
             stringResource(R.string.filter_error_invalid_url)
-        existingUrls.any { it.equals(urlTrimmed, ignoreCase = true) } ->
+        parsedUrls.any { !Patterns.WEB_URL.matcher(it).matches() } ->
+            stringResource(R.string.filter_error_invalid_url)
+        parsedUrls.isNotEmpty() && parsedUrls.all { u -> existingUrls.any { it.equals(u, ignoreCase = true) } } ->
             stringResource(R.string.filter_error_duplicate_url)
         else -> null
     }
 
-    val isValid = nameTrimmed.isNotBlank() && urlTrimmed.isNotBlank() && urlError == null
+    val isValid = nameTrimmed.isNotBlank() && parsedUrls.isNotEmpty() && urlError == null
 
     val handleDismiss: () -> Unit = {
         if (!isValidating) {
@@ -233,7 +238,7 @@ fun AddFilterBottomSheet(
                 value = url,
                 onValueChange = { url = it },
                 label = { Text(stringResource(R.string.settings_add_filter_url)) },
-                placeholder = { Text("https://example.com/filter.txt") },
+                placeholder = { Text(stringResource(R.string.filter_multi_url_hint)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Link,
@@ -262,7 +267,9 @@ fun AddFilterBottomSheet(
                         }
                     }
                 },
-                singleLine = true,
+                singleLine = false,
+                minLines = 1,
+                maxLines = 4,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 isError = urlError != null,
@@ -272,16 +279,42 @@ fun AddFilterBottomSheet(
                 enabled = !isValidating,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        if (isValid && !isValidating) {
-                            onAdd(nameTrimmed, urlTrimmed, buildLocally)
-                        }
-                    }
+                    imeAction = ImeAction.Default
                 )
             )
+
+            // Dynamic merge badge when 2 or more URLs are entered
+            AnimatedVisibility(
+                visible = parsedUrls.size > 1,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 14.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Layers,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.filter_merge_badge, parsedUrls.size),
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+            }
 
             // Build Mode Selector Card (Local Go engine vs Cloud compiler)
             Card(
@@ -377,7 +410,7 @@ fun AddFilterBottomSheet(
                 Button(
                     onClick = {
                         if (isValid && !isValidating) {
-                            onAdd(nameTrimmed, urlTrimmed, buildLocally)
+                            onAdd(nameTrimmed, parsedUrls.joinToString("\n"), buildLocally)
                         }
                     },
                     modifier = Modifier.weight(1f),
