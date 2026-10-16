@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.ContentPaste
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.PhoneAndroid
@@ -47,6 +48,7 @@ import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -72,6 +74,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
+import app.pwhs.blockads.data.entities.FilterList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,17 +83,30 @@ fun AddFilterBottomSheet(
     onDismiss: () -> Unit,
     onAdd: (name: String, url: String, buildLocally: Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    filterToEdit: FilterList? = null,
+    onEdit: ((filter: FilterList, name: String, url: String, buildLocally: Boolean) -> Unit)? = null,
     existingUrls: List<String> = emptyList(),
-    isValidating: Boolean = false
+    isValidating: Boolean = false,
+    progress: Int? = null
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
 
-    var name by remember { mutableStateOf("") }
+    val isEditMode = filterToEdit != null
+    var name by remember(filterToEdit) { mutableStateOf(filterToEdit?.name ?: "") }
     var urlInput by remember { mutableStateOf("") }
-    var urlList by remember { mutableStateOf(emptyList<String>()) }
-    var buildLocally by remember { mutableStateOf(false) }
+    var urlList by remember(filterToEdit) {
+        mutableStateOf(
+            filterToEdit?.let { f ->
+                val raw = f.originalUrl.ifEmpty { f.url }
+                raw.lines().map { it.trim() }.filter { it.isNotBlank() }
+            } ?: emptyList()
+        )
+    }
+    var buildLocally by remember(filterToEdit) {
+        mutableStateOf(filterToEdit?.trieUrl?.startsWith("local://") == true)
+    }
     var showFormatsHelp by remember { mutableStateOf(false) }
 
     val nameTrimmed = name.trim()
@@ -179,7 +195,7 @@ fun AddFilterBottomSheet(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.PlaylistAdd,
+                            imageVector = if (isEditMode) Icons.Outlined.Edit else Icons.AutoMirrored.Outlined.PlaylistAdd,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.size(24.dp)
@@ -187,7 +203,7 @@ fun AddFilterBottomSheet(
                     }
                     Column {
                         Text(
-                            text = stringResource(R.string.settings_add_filter_title),
+                            text = if (isEditMode) stringResource(R.string.filter_edit_title) else stringResource(R.string.settings_add_filter_title),
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
@@ -338,88 +354,60 @@ fun AddFilterBottomSheet(
             FilterUrlChipList(
                 urls = urlList,
                 onRemoveUrl = { urlList = urlList - it },
+                onEditUrl = { oldUrl, newUrl ->
+                    urlList = urlList.map { if (it == oldUrl) newUrl else it }
+                },
                 onClearAll = { urlList = emptyList() },
                 enabled = !isValidating
             )
 
             // Build Mode Selector Card (Local Go engine vs Cloud compiler)
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
-                ),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable(enabled = !isValidating) {
-                        buildLocally = !buildLocally
-                    }
+            BuildModeCard(
+                buildLocally = buildLocally,
+                onToggleBuildLocally = { buildLocally = !buildLocally },
+                enabled = !isValidating
+            )
+
+            // Progress indicator when validating
+            AnimatedVisibility(
+                visible = isValidating && progress != null,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .background(
-                                if (buildLocally) {
-                                    MaterialTheme.colorScheme.secondaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.tertiaryContainer
-                                },
-                                CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = if (buildLocally) Icons.Outlined.PhoneAndroid else Icons.Outlined.Cloud,
-                            contentDescription = null,
-                            tint = if (buildLocally) {
-                                MaterialTheme.colorScheme.onSecondaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.onTertiaryContainer
-                            },
-                            modifier = Modifier.size(20.dp)
+                        Text(
+                            text = stringResource(R.string.settings_updating),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "${progress ?: 0}%",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
                         )
                     }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.filter_build_locally),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = if (buildLocally) {
-                                stringResource(R.string.filter_build_mode_local_desc)
-                            } else {
-                                stringResource(R.string.filter_build_mode_server_desc)
-                            },
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Switch(
-                        checked = buildLocally,
-                        onCheckedChange = { buildLocally = it },
-                        enabled = !isValidating
+                    LinearProgressIndicator(
+                        progress = { (progress ?: 0) / 100f },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Actions: Cancel & Add
+            // Actions: Cancel & Add / Save
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -436,7 +424,12 @@ fun AddFilterBottomSheet(
                 Button(
                     onClick = {
                         if (isValid && !isValidating) {
-                            onAdd(nameTrimmed, effectiveUrls.joinToString("\n"), buildLocally)
+                            val targetUrls = effectiveUrls.joinToString("\n")
+                            if (isEditMode && filterToEdit != null) {
+                                onEdit?.invoke(filterToEdit, nameTrimmed, targetUrls, buildLocally)
+                            } else {
+                                onAdd(nameTrimmed, targetUrls, buildLocally)
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f),
@@ -444,14 +437,30 @@ fun AddFilterBottomSheet(
                     enabled = isValid && !isValidating
                 ) {
                     if (isValidating) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 2.dp
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                progress = {
+                                    val p = progress ?: 0
+                                    if (p > 0) p / 100f else 0f
+                                },
+                                modifier = Modifier.size(18.dp),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = 2.dp
+                            )
+                            if (progress != null) {
+                                Text(
+                                    text = "$progress%",
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.labelLarge
+                                )
+                            }
+                        }
                     } else {
                         Text(
-                            text = stringResource(R.string.settings_add),
+                            text = if (isEditMode) stringResource(R.string.filter_action_save) else stringResource(R.string.settings_add),
                             fontWeight = FontWeight.SemiBold
                         )
                     }

@@ -34,6 +34,7 @@ fun CustomTabContent(
     customFilters: List<FilterList>,
     onToggle: (FilterList) -> Unit,
     onDelete: (FilterList) -> Unit,
+    onEdit: (FilterList) -> Unit,
     onFilterClick: (Long) -> Unit,
     onShowAddDialog: () -> Unit,
     modifier: Modifier = Modifier,
@@ -68,6 +69,7 @@ fun CustomTabContent(
                             filter = filter,
                             onToggle = { onToggle(filter) },
                             onDelete = { onDelete(filter) },
+                            onEdit = { onEdit(filter) },
                             isStarred = starredUrls.contains(filter.url),
                             onToggleStar = onToggleStar?.let { { it(filter) } },
                             onClick = { onFilterClick(filter.id) }

@@ -56,7 +56,11 @@ class CustomFilterManager(
      * @param displayName Optional display name
      * @return The saved [FilterList] entity on success
      */
-    suspend fun addCustomFilter(urls: List<String>, displayName: String? = null): Result<FilterList> = withContext(Dispatchers.IO) {
+    suspend fun addCustomFilter(
+        urls: List<String>,
+        displayName: String? = null,
+        onProgress: ((Int) -> Unit)? = null
+    ): Result<FilterList> = withContext(Dispatchers.IO) {
         val cleanUrls = urls.map { it.trim() }.filter { it.isNotBlank() }
         if (cleanUrls.isEmpty()) {
             return@withContext Result.failure(CustomFilterException("No URLs provided"))
@@ -73,9 +77,11 @@ class CustomFilterManager(
             }
 
             // ── Step 1: Call backend API to compile ──────────────────────
+            onProgress?.invoke(20)
             Timber.d("Building custom filter for URLs: $cleanUrls")
             val buildResponse = customFilterApi.buildFilter(cleanUrls, displayName?.trim())
             Timber.d("Build success: downloadUrl=${buildResponse.downloadUrl}, rules=${buildResponse.ruleCount}")
+            onProgress?.invoke(40)
 
             // ── Step 2: Create temp extraction directory ─────────────────
             val sanitizedName = if (cleanUrls.size == 1) sanitizeName(cleanUrls.first()) else "merged_${System.currentTimeMillis()}"
@@ -89,8 +95,13 @@ class CustomFilterManager(
             val extractedFiles = ZipUtils.downloadAndExtractZip(
                 client = client,
                 downloadUrl = buildResponse.downloadUrl,
-                destDir = extractDir
+                destDir = extractDir,
+                onProgress = { dl ->
+                    val mapped = 40 + (dl * 45) / 100
+                    onProgress?.invoke(mapped)
+                }
             )
+            onProgress?.invoke(90)
             Timber.d("Extracted ${extractedFiles.size} files")
 
             // ── Step 4: Parse info.json ──────────────────────────────────
@@ -204,7 +215,8 @@ class CustomFilterManager(
     suspend fun editCustomFilter(
         filter: FilterList,
         newName: String,
-        newUrl: String
+        newUrl: String,
+        onProgress: ((Int) -> Unit)? = null
     ): Result<FilterList> = withContext(Dispatchers.IO) {
         try {
             val trimmedUrl = newUrl.trim()
@@ -215,8 +227,10 @@ class CustomFilterManager(
                 if (trimmedName != filter.name) {
                     val updated = filter.copy(name = trimmedName, lastUpdated = System.currentTimeMillis())
                     filterListDao.update(updated)
+                    onProgress?.invoke(100)
                     return@withContext Result.success(updated)
                 }
+                onProgress?.invoke(100)
                 return@withContext Result.success(filter)
             }
 
@@ -231,19 +245,27 @@ class CustomFilterManager(
                 )
             }
 
-            // Re-compile via API
-            val buildResponse = customFilterApi.buildFilter(trimmedUrl)
+            // Re-compile via API (supporting multi-line URLs)
+            onProgress?.invoke(20)
+            val cleanUrls = trimmedUrl.lines().map { it.trim() }.filter { it.isNotBlank() }
+            val buildResponse = customFilterApi.buildFilter(cleanUrls, trimmedName.ifBlank { filter.name })
+            onProgress?.invoke(40)
 
             // Download & extract
-            val sanitizedName = sanitizeName(trimmedUrl)
+            val sanitizedName = if (cleanUrls.size == 1) sanitizeName(cleanUrls.first()) else "merged_${filter.id}"
             val extractDir = File(context.filesDir, "$CUSTOM_FILTERS_DIR/$sanitizedName")
             if (extractDir.exists()) extractDir.deleteRecursively()
 
             val extractedFiles = ZipUtils.downloadAndExtractZip(
                 client = client,
                 downloadUrl = buildResponse.downloadUrl,
-                destDir = extractDir
+                destDir = extractDir,
+                onProgress = { dl ->
+                    val mapped = 40 + (dl * 45) / 100
+                    onProgress?.invoke(mapped)
+                }
             )
+            onProgress?.invoke(90)
 
             // Parse info.json
             val infoJson = extractedFiles.find { it.name == "info.json" }

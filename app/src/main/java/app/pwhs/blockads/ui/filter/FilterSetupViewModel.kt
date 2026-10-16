@@ -55,8 +55,14 @@ class FilterSetupViewModel(
     private val _isUpdatingFilter = MutableStateFlow(false)
     val isUpdatingFilter: StateFlow<Boolean> = _isUpdatingFilter.asStateFlow()
 
+    private val _updateProgress = MutableStateFlow<Int?>(null)
+    val updateProgress: StateFlow<Int?> = _updateProgress.asStateFlow()
+
     private val _isAddingCustomFilter = MutableStateFlow(false)
     val isAddingCustomFilter: StateFlow<Boolean> = _isAddingCustomFilter.asStateFlow()
+
+    private val _addFilterProgress = MutableStateFlow<Int?>(null)
+    val addFilterProgress: StateFlow<Int?> = _addFilterProgress.asStateFlow()
 
     private val _filterAddedEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val filterAddedEvent: SharedFlow<Unit> = _filterAddedEvent.asSharedFlow()
@@ -112,8 +118,14 @@ class FilterSetupViewModel(
                 _filterAddedEvent.tryEmit(Unit)
             } else {
                 _isAddingCustomFilter.value = true
-                val result = customFilterManager.addCustomFilter(rawUrls, name.trim())
+                _addFilterProgress.value = 10
+                val result = customFilterManager.addCustomFilter(
+                    urls = rawUrls,
+                    displayName = name.trim(),
+                    onProgress = { p -> _addFilterProgress.value = p }
+                )
                 _isAddingCustomFilter.value = false
+                _addFilterProgress.value = null
 
                 result.fold(
                     onSuccess = { _ ->
@@ -125,6 +137,72 @@ class FilterSetupViewModel(
                         ServiceController.requestRestart(application.applicationContext)
                     },
                     onFailure = { _ ->
+                        _events.toast(R.string.filter_update_failed)
+                    }
+                )
+            }
+        }
+    }
+
+    fun editFilterList(
+        filter: FilterList,
+        name: String,
+        url: String,
+        buildLocally: Boolean
+    ) {
+        viewModelScope.launch {
+            val nameTrimmed = name.trim()
+            val urlTrimmed = url.trim()
+            if (nameTrimmed.isBlank() || urlTrimmed.isBlank()) {
+                _events.toast(R.string.filter_error_invalid_url)
+                return@launch
+            }
+
+            val isCurrentlyLocal = filter.trieUrl.startsWith("local://")
+            val rawExistingUrl = filter.originalUrl.ifEmpty { filter.url }
+            val urlChanged = urlTrimmed != rawExistingUrl.trim()
+            val modeChanged = isCurrentlyLocal != buildLocally
+
+            if (buildLocally) {
+                if (urlChanged || modeChanged) {
+                    customFilterManager.enqueueRecompileLocally(
+                        filter.copy(
+                            name = nameTrimmed,
+                            url = urlTrimmed,
+                            originalUrl = urlTrimmed
+                        )
+                    )
+                    _events.toast(R.string.filter_compile_enqueued)
+                } else {
+                    filterListDao.update(
+                        filter.copy(
+                            name = nameTrimmed,
+                            lastUpdated = System.currentTimeMillis()
+                        )
+                    )
+                    _events.toast(R.string.filter_updated, listOf(filter.ruleCount))
+                }
+                _filterAddedEvent.tryEmit(Unit)
+            } else {
+                _isAddingCustomFilter.value = true
+                _addFilterProgress.value = 10
+                val result = customFilterManager.editCustomFilter(
+                    filter = filter,
+                    newName = nameTrimmed,
+                    newUrl = urlTrimmed,
+                    onProgress = { p -> _addFilterProgress.value = p }
+                )
+                _isAddingCustomFilter.value = false
+                _addFilterProgress.value = null
+
+                result.fold(
+                    onSuccess = { updated ->
+                        _events.toast(R.string.filter_updated, listOf(updated.ruleCount))
+                        _filterAddedEvent.tryEmit(Unit)
+                        filterRepo.loadAllEnabledFilters()
+                        ServiceController.requestRestart(application.applicationContext)
+                    },
+                    onFailure = {
                         _events.toast(R.string.filter_update_failed)
                     }
                 )
@@ -146,24 +224,27 @@ class FilterSetupViewModel(
     fun updateAllFilters() {
         viewModelScope.launch {
             _isUpdatingFilter.value = true
+            _updateProgress.value = 0
 
             var totalCount = 0
             var hasLocalFilters = false
 
+            val customFilters = filterListDao.getAllNonBuiltIn().filter { it.isEnabled }
+            val totalSteps = 1 + customFilters.size
+            var completedSteps = 0
+
             // 1. Update remote built-in filters
             val result = filterRepo.forceUpdateAllEnabledFilters()
             result.onSuccess { count -> totalCount += count }
+            completedSteps++
+            _updateProgress.value = (completedSteps * 100) / totalSteps
 
             // 2. Update all enabled custom filters
-            val customFilters = filterListDao.getAllNonBuiltIn()
             for (filter in customFilters) {
-                if (!filter.isEnabled) continue
-
                 val isLocal = filter.trieUrl.startsWith("local://") &&
                         filter.bloomUrl.startsWith("local://")
 
                 if (isLocal) {
-                    // Enqueue WorkManager job for local filters
                     customFilterManager.enqueueRecompileLocally(filter)
                     hasLocalFilters = true
                 } else {
@@ -172,12 +253,15 @@ class FilterSetupViewModel(
                         totalCount += updatedFilter.ruleCount
                     }
                 }
+                completedSteps++
+                _updateProgress.value = (completedSteps * 100) / totalSteps
             }
 
             // Always reload engine in case any custom filters updated their binaries
             filterRepo.loadAllEnabledFilters()
 
             _isUpdatingFilter.value = false
+            _updateProgress.value = null
 
             if (hasLocalFilters) {
                 _events.toast(R.string.filter_compile_enqueued)
@@ -187,10 +271,8 @@ class FilterSetupViewModel(
                     R.string.filter_updated,
                     listOf(totalCount)
                 )
-            } else if (!hasLocalFilters) {
-                result.onFailure {
-                    _events.toast(R.string.filter_update_failed)
-                }
+            } else {
+                _events.toast(R.string.filter_update_failed)
             }
         }
     }

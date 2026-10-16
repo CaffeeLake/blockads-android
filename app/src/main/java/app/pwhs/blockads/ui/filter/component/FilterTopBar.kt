@@ -32,7 +32,8 @@ fun FilterTopBar(
     onToggleSearch: () -> Unit,
     isUpdatingFilter: Boolean,
     onUpdateAllFilters: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    updateProgress: Int? = null
 ) {
     TopAppBar(
         modifier = modifier,
@@ -61,12 +62,20 @@ fun FilterTopBar(
             ) {
                 if (isUpdatingFilter) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(18.dp),
+                        progress = {
+                            val p = updateProgress ?: 0
+                            if (p > 0) p / 100f else 0f
+                        },
+                        modifier = Modifier.size(16.dp),
                         color = MaterialTheme.colorScheme.primary,
                         strokeWidth = 2.dp
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.settings_updating))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (updateProgress != null) "$updateProgress%" else stringResource(R.string.settings_updating),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 } else {
                     Icon(
                         Icons.Default.CloudDownload,

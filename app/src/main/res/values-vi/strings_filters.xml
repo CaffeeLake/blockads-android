@@ -174,6 +174,10 @@
     <string name="filter_multi_url_hint">Nhập URL bộ lọc</string>
     <string name="filter_add_url_button">Thêm URL</string>
     <string name="filter_url_list_count">%1$d URL bộ lọc cần hợp nhất</string>
+    <string name="filter_action_edit">Sửa</string>
+    <string name="filter_action_save">Lưu</string>
+    <string name="filter_edit_title">Chỉnh sửa bộ lọc</string>
+    <string name="filter_edit_url_dialog_title">Chỉnh sửa URL bộ lọc</string>
     <string name="https_filtering_wireguard_disabled">Đã tắt WireGuard (không tương thích với lọc HTTPS)</string>
     <string name="https_filtering_cert_saved_downloads">✅ Đã lưu chứng chỉ vào Downloads/%1$s</string>
     <string name="https_filtering_cert_saved_legacy">Đã lưu chứng chỉ. Hãy cài đặt từ trình quản lý tệp.</string>

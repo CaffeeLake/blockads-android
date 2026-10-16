@@ -182,6 +182,10 @@
     <string name="filter_multi_url_hint">Enter filter URL</string>
     <string name="filter_add_url_button">Add URL</string>
     <string name="filter_url_list_count">%1$d filter URL(s) to merge</string>
+    <string name="filter_action_edit">Edit</string>
+    <string name="filter_action_save">Save</string>
+    <string name="filter_edit_title">Edit Filter List</string>
+    <string name="filter_edit_url_dialog_title">Edit Filter URL</string>
 
     <!-- HTTPS Wizard Strings -->
     <string name="https_wizard_title">Certificate Setup</string>

@@ -34,7 +34,8 @@ object ZipUtils {
     suspend fun downloadAndExtractZip(
         client: HttpClient,
         downloadUrl: String,
-        destDir: File
+        destDir: File,
+        onProgress: ((Int) -> Unit)? = null
     ): List<File> = withContext(Dispatchers.IO) {
         val extractedFiles = mutableListOf<File>()
         // Everything this call creates, in creation order, so a failed run can be
@@ -59,14 +60,21 @@ object ZipUtils {
                         "Unexpected HTTP ${response.status.value} downloading $downloadUrl"
                     )
                 }
+                val contentLength = response.headers["Content-Length"]?.toLongOrNull() ?: -1L
                 val channel = response.bodyAsChannel()
 
                 FileOutputStream(tempZipFile).use { fos ->
                     val buffer = ByteArray(8 * 1024)
+                    var bytesDownloaded = 0L
                     while (!channel.isClosedForRead) {
                         val bytesRead = channel.readAvailable(buffer)
                         if (bytesRead > 0) {
                             fos.write(buffer, 0, bytesRead)
+                            bytesDownloaded += bytesRead
+                            if (contentLength > 0) {
+                                val percent = ((bytesDownloaded * 100) / contentLength).toInt().coerceIn(0, 100)
+                                onProgress?.invoke(percent)
+                            }
                         }
                     }
                 }

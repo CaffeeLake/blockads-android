@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +44,7 @@ fun FilterItem(
     modifier: Modifier = Modifier,
     isStarred: Boolean = false,
     onToggleStar: (() -> Unit)? = null,
+    onEdit: (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     Row(
@@ -142,6 +144,17 @@ fun FilterItem(
                     contentDescription = if (isStarred) "Unstar" else "Star",
                     tint = if (isStarred) Color(0xFFFFB800) else TextSecondary.copy(alpha = 0.5f),
                     modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+
+        if (onEdit != null) {
+            IconButton(onClick = onEdit, modifier = Modifier.size(32.dp)) {
+                Icon(
+                    Icons.Outlined.Edit,
+                    contentDescription = stringResource(R.string.filter_action_edit),
+                    tint = TextSecondary.copy(alpha = 0.7f),
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }

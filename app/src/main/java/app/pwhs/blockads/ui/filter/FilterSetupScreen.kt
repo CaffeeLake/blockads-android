@@ -58,10 +58,12 @@ fun FilterSetupScreen(
     val allLists by viewModel.filterLists.collectAsStateWithLifecycle()
     val filterLists by viewModel.filteredFilterLists.collectAsStateWithLifecycle()
     val isUpdatingFilter by viewModel.isUpdatingFilter.collectAsStateWithLifecycle()
+    val updateProgress by viewModel.updateProgress.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val starredUrls by viewModel.starredFilterUrls.collectAsStateWithLifecycle()
 
     var showAddDialog by remember { mutableStateOf(false) }
+    var filterToEdit by remember { mutableStateOf<FilterListEntity?>(null) }
     var isSearchVisible by remember { mutableStateOf(false) }
 
     val pagerState = rememberPagerState(initialPage = 0) { FilterCategoryTab.entries.size }
@@ -72,6 +74,7 @@ fun FilterSetupScreen(
     LaunchedEffect(Unit) {
         viewModel.filterAddedEvent.collect {
             showAddDialog = false
+            filterToEdit = null
         }
     }
 
@@ -106,6 +109,7 @@ fun FilterSetupScreen(
                     if (!isSearchVisible) viewModel.setSearchQuery("")
                 },
                 isUpdatingFilter = isUpdatingFilter,
+                updateProgress = updateProgress,
                 onUpdateAllFilters = { viewModel.updateAllFilters() }
             )
         }
@@ -160,6 +164,7 @@ fun FilterSetupScreen(
                                     customFilters = displayFilters,
                                     onToggle = { viewModel.toggleFilterList(it) },
                                     onDelete = { viewModel.deleteFilterList(it) },
+                                    onEdit = { filterToEdit = it },
                                     onFilterClick = onNavigateToFilterDetail,
                                     onShowAddDialog = { showAddDialog = true },
                                     starredUrls = starredUrls,
@@ -192,16 +197,29 @@ fun FilterSetupScreen(
         }
 
         val isAddingCustomFilter by viewModel.isAddingCustomFilter.collectAsStateWithLifecycle()
-        if (showAddDialog) {
+        val addFilterProgress by viewModel.addFilterProgress.collectAsStateWithLifecycle()
+        if (showAddDialog || filterToEdit != null) {
             AddFilterBottomSheet(
-                onDismiss = { if (!isAddingCustomFilter) showAddDialog = false },
+                onDismiss = {
+                    if (!isAddingCustomFilter) {
+                        showAddDialog = false
+                        filterToEdit = null
+                    }
+                },
                 onAdd = { name, url, buildLocally ->
                     if (!isAddingCustomFilter) {
                         viewModel.addFilterList(name, url, buildLocally)
                     }
                 },
+                filterToEdit = filterToEdit,
+                onEdit = { filter, name, url, buildLocally ->
+                    if (!isAddingCustomFilter) {
+                        viewModel.editFilterList(filter, name, url, buildLocally)
+                    }
+                },
                 existingUrls = filterLists.map { it.url },
-                isValidating = isAddingCustomFilter
+                isValidating = isAddingCustomFilter,
+                progress = addFilterProgress
             )
         }
     }

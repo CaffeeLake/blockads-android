@@ -101,6 +101,7 @@ fun FilterSetupSection(
                         iconTint = Color(0xFF059669),
                         title = stringResource(R.string.settings_auto_update_notification),
                         desc = notificationDesc,
+                        onClick = { showNotificationDialog = true }
                     )
                 }
 
