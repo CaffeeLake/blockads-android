@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,9 +44,11 @@ import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.WireGuardProfile
+import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.ui.theme.AccentBlue
 import app.pwhs.blockads.ui.theme.DangerRed
 import app.pwhs.blockads.ui.theme.TextSecondary
+import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,12 +130,25 @@ fun RoutingModeBottomSheet(
 
             // 2. WireGuard Mode
             val hasWgProfile = activeWgProfile != null
+            val wgEndpoint = activeWgProfile?.config?.peers?.firstOrNull()?.endpoint.orEmpty()
+            val wgCountryCode = remember(activeWgProfile?.id, wgEndpoint) {
+                if (activeWgProfile != null) {
+                    WireGuardGeoIpHelper.getCountryCodeFast(wgEndpoint, activeWgProfile.name)
+                } else null
+            }
+            val wgFlag = wgCountryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
+            val wgStatusText = if (hasWgProfile) {
+                if (wgFlag.isNotEmpty()) "$wgFlag ${activeWgProfile.name}" else activeWgProfile.name
+            } else {
+                stringResource(R.string.routing_mode_no_wg_profile)
+            }
+
             RoutingModeCard(
                 icon = Icons.Default.Security,
                 iconTint = AccentBlue,
                 title = stringResource(R.string.routing_mode_wireguard_title),
                 description = stringResource(R.string.routing_mode_wireguard_desc),
-                statusText = if (hasWgProfile) activeWgProfile.name else stringResource(R.string.routing_mode_no_wg_profile),
+                statusText = wgStatusText,
                 statusColor = if (hasWgProfile) MaterialTheme.colorScheme.primary else DangerRed,
                 actionLabel = if (!hasWgProfile) stringResource(R.string.routing_mode_configure_wg) else null,
                 onAction = onConfigureWireGuard,

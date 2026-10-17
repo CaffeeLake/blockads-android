@@ -61,9 +61,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.WireGuardProfile
+import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.ui.wireguard.component.EmptyState
 import app.pwhs.blockads.ui.wireguard.component.ProfileRow
 import app.pwhs.blockads.ui.wireguard.component.SettingToggleCard
+import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -179,8 +181,10 @@ fun WireGuardImportScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     item {
+                        val activeProfile = profiles.firstOrNull { it.id == activeId }
                         WireGuardToggleCard(
                             isWgActive = isWgActive,
+                            activeProfile = activeProfile,
                             onToggle = { viewModel.toggleWireGuard() },
                         )
                     }
@@ -261,8 +265,17 @@ fun WireGuardImportScreen(
 @Composable
 private fun WireGuardToggleCard(
     isWgActive: Boolean,
+    activeProfile: WireGuardProfile?,
     onToggle: () -> Unit,
 ) {
+    val endpoint = activeProfile?.config?.peers?.firstOrNull()?.endpoint.orEmpty()
+    val countryCode = remember(activeProfile?.id, endpoint) {
+        if (activeProfile != null) {
+            WireGuardGeoIpHelper.getCountryCodeFast(endpoint, activeProfile.name)
+        } else null
+    }
+    val flagEmoji = countryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -298,7 +311,11 @@ private fun WireGuardToggleCard(
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = stringResource(R.string.wireguard_import_title),
+                        text = if (isWgActive && activeProfile != null) {
+                            if (flagEmoji != null) "$flagEmoji ${activeProfile.name}" else activeProfile.name
+                        } else {
+                            stringResource(R.string.wireguard_import_title)
+                        },
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                     )

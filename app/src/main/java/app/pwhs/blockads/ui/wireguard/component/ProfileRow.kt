@@ -1,5 +1,6 @@
 package app.pwhs.blockads.ui.wireguard.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
@@ -26,21 +29,27 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.WireGuardProfile
+import app.pwhs.blockads.data.geoip.GeoIpLookup
+import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 import app.pwhs.blockads.utils.configIssue
 import app.pwhs.blockads.utils.describe
 
@@ -59,6 +68,19 @@ fun ProfileRow(
     val address = profile.config.interfaceConfig.address.firstOrNull() ?: "—"
     val issue = remember(profile.config) { profile.configIssue }
     val issueText = issue?.describe(LocalResources.current)
+
+    var countryCode by remember(endpoint, profile.name) {
+        mutableStateOf(WireGuardGeoIpHelper.getCountryCodeFast(endpoint, profile.name))
+    }
+
+    LaunchedEffect(endpoint, profile.name) {
+        if (countryCode == null) {
+            countryCode = WireGuardGeoIpHelper.resolveCountryCode(endpoint, profile.name)
+        }
+    }
+
+    val flagEmoji = countryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }
+    val countryName = countryCode?.let { GeoIpLookup.getCountryName(it) }
 
     Card(
         modifier = modifier
@@ -81,34 +103,94 @@ fun ProfileRow(
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                imageVector = when {
-                    issue != null -> Icons.Filled.ErrorOutline
-                    isActive -> Icons.Filled.CheckCircle
-                    else -> Icons.Outlined.VpnLock
-                },
-                contentDescription = null,
-                tint = if (issue != null) {
-                    MaterialTheme.colorScheme.error
-                } else if (isActive) {
-                    MaterialTheme.colorScheme.primary
+            Box(
+                modifier = Modifier.size(38.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (flagEmoji != null && issue == null) {
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (isActive) MaterialTheme.colorScheme.primaryContainer
+                                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = flagEmoji,
+                            fontSize = 20.sp,
+                        )
+                    }
+                    if (isActive) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(14.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primary),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier.size(10.dp),
+                            )
+                        }
+                    }
                 } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                modifier = Modifier.size(24.dp)
-            )
+                    Icon(
+                        imageVector = when {
+                            issue != null -> Icons.Filled.ErrorOutline
+                            isActive -> Icons.Filled.CheckCircle
+                            else -> Icons.Outlined.VpnLock
+                        },
+                        contentDescription = null,
+                        tint = if (issue != null) {
+                            MaterialTheme.colorScheme.error
+                        } else if (isActive) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+            }
             Spacer(Modifier.width(12.dp))
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(
-                    text = profile.name,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Text(
+                        text = profile.name,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    if (!countryName.isNullOrEmpty()) {
+                        Surface(
+                            shape = RoundedCornerShape(4.dp),
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
+                        ) {
+                            Text(
+                                text = countryName,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                maxLines = 1,
+                            )
+                        }
+                    }
+                }
                 Text(
                     text = endpoint,
                     style = MaterialTheme.typography.bodySmall,
