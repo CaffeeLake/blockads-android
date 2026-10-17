@@ -343,5 +343,19 @@
     <string name="geoip_import_success">Imported %s IP ranges successfully</string>
     <string name="geoip_import_invalid">Invalid GeoIP database file</string>
     <string name="geoip_update_success">GeoIP database updated successfully</string>
+    <string name="routing_mode_sheet_title">Routing Mode</string>
+    <string name="routing_mode_sheet_desc">Choose how BlockAds intercepts and routes traffic on your device.</string>
+    <string name="routing_mode_local_vpn_title">Local VPN Mode</string>
+    <string name="routing_mode_local_vpn_desc">Filters traffic directly on-device using Android VPN Service. No root required, 100% private.</string>
+    <string name="routing_mode_wireguard_title">WireGuard Mode</string>
+    <string name="routing_mode_wireguard_desc">Routes all traffic through your personal WireGuard server with ad blocking applied.</string>
+    <string name="routing_mode_root_proxy_title">Root Proxy Mode</string>
+    <string name="routing_mode_root_proxy_desc">Redirects DNS via iptables without creating a VPN connection. Saves battery and keeps VPN slot free.</string>
+    <string name="routing_mode_active">Active</string>
+    <string name="routing_mode_recommended">Recommended</string>
+    <string name="routing_mode_no_wg_profile">No profile imported</string>
+    <string name="routing_mode_configure_wg">Configure WireGuard</string>
+    <string name="routing_mode_root_available">Root access available</string>
+    <string name="routing_mode_root_unavailable">Root access not detected</string>
 </resources>
 

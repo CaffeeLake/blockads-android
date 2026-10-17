@@ -89,8 +89,11 @@ class HomeViewModelTest {
     }
     private val customDnsRuleDao: CustomDnsRuleDao = mockk(relaxed = true)
 
+    private val context: android.content.Context = ApplicationProvider.getApplicationContext()
+
     private val vm by lazy {
         HomeViewModel(
+            context,
             appPrefs,
             dnsLogDao,
             repo,

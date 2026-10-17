@@ -61,15 +61,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.repository.FilterListRepository
-import app.pwhs.blockads.ui.home.component.HomeAppBar
-import app.pwhs.blockads.ui.home.component.HomeActivityChart
-import app.pwhs.blockads.ui.home.component.MilestoneBottomSheet
-import app.pwhs.blockads.ui.home.component.PowerButton
-import app.pwhs.blockads.ui.home.component.RecentBlockedSection
-import app.pwhs.blockads.ui.home.component.MiniBarChartDefaults
-import app.pwhs.blockads.ui.home.component.NetworkSpeedSection
-import app.pwhs.blockads.ui.home.component.StatCard
-import app.pwhs.blockads.ui.home.component.TopBlockedSection
 import app.pwhs.blockads.ui.home.data.RecentLogFilter
 import app.pwhs.blockads.ui.theme.AccentBlue
 import app.pwhs.blockads.ui.theme.DangerRed
@@ -82,16 +73,27 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import app.pwhs.blockads.ui.event.UiEventEffect
-import app.pwhs.blockads.ui.home.component.HomeBlockedDomainHandler
-import app.pwhs.blockads.ui.home.component.HomeAmbientBackground
 import app.pwhs.blockads.ui.home.component.HomeActiveTipCard
+import app.pwhs.blockads.ui.home.component.HomeActivityChart
+import app.pwhs.blockads.ui.home.component.HomeAmbientBackground
+import app.pwhs.blockads.ui.home.component.HomeAppBar
+import app.pwhs.blockads.ui.home.component.HomeBlockRateCard
+import app.pwhs.blockads.ui.home.component.HomeBlockedDomainHandler
 import app.pwhs.blockads.ui.home.component.HomeFeatureTipType
+import app.pwhs.blockads.ui.home.component.HomeStatusHeader
+import app.pwhs.blockads.ui.home.component.MilestoneBottomSheet
+import app.pwhs.blockads.ui.home.component.MiniBarChartDefaults
+import app.pwhs.blockads.ui.home.component.NetworkSpeedSection
+import app.pwhs.blockads.ui.home.component.PowerButton
+import app.pwhs.blockads.ui.home.component.PrivateDnsWarningCard
+import app.pwhs.blockads.ui.home.component.RecentBlockedSection
+import app.pwhs.blockads.ui.home.component.RoutingModeBottomSheet
+import app.pwhs.blockads.ui.home.component.SelectedBlockedDomain
+import app.pwhs.blockads.ui.home.component.StatCard
+import app.pwhs.blockads.ui.home.component.TopBlockedSection
+import app.pwhs.blockads.ui.home.component.VpnRevokedWarningCard
 import app.pwhs.blockads.ui.home.component.isVisible
 import app.pwhs.blockads.ui.home.component.rememberHomeTipState
-import app.pwhs.blockads.ui.home.component.HomeStatusHeader
-import app.pwhs.blockads.ui.home.component.PrivateDnsWarningCard
-import app.pwhs.blockads.ui.home.component.SelectedBlockedDomain
-import app.pwhs.blockads.ui.home.component.VpnRevokedWarningCard
 import app.pwhs.blockads.utils.AppConstants.AVG_AD_SIZE_KB
 import app.pwhs.blockads.utils.VpnUtils
 import app.pwhs.blockads.utils.formatCount
@@ -145,6 +147,7 @@ fun HomeScreen(
     val showRevokedWarning = vpnRevokedByAnotherApp && !vpnEnabled && !vpnConnecting && !vpnStopping
     val context = LocalContext.current
     var selectedBlockedDomain by remember { mutableStateOf<SelectedBlockedDomain?>(null) }
+    var showRoutingModeSheet by rememberSaveable { mutableStateOf(false) }
 
     UiEventEffect(viewModel.events)
 
@@ -213,14 +216,15 @@ fun HomeScreen(
                     }
 
                     HomeStatusHeader(
-                vpnStopping = vpnStopping,
-                vpnConnecting = vpnConnecting,
-                vpnEnabled = vpnEnabled,
-                showTrustedPause = showTrustedPause,
-                isRootMode = isRootMode,
-                pausedTrustedSsid = pausedTrustedSsid,
-                routingMode = routingMode
-            )
+                        vpnStopping = vpnStopping,
+                        vpnConnecting = vpnConnecting,
+                        vpnEnabled = vpnEnabled,
+                        showTrustedPause = showTrustedPause,
+                        isRootMode = isRootMode,
+                        pausedTrustedSsid = pausedTrustedSsid,
+                        routingMode = routingMode,
+                        onRoutingModeClick = { showRoutingModeSheet = true }
+                    )
 
             Spacer(modifier = Modifier.height(12.dp))
             Button(
@@ -326,56 +330,12 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             // Block rate + Data saved + Uptime card
-            val blockRate = if (totalCount > 0) (blockedCount * 100f / totalCount) else 0f
             val dataSavedKb = blockedCount * AVG_AD_SIZE_KB
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Shield,
-                        contentDescription = stringResource(R.string.home_block_rate),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.home_block_rate),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextSecondary
-                        )
-                        Text(
-                            text = "${String.format(androidx.compose.ui.text.intl.Locale.current.platformLocale, "%.1f", blockRate)}%",
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text(
-                            text = stringResource(R.string.home_filter_rules),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = TextSecondary
-                        )
-                        Text(
-                            text = formatCount(domainCount),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-            }
+            HomeBlockRateCard(
+                totalCount = totalCount,
+                blockedCount = blockedCount,
+                domainCount = domainCount
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -491,6 +451,26 @@ fun HomeScreen(
                     selectedBlockedDomain = null
                     onNavigateToLogsWithQuery(target.domain)
                 }
+            )
+        }
+
+        if (showRoutingModeSheet) {
+            val isRootAvailable by viewModel.isRootAvailable.collectAsStateWithLifecycle()
+            val activeWgProfile by viewModel.activeWgProfile.collectAsStateWithLifecycle()
+
+            RoutingModeBottomSheet(
+                currentMode = routingMode,
+                isRootAvailable = isRootAvailable,
+                activeWgProfile = activeWgProfile,
+                onSelectMode = { mode ->
+                    viewModel.setRoutingMode(mode)
+                    showRoutingModeSheet = false
+                },
+                onConfigureWireGuard = {
+                    showRoutingModeSheet = false
+                    onNavigateToFeature(HomeFeatureTipType.WIREGUARD)
+                },
+                onDismiss = { showRoutingModeSheet = false }
             )
         }
         }

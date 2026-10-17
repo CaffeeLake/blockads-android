@@ -303,5 +303,19 @@
     <string name="dns_leak_tab_dnssec">DNSSEC</string>
     <string name="dns_leak_tab_resolvers">Máy chủ DNS</string>
     <string name="dns_leak_reserved_ips">IP nội bộ</string>
+    <string name="routing_mode_sheet_title">Chế độ định tuyến</string>
+    <string name="routing_mode_sheet_desc">Chọn phương thức chặn quảng cáo và định tuyến lưu lượng trên thiết bị của bạn.</string>
+    <string name="routing_mode_local_vpn_title">Local VPN Mode</string>
+    <string name="routing_mode_local_vpn_desc">Lọc quảng cáo cục bộ qua Android VPN Service. Không cần root, bảo vệ riêng tư 100%.</string>
+    <string name="routing_mode_wireguard_title">WireGuard Mode</string>
+    <string name="routing_mode_wireguard_desc">Định tuyến toàn bộ mạng qua máy chủ WireGuard cá nhân kết hợp lọc quảng cáo.</string>
+    <string name="routing_mode_root_proxy_title">Root Proxy Mode</string>
+    <string name="routing_mode_root_proxy_desc">Chuyển hướng DNS bằng iptables không cần VPN. Tiết kiệm pin và không chiếm slot VPN.</string>
+    <string name="routing_mode_active">Đang dùng</string>
+    <string name="routing_mode_recommended">Khuyên dùng</string>
+    <string name="routing_mode_no_wg_profile">Chưa cấu hình profile</string>
+    <string name="routing_mode_configure_wg">Cài đặt WireGuard</string>
+    <string name="routing_mode_root_available">Đã có quyền Root</string>
+    <string name="routing_mode_root_unavailable">Chưa có quyền Root</string>
 </resources>
 

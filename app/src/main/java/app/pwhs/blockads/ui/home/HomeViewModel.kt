@@ -2,51 +2,59 @@ package app.pwhs.blockads.ui.home
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.pwhs.blockads.data.dao.DnsLogDao
+import app.pwhs.blockads.R
 import app.pwhs.blockads.data.dao.ConfigDao
+import app.pwhs.blockads.data.dao.CustomDnsRuleDao
+import app.pwhs.blockads.data.dao.DnsLogDao
 import app.pwhs.blockads.data.dao.FilterListDao
+import app.pwhs.blockads.data.dao.WhitelistDomainDao
+import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.ConfigProfile
 import app.pwhs.blockads.data.entities.DailyStat
 import app.pwhs.blockads.data.entities.DnsLogEntry
 import app.pwhs.blockads.data.entities.FilterList
 import app.pwhs.blockads.data.entities.HourlyStat
 import app.pwhs.blockads.data.entities.TopBlockedDomain
-import app.pwhs.blockads.data.repository.FilterListRepository
-import app.pwhs.blockads.service.AdBlockVpnService
-import app.pwhs.blockads.service.VpnState
-import app.pwhs.blockads.service.RootProxyService
-import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.WhitelistDomain
+import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.data.network.NetworkSpeed
 import app.pwhs.blockads.data.network.NetworkSpeedMonitor
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import app.pwhs.blockads.data.repository.FilterListRepository
+import app.pwhs.blockads.service.AdBlockVpnService
+import app.pwhs.blockads.service.IptablesManager
 import app.pwhs.blockads.service.NotificationHelper
-import app.pwhs.blockads.R
-import app.pwhs.blockads.data.dao.CustomDnsRuleDao
-import app.pwhs.blockads.data.dao.WhitelistDomainDao
-import app.pwhs.blockads.data.entities.WhitelistDomain
-import app.pwhs.blockads.utils.CustomRuleParser
+import app.pwhs.blockads.service.RootProxyService
+import app.pwhs.blockads.service.ServiceController
+import app.pwhs.blockads.service.VpnState
 import app.pwhs.blockads.ui.event.UiEvent
 import app.pwhs.blockads.ui.event.toast
 import app.pwhs.blockads.ui.home.data.RecentLogFilter
+import app.pwhs.blockads.utils.CustomRuleParser
+import app.pwhs.blockads.utils.configIssue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class HomeViewModel(
+    private val context: Context,
     private val appPrefs: AppPreferences,
     dnsLogDao: DnsLogDao,
     private val filterRepo: FilterListRepository,
@@ -65,6 +73,15 @@ class HomeViewModel(
 
     val routingMode: StateFlow<String> = appPrefs.routingMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "local")
+
+    val isRootAvailable: StateFlow<Boolean> = flow {
+        emit(IptablesManager.isRootAvailable())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val activeWgProfile: StateFlow<WireGuardProfile?> = appPrefs.wgProfiles
+        .combine(appPrefs.wgActiveProfileId) { profiles, activeId ->
+            profiles.firstOrNull { it.id == activeId }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     // Trusted networks (#197): true when BlockAds was auto-paused on a
     // trusted Wi-Fi, so Home can show a distinct state instead of "Unprotected".
@@ -357,6 +374,68 @@ class HomeViewModel(
                     filterRepo.loadCustomRules()
                 }
                 _events.toast(R.string.rule_added)
+            }
+        }
+    }
+
+    fun setRoutingMode(mode: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val oldMode = appPrefs.routingMode.first()
+            if (oldMode == mode) return@launch
+
+            if (mode == AppPreferences.ROUTING_MODE_ROOT) {
+                if (!IptablesManager.isRootAvailable()) {
+                    _events.toast(R.string.root_not_available)
+                    return@launch
+                }
+            }
+
+            if (mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
+                val active = appPrefs.getActiveWgProfileSnapshot()
+                if (active == null) {
+                    _events.toast(R.string.wireguard_empty_title)
+                    return@launch
+                }
+                active.configIssue?.let { issue ->
+                    _events.toast(R.string.wireguard_issue_fix_first, listOf(active.name, issue))
+                    return@launch
+                }
+                if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+                    appPrefs.setHttpsFilteringEnabled(false)
+                    _events.toast(R.string.wireguard_https_filtering_disabled)
+                }
+            }
+
+            appPrefs.setRoutingMode(mode)
+
+            val isRunning = AdBlockVpnService.isRunning || RootProxyService.isRunning
+            if (!isRunning) return@launch
+
+            val oldWasRoot = oldMode == AppPreferences.ROUTING_MODE_ROOT
+            val newIsRoot = mode == AppPreferences.ROUTING_MODE_ROOT
+
+            if (oldWasRoot != newIsRoot) {
+                if (newIsRoot) {
+                    val stopIntent = Intent(context, AdBlockVpnService::class.java).apply {
+                        action = AdBlockVpnService.ACTION_STOP
+                    }
+                    context.startService(stopIntent)
+                    delay(800)
+                    RootProxyService.start(context)
+                } else {
+                    RootProxyService.stop(context)
+                    delay(800)
+                    val startIntent = Intent(context, AdBlockVpnService::class.java).apply {
+                        action = AdBlockVpnService.ACTION_START
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(startIntent)
+                    } else {
+                        context.startService(startIntent)
+                    }
+                }
+            } else {
+                ServiceController.requestRestart(context)
             }
         }
     }

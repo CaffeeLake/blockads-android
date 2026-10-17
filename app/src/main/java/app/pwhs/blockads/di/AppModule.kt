@@ -133,6 +133,7 @@ val appModule = module {
     // ViewModels
     viewModel {
         HomeViewModel(
+            context = androidContext(),
             appPrefs = get(),
             dnsLogDao = get(),
             filterRepo = get(),

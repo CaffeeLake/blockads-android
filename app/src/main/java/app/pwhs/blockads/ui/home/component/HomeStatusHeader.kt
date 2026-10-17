@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +41,8 @@ fun HomeStatusHeader(
     isRootMode: Boolean,
     pausedTrustedSsid: String,
     routingMode: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRoutingModeClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -106,22 +109,34 @@ fun HomeStatusHeader(
                 )
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            Surface(
+                onClick = onRoutingModeClick,
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.clip(RoundedCornerShape(12.dp))
             ) {
-                Text(
-                    text = when (routingMode) {
-                        AppPreferences.ROUTING_MODE_ROOT -> "Root Proxy Mode"
-                        AppPreferences.ROUTING_MODE_WIREGUARD -> "WireGuard Mode"
-                        else -> "Local VPN Mode"
-                    },
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = when (routingMode) {
+                            AppPreferences.ROUTING_MODE_ROOT -> "Root Proxy Mode"
+                            AppPreferences.ROUTING_MODE_WIREGUARD -> "WireGuard Mode"
+                            else -> "Local VPN Mode"
+                        },
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
         }
     }
