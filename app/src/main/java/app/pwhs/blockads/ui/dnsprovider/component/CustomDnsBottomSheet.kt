@@ -62,9 +62,11 @@ fun CustomDnsBottomSheet(
     var selectedProtocol by remember { mutableStateOf(initialProtocol) }
     var endpointInput by remember { mutableStateOf(initialEndpoint) }
     var relayUrlInput by remember { mutableStateOf(initialRelayUrl) }
+    var stampNotice by remember { mutableStateOf<String?>(null) }
 
     val protocols = listOf(
         DnsProtocol.DOH to ("DoH (HTTPS)" to Icons.Default.Lock),
+        DnsProtocol.DOH3 to ("DoH3 (HTTP/3)" to Icons.Default.Bolt),
         DnsProtocol.ODOH to ("ODoH (Oblivious)" to Icons.Default.Shield),
         DnsProtocol.DOQ to ("DoQ (QUIC)" to Icons.Default.Bolt),
         DnsProtocol.DOT to ("DoT (TLS)" to Icons.Default.Security),
@@ -127,11 +129,16 @@ fun CustomDnsBottomSheet(
                                 DnsProtocol.DOH -> {
                                     if (!endpointInput.startsWith("https://")) endpointInput = "https://"
                                 }
+                                DnsProtocol.DOH3 -> {
+                                    if (!endpointInput.startsWith("h3://") && !endpointInput.startsWith("https://")) {
+                                        endpointInput = "h3://"
+                                    }
+                                }
                                 DnsProtocol.DOQ -> {
                                     if (!endpointInput.startsWith("quic://")) endpointInput = "quic://"
                                 }
                                 DnsProtocol.DOT -> {
-                                    if (endpointInput.startsWith("https://") || endpointInput.startsWith("quic://")) {
+                                    if (endpointInput.startsWith("https://") || endpointInput.startsWith("quic://") || endpointInput.startsWith("h3://")) {
                                         endpointInput = ""
                                     }
                                 }
@@ -142,7 +149,7 @@ fun CustomDnsBottomSheet(
                                     }
                                 }
                                 DnsProtocol.PLAIN -> {
-                                    if (endpointInput.startsWith("http") || endpointInput.startsWith("quic")) {
+                                    if (endpointInput.startsWith("http") || endpointInput.startsWith("quic") || endpointInput.startsWith("h3")) {
                                         endpointInput = ""
                                     }
                                 }
@@ -165,6 +172,7 @@ fun CustomDnsBottomSheet(
             // Input Fields
             val endpointLabel = when (selectedProtocol) {
                 DnsProtocol.DOH -> "DoH Endpoint URL"
+                DnsProtocol.DOH3 -> "DoH3 Endpoint URL (HTTP/3)"
                 DnsProtocol.ODOH -> stringResource(R.string.dns_custom_target_url)
                 DnsProtocol.DOQ -> "DoQ Server Address"
                 DnsProtocol.DOT -> "DoT Server Hostname"
@@ -172,6 +180,7 @@ fun CustomDnsBottomSheet(
             }
             val endpointPlaceholder = when (selectedProtocol) {
                 DnsProtocol.DOH -> "https://dns.google/dns-query"
+                DnsProtocol.DOH3 -> "h3://dns.google/dns-query"
                 DnsProtocol.ODOH -> "https://odoh.cloudflare-dns.com/dns-query"
                 DnsProtocol.DOQ -> "quic://dns.quad9.net"
                 DnsProtocol.DOT -> "dns.google"
@@ -187,9 +196,22 @@ fun CustomDnsBottomSheet(
             Spacer(modifier = Modifier.height(6.dp))
             OutlinedTextField(
                 value = endpointInput,
-                onValueChange = { endpointInput = it },
+                onValueChange = { input ->
+                    endpointInput = input
+                    if (app.pwhs.blockads.utils.DnsStampParser.isStamp(input)) {
+                        val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(input)
+                        if (parsed != null) {
+                            selectedProtocol = parsed.protocol
+                            endpointInput = parsed.url
+                            stampNotice = "DNS Stamp: ${parsed.protocol} (${parsed.url})"
+                        }
+                    } else {
+                        stampNotice = null
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text(endpointPlaceholder) },
+                supportingText = stampNotice?.let { { Text(it, color = MaterialTheme.colorScheme.primary) } },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )

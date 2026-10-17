@@ -162,6 +162,7 @@ type OutboundAdapter interface
 	method OutboundAdapter.Start() error
 	method OutboundAdapter.Stop()
 	method OutboundAdapter.SupportsStreams() bool
+func ParseDNSStamp(stamp string) (string, error)
 var ParseProtocol func(s string) internal/dns.DNSProtocol
 func ParseQuanXSummary(content string) string
 var ParseResponseType func(s string) internal/packet.ResponseType
@@ -169,6 +170,7 @@ func ParseRulesetSummary(content string) string
 var ParseTUNPacket func(packet []byte, length int) *internal/packet.DNSQueryInfo
 var ParseWgConfigJSON func(jsonStr string) (*internal/wireguard.WgConfig, error)
 const ProtocolDoH internal/dns.DNSProtocol = 1
+const ProtocolDoH3 internal/dns.DNSProtocol = 5
 const ProtocolDoQ internal/dns.DNSProtocol = 3
 const ProtocolDoT internal/dns.DNSProtocol = 2
 const ProtocolODoH internal/dns.DNSProtocol = 4

@@ -1,6 +1,8 @@
 package dns
 
 import (
+	"context"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"net/http"
@@ -10,6 +12,7 @@ import (
 
 	miekgdns "github.com/miekg/dns"
 	"github.com/quic-go/quic-go"
+	"github.com/quic-go/quic-go/http3"
 )
 
 // DNSProtocol represents the DNS transport protocol.
@@ -21,6 +24,7 @@ const (
 	ProtocolDoT
 	ProtocolDoQ
 	ProtocolODoH
+	ProtocolDoH3
 )
 
 // ParseProtocol converts a string to DNSProtocol.
@@ -28,6 +32,8 @@ func ParseProtocol(s string) DNSProtocol {
 	switch strings.ToUpper(s) {
 	case "DOH":
 		return ProtocolDoH
+	case "DOH3", "H3":
+		return ProtocolDoH3
 	case "DOT":
 		return ProtocolDoT
 	case "DOQ":
@@ -57,6 +63,8 @@ type Resolver struct {
 
 	// HTTP client for DoH and ODoH (reusable)
 	httpClient *http.Client
+	// HTTP/3 client for DoH3 (RFC 9114 over QUIC)
+	h3Client *http.Client
 	// QUIC connection for DoQ (reusable)
 	quicMu     sync.Mutex
 	quicConn   quic.Connection
@@ -90,6 +98,47 @@ func NewResolver(protectFn func(fd int) bool) *Resolver {
 	}
 	r.httpClient = &http.Client{
 		Transport: transport,
+		Timeout:   queryTimeoutDoH,
+	}
+
+	h3Transport := &http3.Transport{
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS13,
+		},
+		QUICConfig: &quic.Config{
+			MaxIdleTimeout: 30 * time.Second,
+		},
+		Dial: func(ctx context.Context, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlyConnection, error) {
+			host, port, err := net.SplitHostPort(addr)
+			if err != nil {
+				host = addr
+				port = "443"
+			}
+			ips, err := net.LookupHost(host)
+			if err != nil || len(ips) == 0 {
+				return nil, fmt.Errorf("DoH3 resolve %s: %w", host, err)
+			}
+			udpAddr, err := net.ResolveUDPAddr("udp", net.JoinHostPort(ips[0], port))
+			if err != nil {
+				return nil, fmt.Errorf("DoH3 resolve UDP: %w", err)
+			}
+			udpConn, err := net.ListenUDP("udp", nil)
+			if err != nil {
+				return nil, fmt.Errorf("DoH3 listen: %w", err)
+			}
+			if protectFn != nil {
+				if rawConn, err := udpConn.SyscallConn(); err == nil {
+					rawConn.Control(func(fd uintptr) {
+						protectFn(int(fd))
+					})
+				}
+			}
+			tr := &quic.Transport{Conn: udpConn}
+			return tr.DialEarly(ctx, udpAddr, tlsCfg, cfg)
+		},
+	}
+	r.h3Client = &http.Client{
+		Transport: h3Transport,
 		Timeout:   queryTimeoutDoH,
 	}
 
@@ -240,6 +289,8 @@ func (r *Resolver) query(rawQuery []byte, protocol DNSProtocol, server, dohURL s
 	switch protocol {
 	case ProtocolDoH:
 		return r.queryDoH(rawQuery, dohURL)
+	case ProtocolDoH3:
+		return r.queryDoH3(rawQuery, dohURL)
 	case ProtocolDoT:
 		return r.queryDoT(rawQuery, server)
 	case ProtocolDoQ:
@@ -302,6 +353,9 @@ func (r *Resolver) queryPlain(rawQuery []byte, server string) ([]byte, error) {
 func (r *Resolver) Shutdown() {
 	r.resetQUICConn()
 	r.httpClient.CloseIdleConnections()
+	if r.h3Client != nil {
+		r.h3Client.CloseIdleConnections()
+	}
 }
 
 // ResolveARecord resolves a domain's A record via a protected plain DNS query.

@@ -295,3 +295,60 @@ func (d *protectedDialer) DialContext(ctx context.Context, network, addr string)
 
 	return conn, nil
 }
+
+// queryDoH3 sends a DNS query via DNS-over-HTTP/3 (RFC 9114 / RFC 8484 over HTTP/3).
+func (r *Resolver) queryDoH3(rawQuery []byte, dohURL string) ([]byte, error) {
+	if dohURL == "" {
+		return nil, fmt.Errorf("DoH3 URL not configured")
+	}
+
+	targetURL := dohURL
+	if strings.HasPrefix(strings.ToLower(targetURL), "h3://") {
+		targetURL = "https://" + targetURL[5:]
+	}
+
+	var resp *http.Response
+	var err error
+
+	for attempt := 1; attempt <= 2; attempt++ {
+		req, reqErr := http.NewRequest("POST", targetURL, bytes.NewReader(rawQuery))
+		if reqErr != nil {
+			return nil, fmt.Errorf("DoH3 request: %w", reqErr)
+		}
+		req.Header.Set("Content-Type", "application/dns-message")
+		req.Header.Set("Accept", "application/dns-message")
+
+		ctx, cancel := context.WithTimeout(context.Background(), queryTimeoutDoH)
+		req = req.WithContext(ctx)
+
+		resp, err = r.h3Client.Do(req)
+		if err == nil {
+			cancel()
+			break
+		}
+
+		cancel()
+		if attempt == 1 {
+			time.Sleep(10 * time.Millisecond)
+			continue
+		}
+		// If DoH3 fails (e.g. server doesn't support H3 or UDP blocked), fallback to HTTP/2 DoH
+		return r.queryDoH(rawQuery, targetURL)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 403 {
+		return nil, fmt.Errorf("DoH3 rate limited (403)")
+	}
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("DoH3 status %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 65535))
+	if err != nil {
+		return nil, fmt.Errorf("DoH3 read: %w", err)
+	}
+
+	return body, nil
+}
+

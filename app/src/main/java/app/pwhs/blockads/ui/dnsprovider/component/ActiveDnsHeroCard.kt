@@ -52,6 +52,7 @@ fun ActiveDnsHeroCard(
 ) {
     val (protocolLabel, protocolIcon, protocolColor) = when (protocol) {
         DnsProtocol.DOH -> Triple("DoH", Icons.Default.Lock, MaterialTheme.colorScheme.primary)
+        DnsProtocol.DOH3 -> Triple("DoH3", Icons.Default.Bolt, Color(0xFF10B981))
         DnsProtocol.ODOH -> Triple("ODoH", Icons.Default.Shield, MaterialTheme.colorScheme.tertiary)
         DnsProtocol.DOT -> Triple("DoT", Icons.Default.Security, MaterialTheme.colorScheme.secondary)
         DnsProtocol.DOQ -> Triple("DoQ", Icons.Default.Bolt, Color(0xFFF59E0B))

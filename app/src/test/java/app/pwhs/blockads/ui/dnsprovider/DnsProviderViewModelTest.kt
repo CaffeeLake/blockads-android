@@ -219,10 +219,18 @@ class DnsProviderViewModelTest {
         assertEquals(DnsProtocol.DOT, protocol.value)
         assertEquals("dot.example", upstream.value)
 
+        vm.onIntent(DnsProviderUiIntent.SaveCustomDns(DnsProtocol.DOH3, "h3://dns.google/dns-query"))
+        assertEquals(DnsProtocol.DOH3, protocol.value)
+        assertEquals("h3://dns.google/dns-query", doh.value)
+
+        vm.onIntent(DnsProviderUiIntent.SaveCustomDns(DnsProtocol.DOH, "sdns://AgMAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5"))
+        assertEquals(DnsProtocol.DOH, protocol.value)
+        assertEquals("https://cloudflare-dns.com/dns-query", doh.value)
+
         vm.onIntent(DnsProviderUiIntent.SaveCustomDns(DnsProtocol.PLAIN, "8.8.4.4"))
         assertEquals(DnsProtocol.PLAIN, protocol.value)
         assertEquals("8.8.4.4", upstream.value)
-        verify(atLeast = 5) { ServiceController.requestRestart(any()) }
+        verify(atLeast = 7) { ServiceController.requestRestart(any()) }
     }
 
     @Test

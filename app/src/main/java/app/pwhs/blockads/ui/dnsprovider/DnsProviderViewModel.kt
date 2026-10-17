@@ -72,6 +72,7 @@ class DnsProviderViewModel(
 
         val endpoint = when (protocol) {
             DnsProtocol.DOH, DnsProtocol.ODOH -> doh
+            DnsProtocol.DOH3 -> if (doh.startsWith("h3://", ignoreCase = true)) doh else "h3://${doh.removePrefix("https://")}"
             DnsProtocol.DOT -> "tls://$upstream"
             DnsProtocol.DOQ -> if (doh.startsWith("quic://", ignoreCase = true)) doh else "quic://${doh.removePrefix("https://")}"
             DnsProtocol.PLAIN -> upstream
@@ -79,6 +80,7 @@ class DnsProviderViewModel(
 
         val customDisplay = when (protocol) {
             DnsProtocol.DOH, DnsProtocol.ODOH -> doh
+            DnsProtocol.DOH3 -> if (doh.startsWith("h3://", ignoreCase = true)) doh else "h3://${doh.removePrefix("https://")}"
             DnsProtocol.DOT -> "tls://$upstream"
             DnsProtocol.DOQ -> if (doh.startsWith("quic://", ignoreCase = true)) doh else "quic://${doh.removePrefix("https://")}"
             DnsProtocol.PLAIN -> upstream
@@ -163,21 +165,29 @@ class DnsProviderViewModel(
 
     fun getParsedHost(input: String): String {
         val trimmed = input.trim()
+        val stamp = if (app.pwhs.blockads.utils.DnsStampParser.isStamp(trimmed)) {
+            app.pwhs.blockads.utils.DnsStampParser.parse(trimmed)
+        } else null
+        val target = stamp?.url ?: trimmed
+
         return when {
-            trimmed.startsWith("https://", ignoreCase = true) -> {
-                try { java.net.URL(trimmed).host } catch (_: Exception) { trimmed }
+            target.startsWith("https://", ignoreCase = true) -> {
+                try { java.net.URL(target).host } catch (_: Exception) { target }
             }
-            trimmed.startsWith("quic://", ignoreCase = true) -> {
+            target.startsWith("h3://", ignoreCase = true) -> {
+                try { java.net.URL("https://" + target.removePrefix("h3://").removePrefix("H3://")).host } catch (_: Exception) { target }
+            }
+            target.startsWith("quic://", ignoreCase = true) -> {
                 try {
-                    java.net.URI(trimmed).host ?: trimmed.removePrefix("quic://").removePrefix("QUIC://")
+                    java.net.URI(target).host ?: target.removePrefix("quic://").removePrefix("QUIC://")
                 } catch (_: Exception) {
-                    trimmed.removePrefix("quic://").removePrefix("QUIC://")
+                    target.removePrefix("quic://").removePrefix("QUIC://")
                 }
             }
-            trimmed.startsWith("tls://", ignoreCase = true) -> {
-                trimmed.removePrefix("tls://").removePrefix("TLS://")
+            target.startsWith("tls://", ignoreCase = true) -> {
+                target.removePrefix("tls://").removePrefix("TLS://")
             }
-            else -> trimmed
+            else -> target
         }
     }
 
@@ -185,30 +195,46 @@ class DnsProviderViewModel(
         val trimmedEndpoint = endpoint.trim()
         if (trimmedEndpoint.isBlank()) return
 
+        val stamp = if (app.pwhs.blockads.utils.DnsStampParser.isStamp(trimmedEndpoint)) {
+            app.pwhs.blockads.utils.DnsStampParser.parse(trimmedEndpoint)
+        } else null
+
+        val effectiveProtocol = stamp?.protocol ?: protocol
+        val effectiveEndpoint = stamp?.url ?: trimmedEndpoint
+
         viewModelScope.launch {
-            val parsedHost = getParsedHost(trimmedEndpoint)
+            val parsedHost = getParsedHost(effectiveEndpoint)
             val currentFallback = appPrefs.fallbackDns.first().trim()
 
-            if (protocol == DnsProtocol.PLAIN && currentFallback.equals(parsedHost, ignoreCase = true)) {
+            if (effectiveProtocol == DnsProtocol.PLAIN && currentFallback.equals(parsedHost, ignoreCase = true)) {
                 _effects.emit(DnsProviderUiEffect.ShowToast(R.string.dns_error_duplicate))
                 return@launch
             }
 
             appPrefs.setDnsProviderId(AppPreferences.CUSTOM_DNS_PROVIDER_ID)
-            appPrefs.setDnsProtocol(protocol)
+            appPrefs.setDnsProtocol(effectiveProtocol)
 
-            when (protocol) {
+            when (effectiveProtocol) {
                 DnsProtocol.DOH -> {
-                    appPrefs.setDohUrl(trimmedEndpoint)
+                    appPrefs.setDohUrl(effectiveEndpoint)
+                    appPrefs.setUpstreamDns(parsedHost)
+                }
+                DnsProtocol.DOH3 -> {
+                    val fullDoh3 = if (effectiveEndpoint.startsWith("h3://", ignoreCase = true) || effectiveEndpoint.startsWith("https://", ignoreCase = true)) {
+                        effectiveEndpoint
+                    } else {
+                        "h3://$effectiveEndpoint"
+                    }
+                    appPrefs.setDohUrl(fullDoh3)
                     appPrefs.setUpstreamDns(parsedHost)
                 }
                 DnsProtocol.ODOH -> {
-                    appPrefs.setDohUrl(trimmedEndpoint)
+                    appPrefs.setDohUrl(effectiveEndpoint)
                     appPrefs.setOdohRelayUrl(relayUrl.trim())
                     appPrefs.setUpstreamDns(parsedHost)
                 }
                 DnsProtocol.DOQ -> {
-                    val fullDoq = if (trimmedEndpoint.startsWith("quic://", ignoreCase = true)) trimmedEndpoint else "quic://$trimmedEndpoint"
+                    val fullDoq = if (effectiveEndpoint.startsWith("quic://", ignoreCase = true)) effectiveEndpoint else "quic://$effectiveEndpoint"
                     appPrefs.setDohUrl(fullDoq)
                     appPrefs.setUpstreamDns(parsedHost)
                 }

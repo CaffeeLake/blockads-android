@@ -56,6 +56,7 @@ const (
 	ProtocolDoT   = internaldns.ProtocolDoT
 	ProtocolDoQ   = internaldns.ProtocolDoQ
 	ProtocolODoH  = internaldns.ProtocolODoH
+	ProtocolDoH3  = internaldns.ProtocolDoH3
 
 	ResponseCustomIP = packet.ResponseCustomIP
 	ResponseNXDomain = packet.ResponseNXDomain
