@@ -143,15 +143,37 @@ object DnsProviders {
         iconRes = R.drawable.ic_dns_dnsbunker
     )
 
+    val CLOUDFLARE_H3 = DnsProvider(
+        id = "cloudflare_h3",
+        name = "Cloudflare (HTTP/3)",
+        category = DnsCategory.PRIVACY,
+        ipAddress = "1.1.1.1",
+        dohUrl = "h3://cloudflare-dns.com/dns-query",
+        description = "Next-gen DNS over HTTP/3 (QUIC) by Cloudflare",
+        iconRes = R.drawable.ic_dns_cloudflare
+    )
+
+    val GOOGLE_H3 = DnsProvider(
+        id = "google_h3",
+        name = "Google (HTTP/3)",
+        category = DnsCategory.STANDARD,
+        ipAddress = "8.8.8.8",
+        dohUrl = "h3://dns.google/dns-query",
+        description = "Fast DNS over HTTP/3 by Google",
+        iconRes = R.drawable.ic_brand_google
+    )
+
     val ALL_PROVIDERS = listOf(
         SYSTEM,
         ADGUARD,
         CLOUDFLARE,
+        CLOUDFLARE_H3,
         CLOUDFLARE_ODOH,
         CLOUDFLARE_FAMILY,
         DNSBUNKER,
         DNSBUNKER_DOQ,
         GOOGLE,
+        GOOGLE_H3,
         OPENDNS,
         OPENDNS_FAMILY,
         QUAD9,
@@ -164,10 +186,10 @@ object DnsProviders {
 
     fun getSecondaryIp(provider: DnsProvider): String? = when (provider.id) {
         QUAD9.id, QUAD9_DOQ.id -> "149.112.112.112"
-        CLOUDFLARE.id, CLOUDFLARE_ODOH.id -> "1.0.0.1"
+        CLOUDFLARE.id, CLOUDFLARE_H3.id, CLOUDFLARE_ODOH.id -> "1.0.0.1"
         CLOUDFLARE_FAMILY.id -> "1.0.0.3"
         ADGUARD.id -> "94.140.14.15"
-        GOOGLE.id -> "8.8.4.4"
+        GOOGLE.id, GOOGLE_H3.id -> "8.8.4.4"
         OPENDNS.id -> "208.67.220.220"
         OPENDNS_FAMILY.id -> "208.67.220.123"
         DNSBUNKER.id, DNSBUNKER_DOQ.id -> "185.250.250.62"

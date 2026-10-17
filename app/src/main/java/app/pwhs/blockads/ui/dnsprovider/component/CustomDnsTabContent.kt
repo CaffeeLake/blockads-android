@@ -154,9 +154,11 @@ fun CustomDnsTabContent(
                     Text(
                         text = "• Plain (UDP 53): Standard unencrypted DNS\n" +
                                 "• DoH (RFC 8484): Encrypted DNS via HTTPS\n" +
+                                "• DoH3 (RFC 9114): DNS over HTTP/3 via QUIC\n" +
                                 "• DoT (RFC 7858): Encrypted DNS via TLS\n" +
                                 "• DoQ (RFC 9250): Low-latency DNS over QUIC\n" +
-                                "• ODoH (RFC 9230): Oblivious DoH hiding client IP with an HTTP proxy relay",
+                                "• ODoH (RFC 9230): Oblivious DoH hiding client IP with an HTTP proxy relay\n" +
+                                "• DNS Stamps (sdns://): Encrypted server profile standard",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

@@ -136,6 +136,8 @@ class DnsProviderViewModel(
             } else if (provider.dohUrl != null) {
                 if (provider.dohUrl.startsWith("quic://", ignoreCase = true)) {
                     appPrefs.setDnsProtocol(DnsProtocol.DOQ)
+                } else if (provider.dohUrl.startsWith("h3://", ignoreCase = true)) {
+                    appPrefs.setDnsProtocol(DnsProtocol.DOH3)
                 } else {
                     appPrefs.setDnsProtocol(DnsProtocol.DOH)
                 }

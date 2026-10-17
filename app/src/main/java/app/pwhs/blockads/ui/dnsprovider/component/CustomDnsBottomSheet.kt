@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -235,28 +236,102 @@ fun CustomDnsBottomSheet(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp)
                 )
+            }
 
-                Spacer(modifier = Modifier.height(8.dp))
-                // Quick Presets
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(R.string.dns_custom_presets),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    OutlinedButton(
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Quick Presets for Current Protocol
+            Text(
+                text = stringResource(R.string.dns_custom_presets),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            val currentPresets = when (selectedProtocol) {
+                DnsProtocol.DOH3 -> listOf(
+                    "Cloudflare H3" to "h3://cloudflare-dns.com/dns-query",
+                    "Google H3" to "h3://dns.google/dns-query"
+                )
+                DnsProtocol.DOH -> listOf(
+                    "Cloudflare" to "https://cloudflare-dns.com/dns-query",
+                    "Google" to "https://dns.google/dns-query",
+                    "AdGuard" to "https://dns.adguard-dns.com/dns-query",
+                    "Quad9" to "https://dns.quad9.net/dns-query"
+                )
+                DnsProtocol.DOQ -> listOf(
+                    "AdGuard DoQ" to "quic://dns.adguard-dns.com",
+                    "Quad9 DoQ" to "quic://dns.quad9.net"
+                )
+                DnsProtocol.DOT -> listOf(
+                    "Cloudflare" to "1dot1dot1dot1.cloudflare-dns.com",
+                    "Google" to "dns.google",
+                    "Quad9" to "dns.quad9.net"
+                )
+                DnsProtocol.ODOH -> listOf(
+                    "Cloudflare ODoH" to "https://odoh.cloudflare-dns.com/dns-query"
+                )
+                DnsProtocol.PLAIN -> listOf(
+                    "Cloudflare" to "1.1.1.1",
+                    "Google" to "8.8.8.8",
+                    "Quad9" to "9.9.9.9",
+                    "AdGuard" to "94.140.14.14"
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                currentPresets.forEach { (name, url) ->
+                    SuggestionChip(
                         onClick = {
-                            endpointInput = "https://odoh.cloudflare-dns.com/dns-query"
-                            relayUrlInput = "https://odoh-relay.cloudflare.com/proxy"
+                            endpointInput = url
+                            if (selectedProtocol == DnsProtocol.ODOH) {
+                                relayUrlInput = "https://odoh-relay.cloudflare.com/proxy"
+                            }
+                            stampNotice = null
                         },
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(stringResource(R.string.dns_custom_preset_cf_odoh), style = MaterialTheme.typography.labelSmall)
-                    }
+                        label = { Text(name, style = MaterialTheme.typography.labelSmall) }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Sample DNS Stamps (sdns://)
+            Text(
+                text = "Sample DNS Stamps (sdns://)",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val stampSamples = listOf(
+                    "Cloudflare (DoH Stamp)" to "sdns://AgMAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5",
+                    "AdGuard (DoQ Stamp)" to "sdns://BAEAAAAAAAAADDk0LjE0MC4xNC4xNAATZG5zLmFkZ3VhcmQtZG5zLmNvbQ"
+                )
+                stampSamples.forEach { (name, stamp) ->
+                    SuggestionChip(
+                        onClick = {
+                            endpointInput = stamp
+                            val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(stamp)
+                            if (parsed != null) {
+                                selectedProtocol = parsed.protocol
+                                endpointInput = parsed.url
+                                stampNotice = "DNS Stamp: ${parsed.protocol} (${parsed.url})"
+                            }
+                        },
+                        label = { Text(name, style = MaterialTheme.typography.labelSmall) }
+                    )
                 }
             }
 
