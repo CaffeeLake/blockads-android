@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.filled.VpnLock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,7 +33,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.ui.theme.AccentBlue
@@ -59,9 +64,12 @@ fun RoutingModeBottomSheet(
     onSelectMode: (String) -> Unit,
     onConfigureWireGuard: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activeSsProfile: ShadowsocksProfile? = null,
+    onSaveShadowsocksKey: ((String) -> Boolean)? = null
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showOutlineDialog by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -164,7 +172,44 @@ fun RoutingModeBottomSheet(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // 3. Root Proxy Mode
+            // 3. Outline / Shadowsocks Mode
+            val hasSsProfile = activeSsProfile != null
+            val ssEndpoint = activeSsProfile?.server.orEmpty()
+            val ssCountryCode = remember(activeSsProfile?.server, activeSsProfile?.tag) {
+                if (activeSsProfile != null) {
+                    WireGuardGeoIpHelper.getCountryCodeFast(ssEndpoint, activeSsProfile.tag)
+                } else null
+            }
+            val ssFlag = ssCountryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
+            val ssStatusText = if (hasSsProfile) {
+                val displayName = activeSsProfile.tag.ifEmpty { "${activeSsProfile.server}:${activeSsProfile.port}" }
+                if (ssFlag.isNotEmpty()) "$ssFlag $displayName" else displayName
+            } else {
+                stringResource(R.string.routing_mode_no_ss_profile)
+            }
+
+            RoutingModeCard(
+                icon = Icons.Default.VpnKey,
+                iconTint = Color(0xFF0D9488),
+                title = stringResource(R.string.routing_mode_shadowsocks_title),
+                description = stringResource(R.string.routing_mode_shadowsocks_desc),
+                statusText = ssStatusText,
+                statusColor = if (hasSsProfile) MaterialTheme.colorScheme.primary else DangerRed,
+                actionLabel = stringResource(R.string.routing_mode_configure_ss),
+                onAction = { showOutlineDialog = true },
+                isSelected = currentMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS,
+                onClick = {
+                    if (hasSsProfile) {
+                        onSelectMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
+                    } else {
+                        showOutlineDialog = true
+                    }
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // 4. Root Proxy Mode
             RoutingModeCard(
                 icon = Icons.Default.Bolt,
                 iconTint = Color(0xFF7C3AED),
@@ -179,6 +224,19 @@ fun RoutingModeBottomSheet(
                 isSelected = currentMode == AppPreferences.ROUTING_MODE_ROOT,
                 onClick = {
                     onSelectMode(AppPreferences.ROUTING_MODE_ROOT)
+                }
+            )
+        }
+
+        if (showOutlineDialog && onSaveShadowsocksKey != null) {
+            OutlineKeyDialog(
+                onDismiss = { showOutlineDialog = false },
+                onSave = { key ->
+                    val ok = onSaveShadowsocksKey(key)
+                    if (ok) {
+                        onSelectMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
+                    }
+                    ok
                 }
             )
         }

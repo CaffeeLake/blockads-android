@@ -457,11 +457,13 @@ fun HomeScreen(
         if (showRoutingModeSheet) {
             val isRootAvailable by viewModel.isRootAvailable.collectAsStateWithLifecycle()
             val activeWgProfile by viewModel.activeWgProfile.collectAsStateWithLifecycle()
+            val activeSsProfile by viewModel.activeSsProfile.collectAsStateWithLifecycle()
 
             RoutingModeBottomSheet(
                 currentMode = routingMode,
                 isRootAvailable = isRootAvailable,
                 activeWgProfile = activeWgProfile,
+                activeSsProfile = activeSsProfile,
                 onSelectMode = { mode ->
                     viewModel.setRoutingMode(mode)
                     showRoutingModeSheet = false
@@ -469,6 +471,9 @@ fun HomeScreen(
                 onConfigureWireGuard = {
                     showRoutingModeSheet = false
                     onNavigateToFeature(HomeFeatureTipType.WIREGUARD)
+                },
+                onSaveShadowsocksKey = { uri ->
+                    viewModel.saveShadowsocksUri(uri).isSuccess
                 },
                 onDismiss = { showRoutingModeSheet = false }
             )

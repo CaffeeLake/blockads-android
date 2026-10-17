@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/miekg/dns"
+	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 	"github.com/xjasonlyu/tun2socks/v2/core/adapter"
 )
 
@@ -141,6 +142,14 @@ func (e *Engine) StartFull(fd int, protector SocketProtector) {
 	uidr := e.uidResolver
 	done := make(chan struct{})
 	e.fullTunnelDone = done
+
+	// If Shadowsocks outbound is configured, ensure it uses the live protectFn
+	if client := e.ssClient.Load(); client != nil && client.Config() != nil {
+		if newClient, err := shadowsocks.NewClient(client.Config(), protectFn); err == nil {
+			e.ssClient.Store(newClient)
+			logf("StartFull: Shadowsocks outbound active via %s", newClient.ServerAddress())
+		}
+	}
 	e.mu.Unlock()
 
 	fail := func(format string, args ...interface{}) {
@@ -314,6 +323,17 @@ func isStunPort(port int) bool {
 }
 
 func relayDirectFromFlow(clientConn net.Conn, flow flowID, engine *Engine, protectFn func(fd int) bool) {
+	if ss := engine.ssClient.Load(); ss != nil {
+		remote, err := ss.DialTCP(flow.serverIP, flow.serverPort)
+		if err != nil {
+			logf("[FullTunnel] shadowsocks dial %s:%d via %s failed: %v", flow.serverIP, flow.serverPort, ss.ServerAddress(), err)
+			return
+		}
+		defer remote.Close()
+		bidiCopyFlow(clientConn, remote)
+		return
+	}
+
 	dialer := &net.Dialer{
 		Timeout: flowDialTimeout,
 		Control: protectedControl(protectFn),

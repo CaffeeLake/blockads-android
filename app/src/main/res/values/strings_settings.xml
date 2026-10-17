@@ -357,5 +357,15 @@
     <string name="routing_mode_configure_wg">Configure WireGuard</string>
     <string name="routing_mode_root_available">Root access available</string>
     <string name="routing_mode_root_unavailable">Root access not detected</string>
+    <string name="routing_mode_shadowsocks_title">Outline / Shadowsocks</string>
+    <string name="routing_mode_shadowsocks_desc">Routes traffic through an Outline / Shadowsocks proxy with on-device ad blocking.</string>
+    <string name="routing_mode_no_ss_profile">No Outline key configured</string>
+    <string name="routing_mode_configure_ss">Configure Key</string>
+    <string name="outline_dialog_title">Outline VPN Key</string>
+    <string name="outline_dialog_desc">Paste an Outline access key (ss://...) to connect through an encrypted proxy.</string>
+    <string name="outline_dialog_hint" translatable="false">ss://...</string>
+    <string name="outline_dialog_save">Save &amp; Connect</string>
+    <string name="outline_dialog_paste">Paste from Clipboard</string>
+    <string name="outline_dialog_invalid_key">Invalid Outline / Shadowsocks key</string>
 </resources>
 

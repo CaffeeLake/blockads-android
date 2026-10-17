@@ -9,6 +9,7 @@ import (
 	"github.com/nqmgaming/blockads-tunnel/internal/packet"
 	"github.com/nqmgaming/blockads-tunnel/internal/safesearch"
 	"github.com/nqmgaming/blockads-tunnel/internal/scriptlet"
+	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 	"github.com/nqmgaming/blockads-tunnel/internal/trie"
 	"github.com/nqmgaming/blockads-tunnel/internal/wireguard"
 )
@@ -117,3 +118,16 @@ var (
 	newPacketPipe          = packet.NewPacketPipe
 	isKnownPublicDoHIP     = mitm.IsKnownPublicDoHIP
 )
+
+type ShadowsocksClient = shadowsocks.Client
+type ShadowsocksConfig = shadowsocks.Config
+
+// ParseShadowsocksURI parses an Outline / Shadowsocks ss:// URI and returns its JSON configuration.
+func ParseShadowsocksURI(rawURI string) (string, error) {
+	cfg, err := shadowsocks.ParseURI(rawURI)
+	if err != nil {
+		return "", err
+	}
+	return cfg.ToJSON(), nil
+}
+

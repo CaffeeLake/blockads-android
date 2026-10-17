@@ -17,6 +17,7 @@ import app.pwhs.blockads.data.entities.DailyStat
 import app.pwhs.blockads.data.entities.DnsLogEntry
 import app.pwhs.blockads.data.entities.FilterList
 import app.pwhs.blockads.data.entities.HourlyStat
+import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.TopBlockedDomain
 import app.pwhs.blockads.data.entities.WhitelistDomain
 import app.pwhs.blockads.data.entities.WireGuardProfile
@@ -82,6 +83,9 @@ class HomeViewModel(
         .combine(appPrefs.wgActiveProfileId) { profiles, activeId ->
             profiles.firstOrNull { it.id == activeId }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val activeSsProfile: StateFlow<ShadowsocksProfile?> = appPrefs.ssProfile
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     // Trusted networks (#197): true when BlockAds was auto-paused on a
     // trusted Wi-Fi, so Home can show a distinct state instead of "Unprotected".
@@ -406,6 +410,14 @@ class HomeViewModel(
                 }
             }
 
+            if (mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS) {
+                val active = appPrefs.getSsProfileSnapshot()
+                if (active == null) {
+                    _events.toast(R.string.routing_mode_no_ss_profile)
+                    return@launch
+                }
+            }
+
             appPrefs.setRoutingMode(mode)
 
             val isRunning = AdBlockVpnService.isRunning || RootProxyService.isRunning
@@ -437,6 +449,22 @@ class HomeViewModel(
             } else {
                 ServiceController.requestRestart(context)
             }
+        }
+    }
+
+    fun saveShadowsocksUri(uri: String): Result<ShadowsocksProfile> {
+        return try {
+            val json = tunnel.Tunnel.parseShadowsocksURI(uri)
+            val profile = ShadowsocksProfile.fromJson(json).copy(rawUri = uri)
+            viewModelScope.launch(Dispatchers.IO) {
+                appPrefs.setSsProfile(profile)
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
+                ServiceController.requestRestart(context)
+            }
+            Result.success(profile)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to parse and save Shadowsocks URI")
+            Result.failure(e)
         }
     }
 }

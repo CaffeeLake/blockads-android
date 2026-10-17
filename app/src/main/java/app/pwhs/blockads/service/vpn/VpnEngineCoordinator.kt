@@ -172,6 +172,11 @@ class VpnEngineCoordinator(
         } else {
             ""
         }
+        val ssConfigJson = if (routingMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS) {
+            appPrefs.getSsProfileSnapshot()?.toJson() ?: ""
+        } else {
+            ""
+        }
 
         val selectedBrowsers = appPrefs.getSelectedBrowsersSnapshot()
         val filterHttp3 = if (httpsFilteringEnabled) true else appPrefs.getFilterHttp3Snapshot()
@@ -181,6 +186,7 @@ class VpnEngineCoordinator(
         goTunnelAdapter.start(
             vpnInterface = vpnInterface,
             wgConfigJson = wgConfigJson,
+            ssConfigJson = ssConfigJson,
             httpsFilteringEnabled = httpsFilteringEnabled,
             selectedBrowsers = selectedBrowsers,
             certDir = certDir,

@@ -275,10 +275,20 @@ class GoTunnelAdapter(
         filterHttp3: Boolean = false,
         blockDohBypass: Boolean = false,
         blockWebRtc: Boolean = false,
-        socketProtector: ((Int) -> Boolean)? = null
+        socketProtector: ((Int) -> Boolean)? = null,
+        ssConfigJson: String = ""
     ) {
         if (isRunning) return
         isRunning = true
+
+        try {
+            engine.setShadowsocksConfig(ssConfigJson)
+            if (ssConfigJson.isNotEmpty()) {
+                Timber.d("Configured Shadowsocks outbound in Go engine")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to configure Shadowsocks in Go engine")
+        }
 
         val mitmMode = httpsFilteringEnabled && certDir.isNotEmpty() && wgConfigJson.isEmpty()
         engine.setUseTcpStack(mitmMode)

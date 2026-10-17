@@ -7,9 +7,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import app.pwhs.blockads.data.datastore.prefs.AppearancePreferences
 import app.pwhs.blockads.data.datastore.prefs.DnsPreferences
 import app.pwhs.blockads.data.datastore.prefs.FilterPreferences
+import app.pwhs.blockads.data.datastore.prefs.ShadowsocksPreferences
 import app.pwhs.blockads.data.datastore.prefs.VpnSecurityPreferences
 import app.pwhs.blockads.data.datastore.prefs.WireGuardPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
+import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import kotlinx.coroutines.flow.Flow
 
@@ -27,11 +29,13 @@ class AppPreferences internal constructor(
     val filter = FilterPreferences(dataStore)
     val wireguard = WireGuardPreferences(dataStore)
     val vpnSecurity = VpnSecurityPreferences(dataStore)
+    val shadowsocks = ShadowsocksPreferences(dataStore)
 
     companion object {
         const val ROUTING_MODE_DIRECT = WireGuardPreferences.ROUTING_MODE_DIRECT
         const val ROUTING_MODE_WIREGUARD = WireGuardPreferences.ROUTING_MODE_WIREGUARD
         const val ROUTING_MODE_ROOT = WireGuardPreferences.ROUTING_MODE_ROOT
+        const val ROUTING_MODE_SHADOWSOCKS = ShadowsocksPreferences.ROUTING_MODE_SHADOWSOCKS
 
         const val PROTECTION_BASIC = FilterPreferences.PROTECTION_BASIC
         const val PROTECTION_STANDARD = FilterPreferences.PROTECTION_STANDARD
@@ -251,4 +255,8 @@ class AppPreferences internal constructor(
     suspend fun migrateLegacyWgConfigIfNeeded() = wireguard.migrateLegacyWgConfigIfNeeded()
     suspend fun setExcludeLan(enabled: Boolean) = wireguard.setExcludeLan(enabled)
     suspend fun setAllowAppBypass(enabled: Boolean) = wireguard.setAllowAppBypass(enabled)
+
+    val ssProfile: Flow<ShadowsocksProfile?> get() = shadowsocks.ssProfile
+    suspend fun getSsProfileSnapshot(): ShadowsocksProfile? = shadowsocks.getSsProfileSnapshot()
+    suspend fun setSsProfile(profile: ShadowsocksProfile?) = shadowsocks.setSsProfile(profile)
 }

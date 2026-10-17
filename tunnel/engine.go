@@ -154,6 +154,9 @@ type Engine struct {
 	// GeoIP database
 	geoIPDB atomic.Pointer[GeoIPDatabase]
 
+	// Shadowsocks / Outline client
+	ssClient atomic.Pointer[ShadowsocksClient]
+
 	// UID resolver — supplied by Kotlin. When nil, flow-level UID lookup
 	// falls back to UIDUnknown. Stored on the engine so both the stack
 	// (once created) and any future consumer can pull from one place.

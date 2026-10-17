@@ -317,5 +317,14 @@
     <string name="routing_mode_configure_wg">Cài đặt WireGuard</string>
     <string name="routing_mode_root_available">Đã có quyền Root</string>
     <string name="routing_mode_root_unavailable">Chưa có quyền Root</string>
+    <string name="routing_mode_shadowsocks_title">Outline / Shadowsocks</string>
+    <string name="routing_mode_shadowsocks_desc">Định tuyến mạng qua proxy Outline / Shadowsocks kết hợp lọc quảng cáo on-device.</string>
+    <string name="routing_mode_no_ss_profile">Chưa có Outline key</string>
+    <string name="routing_mode_configure_ss">Cài đặt Key</string>
+    <string name="outline_dialog_title">Outline VPN Key</string>
+    <string name="outline_dialog_desc">Dán mã truy cập Outline (ss://...) để kết nối qua máy chủ proxy được mã hóa.</string>
+    <string name="outline_dialog_save">Lưu &amp; Kết nối</string>
+    <string name="outline_dialog_paste">Dán từ bộ nhớ tạm</string>
+    <string name="outline_dialog_invalid_key">Mã Outline / Shadowsocks không hợp lệ</string>
 </resources>
 
