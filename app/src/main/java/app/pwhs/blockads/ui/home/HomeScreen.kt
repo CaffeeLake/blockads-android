@@ -458,22 +458,21 @@ fun HomeScreen(
             val isRootAvailable by viewModel.isRootAvailable.collectAsStateWithLifecycle()
             val activeWgProfile by viewModel.activeWgProfile.collectAsStateWithLifecycle()
             val activeSsProfile by viewModel.activeSsProfile.collectAsStateWithLifecycle()
+            val activeProxyType by viewModel.activeProxyType.collectAsStateWithLifecycle()
 
             RoutingModeBottomSheet(
                 currentMode = routingMode,
                 isRootAvailable = isRootAvailable,
                 activeWgProfile = activeWgProfile,
                 activeSsProfile = activeSsProfile,
+                activeProxyType = activeProxyType,
                 onSelectMode = { mode ->
                     viewModel.setRoutingMode(mode)
                     showRoutingModeSheet = false
                 },
-                onConfigureWireGuard = {
+                onConfigureProxyVpn = {
                     showRoutingModeSheet = false
                     onNavigateToFeature(HomeFeatureTipType.WIREGUARD)
-                },
-                onSaveShadowsocksKey = { uri ->
-                    viewModel.saveShadowsocksUri(uri).isSuccess
                 },
                 onDismiss = { showRoutingModeSheet = false }
             )

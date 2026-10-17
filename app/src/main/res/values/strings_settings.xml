@@ -367,5 +367,25 @@
     <string name="outline_dialog_save">Save &amp; Connect</string>
     <string name="outline_dialog_paste">Paste from Clipboard</string>
     <string name="outline_dialog_invalid_key">Invalid Outline / Shadowsocks key</string>
+
+    <!-- Proxy & VPN -->
+    <string name="proxy_vpn_title">Proxy &amp; VPN</string>
+    <string name="proxy_vpn_subtitle">Manage WireGuard &amp; Outline / Shadowsocks servers</string>
+    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
+    <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
+    <string name="proxy_vpn_master_toggle">Enable Proxy &amp; VPN</string>
+    <string name="proxy_vpn_master_toggle_desc">Route traffic through the active server with ad blocking</string>
+    <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
+    <string name="routing_mode_proxy_vpn_desc">Routes all traffic through a remote WireGuard or Outline proxy server while blocking ads locally.</string>
+    <string name="routing_mode_no_proxy_profile">No server configured</string>
+    <string name="routing_mode_configure_proxy">Configure Proxy &amp; VPN</string>
+    <string name="shadowsocks_empty_title">No Outline keys added</string>
+    <string name="shadowsocks_empty_desc">Add an Outline access key (ss://...) to route traffic through an encrypted proxy.</string>
+    <string name="shadowsocks_add_key">Add Outline Key</string>
+    <string name="shadowsocks_imported">Imported: %1$s</string>
+    <string name="shadowsocks_deleted">Deleted: %1$s</string>
+    <string name="shadowsocks_active">Active: %1$s</string>
+    <string name="shadowsocks_delete_confirm_title">Delete Profile</string>
+    <string name="shadowsocks_delete_confirm_desc">Are you sure you want to delete \"%1$s\"?</string>
 </resources>
 

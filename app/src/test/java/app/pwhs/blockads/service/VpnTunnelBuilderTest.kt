@@ -38,6 +38,7 @@ class VpnTunnelBuilderTest {
     private val prefs: AppPreferences = mockk {
         coEvery { getRoutingModeSnapshot() } answers { this@VpnTunnelBuilderTest.routingMode }
         coEvery { getWgConfigJsonSnapshot() } answers { wgJson }
+        coEvery { getActiveProxyTypeSnapshot() } returns AppPreferences.PROXY_TYPE_WIREGUARD
         every { excludeLan } answers { flowOf(this@VpnTunnelBuilderTest.excludeLan) }
         every { allowAppBypass } answers { flowOf(this@VpnTunnelBuilderTest.allowAppBypass) }
     }

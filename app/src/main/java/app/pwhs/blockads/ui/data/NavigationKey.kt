@@ -62,6 +62,9 @@ data object DomainRulesKey : NavKey
 data object WireGuardImportKey : NavKey
 
 @Serializable
+data object ProxyVpnKey : NavKey
+
+@Serializable
 data class WireGuardEditKey(val profileId: String) : NavKey
 
 @Serializable

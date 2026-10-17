@@ -42,8 +42,14 @@ class VpnTunnelBuilder(
                 appPrefs.getRoutingModeSnapshot()
             }
             var resolvedWgConfigJson = ""
+            val isWg = when (routingMode) {
+                AppPreferences.ROUTING_MODE_WIREGUARD -> true
+                AppPreferences.ROUTING_MODE_PROXY_VPN -> runBlocking { appPrefs.getActiveProxyTypeSnapshot() } == AppPreferences.PROXY_TYPE_WIREGUARD
+                else -> false
+            }
+
             val wgConfig: WireGuardConfig? =
-                if (routingMode == AppPreferences.ROUTING_MODE_WIREGUARD) {
+                if (isWg) {
                     val json = runBlocking { appPrefs.getWgConfigJsonSnapshot() }
                     json?.let {
                         try {

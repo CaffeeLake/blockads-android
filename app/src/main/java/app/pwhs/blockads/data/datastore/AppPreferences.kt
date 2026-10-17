@@ -36,6 +36,10 @@ class AppPreferences internal constructor(
         const val ROUTING_MODE_WIREGUARD = WireGuardPreferences.ROUTING_MODE_WIREGUARD
         const val ROUTING_MODE_ROOT = WireGuardPreferences.ROUTING_MODE_ROOT
         const val ROUTING_MODE_SHADOWSOCKS = ShadowsocksPreferences.ROUTING_MODE_SHADOWSOCKS
+        const val ROUTING_MODE_PROXY_VPN = "proxy_vpn"
+
+        const val PROXY_TYPE_WIREGUARD = ShadowsocksPreferences.PROXY_TYPE_WIREGUARD
+        const val PROXY_TYPE_SHADOWSOCKS = ShadowsocksPreferences.PROXY_TYPE_SHADOWSOCKS
 
         const val PROTECTION_BASIC = FilterPreferences.PROTECTION_BASIC
         const val PROTECTION_STANDARD = FilterPreferences.PROTECTION_STANDARD
@@ -256,7 +260,17 @@ class AppPreferences internal constructor(
     suspend fun setExcludeLan(enabled: Boolean) = wireguard.setExcludeLan(enabled)
     suspend fun setAllowAppBypass(enabled: Boolean) = wireguard.setAllowAppBypass(enabled)
 
+    val activeProxyType: Flow<String> get() = shadowsocks.activeProxyType
+    val ssProfiles: Flow<List<ShadowsocksProfile>> get() = shadowsocks.ssProfiles
+    val activeSsProfileId: Flow<String?> get() = shadowsocks.activeSsProfileId
     val ssProfile: Flow<ShadowsocksProfile?> get() = shadowsocks.ssProfile
+
     suspend fun getSsProfileSnapshot(): ShadowsocksProfile? = shadowsocks.getSsProfileSnapshot()
+    suspend fun getActiveProxyTypeSnapshot(): String = shadowsocks.getActiveProxyTypeSnapshot()
+    suspend fun setActiveProxyType(type: String) = shadowsocks.setActiveProxyType(type)
+    suspend fun setActiveSsProfileId(id: String) = shadowsocks.setActiveProfileId(id)
+    suspend fun addSsProfile(profile: ShadowsocksProfile) = shadowsocks.addProfile(profile)
+    suspend fun deleteSsProfile(id: String) = shadowsocks.deleteProfile(id)
+    suspend fun renameSsProfile(id: String, newName: String) = shadowsocks.renameProfile(id, newName)
     suspend fun setSsProfile(profile: ShadowsocksProfile?) = shadowsocks.setSsProfile(profile)
 }

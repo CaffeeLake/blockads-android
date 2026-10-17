@@ -123,8 +123,9 @@ fun HomeStatusHeader(
                     Text(
                         text = when (routingMode) {
                             AppPreferences.ROUTING_MODE_ROOT -> "Root Proxy Mode"
-                            AppPreferences.ROUTING_MODE_WIREGUARD -> "WireGuard Mode"
-                            AppPreferences.ROUTING_MODE_SHADOWSOCKS -> "Outline Mode"
+                            AppPreferences.ROUTING_MODE_PROXY_VPN,
+                            AppPreferences.ROUTING_MODE_WIREGUARD,
+                            AppPreferences.ROUTING_MODE_SHADOWSOCKS -> "Proxy & VPN"
                             else -> "Local VPN Mode"
                         },
                         style = MaterialTheme.typography.labelSmall,

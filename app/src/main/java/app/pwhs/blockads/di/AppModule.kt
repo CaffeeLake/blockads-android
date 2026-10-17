@@ -24,6 +24,7 @@ import app.pwhs.blockads.ui.firewall.FirewallViewModel
 import app.pwhs.blockads.ui.splash.SplashViewModel
 import app.pwhs.blockads.ui.wireguard.WireGuardEditViewModel
 import app.pwhs.blockads.ui.wireguard.WireGuardImportViewModel
+import app.pwhs.blockads.ui.proxyvpn.ProxyVpnViewModel
 import app.pwhs.blockads.ui.httpsfiltering.HttpsFilteringViewModel
 import app.pwhs.blockads.ui.httpsfiltering.wizard.CertInstallationWizardViewModel
 import io.ktor.client.HttpClient
@@ -267,6 +268,11 @@ val appModule = module {
     }
     viewModel {
         WireGuardImportViewModel(
+            application = androidApplication()
+        )
+    }
+    viewModel {
+        ProxyVpnViewModel(
             application = androidApplication()
         )
     }

@@ -93,12 +93,12 @@ fun ProtectionSection(
 
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
 
-                // 4. WireGuard Import
+                // 4. Proxy & VPN
                 SettingItem(
                     iconPainter = painterResource(R.drawable.ic_settings_wireguard),
                     iconTint = Color(0xFF7C3AED),
-                    title = stringResource(R.string.wireguard_import_title) + " (BETA)",
-                    desc = stringResource(R.string.wireguard_empty_desc),
+                    title = stringResource(R.string.proxy_vpn_title),
+                    desc = stringResource(R.string.proxy_vpn_subtitle),
                     onClick = onNavigateToWireGuardImport
                 )
 

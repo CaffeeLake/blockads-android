@@ -61,15 +61,14 @@ fun RoutingModeBottomSheet(
     currentMode: String,
     isRootAvailable: Boolean,
     activeWgProfile: WireGuardProfile?,
+    activeSsProfile: ShadowsocksProfile?,
+    activeProxyType: String,
     onSelectMode: (String) -> Unit,
-    onConfigureWireGuard: () -> Unit,
+    onConfigureProxyVpn: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
-    activeSsProfile: ShadowsocksProfile? = null,
-    onSaveShadowsocksKey: ((String) -> Boolean)? = null
+    modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showOutlineDialog by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -136,80 +135,49 @@ fun RoutingModeBottomSheet(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // 2. WireGuard Mode
-            val hasWgProfile = activeWgProfile != null
-            val wgEndpoint = activeWgProfile?.config?.peers?.firstOrNull()?.endpoint.orEmpty()
-            val wgCountryCode = remember(activeWgProfile?.id, wgEndpoint) {
-                if (activeWgProfile != null) {
-                    WireGuardGeoIpHelper.getCountryCodeFast(wgEndpoint, activeWgProfile.name)
-                } else null
-            }
-            val wgFlag = wgCountryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
-            val wgStatusText = if (hasWgProfile) {
-                if (wgFlag.isNotEmpty()) "$wgFlag ${activeWgProfile.name}" else activeWgProfile.name
+            // 2. Proxy & VPN Mode (Unified WireGuard + Outline / Shadowsocks)
+            val isProxyMode = currentMode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+                currentMode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+                currentMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
+
+            val isWg = activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD || currentMode == AppPreferences.ROUTING_MODE_WIREGUARD
+            val hasActiveProfile = if (isWg) activeWgProfile != null else activeSsProfile != null
+
+            val proxyStatusText = if (isWg && activeWgProfile != null) {
+                val endpoint = activeWgProfile.config.peers.firstOrNull()?.endpoint.orEmpty()
+                val cc = WireGuardGeoIpHelper.getCountryCodeFast(endpoint, activeWgProfile.name)
+                val flag = cc?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
+                if (flag.isNotEmpty()) "$flag ${activeWgProfile.name} (WireGuard)" else "${activeWgProfile.name} (WireGuard)"
+            } else if (!isWg && activeSsProfile != null) {
+                val cc = WireGuardGeoIpHelper.getCountryCodeFast(activeSsProfile.server, activeSsProfile.tag)
+                val flag = cc?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
+                if (flag.isNotEmpty()) "$flag ${activeSsProfile.displayName} (Outline)" else "${activeSsProfile.displayName} (Outline)"
             } else {
-                stringResource(R.string.routing_mode_no_wg_profile)
+                stringResource(R.string.routing_mode_no_proxy_profile)
             }
 
             RoutingModeCard(
-                icon = Icons.Default.Security,
-                iconTint = AccentBlue,
-                title = stringResource(R.string.routing_mode_wireguard_title),
-                description = stringResource(R.string.routing_mode_wireguard_desc),
-                statusText = wgStatusText,
-                statusColor = if (hasWgProfile) MaterialTheme.colorScheme.primary else DangerRed,
-                actionLabel = if (!hasWgProfile) stringResource(R.string.routing_mode_configure_wg) else null,
-                onAction = onConfigureWireGuard,
-                isSelected = currentMode == AppPreferences.ROUTING_MODE_WIREGUARD,
+                icon = if (isWg) Icons.Default.Security else Icons.Default.VpnKey,
+                iconTint = if (isWg) AccentBlue else Color(0xFF0D9488),
+                title = stringResource(R.string.routing_mode_proxy_vpn_title),
+                description = stringResource(R.string.routing_mode_proxy_vpn_desc),
+                statusText = proxyStatusText,
+                statusColor = if (hasActiveProfile) MaterialTheme.colorScheme.primary else DangerRed,
+                actionLabel = stringResource(R.string.routing_mode_configure_proxy),
+                onAction = onConfigureProxyVpn,
+                isSelected = isProxyMode,
                 onClick = {
-                    if (hasWgProfile) {
-                        onSelectMode(AppPreferences.ROUTING_MODE_WIREGUARD)
+                    if (hasActiveProfile) {
+                        onSelectMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
                     } else {
-                        onConfigureWireGuard()
+                        onConfigureProxyVpn()
                     }
                 }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // 3. Outline / Shadowsocks Mode
-            val hasSsProfile = activeSsProfile != null
-            val ssEndpoint = activeSsProfile?.server.orEmpty()
-            val ssCountryCode = remember(activeSsProfile?.server, activeSsProfile?.tag) {
-                if (activeSsProfile != null) {
-                    WireGuardGeoIpHelper.getCountryCodeFast(ssEndpoint, activeSsProfile.tag)
-                } else null
-            }
-            val ssFlag = ssCountryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
-            val ssStatusText = if (hasSsProfile) {
-                val displayName = activeSsProfile.tag.ifEmpty { "${activeSsProfile.server}:${activeSsProfile.port}" }
-                if (ssFlag.isNotEmpty()) "$ssFlag $displayName" else displayName
-            } else {
-                stringResource(R.string.routing_mode_no_ss_profile)
-            }
-
-            RoutingModeCard(
-                icon = Icons.Default.VpnKey,
-                iconTint = Color(0xFF0D9488),
-                title = stringResource(R.string.routing_mode_shadowsocks_title),
-                description = stringResource(R.string.routing_mode_shadowsocks_desc),
-                statusText = ssStatusText,
-                statusColor = if (hasSsProfile) MaterialTheme.colorScheme.primary else DangerRed,
-                actionLabel = stringResource(R.string.routing_mode_configure_ss),
-                onAction = { showOutlineDialog = true },
-                isSelected = currentMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS,
-                onClick = {
-                    if (hasSsProfile) {
-                        onSelectMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
-                    } else {
-                        showOutlineDialog = true
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // 4. Root Proxy Mode
+            // 3. Root Proxy Mode
             RoutingModeCard(
                 icon = Icons.Default.Bolt,
                 iconTint = Color(0xFF7C3AED),
@@ -224,19 +192,6 @@ fun RoutingModeBottomSheet(
                 isSelected = currentMode == AppPreferences.ROUTING_MODE_ROOT,
                 onClick = {
                     onSelectMode(AppPreferences.ROUTING_MODE_ROOT)
-                }
-            )
-        }
-
-        if (showOutlineDialog && onSaveShadowsocksKey != null) {
-            OutlineKeyDialog(
-                onDismiss = { showOutlineDialog = false },
-                onSave = { key ->
-                    val ok = onSaveShadowsocksKey(key)
-                    if (ok) {
-                        onSelectMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
-                    }
-                    ok
                 }
             )
         }

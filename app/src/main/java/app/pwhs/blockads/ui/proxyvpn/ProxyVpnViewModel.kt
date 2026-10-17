@@ -1,0 +1,318 @@
+package app.pwhs.blockads.ui.proxyvpn
+
+import android.app.Application
+import android.net.Uri
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import app.pwhs.blockads.R
+import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.ShadowsocksProfile
+import app.pwhs.blockads.data.entities.WireGuardProfile
+import app.pwhs.blockads.service.ServiceController
+import app.pwhs.blockads.service.vpn.VpnNotificationManager
+import app.pwhs.blockads.utils.WgConfigIssue
+import app.pwhs.blockads.utils.WireGuardConfigParser
+import app.pwhs.blockads.utils.configIssue
+import app.pwhs.blockads.utils.describe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import timber.log.Timber
+
+class ProxyVpnViewModel(
+    application: Application,
+) : AndroidViewModel(application), KoinComponent {
+
+    private val appPrefs: AppPreferences by inject()
+
+    private val _selectedTab = MutableStateFlow(0)
+    val selectedTab: StateFlow<Int> = _selectedTab.asStateFlow()
+
+    private val _isProxyActive = MutableStateFlow(false)
+    val isProxyActive: StateFlow<Boolean> = _isProxyActive.asStateFlow()
+
+    private val _activeProxyType = MutableStateFlow(AppPreferences.PROXY_TYPE_WIREGUARD)
+    val activeProxyType: StateFlow<String> = _activeProxyType.asStateFlow()
+
+    // WireGuard state
+    private val _wgProfiles = MutableStateFlow<List<WireGuardProfile>>(emptyList())
+    val wgProfiles: StateFlow<List<WireGuardProfile>> = _wgProfiles.asStateFlow()
+
+    private val _activeWgProfileId = MutableStateFlow<String?>(null)
+    val activeWgProfileId: StateFlow<String?> = _activeWgProfileId.asStateFlow()
+
+    private val _isLoadingWg = MutableStateFlow(false)
+    val isLoadingWg: StateFlow<Boolean> = _isLoadingWg.asStateFlow()
+
+    private val _splitDnsZones = MutableStateFlow("")
+    val splitDnsZones: StateFlow<String> = _splitDnsZones.asStateFlow()
+
+    private val _excludeLan = MutableStateFlow(false)
+    val excludeLan: StateFlow<Boolean> = _excludeLan.asStateFlow()
+
+    private val _allowAppBypass = MutableStateFlow(false)
+    val allowAppBypass: StateFlow<Boolean> = _allowAppBypass.asStateFlow()
+
+    // Shadowsocks state
+    private val _ssProfiles = MutableStateFlow<List<ShadowsocksProfile>>(emptyList())
+    val ssProfiles: StateFlow<List<ShadowsocksProfile>> = _ssProfiles.asStateFlow()
+
+    private val _activeSsProfileId = MutableStateFlow<String?>(null)
+    val activeSsProfileId: StateFlow<String?> = _activeSsProfileId.asStateFlow()
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
+
+    private val _events = MutableSharedFlow<ProxyVpnUiEvent>()
+    val events: SharedFlow<ProxyVpnUiEvent> = _events.asSharedFlow()
+
+    init {
+        // Collect WireGuard profiles
+        combine(appPrefs.wgProfiles, appPrefs.wgActiveProfileId) { list, active ->
+            list to active
+        }.onEach { (list, active) ->
+            _wgProfiles.value = list
+            _activeWgProfileId.value = active ?: list.firstOrNull { it.configIssue == null }?.id
+        }.launchIn(viewModelScope)
+
+        // Collect Shadowsocks profiles
+        combine(appPrefs.ssProfiles, appPrefs.activeSsProfileId) { list, active ->
+            list to active
+        }.onEach { (list, active) ->
+            _ssProfiles.value = list
+            _activeSsProfileId.value = active ?: list.firstOrNull()?.id
+        }.launchIn(viewModelScope)
+
+        // Stream routing mode & active proxy type
+        combine(appPrefs.routingMode, appPrefs.activeProxyType) { mode, type ->
+            mode to type
+        }.onEach { (mode, type) ->
+            _isProxyActive.value = mode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+                mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+                mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
+            _activeProxyType.value = type
+        }.launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            _splitDnsZones.value = appPrefs.splitDnsZones.first()
+            _excludeLan.value = appPrefs.excludeLan.first()
+            _allowAppBypass.value = appPrefs.allowAppBypass.first()
+        }
+    }
+
+    fun selectTab(index: Int) {
+        _selectedTab.value = index
+    }
+
+    fun clearError() {
+        _error.value = null
+    }
+
+    fun toggleProxyVpn() {
+        viewModelScope.launch {
+            val currentlyActive = _isProxyActive.value
+            if (currentlyActive) {
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
+                _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(false))
+            } else {
+                val targetType = if (_selectedTab.value == 1) AppPreferences.PROXY_TYPE_SHADOWSOCKS else AppPreferences.PROXY_TYPE_WIREGUARD
+                appPrefs.setActiveProxyType(targetType)
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+                _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(true))
+            }
+            ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    // ── WireGuard Operations ─────────────────────────────────────────────
+
+    fun setActiveWireGuardProfile(id: String) {
+        viewModelScope.launch {
+            val profile = _wgProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            profile.configIssue?.let { issue ->
+                _error.value = fixFirstMessage(profile, issue)
+                return@launch
+            }
+            appPrefs.setActiveWgProfile(id)
+            appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_WIREGUARD)
+            appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+            _events.emit(ProxyVpnUiEvent.ProfileActivated(profile.name))
+            ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    fun importWireGuardFromUri(uri: Uri) {
+        viewModelScope.launch {
+            _isLoadingWg.value = true
+            _error.value = null
+            try {
+                val content = withContext(Dispatchers.IO) {
+                    getApplication<Application>().contentResolver.openInputStream(uri)?.use { stream ->
+                        stream.bufferedReader().readText()
+                    } ?: throw IllegalArgumentException("Could not read file")
+                }
+                val displayName = deriveNameFromUri(uri) ?: defaultUniqueName()
+                val parsed = WireGuardConfigParser.parse(content)
+                val profile = WireGuardProfile(
+                    id = WireGuardProfile.newId(),
+                    name = displayName,
+                    config = parsed,
+                )
+                val makeActive = appPrefs.getActiveWgProfileSnapshot() == null && profile.configIssue == null
+                appPrefs.addOrUpdateWgProfile(profile, makeActive = makeActive)
+                _events.emit(ProxyVpnUiEvent.ProfileImported(displayName))
+                if (makeActive && _isProxyActive.value) {
+                    ServiceController.requestRestart(getApplication())
+                }
+            } catch (e: Exception) {
+                _error.value = e.message ?: "Failed to import configuration"
+            } finally {
+                _isLoadingWg.value = false
+            }
+        }
+    }
+
+    fun renameWireGuardProfile(id: String, newName: String) {
+        val name = newName.trim()
+        if (name.isEmpty()) return
+        viewModelScope.launch {
+            appPrefs.renameWgProfile(id, name)
+            _events.emit(ProxyVpnUiEvent.ProfileRenamed)
+        }
+    }
+
+    fun deleteWireGuardProfile(id: String) {
+        viewModelScope.launch {
+            val target = _wgProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            val wasActive = _activeWgProfileId.value == id
+            appPrefs.removeWgProfile(id)
+            _events.emit(ProxyVpnUiEvent.ProfileDeleted(target.name))
+            if (wasActive) VpnNotificationManager.cancelWireGuardConfigIssue(getApplication())
+            if (wasActive && _isProxyActive.value && _activeProxyType.value == AppPreferences.PROXY_TYPE_WIREGUARD) {
+                if (appPrefs.getActiveWgProfileSnapshot() == null) {
+                    appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
+                    _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(false))
+                }
+                ServiceController.requestRestart(getApplication())
+            }
+        }
+    }
+
+    fun setSplitDnsZones(zones: String) {
+        _splitDnsZones.value = zones
+        viewModelScope.launch {
+            appPrefs.setSplitDnsZones(zones)
+            if (_isProxyActive.value) ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    fun setExcludeLan(enabled: Boolean) {
+        _excludeLan.value = enabled
+        viewModelScope.launch {
+            appPrefs.setExcludeLan(enabled)
+            if (_isProxyActive.value) ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    fun setAllowAppBypass(enabled: Boolean) {
+        _allowAppBypass.value = enabled
+        viewModelScope.launch {
+            appPrefs.setAllowAppBypass(enabled)
+            if (_isProxyActive.value) ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    // ── Shadowsocks / Outline Operations ─────────────────────────────────
+
+    fun setActiveShadowsocksProfile(id: String) {
+        viewModelScope.launch {
+            val profile = _ssProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            appPrefs.setActiveSsProfileId(id)
+            appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+            appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+            _events.emit(ProxyVpnUiEvent.ProfileActivated(profile.displayName))
+            ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    fun saveShadowsocksKey(rawUri: String): Result<ShadowsocksProfile> {
+        return try {
+            val json = tunnel.Tunnel.parseShadowsocksURI(rawUri)
+            val profile = ShadowsocksProfile.fromJson(json).copy(rawUri = rawUri)
+            viewModelScope.launch {
+                appPrefs.addSsProfile(profile)
+                appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+                _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
+                ServiceController.requestRestart(getApplication())
+            }
+            Result.success(profile)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to parse and save Shadowsocks key")
+            Result.failure(e)
+        }
+    }
+
+    fun renameShadowsocksProfile(id: String, newName: String) {
+        val name = newName.trim()
+        if (name.isEmpty()) return
+        viewModelScope.launch {
+            appPrefs.renameSsProfile(id, name)
+            _events.emit(ProxyVpnUiEvent.ProfileRenamed)
+        }
+    }
+
+    fun deleteShadowsocksProfile(id: String) {
+        viewModelScope.launch {
+            val target = _ssProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            val wasActive = _activeSsProfileId.value == id
+            appPrefs.deleteSsProfile(id)
+            _events.emit(ProxyVpnUiEvent.ProfileDeleted(target.displayName))
+            if (wasActive && _isProxyActive.value && _activeProxyType.value == AppPreferences.PROXY_TYPE_SHADOWSOCKS) {
+                if (appPrefs.getSsProfileSnapshot() == null) {
+                    appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
+                    _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(false))
+                }
+                ServiceController.requestRestart(getApplication())
+            }
+        }
+    }
+
+    private fun fixFirstMessage(profile: WireGuardProfile, issue: WgConfigIssue): String {
+        val res = getApplication<Application>().resources
+        return res.getString(R.string.wireguard_issue_fix_first, profile.name, issue.describe(res))
+    }
+
+    private fun deriveNameFromUri(uri: Uri): String? {
+        val ctx = getApplication<Application>()
+        return try {
+            ctx.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                val nameIdx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                if (nameIdx >= 0 && cursor.moveToFirst()) {
+                    cursor.getString(nameIdx)?.removeSuffix(".conf")?.takeIf { it.isNotBlank() }
+                } else null
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun defaultUniqueName(): String {
+        val existing = _wgProfiles.value.map { it.name }.toSet()
+        var n = 1
+        while ("Tunnel $n" in existing) n++
+        return "Tunnel $n"
+    }
+}

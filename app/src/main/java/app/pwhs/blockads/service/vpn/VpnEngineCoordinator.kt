@@ -167,12 +167,23 @@ class VpnEngineCoordinator(
         socketProtector: (Int) -> Boolean
     ) {
         val routingMode = appPrefs.getRoutingModeSnapshot()
-        val wgConfigJson = if (routingMode == AppPreferences.ROUTING_MODE_WIREGUARD) {
+        val isWg = when (routingMode) {
+            AppPreferences.ROUTING_MODE_WIREGUARD -> true
+            AppPreferences.ROUTING_MODE_PROXY_VPN -> appPrefs.getActiveProxyTypeSnapshot() == AppPreferences.PROXY_TYPE_WIREGUARD
+            else -> false
+        }
+        val isSs = when (routingMode) {
+            AppPreferences.ROUTING_MODE_SHADOWSOCKS -> true
+            AppPreferences.ROUTING_MODE_PROXY_VPN -> appPrefs.getActiveProxyTypeSnapshot() == AppPreferences.PROXY_TYPE_SHADOWSOCKS
+            else -> false
+        }
+
+        val wgConfigJson = if (isWg) {
             resolvedWgConfigJson.ifEmpty { appPrefs.getWgConfigJsonSnapshot() ?: "" }
         } else {
             ""
         }
-        val ssConfigJson = if (routingMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS) {
+        val ssConfigJson = if (isSs) {
             appPrefs.getSsProfileSnapshot()?.toJson() ?: ""
         } else {
             ""

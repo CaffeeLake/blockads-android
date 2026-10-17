@@ -87,6 +87,9 @@ class HomeViewModel(
     val activeSsProfile: StateFlow<ShadowsocksProfile?> = appPrefs.ssProfile
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val activeProxyType: StateFlow<String> = appPrefs.activeProxyType
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppPreferences.PROXY_TYPE_WIREGUARD)
+
     // Trusted networks (#197): true when BlockAds was auto-paused on a
     // trusted Wi-Fi, so Home can show a distinct state instead of "Unprotected".
     val pausedByTrusted: StateFlow<Boolean> = appPrefs.pausedByTrusted
@@ -394,19 +397,28 @@ class HomeViewModel(
                 }
             }
 
-            if (mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
-                val active = appPrefs.getActiveWgProfileSnapshot()
-                if (active == null) {
-                    _events.toast(R.string.wireguard_empty_title)
-                    return@launch
-                }
-                active.configIssue?.let { issue ->
-                    _events.toast(R.string.wireguard_issue_fix_first, listOf(active.name, issue))
-                    return@launch
-                }
-                if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
-                    appPrefs.setHttpsFilteringEnabled(false)
-                    _events.toast(R.string.wireguard_https_filtering_disabled)
+            if (mode == AppPreferences.ROUTING_MODE_PROXY_VPN || mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
+                val activeType = appPrefs.getActiveProxyTypeSnapshot()
+                if (activeType == AppPreferences.PROXY_TYPE_WIREGUARD || mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
+                    val active = appPrefs.getActiveWgProfileSnapshot()
+                    if (active == null) {
+                        _events.toast(R.string.routing_mode_no_proxy_profile)
+                        return@launch
+                    }
+                    active.configIssue?.let { issue ->
+                        _events.toast(R.string.wireguard_issue_fix_first, listOf(active.name, issue))
+                        return@launch
+                    }
+                    if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+                        appPrefs.setHttpsFilteringEnabled(false)
+                        _events.toast(R.string.wireguard_https_filtering_disabled)
+                    }
+                } else {
+                    val active = appPrefs.getSsProfileSnapshot()
+                    if (active == null) {
+                        _events.toast(R.string.routing_mode_no_proxy_profile)
+                        return@launch
+                    }
                 }
             }
 

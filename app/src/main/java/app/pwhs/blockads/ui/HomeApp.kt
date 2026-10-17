@@ -67,6 +67,7 @@ import app.pwhs.blockads.ui.data.SettingsKey
 import app.pwhs.blockads.ui.data.StatisticsKey
 import app.pwhs.blockads.ui.data.TrustedNetworksKey
 import app.pwhs.blockads.ui.data.WireGuardEditKey
+import app.pwhs.blockads.ui.data.ProxyVpnKey
 import app.pwhs.blockads.ui.data.WireGuardImportKey
 import app.pwhs.blockads.ui.dnsprovider.DnsProviderScreen
 import app.pwhs.blockads.ui.domainrules.DomainRulesScreen
@@ -81,7 +82,7 @@ import app.pwhs.blockads.ui.config.ConfigScreen
 import app.pwhs.blockads.ui.settings.SettingsScreen
 import app.pwhs.blockads.ui.statistics.StatisticsScreen
 import app.pwhs.blockads.ui.wireguard.WireGuardEditScreen
-import app.pwhs.blockads.ui.wireguard.WireGuardImportScreen
+import app.pwhs.blockads.ui.proxyvpn.ProxyVpnScreen
 import org.koin.compose.koinInject
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -364,8 +365,18 @@ fun HomeApp(
                         }
                     )
                 }
+                entry<ProxyVpnKey> {
+                    ProxyVpnScreen(
+                        onNavigateBack = {
+                            safePop(currentBackStack)
+                        },
+                        onEditProfile = { profileId ->
+                            currentBackStack.add(WireGuardEditKey(profileId))
+                        },
+                    )
+                }
                 entry<WireGuardImportKey> {
-                    WireGuardImportScreen(
+                    ProxyVpnScreen(
                         onNavigateBack = {
                             safePop(currentBackStack)
                         },

@@ -326,5 +326,25 @@
     <string name="outline_dialog_save">Lưu &amp; Kết nối</string>
     <string name="outline_dialog_paste">Dán từ bộ nhớ tạm</string>
     <string name="outline_dialog_invalid_key">Mã Outline / Shadowsocks không hợp lệ</string>
+
+    <!-- Proxy & VPN -->
+    <string name="proxy_vpn_title">Proxy &amp; VPN</string>
+    <string name="proxy_vpn_subtitle">Quản lý máy chủ WireGuard &amp; Outline / Shadowsocks</string>
+    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
+    <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
+    <string name="proxy_vpn_master_toggle">Bật Proxy &amp; VPN</string>
+    <string name="proxy_vpn_master_toggle_desc">Định tuyến lưu lượng mạng qua máy chủ đã chọn kết hợp lọc quảng cáo</string>
+    <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
+    <string name="routing_mode_proxy_vpn_desc">Định tuyến toàn bộ mạng qua máy chủ WireGuard hoặc proxy Outline kết hợp lọc quảng cáo on-device.</string>
+    <string name="routing_mode_no_proxy_profile">Chưa cấu hình máy chủ</string>
+    <string name="routing_mode_configure_proxy">Cài đặt Proxy &amp; VPN</string>
+    <string name="shadowsocks_empty_title">Chưa có khóa Outline nào</string>
+    <string name="shadowsocks_empty_desc">Thêm mã truy cập Outline (ss://...) để kết nối qua proxy mã hóa.</string>
+    <string name="shadowsocks_add_key">Thêm khóa Outline</string>
+    <string name="shadowsocks_imported">Đã thêm: %1$s</string>
+    <string name="shadowsocks_deleted">Đã xóa: %1$s</string>
+    <string name="shadowsocks_active">Đang kích hoạt: %1$s</string>
+    <string name="shadowsocks_delete_confirm_title">Xóa cấu hình</string>
+    <string name="shadowsocks_delete_confirm_desc">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
 </resources>
 
