@@ -257,6 +257,13 @@ func newFullTunnelUdpHandler(engine *Engine, filter *MitmFilter, uidr UIDResolve
 			return
 		}
 		engine.logConnection(flow, ProtocolUDP)
+
+		// When Shadowsocks is active, drop QUIC (UDP 443) so browsers fall back to TCP through the proxy.
+		if engine.ssClient.Load() != nil && flow.serverPort == 443 {
+			_ = conn.Close()
+			return
+		}
+
 		// Browser QUIC (UDP 443): drop to force TCP TLS for MITM — ONLY
 		// when HTTP/3 filtering is enabled from the UI. Default off →
 		// relay QUIC so pages load fully. DNS-level blocking still applies

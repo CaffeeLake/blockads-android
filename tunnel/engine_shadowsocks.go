@@ -1,6 +1,8 @@
 package tunnel
 
 import (
+	"net"
+
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 )
 
@@ -33,3 +35,14 @@ func (e *Engine) GetShadowsocksConfig() string {
 	}
 	return client.Config().ToJSON()
 }
+
+// DialProxy attempts to dial target via Shadowsocks if active.
+// Returns (conn, true, err) if Shadowsocks handled it, or (nil, false, nil) if Shadowsocks is not active.
+func (e *Engine) DialProxy(targetIP net.IP, targetPort int) (net.Conn, bool, error) {
+	if ss := e.ssClient.Load(); ss != nil {
+		conn, err := ss.DialTCP(targetIP, targetPort)
+		return conn, true, err
+	}
+	return nil, false, nil
+}
+

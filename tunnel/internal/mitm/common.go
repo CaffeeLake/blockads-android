@@ -123,6 +123,7 @@ type AdBlockChecker interface {
 	LookupIP(host string) (net.IP, error)
 	IsDoHBlockingEnabled() bool
 	LogConnection(flow FlowID, protocol int)
+	DialProxy(targetIP net.IP, targetPort int) (net.Conn, bool, error)
 }
 
 type adBlockChecker = AdBlockChecker
