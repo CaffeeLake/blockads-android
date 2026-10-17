@@ -62,12 +62,14 @@ class EntityModelsTest {
         assertNull(DnsProviders.getByIp("203.0.113.1"))
         val ids = DnsProviders.ALL_PROVIDERS.map { it.id }
         assertEquals(ids.distinct(), ids)
-        assertTrue(DnsProviders.ALL_PROVIDERS.all { url -> url.dohUrl.let { it == null || it.startsWith("https://") || it.startsWith("quic://") || it.startsWith("h3://") } })
+        assertTrue(DnsProviders.ALL_PROVIDERS.all { url -> url.dohUrl.let { it == null || it.startsWith("https://") || it.startsWith("quic://") || it.startsWith("h3://") || it.startsWith("sdns://") } })
         assertEquals("quad9", DnsProviders.getByIp("9.9.9.9")?.id)
         assertEquals(DnsProviders.DNSBUNKER, DnsProviders.getById("dnsbunker"))
         assertEquals(DnsProviders.DNSBUNKER_DOQ, DnsProviders.getById("dnsbunker_doq"))
         assertEquals(DnsProviders.CLOUDFLARE_H3, DnsProviders.getById("cloudflare_h3"))
         assertEquals(DnsProviders.GOOGLE_H3, DnsProviders.getById("google_h3"))
+        assertEquals(DnsProviders.ADGUARD_STAMP, DnsProviders.getById("adguard_stamp"))
+        assertEquals(DnsProviders.CLOUDFLARE_STAMP, DnsProviders.getById("cloudflare_stamp"))
         assertEquals(DnsProviders.DNSBUNKER, DnsProviders.getByIp("185.250.250.61"))
     }
 }

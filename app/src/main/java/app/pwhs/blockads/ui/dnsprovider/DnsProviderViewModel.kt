@@ -134,14 +134,28 @@ class DnsProviderViewModel(
                 appPrefs.setDohUrl(provider.dohUrl)
                 appPrefs.setOdohRelayUrl(provider.odohRelayUrl)
             } else if (provider.dohUrl != null) {
-                if (provider.dohUrl.startsWith("quic://", ignoreCase = true)) {
+                if (app.pwhs.blockads.utils.DnsStampParser.isStamp(provider.dohUrl)) {
+                    val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(provider.dohUrl)
+                    if (parsed != null) {
+                        appPrefs.setDnsProtocol(parsed.protocol)
+                        appPrefs.setDohUrl(parsed.url)
+                        if (parsed.serverAddr.isNotBlank()) {
+                            appPrefs.setUpstreamDns(parsed.serverAddr)
+                        }
+                    } else {
+                        appPrefs.setDnsProtocol(DnsProtocol.DOH)
+                        appPrefs.setDohUrl(provider.dohUrl)
+                    }
+                } else if (provider.dohUrl.startsWith("quic://", ignoreCase = true)) {
                     appPrefs.setDnsProtocol(DnsProtocol.DOQ)
+                    appPrefs.setDohUrl(provider.dohUrl)
                 } else if (provider.dohUrl.startsWith("h3://", ignoreCase = true)) {
                     appPrefs.setDnsProtocol(DnsProtocol.DOH3)
+                    appPrefs.setDohUrl(provider.dohUrl)
                 } else {
                     appPrefs.setDnsProtocol(DnsProtocol.DOH)
+                    appPrefs.setDohUrl(provider.dohUrl)
                 }
-                appPrefs.setDohUrl(provider.dohUrl)
             } else {
                 appPrefs.setDnsProtocol(DnsProtocol.PLAIN)
             }

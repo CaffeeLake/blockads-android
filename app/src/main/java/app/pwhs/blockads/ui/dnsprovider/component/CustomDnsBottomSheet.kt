@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,6 +61,7 @@ fun CustomDnsBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    var isStampSelected by remember { mutableStateOf(app.pwhs.blockads.utils.DnsStampParser.isStamp(initialEndpoint)) }
     var selectedProtocol by remember { mutableStateOf(initialProtocol) }
     var endpointInput by remember { mutableStateOf(initialEndpoint) }
     var relayUrlInput by remember { mutableStateOf(initialRelayUrl) }
@@ -118,12 +120,32 @@ fun CustomDnsBottomSheet(
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Dedicated DNS Stamp chip
+                FilterChip(
+                    selected = isStampSelected,
+                    onClick = {
+                        isStampSelected = true
+                        if (!endpointInput.startsWith("sdns://")) {
+                            endpointInput = "sdns://"
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Verified, contentDescription = null, modifier = Modifier.size(16.dp))
+                    },
+                    label = { Text("DNS Stamp (sdns)", style = MaterialTheme.typography.labelMedium) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                )
+
                 protocols.forEach { (protocol, info) ->
                     val (label, icon) = info
-                    val isSelected = selectedProtocol == protocol
+                    val isSelected = !isStampSelected && selectedProtocol == protocol
                     FilterChip(
                         selected = isSelected,
                         onClick = {
+                            isStampSelected = false
                             selectedProtocol = protocol
                             // Auto-adjust placeholder/prefix if switching
                             when (protocol) {
@@ -139,7 +161,7 @@ fun CustomDnsBottomSheet(
                                     if (!endpointInput.startsWith("quic://")) endpointInput = "quic://"
                                 }
                                 DnsProtocol.DOT -> {
-                                    if (endpointInput.startsWith("https://") || endpointInput.startsWith("quic://") || endpointInput.startsWith("h3://")) {
+                                    if (endpointInput.startsWith("https://") || endpointInput.startsWith("quic://") || endpointInput.startsWith("h3://") || endpointInput.startsWith("sdns://")) {
                                         endpointInput = ""
                                     }
                                 }
@@ -150,7 +172,7 @@ fun CustomDnsBottomSheet(
                                     }
                                 }
                                 DnsProtocol.PLAIN -> {
-                                    if (endpointInput.startsWith("http") || endpointInput.startsWith("quic") || endpointInput.startsWith("h3")) {
+                                    if (endpointInput.startsWith("http") || endpointInput.startsWith("quic") || endpointInput.startsWith("h3") || endpointInput.startsWith("sdns")) {
                                         endpointInput = ""
                                     }
                                 }
@@ -171,7 +193,9 @@ fun CustomDnsBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Input Fields
-            val endpointLabel = when (selectedProtocol) {
+            val endpointLabel = if (isStampSelected) {
+                "DNS Stamp (sdns://)"
+            } else when (selectedProtocol) {
                 DnsProtocol.DOH -> "DoH Endpoint URL"
                 DnsProtocol.DOH3 -> "DoH3 Endpoint URL (HTTP/3)"
                 DnsProtocol.ODOH -> stringResource(R.string.dns_custom_target_url)
@@ -179,7 +203,9 @@ fun CustomDnsBottomSheet(
                 DnsProtocol.DOT -> "DoT Server Hostname"
                 DnsProtocol.PLAIN -> stringResource(R.string.dns_custom_server_ip)
             }
-            val endpointPlaceholder = when (selectedProtocol) {
+            val endpointPlaceholder = if (isStampSelected) {
+                "sdns://AgMAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5"
+            } else when (selectedProtocol) {
                 DnsProtocol.DOH -> "https://dns.google/dns-query"
                 DnsProtocol.DOH3 -> "h3://dns.google/dns-query"
                 DnsProtocol.ODOH -> "https://odoh.cloudflare-dns.com/dns-query"
@@ -203,7 +229,6 @@ fun CustomDnsBottomSheet(
                         val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(input)
                         if (parsed != null) {
                             selectedProtocol = parsed.protocol
-                            endpointInput = parsed.url
                             stampNotice = "DNS Stamp: ${parsed.protocol} (${parsed.url})"
                         }
                     } else {
@@ -249,7 +274,12 @@ fun CustomDnsBottomSheet(
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            val currentPresets = when (selectedProtocol) {
+            val currentPresets = if (isStampSelected) {
+                listOf(
+                    "Cloudflare Stamp (DoH)" to "sdns://AgMAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5",
+                    "AdGuard Stamp (DoQ)" to "sdns://BAEAAAAAAAAADDk0LjE0MC4xNC4xNAATZG5zLmFkZ3VhcmQtZG5zLmNvbQ"
+                )
+            } else when (selectedProtocol) {
                 DnsProtocol.DOH3 -> listOf(
                     "Cloudflare H3" to "h3://cloudflare-dns.com/dns-query",
                     "Google H3" to "h3://dns.google/dns-query"
@@ -290,44 +320,17 @@ fun CustomDnsBottomSheet(
                     SuggestionChip(
                         onClick = {
                             endpointInput = url
-                            if (selectedProtocol == DnsProtocol.ODOH) {
-                                relayUrlInput = "https://odoh-relay.cloudflare.com/proxy"
-                            }
-                            stampNotice = null
-                        },
-                        label = { Text(name, style = MaterialTheme.typography.labelSmall) }
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Sample DNS Stamps (sdns://)
-            Text(
-                text = "Sample DNS Stamps (sdns://)",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val stampSamples = listOf(
-                    "Cloudflare (DoH Stamp)" to "sdns://AgMAAAAAAAAABzEuMS4xLjEAEmNsb3VkZmxhcmUtZG5zLmNvbQovZG5zLXF1ZXJ5",
-                    "AdGuard (DoQ Stamp)" to "sdns://BAEAAAAAAAAADDk0LjE0MC4xNC4xNAATZG5zLmFkZ3VhcmQtZG5zLmNvbQ"
-                )
-                stampSamples.forEach { (name, stamp) ->
-                    SuggestionChip(
-                        onClick = {
-                            endpointInput = stamp
-                            val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(stamp)
-                            if (parsed != null) {
-                                selectedProtocol = parsed.protocol
-                                endpointInput = parsed.url
-                                stampNotice = "DNS Stamp: ${parsed.protocol} (${parsed.url})"
+                            if (isStampSelected || app.pwhs.blockads.utils.DnsStampParser.isStamp(url)) {
+                                val parsed = app.pwhs.blockads.utils.DnsStampParser.parse(url)
+                                if (parsed != null) {
+                                    selectedProtocol = parsed.protocol
+                                    stampNotice = "DNS Stamp: ${parsed.protocol} (${parsed.url})"
+                                }
+                            } else {
+                                if (selectedProtocol == DnsProtocol.ODOH) {
+                                    relayUrlInput = "https://odoh-relay.cloudflare.com/proxy"
+                                }
+                                stampNotice = null
                             }
                         },
                         label = { Text(name, style = MaterialTheme.typography.labelSmall) }
@@ -349,7 +352,12 @@ fun CustomDnsBottomSheet(
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        onSave(selectedProtocol, endpointInput, relayUrlInput)
+                        val finalProtocol = if (isStampSelected || app.pwhs.blockads.utils.DnsStampParser.isStamp(endpointInput)) {
+                            app.pwhs.blockads.utils.DnsStampParser.parse(endpointInput)?.protocol ?: selectedProtocol
+                        } else {
+                            selectedProtocol
+                        }
+                        onSave(finalProtocol, endpointInput, relayUrlInput)
                     },
                     enabled = endpointInput.isNotBlank(),
                     shape = RoundedCornerShape(12.dp)
