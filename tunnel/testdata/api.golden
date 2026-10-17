@@ -69,6 +69,7 @@ type Engine struct
 	method Engine.GetRulesetDNSServersCSV() string
 	method Engine.GetRulesetRemoteFiltersJSON() string
 	method Engine.GetStats() string
+	method Engine.IsBlockWebRTC() bool
 	method Engine.IsConnLogEnabled() bool
 	method Engine.IsDoHBlockingEnabled() bool
 	method Engine.IsDomainBlocked(host string) bool
@@ -86,6 +87,7 @@ type Engine struct
 	method Engine.SetAppResolver(resolver AppResolver)
 	method Engine.SetAppUidResolver(resolver AppUidResolver)
 	method Engine.SetBlockResponseType(responseType string)
+	method Engine.SetBlockWebRTC(enabled bool)
 	method Engine.SetConnLogEnabled(enabled bool)
 	method Engine.SetCosmeticCSS(css string)
 	method Engine.SetCosmeticCSSFromFile(filePath string) error

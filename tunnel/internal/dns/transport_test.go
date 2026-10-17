@@ -72,7 +72,6 @@ func TestDoH(t *testing.T) {
 // cancelled the context by then, so the read fails with "context canceled"
 // and Resolve silently falls back to plaintext.
 func TestDoHHTTP2Reliable(t *testing.T) {
-	t.Skip("known bug: queryDoH cancels the request context before reading the body; HTTP/2 answers fail intermittently")
 	srv := startDoH(t, true, dohAnswer("192.0.2.53"))
 	r := NewResolver(nil)
 	defer r.Shutdown()
@@ -103,11 +102,7 @@ func TestDoHStatusErrors(t *testing.T) {
 }
 
 // The body is capped at 65535 bytes, the largest possible DNS message.
-// queryDoH cancels the request context as soon as the headers arrive, before
-// reading the body, so any body not already buffered fails with "context
-// canceled".
 func TestDoHBodyCap(t *testing.T) {
-	t.Skip("known bug: queryDoH cancels the request context before reading the body; large answers fail")
 	srv := startDoH(t, true, func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write(bytes.Repeat([]byte{0xab}, 70000))
 	})

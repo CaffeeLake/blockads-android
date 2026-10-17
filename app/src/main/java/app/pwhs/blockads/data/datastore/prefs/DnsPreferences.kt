@@ -21,6 +21,7 @@ class DnsPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_DNS_RESPONSE_TYPE = stringPreferencesKey("dns_response_type")
         val KEY_SPLIT_DNS_ZONES = stringPreferencesKey("split_dns_zones")
         val KEY_BLOCK_DOH_BYPASS = booleanPreferencesKey("block_doh_bypass")
+        val KEY_BLOCK_WEBRTC_LEAK = booleanPreferencesKey("block_webrtc_leak")
         val KEY_ODOH_RELAY_URL = stringPreferencesKey("odoh_relay_url")
 
         const val DNS_RESPONSE_NXDOMAIN = "nxdomain"
@@ -136,4 +137,17 @@ class DnsPreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun getBlockDohBypassSnapshot(): Boolean =
         dataStore.data.map { it[KEY_BLOCK_DOH_BYPASS] ?: false }.first()
+
+    val blockWebRtcLeak: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_BLOCK_WEBRTC_LEAK] ?: false
+    }
+
+    suspend fun setBlockWebRtcLeak(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[KEY_BLOCK_WEBRTC_LEAK] = enabled
+        }
+    }
+
+    suspend fun getBlockWebRtcLeakSnapshot(): Boolean =
+        dataStore.data.map { it[KEY_BLOCK_WEBRTC_LEAK] ?: false }.first()
 }

@@ -62,7 +62,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `a provider without an encrypted url is saved as plain DNS`() = runTest {
-        vm.selectDnsProvider(DnsProviders.OPENDNS)
+        vm.selectDnsProvider(DnsProviders.SYSTEM)
         vm.completeOnboarding()
         coVerify { appPrefs.setDnsProtocol(DnsProtocol.PLAIN) }
         coVerify(exactly = 0) { appPrefs.setDohUrl(any()) }

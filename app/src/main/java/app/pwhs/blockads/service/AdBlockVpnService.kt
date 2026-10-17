@@ -201,6 +201,11 @@ class AdBlockVpnService : VpnService() {
             }
         }
         serviceScope.launch {
+            appPrefs.blockWebRtcLeak.collect { enabled ->
+                if (::goTunnelAdapter.isInitialized) goTunnelAdapter.setBlockWebRtc(enabled)
+            }
+        }
+        serviceScope.launch {
             kotlinx.coroutines.flow.combine(
                 appPrefs.useSystemDnsOnTrustedEnabled,
                 appPrefs.trustedSsids

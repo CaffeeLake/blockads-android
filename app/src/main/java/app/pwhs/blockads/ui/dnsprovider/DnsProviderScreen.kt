@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,6 +40,7 @@ import app.pwhs.blockads.ui.dnsprovider.component.DnsProviderTabs
 import app.pwhs.blockads.ui.dnsprovider.component.DohBypassCard
 import app.pwhs.blockads.ui.dnsprovider.component.FallbackDnsBottomSheet
 import app.pwhs.blockads.ui.dnsprovider.component.FallbackDnsCard
+import app.pwhs.blockads.ui.dnsprovider.component.WebRtcLeakCard
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +52,9 @@ fun DnsProviderScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var showLeakTestSheet by remember { androidx.compose.runtime.mutableStateOf(false) }
+    val leakViewModel: app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestViewModel = koinViewModel()
+    val leakState by leakViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel.effects) {
         viewModel.effects.collect { effect ->
@@ -83,6 +89,18 @@ fun DnsProviderScreen(
                             contentDescription = "Back"
                         )
                     }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        leakViewModel.onIntent(app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestUiIntent.StartTest)
+                        showLeakTestSheet = true
+                    }) {
+                        Icon(
+                            Icons.Default.Shield,
+                            contentDescription = stringResource(R.string.dns_leak_test_title),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             )
         }
@@ -103,7 +121,11 @@ fun DnsProviderScreen(
                     protocol = state.activeProtocol,
                     endpoint = state.activeEndpoint,
                     fallbackDns = state.fallbackDns,
-                    onEditFallback = { viewModel.onIntent(DnsProviderUiIntent.OpenFallbackSheet) }
+                    onEditFallback = { viewModel.onIntent(DnsProviderUiIntent.OpenFallbackSheet) },
+                    onTestDnsLeak = {
+                        leakViewModel.onIntent(app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestUiIntent.StartTest)
+                        showLeakTestSheet = true
+                    }
                 )
             }
 
@@ -168,6 +190,12 @@ fun DnsProviderScreen(
                     onCheckedChange = { viewModel.onIntent(DnsProviderUiIntent.ToggleBlockDohBypass(it)) }
                 )
             }
+            item {
+                WebRtcLeakCard(
+                    enabled = state.blockWebRtcLeak,
+                    onCheckedChange = { viewModel.onIntent(DnsProviderUiIntent.ToggleBlockWebRtcLeak(it)) }
+                )
+            }
 
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
@@ -194,6 +222,15 @@ fun DnsProviderScreen(
             onSave = { fallbackIp ->
                 viewModel.onIntent(DnsProviderUiIntent.SaveFallbackDns(fallbackIp))
             }
+        )
+    }
+
+    // DNS Leak Test BottomSheet
+    if (showLeakTestSheet) {
+        app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestBottomSheet(
+            uiState = leakState,
+            onStartTest = { leakViewModel.onIntent(app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestUiIntent.StartTest) },
+            onDismiss = { showLeakTestSheet = false }
         )
     }
 }

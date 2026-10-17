@@ -43,6 +43,7 @@ class DnsProviderViewModelTest {
     private val doh = MutableStateFlow("")
     private val odohRelay = MutableStateFlow("")
     private val blockDoh = MutableStateFlow(false)
+    private val blockWebRtc = MutableStateFlow(false)
 
     private val appPrefs: AppPreferences = mockk(relaxed = true) {
         every { dnsProviderId } returns providerId
@@ -52,6 +53,7 @@ class DnsProviderViewModelTest {
         every { dohUrl } returns doh
         every { odohRelayUrl } returns odohRelay
         every { blockDohBypass } returns blockDoh
+        every { blockWebRtcLeak } returns blockWebRtc
         coEvery { setDnsProviderId(any()) } coAnswers { providerId.value = firstArg() }
         coEvery { setUpstreamDns(any()) } coAnswers { upstream.value = firstArg() }
         coEvery { setFallbackDns(any()) } coAnswers { fallback.value = firstArg() }
@@ -59,6 +61,7 @@ class DnsProviderViewModelTest {
         coEvery { setDohUrl(any()) } coAnswers { doh.value = firstArg() }
         coEvery { setOdohRelayUrl(any()) } coAnswers { odohRelay.value = firstArg() }
         coEvery { setBlockDohBypass(any()) } coAnswers { blockDoh.value = firstArg() }
+        coEvery { setBlockWebRtcLeak(any()) } coAnswers { blockWebRtc.value = firstArg() }
     }
     private val vm by lazy { DnsProviderViewModel(appPrefs, mockk<Application>(relaxed = true)) }
 
@@ -120,9 +123,14 @@ class DnsProviderViewModelTest {
         assertEquals(DnsProtocol.DOQ, protocol.value)
         assertEquals("quic://dns.quad9.net", doh.value)
 
-        vm.onIntent(DnsProviderUiIntent.SelectProvider(DnsProviders.OPENDNS))
+        vm.onIntent(DnsProviderUiIntent.SelectProvider(DnsProviders.SYSTEM))
         assertEquals(DnsProtocol.PLAIN, protocol.value)
+        assertEquals("0.0.0.0", upstream.value)
+
+        vm.onIntent(DnsProviderUiIntent.SelectProvider(DnsProviders.OPENDNS))
+        assertEquals(DnsProtocol.DOH, protocol.value)
         assertEquals("208.67.222.222", upstream.value)
+        assertEquals("https://doh.opendns.com/dns-query", doh.value)
     }
 
     @Test
@@ -278,5 +286,12 @@ class DnsProviderViewModelTest {
         hot()
         vm.onIntent(DnsProviderUiIntent.ToggleBlockDohBypass(true))
         coVerify { appPrefs.setBlockDohBypass(true) }
+    }
+
+    @Test
+    fun `WebRTC leak blocking persists`() = runTest {
+        hot()
+        vm.onIntent(DnsProviderUiIntent.ToggleBlockWebRtcLeak(true))
+        coVerify { appPrefs.setBlockWebRtcLeak(true) }
     }
 }

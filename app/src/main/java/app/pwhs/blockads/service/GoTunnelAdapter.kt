@@ -220,6 +220,10 @@ class GoTunnelAdapter(
         }
     }
 
+    fun setBlockWebRtc(enabled: Boolean) {
+        engine.setBlockWebRTC(enabled)
+    }
+
     /**
      * Set the DNS log callback.
      */
@@ -262,16 +266,6 @@ class GoTunnelAdapter(
         }
     }
 
-    /**
-     * Start the Go tunnel engine.
-     * This method blocks the calling thread until [stop] is called.
-     *
-     * @param vpnInterface The TUN file descriptor from VpnService
-     * @param wgConfigJson Optional WireGuard config JSON
-     * @param httpsFilteringEnabled True if MITM proxy should be started
-     * @param selectedBrowsers Set of package names allowed for MITM
-     * @param certDir Directory to store the proxy's root CA certificate
-     */
     fun start(
         vpnInterface: android.os.ParcelFileDescriptor, 
         wgConfigJson: String = "",
@@ -280,25 +274,12 @@ class GoTunnelAdapter(
         certDir: String = "",
         filterHttp3: Boolean = false,
         blockDohBypass: Boolean = false,
+        blockWebRtc: Boolean = false,
         socketProtector: ((Int) -> Boolean)? = null
     ) {
         if (isRunning) return
         isRunning = true
 
-        // 1. Synchronize the MITM state before starting the tunnel.
-        // HTTPS filtering now runs through the userspace TCP/IP stack
-        // (Phase E): each TCP flow is terminated in Go with real
-        // source-UID visibility, so per-app scoping (MITM only the
-        // selected browsers) actually works on Android 10+. The legacy
-        // VpnService HTTP proxy path is no longer used.
-        // WireGuard and the userspace TCP/IP stack are mutually exclusive:
-        // the stack terminates each flow and dials it directly, bypassing the
-        // WG tunnel. The engine is created once (onCreate) and reused across
-        // VPN restarts, so a `useTcpStack=true` left over from an earlier
-        // HTTPS-filtering session would silently hijack all non-DNS WireGuard
-        // traffic — the handshake still completes, but SSH/ping never enter
-        // the tunnel. Set the flag explicitly on every start from the current
-        // mode so stale state can't leak across a mode switch.
         val mitmMode = httpsFilteringEnabled && certDir.isNotEmpty() && wgConfigJson.isEmpty()
         engine.setUseTcpStack(mitmMode)
 
@@ -310,13 +291,11 @@ class GoTunnelAdapter(
                     runCatching { pm.getPackageUid(pkg, 0) }.getOrNull()
                 }.joinToString(",")
 
-                // Init CA + filter, register UIDs.
                 engine.startStackMitm(certDir)
                 engine.setMitmAllowedUIDs(uids)
                 engine.setFilterHttp3(filterHttp3)
 
                 TunnelRuleLoader.loadExtraPassthrough(context, engine)
-
                 Timber.d("HTTPS filtering via userspace TCP/IP stack (browsers=${browsers.size}, uids=$uids)")
             } catch (e: Exception) {
                 Timber.e(e, "Failed to init stack MITM on VPN boot")
@@ -330,10 +309,9 @@ class GoTunnelAdapter(
         setupUidResolver()
         setupAppUidResolver()
 
-        // Load DoH blacklist asset to prevent DNS-over-HTTPS bypass if enabled (Issue #145)
         setBlockDohBypass(blockDohBypass)
+        setBlockWebRtc(blockWebRtc)
 
-        // Give Go the paths to the Mmap logs so it can read them natively for max speed
         updateTries()
         updateCosmeticRules()
 

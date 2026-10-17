@@ -87,6 +87,8 @@ class VpnTunnelBuilder(
                     // The decomposed routes stand in for 0.0.0.0/0 and also work below API 33.
                     if (excludeLan && !route.isIpv6 && route.prefixLength == 0) {
                         addIpv4Routes(b, excludeLan = true)
+                    } else if (excludeLan && route.isIpv6 && route.prefixLength == 0) {
+                        addIpv6Routes(b, excludeLan = true)
                     } else {
                         b.addRoute(route.address, route.prefixLength)
                     }
@@ -100,6 +102,8 @@ class VpnTunnelBuilder(
                         b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
                         b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
                         b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
+                        b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
+                        b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
                         Timber.d("LAN excluded from WireGuard VPN routes")
                     } catch (e: Exception) {
                         Timber.w(e, "Failed to exclude LAN routes")
@@ -109,6 +113,9 @@ class VpnTunnelBuilder(
                 b.addAddress("100.64.100.2", 32)
                 b.addDnsServer("100.64.100.1")
                 b.addRoute("100.64.100.1", 32)
+                b.addAddress("fd00::2", 128)
+                b.addDnsServer("fd00::1")
+                b.addRoute("fd00::1", 128)
                 b
             } else {
                 val excludeLan = runBlocking { appPrefs.excludeLan.first() }
@@ -124,24 +131,21 @@ class VpnTunnelBuilder(
                     .setBlocking(false)
                     .setMtu(1350)
                 addIpv4Routes(b, excludeLan)
+                addIpv6Routes(b, excludeLan)
                 if (excludeLan && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     try {
                         b.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
                         b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
                         b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
                         b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
+                        b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
+                        b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
                         Timber.d("LAN excluded from direct mode VPN routes")
                     } catch (e: Exception) {
                         Timber.w(e, "Failed to exclude LAN routes")
                     }
                 }
                 b
-            }
-
-            try {
-                builder.addDisallowedApplication(vpnService.packageName)
-            } catch (e: Exception) {
-                Timber.w(e, "Could not exclude self from VPN")
             }
 
             for (appPackage in whitelistedApps) {
@@ -156,7 +160,7 @@ class VpnTunnelBuilder(
             // A non-bypassable tunnel refuses an app's explicit bind to an
             // underlying network, which is what breaks wireless Android Auto.
             val allowAppBypass = runBlocking { appPrefs.allowAppBypass.first() }
-            if (wgConfig == null || allowAppBypass) {
+            if (allowAppBypass) {
                 builder.allowBypass()
             }
 
@@ -237,6 +241,14 @@ class VpnTunnelBuilder(
             }
         } else {
             builder.addRoute("0.0.0.0", 0)
+        }
+    }
+
+    private fun addIpv6Routes(builder: VpnService.Builder, excludeLan: Boolean) {
+        if (excludeLan && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            builder.addRoute("2000::", 3)
+        } else {
+            builder.addRoute("::", 0)
         }
     }
 }

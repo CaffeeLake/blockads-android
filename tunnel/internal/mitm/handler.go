@@ -89,7 +89,8 @@ func NewMitmTcpHandler(
 		}
 
 		// Never attempt to dial our virtual TUN DNS IPs on non-DNS ports
-		if flow.serverIP.String() == "100.64.100.1" || flow.serverIP.String() == "fd00::1" {
+		s := flow.serverIP.String()
+		if s == "100.64.100.1" || s == "fd00::1" || s == "192.0.2.2" || s == "2001:db8:1111::2" {
 			return
 		}
 

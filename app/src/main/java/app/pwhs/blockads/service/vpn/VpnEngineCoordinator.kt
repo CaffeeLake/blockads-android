@@ -176,6 +176,7 @@ class VpnEngineCoordinator(
         val selectedBrowsers = appPrefs.getSelectedBrowsersSnapshot()
         val filterHttp3 = if (httpsFilteringEnabled) true else appPrefs.getFilterHttp3Snapshot()
         val blockDohBypass = appPrefs.getBlockDohBypassSnapshot()
+        val blockWebRtc = appPrefs.getBlockWebRtcLeakSnapshot()
 
         goTunnelAdapter.start(
             vpnInterface = vpnInterface,
@@ -185,6 +186,7 @@ class VpnEngineCoordinator(
             certDir = certDir,
             filterHttp3 = filterHttp3,
             blockDohBypass = blockDohBypass,
+            blockWebRtc = blockWebRtc,
             socketProtector = socketProtector
         )
     }

@@ -65,6 +65,8 @@ val appModule = module {
                 requestTimeoutMillis = 60_000
                 connectTimeoutMillis = 30_000
             }
+
+            install(io.ktor.client.plugins.websocket.WebSockets)
         }
     }
 
@@ -301,6 +303,19 @@ val appModule = module {
             application = androidApplication(),
             geoIpManager = get(),
             appPreferences = get()
+        )
+    }
+
+    // DNS Leak Test
+    single<app.pwhs.blockads.data.repository.DnsLeakRepository> {
+        app.pwhs.blockads.data.repository.DnsLeakRepositoryImpl(
+            client = get(),
+            appPrefs = get(),
+        )
+    }
+    viewModel {
+        app.pwhs.blockads.ui.dnsprovider.leak.DnsLeakTestViewModel(
+            dnsLeakRepository = get()
         )
     }
 }

@@ -136,6 +136,10 @@ type Engine struct {
 	// ad-blocking still applies. Toggled from the UI via SetFilterHttp3.
 	quicDrop atomic.Bool
 
+	// blockWebRTC: when true, UDP STUN (ports 3478, 5349, 19302-19309) and
+	// TCP STUN/TURN flows are dropped to prevent WebRTC IP leak on websites.
+	blockWebRTC atomic.Bool
+
 	// Stack-mode MITM state (Phase D). When both are non-nil, the stack
 	// uses the MITM TCP handler; otherwise the Phase C direct-dial
 	// passthrough handler is used.
@@ -347,6 +351,18 @@ func (e *Engine) SetConnLogEnabled(enabled bool) {
 
 // IsConnLogEnabled reports the current value.
 func (e *Engine) IsConnLogEnabled() bool { return e.connLogEnabled.Load() }
+
+// SetBlockWebRTC toggles WebRTC STUN/TURN traffic blocking. When true,
+// WebRTC STUN discovery packets (UDP 3478, 5349, 19302-19309) and TCP STUN/TURN
+// connections are dropped to prevent websites from discovering the user's real or
+// LAN IP via WebRTC ICE candidate gathering.
+func (e *Engine) SetBlockWebRTC(enabled bool) {
+	e.blockWebRTC.Store(enabled)
+	logf("SetBlockWebRTC: WebRTC STUN leak protection = %t", enabled)
+}
+
+// IsBlockWebRTC reports whether WebRTC leak protection is enabled.
+func (e *Engine) IsBlockWebRTC() bool { return e.blockWebRTC.Load() }
 
 // SetDoHBlocklist parses newline-separated domains of known DoH endpoints
 // (e.g. from assets/blocklist_doh.txt). When client apps or browsers

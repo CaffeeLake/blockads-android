@@ -173,6 +173,27 @@
     <string name="dns_custom_save">Save</string>
     <string name="dns_custom_cancel">Cancel</string>
     <string name="dns_doh_badge" translatable="false">DoH</string>
+    <string name="dns_leak_test_title">DNS Leak Test</string>
+    <string name="dns_leak_test_btn">Check DNS Leak</string>
+    <string name="dns_leak_test_desc">Verify that your DNS queries are securely encrypted and not leaking to your ISP</string>
+    <string name="dns_leak_status_secure">Secure (No Leak)</string>
+    <string name="dns_leak_status_leaked">DNS Leak Detected!</string>
+    <string name="dns_leak_status_ecs_leak">Subnet (ECS) Exposure</string>
+    <string name="dns_leak_testing_init">Initializing test session…</string>
+    <string name="dns_leak_testing_probing">Probing DNS resolvers…</string>
+    <string name="dns_leak_testing_analyzing">Analyzing security results…</string>
+    <string name="dns_leak_resolvers_title">Detected DNS Resolvers</string>
+    <string name="dns_leak_client_network">Your Network Identity</string>
+    <string name="dns_leak_latency">Response Latency</string>
+    <string name="dns_leak_retest">Run Test Again</string>
+    <string name="dns_security_title">DNS Security (DNSSEC)</string>
+    <string name="dns_security_authenticated">Protected (DNSSEC Validated)</string>
+    <string name="dns_security_not_authenticated">Unvalidated</string>
+    <string name="dns_security_desc">Validates cryptographic signatures to protect against DNS spoofing and cache poisoning.</string>
+    <string name="dns_leak_tab_overview">Overview</string>
+    <string name="dns_leak_tab_dnssec">DNSSEC</string>
+    <string name="dns_leak_tab_resolvers">Resolvers</string>
+    <string name="dns_leak_reserved_ips">Reserved IPs</string>
     <string name="app_management_title">App Management</string>
     <string name="app_management_subtitle">%d apps</string>
     <string name="app_management_subtitle_filtered">%1$d of %2$d apps</string>
@@ -243,6 +264,9 @@
     <string name="dns_block_doh_bypass_title">Block DNS-over-HTTPS (DoH) Bypass</string>
     <string name="dns_block_doh_bypass_desc">Prevent apps and browsers from bypassing local filtering using encrypted DoH/DoT</string>
     <string name="dns_block_doh_bypass_notice">Note: If your browser (e.g. Chrome) shows a connection error (DNS_PROBE_FINISHED_BAD_SECURE_CONFIG), set \"Use secure DNS\" in your browser settings to \"Automatic\".</string>
+    <string name="dns_block_webrtc_leak_title">Block WebRTC IP Leak</string>
+    <string name="dns_block_webrtc_leak_desc">Prevent websites and browsers from discovering your real IP and local network addresses via WebRTC STUN</string>
+    <string name="dns_block_webrtc_leak_notice">Note: Blocking WebRTC STUN prevents IP leaks on leak-test and tracking sites, but may affect browser-based real-time video/voice calls (e.g. web Discord, Google Meet).</string>
 
     <!-- DNS Screen Refactor & ODoH Preparation -->
     <string name="dns_tab_builtin" translatable="false">Built-in</string>

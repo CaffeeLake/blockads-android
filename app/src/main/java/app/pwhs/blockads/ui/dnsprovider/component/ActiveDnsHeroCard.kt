@@ -48,6 +48,7 @@ fun ActiveDnsHeroCard(
     endpoint: String,
     fallbackDns: String,
     onEditFallback: () -> Unit,
+    onTestDnsLeak: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val (protocolLabel, protocolIcon, protocolColor) = when (protocol) {
@@ -167,6 +168,29 @@ fun ActiveDnsHeroCard(
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(18.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+            Spacer(modifier = Modifier.height(10.dp))
+
+            androidx.compose.material3.OutlinedButton(
+                onClick = onTestDnsLeak,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Shield,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.dns_leak_test_btn),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }

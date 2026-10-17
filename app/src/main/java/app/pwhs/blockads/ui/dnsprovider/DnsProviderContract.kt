@@ -19,6 +19,7 @@ data class DnsProviderUiState(
     val customDnsDisplay: String = "",
     val isCustomDns: Boolean = false,
     val blockDohBypass: Boolean = false,
+    val blockWebRtcLeak: Boolean = false,
     val showCustomSheet: Boolean = false,
     val showFallbackSheet: Boolean = false
 )
@@ -38,6 +39,7 @@ sealed interface DnsProviderUiIntent {
     data object CloseFallbackSheet : DnsProviderUiIntent
     data class SaveFallbackDns(val fallbackIp: String) : DnsProviderUiIntent
     data class ToggleBlockDohBypass(val enabled: Boolean) : DnsProviderUiIntent
+    data class ToggleBlockWebRtcLeak(val enabled: Boolean) : DnsProviderUiIntent
 }
 
 sealed interface DnsProviderUiEffect {

@@ -47,6 +47,7 @@ class DnsProviderViewModel(
         appPrefs.odohRelayUrl,
         appPrefs.fallbackDns,
         appPrefs.blockDohBypass,
+        appPrefs.blockWebRtcLeak,
         _selectedTab,
         _selectedCategory,
         _showCustomSheet,
@@ -59,10 +60,11 @@ class DnsProviderViewModel(
         val odohRelay = args[4] as String
         val fallback = args[5] as String
         val dohBypass = args[6] as Boolean
-        val tab = args[7] as Int
-        val category = args[8] as DnsCategory?
-        val showCustom = args[9] as Boolean
-        val showFallback = args[10] as Boolean
+        val webRtcLeak = args[7] as Boolean
+        val tab = args[8] as Int
+        val category = args[9] as DnsCategory?
+        val showCustom = args[10] as Boolean
+        val showFallback = args[11] as Boolean
 
         val isCustom = providerId == AppPreferences.CUSTOM_DNS_PROVIDER_ID ||
                 (providerId == null && DnsProviders.getByIp(upstream) == null)
@@ -100,6 +102,7 @@ class DnsProviderViewModel(
             customDnsDisplay = customDisplay,
             isCustomDns = isCustom,
             blockDohBypass = dohBypass,
+            blockWebRtcLeak = webRtcLeak,
             showCustomSheet = showCustom,
             showFallbackSheet = showFallback
         )
@@ -121,6 +124,7 @@ class DnsProviderViewModel(
             is DnsProviderUiIntent.CloseFallbackSheet -> _showFallbackSheet.value = false
             is DnsProviderUiIntent.SaveFallbackDns -> saveFallbackDns(intent.fallbackIp)
             is DnsProviderUiIntent.ToggleBlockDohBypass -> toggleBlockDohBypass(intent.enabled)
+            is DnsProviderUiIntent.ToggleBlockWebRtcLeak -> toggleBlockWebRtcLeak(intent.enabled)
         }
     }
 
@@ -304,6 +308,12 @@ class DnsProviderViewModel(
     private fun toggleBlockDohBypass(enabled: Boolean) {
         viewModelScope.launch {
             appPrefs.setBlockDohBypass(enabled)
+        }
+    }
+
+    private fun toggleBlockWebRtcLeak(enabled: Boolean) {
+        viewModelScope.launch {
+            appPrefs.setBlockWebRtcLeak(enabled)
         }
     }
 

@@ -88,7 +88,7 @@ func NewResolver(protectFn func(fd int) bool) *Resolver {
 		protectSocketFn: protectFn,
 	}
 
-	dialer := &protectedDialer{protectFn: protectFn}
+	dialer := &protectedDialer{protectFn: protectFn, resolver: r}
 	transport := &http.Transport{
 		DialContext:         dialer.DialContext,
 		MaxIdleConns:        10,
@@ -114,11 +114,18 @@ func NewResolver(protectFn func(fd int) bool) *Resolver {
 				host = addr
 				port = "443"
 			}
-			ips, err := net.LookupHost(host)
-			if err != nil || len(ips) == 0 {
-				return nil, fmt.Errorf("DoH3 resolve %s: %w", host, err)
+			targetIP := host
+			if net.ParseIP(host) == nil {
+				targetIP = resolveBootstrapIP(host, r)
+				if targetIP == "" {
+					ips, err := net.LookupHost(host)
+					if err != nil || len(ips) == 0 {
+						return nil, fmt.Errorf("DoH3 resolve %s: %w", host, err)
+					}
+					targetIP = ips[0]
+				}
 			}
-			udpAddr, err := net.ResolveUDPAddr("udp", net.JoinHostPort(ips[0], port))
+			udpAddr, err := net.ResolveUDPAddr("udp", net.JoinHostPort(targetIP, port))
 			if err != nil {
 				return nil, fmt.Errorf("DoH3 resolve UDP: %w", err)
 			}

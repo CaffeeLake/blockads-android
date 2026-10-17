@@ -132,6 +132,7 @@ class AppPreferences internal constructor(
     val dnsResponseType: Flow<String> get() = dns.dnsResponseType
     val splitDnsZones: Flow<String> get() = dns.splitDnsZones
     val blockDohBypass: Flow<Boolean> get() = dns.blockDohBypass
+    val blockWebRtcLeak: Flow<Boolean> get() = dns.blockWebRtcLeak
 
     // ── Appearance Flows ─────────────────────────────────────────────────
     val themeMode: Flow<String> get() = appearance.themeMode
@@ -214,6 +215,8 @@ class AppPreferences internal constructor(
     suspend fun setSplitDnsZones(zones: String) = dns.setSplitDnsZones(zones)
     suspend fun setBlockDohBypass(enabled: Boolean) = dns.setBlockDohBypass(enabled)
     suspend fun getBlockDohBypassSnapshot(): Boolean = dns.getBlockDohBypassSnapshot()
+    suspend fun setBlockWebRtcLeak(enabled: Boolean) = dns.setBlockWebRtcLeak(enabled)
+    suspend fun getBlockWebRtcLeakSnapshot(): Boolean = dns.getBlockWebRtcLeakSnapshot()
 
     suspend fun setThemeMode(mode: String) = appearance.setThemeMode(mode)
     suspend fun setAppLanguage(language: String) = appearance.setAppLanguage(language)

@@ -98,7 +98,7 @@ object DnsProviders {
         name = "OpenDNS",
         category = DnsCategory.STANDARD,
         ipAddress = "208.67.222.222",
-        dohUrl = null,
+        dohUrl = "https://doh.opendns.com/dns-query",
         description = "Reliable DNS with optional content filtering",
         iconRes = R.drawable.ic_dns_opendns
     )
@@ -108,7 +108,7 @@ object DnsProviders {
         name = "OpenDNS Family Shield",
         category = DnsCategory.FAMILY,
         ipAddress = "208.67.222.123",
-        dohUrl = null,
+        dohUrl = "https://doh.familyshield.opendns.com/dns-query",
         description = "Family-safe DNS blocking adult content",
         iconRes = R.drawable.ic_dns_opendns
     )

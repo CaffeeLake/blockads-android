@@ -54,6 +54,7 @@ class VpnEngineCoordinatorTest {
         coEvery { getWgConfigJsonSnapshot() } answers { savedWgJson }
         coEvery { getFilterHttp3Snapshot() } returns false
         coEvery { getBlockDohBypassSnapshot() } returns true
+        coEvery { getBlockWebRtcLeakSnapshot() } returns false
         coEvery { getUseSystemDnsOnTrustedEnabledSnapshot() } returns false
         coEvery { getTrustedSsidsSnapshot() } returns emptySet()
     }
@@ -135,17 +136,17 @@ class VpnEngineCoordinatorTest {
         routingMode = AppPreferences.ROUTING_MODE_WIREGUARD
         savedWgJson = "{\"saved\":1}"
         coordinator.startTunnel(adapter, tun, "{\"resolved\":1}", httpsFilteringEnabled = false, certDir = "/c") { true }
-        verify { adapter.start(tun, "{\"resolved\":1}", false, setOf("com.android.chrome"), "/c", false, true, any()) }
+        verify { adapter.start(tun, "{\"resolved\":1}", false, setOf("com.android.chrome"), "/c", false, true, any(), any()) }
 
         coordinator.startTunnel(adapter, tun, "", httpsFilteringEnabled = false, certDir = "/c") { true }
-        verify { adapter.start(tun, "{\"saved\":1}", false, any(), any(), any(), any(), any()) }
+        verify { adapter.start(tun, "{\"saved\":1}", false, any(), any(), any(), any(), any(), any()) }
     }
 
     @Test
     fun `direct mode ignores any WireGuard config and https forces HTTP3 filtering`() = runTest {
         savedWgJson = "{\"saved\":1}"
         coordinator.startTunnel(adapter, tun, "{\"resolved\":1}", httpsFilteringEnabled = true, certDir = "/c") { true }
-        verify { adapter.start(tun, "", true, any(), "/c", true, true, any()) }
+        verify { adapter.start(tun, "", true, any(), "/c", true, true, any(), any()) }
     }
 
     @Ignore("WireGuard mode with no usable config starts the direct full-tunnel engine instead of failing closed")

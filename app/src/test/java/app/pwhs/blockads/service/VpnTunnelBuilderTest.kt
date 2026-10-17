@@ -100,15 +100,14 @@ class VpnTunnelBuilderTest {
     }
 
     @Test
-    fun `direct mode is a bypassable full tunnel that excludes us and the whitelist`() {
+    fun `direct mode is a full tunnel that routes IPv4 and IPv6 and excludes whitelist`() {
         val result = establish("com.bank", "not.installed") as TunnelResult.Success
         assertEquals("", result.resolvedWgConfigJson)
         assertEquals(listOf("BlockAds"), sessions)
         assertEquals(1350, mtu)
-        assertTrue(routes.containsAll(listOf("0.0.0.0/0", "100.64.100.1/32", "fd00::1/128")))
-        assertTrue("::/0" !in routes)
-        assertEquals(listOf("app.pwhs.blockads", "com.bank"), disallowed)
-        assertTrue(bypass)
+        assertTrue(routes.containsAll(listOf("0.0.0.0/0", "::/0", "100.64.100.1/32", "fd00::1/128")))
+        assertEquals(listOf("com.bank"), disallowed)
+        assertEquals(false, bypass)
     }
 
     @Test
@@ -117,7 +116,6 @@ class VpnTunnelBuilderTest {
         establish()
         assertTrue("0.0.0.0/0" !in routes)
         assertTrue(routes.size > 10)
-        assertTrue("::/0" !in routes)
     }
 
     @Test
@@ -150,7 +148,7 @@ class VpnTunnelBuilderTest {
         wgJson = wgConfig.toJson()
         excludeLan = true
         establish()
-        assertEquals(4, routes.count { it.startsWith("-") })
+        assertEquals(6, routes.count { it.startsWith("-") })
     }
 
     @Test

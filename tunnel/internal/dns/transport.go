@@ -9,7 +9,9 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/quic-go/quic-go"
@@ -38,17 +40,16 @@ func (r *Resolver) queryDoH(rawQuery []byte, dohURL string) ([]byte, error) {
 
 		resp, err = r.httpClient.Do(req)
 		if err == nil {
-			cancel()
+			defer cancel()
 			break
 		}
 
+		cancel()
 		errStr := err.Error()
 		if strings.Contains(errStr, "EOF") && attempt == 1 {
-			cancel()
 			time.Sleep(10 * time.Millisecond)
 			continue
 		}
-		cancel()
 		return nil, fmt.Errorf("DoH request failed: %w", err)
 	}
 	defer resp.Body.Close()
@@ -77,27 +78,33 @@ func (r *Resolver) queryDoT(rawQuery []byte, server string) ([]byte, error) {
 		port = p
 	}
 
-	dialer := &net.Dialer{Timeout: connectTimeout}
-
-	ips, err := net.LookupHost(host)
-	if err != nil || len(ips) == 0 {
-		return nil, fmt.Errorf("DoT resolve %s: %w", host, err)
-	}
-
-	conn, err := dialer.Dial("tcp", net.JoinHostPort(ips[0], port))
-	if err != nil {
-		return nil, fmt.Errorf("DoT dial: %w", err)
-	}
-
-	if r.protectSocketFn != nil {
-		if tcpConn, ok := conn.(*net.TCPConn); ok {
-			rawConn, err := tcpConn.SyscallConn()
-			if err == nil {
-				rawConn.Control(func(fd uintptr) {
+	dialer := &net.Dialer{
+		Timeout: connectTimeout,
+		Control: func(network, address string, c syscall.RawConn) error {
+			if r.protectSocketFn != nil {
+				return c.Control(func(fd uintptr) {
 					r.protectSocketFn(int(fd))
 				})
 			}
+			return nil
+		},
+	}
+
+	targetIP := host
+	if net.ParseIP(host) == nil {
+		targetIP = resolveBootstrapIP(host, r)
+		if targetIP == "" {
+			ips, err := net.LookupHost(host)
+			if err != nil || len(ips) == 0 {
+				return nil, fmt.Errorf("DoT resolve %s: %w", host, err)
+			}
+			targetIP = ips[0]
 		}
+	}
+
+	conn, err := dialer.Dial("tcp", net.JoinHostPort(targetIP, port))
+	if err != nil {
+		return nil, fmt.Errorf("DoT dial: %w", err)
 	}
 
 	tlsConn := tls.Client(conn, &tls.Config{
@@ -193,12 +200,19 @@ func (r *Resolver) getOrCreateQUICConn(host, port string) (quic.Connection, erro
 		return r.quicConn, nil
 	}
 
-	ips, err := net.LookupHost(host)
-	if err != nil || len(ips) == 0 {
-		return nil, fmt.Errorf("DoQ resolve %s: %w", host, err)
+	targetIP := host
+	if net.ParseIP(host) == nil {
+		targetIP = resolveBootstrapIP(host, r)
+		if targetIP == "" {
+			ips, err := net.LookupHost(host)
+			if err != nil || len(ips) == 0 {
+				return nil, fmt.Errorf("DoQ resolve %s: %w", host, err)
+			}
+			targetIP = ips[0]
+		}
 	}
 
-	udpAddr, err := net.ResolveUDPAddr("udp", net.JoinHostPort(ips[0], port))
+	udpAddr, err := net.ResolveUDPAddr("udp", net.JoinHostPort(targetIP, port))
 	if err != nil {
 		return nil, fmt.Errorf("DoQ resolve UDP: %w", err)
 	}
@@ -269,31 +283,63 @@ func parseDoQURL(url string) (host, port string) {
 
 type protectedDialer struct {
 	protectFn func(fd int) bool
+	resolver  *Resolver
 }
 
 func (d *protectedDialer) DialContext(ctx context.Context, network, addr string) (net.Conn, error) {
-	dialer := &net.Dialer{Timeout: connectTimeout}
-	conn, err := dialer.DialContext(ctx, network, addr)
-	if err != nil {
-		return nil, err
+	dialer := &net.Dialer{
+		Timeout: connectTimeout,
+		Control: func(network, address string, c syscall.RawConn) error {
+			if d.protectFn != nil {
+				return c.Control(func(fd uintptr) {
+					d.protectFn(int(fd))
+				})
+			}
+			return nil
+		},
 	}
 
-	if d.protectFn != nil {
-		var rawConn interface{ Control(func(fd uintptr)) error }
-		switch c := conn.(type) {
-		case *net.TCPConn:
-			rawConn, _ = c.SyscallConn()
-		case *net.UDPConn:
-			rawConn, _ = c.SyscallConn()
-		}
-		if rawConn != nil {
-			rawConn.Control(func(fd uintptr) {
-				d.protectFn(int(fd))
-			})
+	targetAddr := addr
+	host, port, err := net.SplitHostPort(addr)
+	if err == nil {
+		if net.ParseIP(host) == nil {
+			targetIP := resolveBootstrapIP(host, d.resolver)
+			if targetIP != "" {
+				targetAddr = net.JoinHostPort(targetIP, port)
+			}
 		}
 	}
 
-	return conn, nil
+	return dialer.DialContext(ctx, network, targetAddr)
+}
+
+func resolveBootstrapIP(host string, r *Resolver) string {
+	if r != nil {
+		r.mu.RLock()
+		primary := r.primaryServer
+		dohURL := r.dohURL
+		r.mu.RUnlock()
+		if net.ParseIP(primary) != nil && dohURL != "" {
+			if u, err := url.Parse(dohURL); err == nil && strings.EqualFold(u.Hostname(), host) {
+				return primary
+			}
+		}
+	}
+	switch strings.ToLower(host) {
+	case "cloudflare-dns.com", "one.one.one.one", "1dot1dot1dot1.cloudflare-dns.com", "family.cloudflare-dns.com", "odoh.cloudflare-dns.com":
+		return "1.1.1.1"
+	case "dns.google":
+		return "8.8.8.8"
+	case "dns.quad9.net":
+		return "9.9.9.9"
+	case "dns.adguard-dns.com", "dns.adguard.com":
+		return "94.140.14.14"
+	case "doh.opendns.com", "dns.opendns.com":
+		return "208.67.222.222"
+	case "doh.familyshield.opendns.com":
+		return "208.67.222.123"
+	}
+	return ""
 }
 
 // queryDoH3 sends a DNS query via DNS-over-HTTP/3 (RFC 9114 / RFC 8484 over HTTP/3).
@@ -323,7 +369,7 @@ func (r *Resolver) queryDoH3(rawQuery []byte, dohURL string) ([]byte, error) {
 
 		resp, err = r.h3Client.Do(req)
 		if err == nil {
-			cancel()
+			defer cancel()
 			break
 		}
 
