@@ -18,6 +18,11 @@ enum class BottomBarScreen(
         icon = R.drawable.ic_shield
     ),
 
+    WireGuard(
+        labelRes = R.string.proxy_vpn_tab_wireguard,
+        icon = R.drawable.ic_settings_wireguard
+    ),
+
     Firewall(
         labelRes = R.string.settings_firewall,
         icon = R.drawable.ic_fire

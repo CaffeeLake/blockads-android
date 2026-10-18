@@ -43,6 +43,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("fdroid") {
+            dimension = "distribution"
+            buildConfigField("Boolean", "IS_STORE", "false")
+        }
+        create("store") {
+            dimension = "distribution"
+            buildConfigField("Boolean", "IS_STORE", "true")
+        }
+    }
+
     // Load signing config from key.properties (CI/CD)
     val keyPropertiesFile = rootProject.file("key.properties")
     val useReleaseKeystore = keyPropertiesFile.exists()
@@ -134,9 +146,10 @@ android {
         includeInBundle = false
     }
 
+    val isBuildingBundle = gradle.startParameter.taskNames.any { it.contains("bundle", ignoreCase = true) }
     splits {
         abi {
-            isEnable = true
+            isEnable = !isBuildingBundle
             reset()
             include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
             isUniversalApk = true
@@ -265,7 +278,10 @@ dependencies {
 
 kover {
     currentProject {
-        createVariant("unit") { add("debug") }
+        createVariant("unit") {
+            add("fdroidDebug")
+            add("storeDebug")
+        }
     }
     reports {
         filters {

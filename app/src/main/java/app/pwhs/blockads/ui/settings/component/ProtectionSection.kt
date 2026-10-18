@@ -93,14 +93,24 @@ fun ProtectionSection(
 
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
 
-                // 4. Proxy & VPN
-                SettingItem(
-                    iconPainter = painterResource(R.drawable.ic_settings_wireguard),
-                    iconTint = Color(0xFF7C3AED),
-                    title = stringResource(R.string.proxy_vpn_title),
-                    desc = stringResource(R.string.proxy_vpn_subtitle),
-                    onClick = onNavigateToWireGuardImport
-                )
+                // 4. Proxy & VPN (fdroid) or Filter Rules (store)
+                if (app.pwhs.blockads.BuildConfig.IS_STORE) {
+                    SettingItem(
+                        iconPainter = painterResource(R.drawable.ic_shield),
+                        iconTint = Color(0xFF7C3AED),
+                        title = stringResource(R.string.settings_category_filters),
+                        desc = stringResource(R.string.settings_category_filters_desc),
+                        onClick = onNavigateToWireGuardImport
+                    )
+                } else {
+                    SettingItem(
+                        iconPainter = painterResource(R.drawable.ic_settings_wireguard),
+                        iconTint = Color(0xFF7C3AED),
+                        title = stringResource(R.string.proxy_vpn_title),
+                        desc = stringResource(R.string.proxy_vpn_subtitle),
+                        onClick = onNavigateToWireGuardImport
+                    )
+                }
 
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
 

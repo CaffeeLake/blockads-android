@@ -4,6 +4,7 @@ import android.net.IpPrefix
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.WireGuardConfig
 import app.pwhs.blockads.utils.SubnetDecomposer
@@ -91,8 +92,9 @@ class VpnTunnelBuilder(
 
             val builder = if (wgConfig != null) {
                 Timber.d("Establishing VPN in WireGuard mode")
+                val appName = vpnService.getString(R.string.app_name)
                 val b = vpnService.Builder()
-                    .setSession("BlockAds WireGuard")
+                    .setSession("$appName WireGuard")
                     .setBlocking(false)
                     .setMtu(1280)
 
@@ -156,8 +158,9 @@ class VpnTunnelBuilder(
                 val allowIpv6 = preferredIp != AppPreferences.PREFERRED_IP_IPV4
                 val allowIpv4 = preferredIp != AppPreferences.PREFERRED_IP_IPV6
                 Timber.d("Establishing VPN in direct mode (fullTunnel=true, excludeLan=$excludeLan, preferredIp=$preferredIp)")
+                val appName = vpnService.getString(R.string.app_name)
                 val b = vpnService.Builder()
-                    .setSession(if (isSs) "BlockAds Outline" else "BlockAds")
+                    .setSession(if (isSs) "$appName Outline" else appName)
                     .addAddress("100.64.100.2", 32)
                     .addRoute("100.64.100.1", 32)
                     .addDnsServer("100.64.100.1")

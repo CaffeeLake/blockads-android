@@ -52,6 +52,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun FilterSetupScreen(
     modifier: Modifier = Modifier,
+    canNavigateBack: Boolean = false,
+    onNavigateBack: () -> Unit = {},
     viewModel: FilterSetupViewModel = koinViewModel(),
     onNavigateToFilterDetail: (filterId: Long) -> Unit = {}
 ) {
@@ -108,6 +110,8 @@ fun FilterSetupScreen(
                     isSearchVisible = !isSearchVisible
                     if (!isSearchVisible) viewModel.setSearchQuery("")
                 },
+                canNavigateBack = canNavigateBack,
+                onNavigateBack = onNavigateBack,
                 isUpdatingFilter = isUpdatingFilter,
                 updateProgress = updateProgress,
                 onUpdateAllFilters = { viewModel.updateAllFilters() }

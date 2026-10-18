@@ -34,6 +34,10 @@ class FilterListSeeder(
     }
 
     suspend fun seedDefaultsIfNeeded() = withContext(Dispatchers.IO) {
+        if (app.pwhs.blockads.BuildConfig.IS_STORE) {
+            Timber.d("Store flavor: skipping default filter list seeding")
+            return@withContext
+        }
         val existingBuiltIns = filterListDao.getAllSync().count { it.isBuiltIn }
         if (existingBuiltIns < 50) {
             seedFromBundledAsset()
@@ -42,6 +46,9 @@ class FilterListSeeder(
     }
 
     suspend fun seedFromBundledAsset() = withContext(Dispatchers.IO) {
+        if (app.pwhs.blockads.BuildConfig.IS_STORE) {
+            return@withContext
+        }
         try {
             val assetJson = context.assets.open(BUNDLED_ASSET_PATH).bufferedReader().use { it.readText() }
             val bundledLists = parseFilterJson(assetJson)
@@ -55,6 +62,9 @@ class FilterListSeeder(
     }
 
     suspend fun fetchAndSyncRemoteFilterLists() = withContext(Dispatchers.IO) {
+        if (app.pwhs.blockads.BuildConfig.IS_STORE) {
+            return@withContext
+        }
         try {
             val channel = client.get(FILTER_LIST_JSON_URL).bodyAsChannel()
             val buffer = ByteArray(256 * 1024)

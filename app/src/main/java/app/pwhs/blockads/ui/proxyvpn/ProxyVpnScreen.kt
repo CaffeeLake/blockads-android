@@ -76,6 +76,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProxyVpnScreen(
+    canNavigateBack: Boolean = true,
     onNavigateBack: () -> Unit,
     onEditProfile: (String) -> Unit,
     onNavigateToVpnSettings: () -> Unit,
@@ -260,11 +261,13 @@ fun ProxyVpnScreen(
                 TopAppBar(
                     title = { Text(stringResource(R.string.proxy_vpn_title)) },
                     navigationIcon = {
-                        IconButton(onClick = onNavigateBack) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.accessibility_navigate_back)
-                            )
+                        if (canNavigateBack) {
+                            IconButton(onClick = onNavigateBack) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.accessibility_navigate_back)
+                                )
+                            }
                         }
                     },
                     actions = {

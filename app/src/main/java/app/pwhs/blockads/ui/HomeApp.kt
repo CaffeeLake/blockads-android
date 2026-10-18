@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import app.pwhs.blockads.BuildConfig
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.ui.about.AboutScreen
 import app.pwhs.blockads.ui.appearance.AppearanceScreen
@@ -103,6 +104,7 @@ fun HomeApp(
     )
     val homeStack = rememberNavBackStack(HomeKey)
     val filterStack = rememberNavBackStack(FilterKey)
+    val wireguardStack = rememberNavBackStack(ProxyVpnKey)
     val firewallStack = rememberNavBackStack(FireWallKey)
     val domainRuleStack = rememberNavBackStack(DomainRulesKey)
     val settingsStack = rememberNavBackStack(SettingsKey)
@@ -111,18 +113,29 @@ fun HomeApp(
     val currentBackStack = when (currentTab) {
         BottomBarScreen.Home -> homeStack
         BottomBarScreen.FilterSetup -> filterStack
+        BottomBarScreen.WireGuard -> wireguardStack
         BottomBarScreen.Firewall -> firewallStack
         BottomBarScreen.DomainRule -> domainRuleStack
         BottomBarScreen.Settings -> settingsStack
     }
 
-    val bottomBarScreens = listOf(
-        BottomBarScreen.Home,
-        BottomBarScreen.FilterSetup,
-        BottomBarScreen.Firewall,
-        BottomBarScreen.DomainRule,
-        BottomBarScreen.Settings
-    )
+    val bottomBarScreens = if (BuildConfig.IS_STORE) {
+        listOf(
+            BottomBarScreen.Home,
+            BottomBarScreen.WireGuard,
+            BottomBarScreen.Firewall,
+            BottomBarScreen.DomainRule,
+            BottomBarScreen.Settings
+        )
+    } else {
+        listOf(
+            BottomBarScreen.Home,
+            BottomBarScreen.FilterSetup,
+            BottomBarScreen.Firewall,
+            BottomBarScreen.DomainRule,
+            BottomBarScreen.Settings
+        )
+    }
     var showBottomBar by rememberSaveable { mutableStateOf(true) }
     fun safePop(stack: MutableList<*>) {
         if (stack.size > 1) {
@@ -151,6 +164,7 @@ fun HomeApp(
                             selected = currentBackStack == when (screen) {
                                 BottomBarScreen.Home -> homeStack
                                 BottomBarScreen.FilterSetup -> filterStack
+                                BottomBarScreen.WireGuard -> wireguardStack
                                 BottomBarScreen.Firewall -> firewallStack
                                 BottomBarScreen.DomainRule -> domainRuleStack
                                 BottomBarScreen.Settings -> settingsStack
@@ -249,9 +263,13 @@ fun HomeApp(
                 }
                 entry<FilterKey> {
                     FilterSetupScreen(
+                        canNavigateBack = currentBackStack.size > 1,
+                        onNavigateBack = {
+                            safePop(currentBackStack)
+                        },
                         onNavigateToFilterDetail = { filterId ->
                             showBottomBar = false
-                            filterStack.add(FilterDetailKey(filterId))
+                            currentBackStack.add(FilterDetailKey(filterId))
                         }
                     )
                 }
@@ -281,7 +299,11 @@ fun HomeApp(
                         },
                         onNavigateToWireGuardImport = {
                             showBottomBar = false
-                            settingsStack.add(WireGuardImportKey)
+                            if (BuildConfig.IS_STORE) {
+                                settingsStack.add(FilterKey)
+                            } else {
+                                settingsStack.add(WireGuardImportKey)
+                            }
                         },
                         onNavigateToHttpsFiltering = {
                             showBottomBar = false
@@ -328,7 +350,7 @@ fun HomeApp(
                     FilterDetailScreen(
                         filterId = it.filterId,
                         onNavigateBack = {
-                            safePop(filterStack)
+                            safePop(currentBackStack)
                         }
                     )
                 }
@@ -369,6 +391,7 @@ fun HomeApp(
                 }
                 entry<ProxyVpnKey> {
                     ProxyVpnScreen(
+                        canNavigateBack = currentBackStack.size > 1,
                         onNavigateBack = {
                             safePop(currentBackStack)
                         },

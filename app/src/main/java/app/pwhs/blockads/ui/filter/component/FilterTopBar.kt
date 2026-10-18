@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Search
@@ -33,10 +34,22 @@ fun FilterTopBar(
     isUpdatingFilter: Boolean,
     onUpdateAllFilters: () -> Unit,
     modifier: Modifier = Modifier,
+    canNavigateBack: Boolean = false,
+    onNavigateBack: () -> Unit = {},
     updateProgress: Int? = null
 ) {
     TopAppBar(
         modifier = modifier,
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.accessibility_navigate_back)
+                    )
+                }
+            }
+        },
         title = {
             Text(
                 text = stringResource(R.string.filter_setup_title),
