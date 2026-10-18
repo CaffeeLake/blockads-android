@@ -170,11 +170,19 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 	}
 
 	targetAddr := net.JoinHostPort(targetIP.String(), strconv.Itoa(targetPort))
+	portStr := strconv.Itoa(targetPort)
+	ipStr := targetIP.String()
+	targetPath := ipStr + "/" + portStr + "/"
+
 	reqPath := c.config.Path
-	if strings.Contains(reqPath, "*/*") {
-		reqPath = strings.Replace(reqPath, "*/*", targetAddr, 1)
+	if strings.Contains(reqPath, "*/*/") {
+		reqPath = strings.Replace(reqPath, "*/*/", targetPath, 1)
+	} else if strings.Contains(reqPath, "*/*") {
+		reqPath = strings.Replace(reqPath, "*/*", ipStr+"/"+portStr, 1)
+	} else if strings.Contains(reqPath, "{target}/{port}") {
+		reqPath = strings.Replace(reqPath, "{target}/{port}", ipStr+"/"+portStr, 1)
 	} else if strings.HasSuffix(reqPath, "/") {
-		reqPath = reqPath + targetAddr
+		reqPath = reqPath + targetPath
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodConnect, "https://"+c.config.SNI+reqPath, nil)

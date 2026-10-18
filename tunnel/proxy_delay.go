@@ -10,7 +10,9 @@ import (
 
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/hysteria2"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/masque"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/tuic"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vmess"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
@@ -86,12 +88,29 @@ func testProxyNodeDelayWithProtect(protocol string, configJSON string, timeoutMs
 		}
 		client, err = hysteria2.NewClient(cfg, protectFn)
 
+	case "tuic":
+		cfg, parseErr := tuic.FromJSON(configJSON)
+		if parseErr != nil {
+			return -1, parseErr
+		}
+		client, err = tuic.NewClient(cfg, protectFn)
+
+	case "masque":
+		cfg, parseErr := masque.FromJSON(configJSON)
+		if parseErr != nil {
+			return -1, parseErr
+		}
+		client, err = masque.NewClient(cfg, protectFn)
+
 	default:
 		return -1, fmt.Errorf("unsupported protocol: %s", protocol)
 	}
 
 	if err != nil {
 		return -1, fmt.Errorf("init client failed: %w", err)
+	}
+	if closer, ok := client.(interface{ Close() error }); ok {
+		defer closer.Close()
 	}
 
 	// Anycast Cloudflare IP for cp.cloudflare.com

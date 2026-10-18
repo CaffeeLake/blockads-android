@@ -199,7 +199,7 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 		header = make([]byte, 2+1+16+2)
 		header[0] = 0x05 // VER
 		header[1] = 0x01 // TYPE: Connect
-		header[2] = 0x02 // ADDR_TYPE: IPv6
+		header[2] = 0x04 // ADDR_TYPE: IPv6
 		copy(header[3:19], v6)
 		binary.BigEndian.PutUint16(header[19:21], uint16(targetPort))
 	} else {

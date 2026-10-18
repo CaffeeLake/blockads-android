@@ -9,6 +9,7 @@ import app.pwhs.blockads.data.entities.WireGuardProfile
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -82,6 +83,14 @@ object JsonSubscriptionParser {
                     }
                     "masque" -> {
                         val profile = parseMasqueOutbound(remarks, settings, streamSettings)
+                        if (profile != null) {
+                            proxyList.add(profile)
+                        } else {
+                            failed++
+                        }
+                    }
+                    "tuic" -> {
+                        val profile = parseTuicOutbound(remarks, settings, streamSettings)
                         if (profile != null) {
                             proxyList.add(profile)
                         } else {
@@ -167,6 +176,9 @@ object JsonSubscriptionParser {
         val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content.orEmpty().ifEmpty { address }
         val alpnList = tlsSettings?.get("alpn")?.jsonArray?.map { it.jsonPrimitive.content } ?: listOf("h3")
         val alpn = alpnList.joinToString(",")
+        val allowInsecure = tlsSettings?.get("allowInsecure")?.jsonPrimitive?.booleanOrNull
+            ?: tlsSettings?.get("insecure")?.jsonPrimitive?.booleanOrNull
+            ?: false
 
         return ProxyProfile(
             name = remarks.ifEmpty { "MASQUE" },
@@ -178,6 +190,67 @@ object JsonSubscriptionParser {
             masquePass = pass,
             sni = sni,
             alpn = alpn,
+            allowInsecure = allowInsecure,
+            tag = remarks
+        )
+    }
+
+    private fun parseTuicOutbound(
+        remarks: String,
+        settings: JsonObject?,
+        streamSettings: JsonObject?
+    ): ProxyProfile? {
+        val servers = settings?.get("servers")?.jsonArray?.filterIsInstance<JsonObject>()
+        val firstServer = servers?.firstOrNull()
+        val address = firstServer?.get("address")?.jsonPrimitive?.content
+            ?: settings?.get("address")?.jsonPrimitive?.content
+            ?: settings?.get("server")?.jsonPrimitive?.content.orEmpty()
+        val port = firstServer?.get("port")?.jsonPrimitive?.intOrNull
+            ?: settings?.get("port")?.jsonPrimitive?.intOrNull
+            ?: settings?.get("server_port")?.jsonPrimitive?.intOrNull
+            ?: 443
+        if (address.isEmpty()) return null
+
+        val uuid = firstServer?.get("uuid")?.jsonPrimitive?.content
+            ?: firstServer?.get("id")?.jsonPrimitive?.content
+            ?: settings?.get("uuid")?.jsonPrimitive?.content
+            ?: settings?.get("id")?.jsonPrimitive?.content.orEmpty()
+
+        val password = firstServer?.get("password")?.jsonPrimitive?.content
+            ?: settings?.get("password")?.jsonPrimitive?.content.orEmpty()
+
+        val tuicSettings = streamSettings?.get("tuicSettings")?.jsonObject
+        val congestion = tuicSettings?.get("congestionControl")?.jsonPrimitive?.content
+            ?: tuicSettings?.get("congestion_control")?.jsonPrimitive?.content
+            ?: settings?.get("congestion_control")?.jsonPrimitive?.content
+            ?: "bbr"
+
+        val udpRelay = tuicSettings?.get("udpRelayMode")?.jsonPrimitive?.content
+            ?: tuicSettings?.get("udp_relay_mode")?.jsonPrimitive?.content
+            ?: settings?.get("udp_relay_mode")?.jsonPrimitive?.content
+            ?: "native"
+
+        val tlsSettings = streamSettings?.get("tlsSettings")?.jsonObject ?: settings?.get("tls")?.jsonObject
+        val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content
+            ?: tlsSettings?.get("server_name")?.jsonPrimitive?.content.orEmpty().ifEmpty { address }
+        val alpnList = tlsSettings?.get("alpn")?.jsonArray?.map { it.jsonPrimitive.content } ?: listOf("h3")
+        val alpn = alpnList.joinToString(",")
+        val allowInsecure = tlsSettings?.get("allowInsecure")?.jsonPrimitive?.booleanOrNull
+            ?: tlsSettings?.get("insecure")?.jsonPrimitive?.booleanOrNull
+            ?: false
+
+        return ProxyProfile(
+            name = remarks.ifEmpty { "TUIC" },
+            protocol = ProxyProtocol.TUIC,
+            server = address,
+            port = port,
+            uuid = uuid,
+            password = password,
+            sni = sni,
+            alpn = alpn,
+            congestionControl = congestion,
+            udpRelayMode = udpRelay,
+            allowInsecure = allowInsecure,
             tag = remarks
         )
     }
