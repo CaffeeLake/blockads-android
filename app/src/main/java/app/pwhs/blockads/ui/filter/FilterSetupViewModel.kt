@@ -13,6 +13,8 @@ import app.pwhs.blockads.service.AdBlockVpnService
 import app.pwhs.blockads.service.ServiceController
 import app.pwhs.blockads.ui.event.UiEvent
 import app.pwhs.blockads.ui.event.toast
+import app.pwhs.blockads.BuildConfig
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -33,6 +35,13 @@ class FilterSetupViewModel(
 ) : ViewModel() {
 
     val filterLists: StateFlow<List<FilterList>> = filterListDao.getAll()
+        .map { lists ->
+            if (BuildConfig.IS_STORE) {
+                lists.filter { !it.isBuiltIn }
+            } else {
+                lists
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _searchQuery = MutableStateFlow("")

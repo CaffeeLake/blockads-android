@@ -35,7 +35,11 @@ class FilterListSeeder(
 
     suspend fun seedDefaultsIfNeeded() = withContext(Dispatchers.IO) {
         if (app.pwhs.blockads.BuildConfig.IS_STORE) {
-            Timber.d("Store flavor: skipping default filter list seeding")
+            val builtIns = filterListDao.getAllSync().filter { it.isBuiltIn }
+            if (builtIns.isNotEmpty()) {
+                builtIns.forEach { filterListDao.delete(it) }
+                Timber.d("Store flavor: deleted ${builtIns.size} built-in filters")
+            }
             return@withContext
         }
         val existingBuiltIns = filterListDao.getAllSync().count { it.isBuiltIn }

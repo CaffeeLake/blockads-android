@@ -34,6 +34,7 @@ fun FilterTopBar(
     isUpdatingFilter: Boolean,
     onUpdateAllFilters: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.filter_setup_title),
     canNavigateBack: Boolean = false,
     onNavigateBack: () -> Unit = {},
     updateProgress: Int? = null
@@ -52,7 +53,7 @@ fun FilterTopBar(
         },
         title = {
             Text(
-                text = stringResource(R.string.filter_setup_title),
+                text = title,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.pwhs.blockads.BuildConfig
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.FilterList as FilterListEntity
 import app.pwhs.blockads.ui.event.UiEventEffect
@@ -68,7 +69,16 @@ fun FilterSetupScreen(
     var filterToEdit by remember { mutableStateOf<FilterListEntity?>(null) }
     var isSearchVisible by remember { mutableStateOf(false) }
 
-    val pagerState = rememberPagerState(initialPage = 0) { FilterCategoryTab.entries.size }
+    val isStore = BuildConfig.IS_STORE
+    val categories = remember(isStore) {
+        if (isStore) {
+            listOf(FilterCategoryTab.CUSTOM)
+        } else {
+            FilterCategoryTab.entries
+        }
+    }
+
+    val pagerState = rememberPagerState(initialPage = 0) { categories.size }
     val coroutineScope = rememberCoroutineScope()
 
     UiEventEffect(viewModel.events)
@@ -82,7 +92,7 @@ fun FilterSetupScreen(
 
     val activeCounts = remember(allLists, starredUrls) {
         val counts = mutableMapOf<FilterCategoryTab, Int>()
-        for (tab in FilterCategoryTab.entries) {
+        for (tab in categories) {
             counts[tab] = 0
         }
         for (filter in allLists) {
@@ -105,6 +115,7 @@ fun FilterSetupScreen(
         modifier = modifier,
         topBar = {
             FilterTopBar(
+                title = if (isStore) stringResource(R.string.settings_category_filters) else stringResource(R.string.filter_setup_title),
                 isSearchVisible = isSearchVisible,
                 onToggleSearch = {
                     isSearchVisible = !isSearchVisible
@@ -129,15 +140,20 @@ fun FilterSetupScreen(
                 onSearchQueryChange = { viewModel.setSearchQuery(it) }
             )
 
-            FilterTabRow(
-                selectedTab = FilterCategoryTab.entries[pagerState.currentPage],
-                onTabSelected = { tab ->
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(tab.ordinal)
-                    }
-                },
-                activeCounts = activeCounts
-            )
+            if (!isStore) {
+                FilterTabRow(
+                    selectedTab = categories[pagerState.currentPage],
+                    onTabSelected = { tab ->
+                        coroutineScope.launch {
+                            val targetIndex = categories.indexOf(tab)
+                            if (targetIndex >= 0) {
+                                pagerState.animateScrollToPage(targetIndex)
+                            }
+                        }
+                    },
+                    activeCounts = activeCounts
+                )
+            }
 
             val isSearching = searchQuery.isNotBlank()
 
@@ -145,7 +161,7 @@ fun FilterSetupScreen(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
-                val currentTab = FilterCategoryTab.entries[page]
+                val currentTab = categories[page]
                 val displayFilters = remember(filterLists, currentTab, starredUrls) {
                     val tabFilters = filterLists.filter { it.matchesCategory(currentTab, starredUrls) }
                     if (currentTab == FilterCategoryTab.ALL) {
