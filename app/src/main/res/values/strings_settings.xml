@@ -373,6 +373,7 @@
     <string name="proxy_vpn_subtitle">Manage WireGuard &amp; Outline / Shadowsocks servers</string>
     <string name="proxy_vpn_tab_wireguard">WireGuard</string>
     <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
+    <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
     <string name="proxy_vpn_master_toggle">Enable Proxy &amp; VPN</string>
     <string name="proxy_vpn_master_toggle_desc">Route traffic through the active server with ad blocking</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
@@ -387,6 +388,13 @@
     <string name="shadowsocks_active">Active: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Delete Profile</string>
     <string name="shadowsocks_delete_confirm_desc">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="proxy_node_empty_title">No proxy nodes added</string>
+    <string name="proxy_node_empty_desc">Add a proxy node link (VLESS, Trojan, Shadowsocks) to route traffic through an encrypted proxy.</string>
+    <string name="proxy_node_add_node">Add Proxy Node</string>
+    <string name="proxy_node_dialog_title">Add Proxy Node</string>
+    <string name="proxy_node_dialog_desc">Paste a VLESS, Trojan, or Shadowsocks / Outline link</string>
+    <string name="proxy_node_dialog_hint">vless://..., trojan://..., or ss://...</string>
+    <string name="proxy_node_dialog_invalid">Invalid proxy link. Supported schemes: vless://, trojan://, ss://</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">VPN Settings</string>

@@ -4,6 +4,7 @@ go 1.23.5
 
 require (
 	github.com/cloudflare/odoh-go v1.0.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/jedisct1/go-dnsstamps v0.0.0-20260518121737-6579dc73e4a2
 	github.com/miekg/dns v1.1.62
 	github.com/quic-go/quic-go v0.48.2

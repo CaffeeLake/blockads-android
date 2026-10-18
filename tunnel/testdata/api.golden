@@ -63,6 +63,8 @@ type Engine struct
 	method Engine.ClearQuanXConfig()
 	method Engine.ClearRulesetConfig()
 	method Engine.DialProxy(targetIP net.IP, targetPort int) (net.Conn, bool, error)
+	method Engine.GetActiveProxyProtocol() string
+	method Engine.GetActiveProxyServerAddress() string
 	method Engine.GetGeoIPCountry(ipStr string) string
 	method Engine.GetMitmCACert(certDir string) string
 	method Engine.GetRouter() *Router
@@ -107,6 +109,8 @@ type Engine struct
 	method Engine.SetMitmAllowedUIDs(uidsCsv string)
 	method Engine.SetODoHRelay(relayURL string)
 	method Engine.SetOutboundAdapter(adapter OutboundAdapter)
+	method Engine.SetPreferredIPType(ipType string)
+	method Engine.SetProxyNodeConfig(protocol string, configJSON string) error
 	method Engine.SetQuanXConfig(content string) (int, error)
 	method Engine.SetRulesetConfig(content string) (int, error)
 	method Engine.SetSafeSearch(enabled bool)
@@ -174,6 +178,8 @@ var ParseResponseType func(s string) internal/packet.ResponseType
 func ParseRulesetSummary(content string) string
 func ParseShadowsocksURI(rawURI string) (string, error)
 var ParseTUNPacket func(packet []byte, length int) *internal/packet.DNSQueryInfo
+func ParseTrojanURI(rawURI string) (string, error)
+func ParseVlessURI(rawURI string) (string, error)
 var ParseWgConfigJSON func(jsonStr string) (*internal/wireguard.WgConfig, error)
 const ProtocolDoH internal/dns.DNSProtocol = 1
 const ProtocolDoH3 internal/dns.DNSProtocol = 5
@@ -270,7 +276,10 @@ var SetScriptletsRuntime func(js string)
 type ShadowsocksClient = internal/shadowsocks.Client
 	method ShadowsocksClient.Config() *internal/shadowsocks.Config
 	method ShadowsocksClient.DialTCP(targetIP net.IP, targetPort int) (net.Conn, error)
+	method ShadowsocksClient.Protocol() string
 	method ShadowsocksClient.ServerAddress() string
+	method ShadowsocksClient.SetProtectFn(fn func(fd int) bool)
+	method ShadowsocksClient.Tag() string
 type ShadowsocksConfig = internal/shadowsocks.Config
 	field ShadowsocksConfig.Method string
 	field ShadowsocksConfig.Password string

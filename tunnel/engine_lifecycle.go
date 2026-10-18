@@ -26,6 +26,12 @@ func (e *Engine) Start(fd int, protector SocketProtector, wgConfigJSON string) {
 		}
 	}
 	e.protectFn = protectFn
+	if pc := e.proxyClient.Load(); pc != nil && *pc != nil {
+		(*pc).SetProtectFn(protectFn)
+	}
+	if client := e.ssClient.Load(); client != nil {
+		client.SetProtectFn(protectFn)
+	}
 	e.resolver = NewResolver(protectFn)
 	e.resolver.Configure(ParseProtocol(e.protocol), e.primaryDNS, e.fallbackDNS, e.dohURL)
 	e.resolver.SetODoHRelay(e.odohRelayURL)

@@ -18,6 +18,7 @@ import (
 	"sync/atomic"
 
 	"github.com/miekg/dns"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
 )
 
 // LogCallback is the interface for receiving DNS query events in Kotlin.
@@ -156,6 +157,9 @@ type Engine struct {
 
 	// Shadowsocks / Outline client
 	ssClient atomic.Pointer[ShadowsocksClient]
+
+	// Outbound proxy client (Shadowsocks, Trojan, VLESS)
+	proxyClient atomic.Pointer[proxy.Client]
 
 	// preferredIPType controls whether IPv4 or IPv6 DNS records are preferred:
 	// "auto" (default): dual stack, allow both A and AAAA queries.

@@ -7,6 +7,8 @@ import (
 	"github.com/nqmgaming/blockads-tunnel/internal/geoip"
 	"github.com/nqmgaming/blockads-tunnel/internal/mitm"
 	"github.com/nqmgaming/blockads-tunnel/internal/packet"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
 	"github.com/nqmgaming/blockads-tunnel/internal/safesearch"
 	"github.com/nqmgaming/blockads-tunnel/internal/scriptlet"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
@@ -125,6 +127,24 @@ type ShadowsocksConfig = shadowsocks.Config
 // ParseShadowsocksURI parses an Outline / Shadowsocks ss:// URI and returns its JSON configuration.
 func ParseShadowsocksURI(rawURI string) (string, error) {
 	cfg, err := shadowsocks.ParseURI(rawURI)
+	if err != nil {
+		return "", err
+	}
+	return cfg.ToJSON(), nil
+}
+
+// ParseTrojanURI parses a trojan:// URI and returns its JSON configuration.
+func ParseTrojanURI(rawURI string) (string, error) {
+	cfg, err := trojan.ParseURI(rawURI)
+	if err != nil {
+		return "", err
+	}
+	return cfg.ToJSON(), nil
+}
+
+// ParseVlessURI parses a vless:// URI and returns its JSON configuration.
+func ParseVlessURI(rawURI string) (string, error) {
+	cfg, err := vless.ParseURI(rawURI)
 	if err != nil {
 		return "", err
 	}

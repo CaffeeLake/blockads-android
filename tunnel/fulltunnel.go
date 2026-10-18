@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/miekg/dns"
-	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 	"github.com/xjasonlyu/tun2socks/v2/core/adapter"
 )
 
@@ -143,12 +142,14 @@ func (e *Engine) StartFull(fd int, protector SocketProtector) {
 	done := make(chan struct{})
 	e.fullTunnelDone = done
 
-	// If Shadowsocks outbound is configured, ensure it uses the live protectFn
+	// Ensure active proxy client uses the live protectFn
+	if pc := e.proxyClient.Load(); pc != nil && *pc != nil {
+		(*pc).SetProtectFn(protectFn)
+		logf("StartFull: Proxy outbound (%s) active via %s", (*pc).Protocol(), (*pc).ServerAddress())
+	}
 	if client := e.ssClient.Load(); client != nil && client.Config() != nil {
-		if newClient, err := shadowsocks.NewClient(client.Config(), protectFn); err == nil {
-			e.ssClient.Store(newClient)
-			logf("StartFull: Shadowsocks outbound active via %s", newClient.ServerAddress())
-		}
+		client.SetProtectFn(protectFn)
+		logf("StartFull: Shadowsocks outbound active via %s", client.ServerAddress())
 	}
 	e.mu.Unlock()
 
@@ -258,8 +259,8 @@ func newFullTunnelUdpHandler(engine *Engine, filter *MitmFilter, uidr UIDResolve
 		}
 		engine.logConnection(flow, ProtocolUDP)
 
-		// When Shadowsocks is active, drop QUIC (UDP 443) so browsers fall back to TCP through the proxy.
-		if engine.ssClient.Load() != nil && flow.serverPort == 443 {
+		// When Proxy (Shadowsocks, Trojan, VLESS) is active, drop QUIC (UDP 443) so browsers fall back to TCP through the proxy.
+		if (engine.proxyClient.Load() != nil || engine.ssClient.Load() != nil) && flow.serverPort == 443 {
 			_ = conn.Close()
 			return
 		}
@@ -330,10 +331,9 @@ func isStunPort(port int) bool {
 }
 
 func relayDirectFromFlow(clientConn net.Conn, flow flowID, engine *Engine, protectFn func(fd int) bool) {
-	if ss := engine.ssClient.Load(); ss != nil {
-		remote, err := ss.DialTCP(flow.serverIP, flow.serverPort)
+	if remote, used, err := engine.DialProxy(flow.serverIP, flow.serverPort); used {
 		if err != nil {
-			logf("[FullTunnel] shadowsocks dial %s:%d via %s failed: %v", flow.serverIP, flow.serverPort, ss.ServerAddress(), err)
+			logf("[FullTunnel] proxy dial %s:%d failed: %v", flow.serverIP, flow.serverPort, err)
 			return
 		}
 		defer remote.Close()

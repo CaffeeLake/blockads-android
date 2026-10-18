@@ -39,6 +39,7 @@ class VpnTunnelBuilderTest {
         coEvery { getRoutingModeSnapshot() } answers { this@VpnTunnelBuilderTest.routingMode }
         coEvery { getWgConfigJsonSnapshot() } answers { wgJson }
         coEvery { getActiveProxyTypeSnapshot() } returns AppPreferences.PROXY_TYPE_WIREGUARD
+        coEvery { getActiveProxyProfileSnapshot() } returns null
         every { excludeLan } answers { flowOf(this@VpnTunnelBuilderTest.excludeLan) }
         every { allowAppBypass } answers { flowOf(this@VpnTunnelBuilderTest.allowAppBypass) }
         every { preferredIPType } returns flowOf(AppPreferences.PREFERRED_IP_AUTO)

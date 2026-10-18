@@ -1,30 +1,107 @@
 package tunnel
 
 import (
+	"fmt"
 	"net"
+	"strconv"
+	"strings"
 
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 )
 
-// SetShadowsocksConfig configures the Shadowsocks / Outline client.
-// An empty string clears the active Shadowsocks client.
-func (e *Engine) SetShadowsocksConfig(configJSON string) error {
-	if configJSON == "" {
+// SetProxyNodeConfig configures an outbound proxy node (shadowsocks, trojan, vless).
+// Empty string or empty protocol clears the active proxy node.
+func (e *Engine) SetProxyNodeConfig(protocol string, configJSON string) error {
+	protocol = strings.ToLower(strings.TrimSpace(protocol))
+	if configJSON == "" || protocol == "" {
+		e.proxyClient.Store(nil)
 		e.ssClient.Store(nil)
-		logf("Shadowsocks client cleared")
+		logf("Proxy node cleared")
 		return nil
 	}
-	cfg, err := shadowsocks.FromJSON(configJSON)
-	if err != nil {
-		return err
+
+	switch protocol {
+	case "shadowsocks", "ss":
+		cfg, err := shadowsocks.FromJSON(configJSON)
+		if err != nil {
+			return err
+		}
+		client, err := shadowsocks.NewClient(cfg, e.protectFn)
+		if err != nil {
+			return err
+		}
+		e.ssClient.Store(client)
+		var pClient proxy.Client = client
+		e.proxyClient.Store(&pClient)
+		logf("Proxy node (shadowsocks) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
+		return nil
+
+	case "trojan":
+		cfg, err := trojan.FromJSON(configJSON)
+		if err != nil {
+			return err
+		}
+		client, err := trojan.NewClient(cfg, e.protectFn)
+		if err != nil {
+			return err
+		}
+		e.ssClient.Store(nil)
+		var pClient proxy.Client = client
+		e.proxyClient.Store(&pClient)
+		logf("Proxy node (trojan) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
+		return nil
+
+	case "vless":
+		cfg, err := vless.FromJSON(configJSON)
+		if err != nil {
+			return err
+		}
+		client, err := vless.NewClient(cfg, e.protectFn)
+		if err != nil {
+			return err
+		}
+		e.ssClient.Store(nil)
+		var pClient proxy.Client = client
+		e.proxyClient.Store(&pClient)
+		logf("Proxy node (vless) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
+		return nil
+
+	default:
+		return fmt.Errorf("unsupported proxy protocol: %s", protocol)
 	}
-	client, err := shadowsocks.NewClient(cfg, e.protectFn)
-	if err != nil {
-		return err
+}
+
+// GetActiveProxyProtocol returns the protocol of the currently active proxy ("shadowsocks", "trojan", "vless"), or "".
+func (e *Engine) GetActiveProxyProtocol() string {
+	pc := e.proxyClient.Load()
+	if pc != nil && *pc != nil {
+		return (*pc).Protocol()
 	}
-	e.ssClient.Store(client)
-	logf("Shadowsocks client configured for server %s (tag: %s)", client.ServerAddress(), cfg.Tag)
-	return nil
+	if e.ssClient.Load() != nil {
+		return "shadowsocks"
+	}
+	return ""
+}
+
+// GetActiveProxyServerAddress returns host:port of the active proxy, or "".
+func (e *Engine) GetActiveProxyServerAddress() string {
+	pc := e.proxyClient.Load()
+	if pc != nil && *pc != nil {
+		return (*pc).ServerAddress()
+	}
+	if ss := e.ssClient.Load(); ss != nil {
+		return ss.ServerAddress()
+	}
+	return ""
+}
+
+// SetShadowsocksConfig configures the Shadowsocks / Outline client.
+// Kept for backward compatibility.
+func (e *Engine) SetShadowsocksConfig(configJSON string) error {
+	return e.SetProxyNodeConfig("shadowsocks", configJSON)
 }
 
 // GetShadowsocksConfig returns the current Shadowsocks config JSON or empty string.
@@ -36,13 +113,45 @@ func (e *Engine) GetShadowsocksConfig() string {
 	return client.Config().ToJSON()
 }
 
-// DialProxy attempts to dial target via Shadowsocks if active.
-// Returns (conn, true, err) if Shadowsocks handled it, or (nil, false, nil) if Shadowsocks is not active.
+// isProxyServer checks whether target matches the active proxy server's address.
+func (e *Engine) isProxyServer(targetIP net.IP, targetPort int) bool {
+	addr := e.GetActiveProxyServerAddress()
+	if addr == "" {
+		return false
+	}
+	host, portStr, err := net.SplitHostPort(addr)
+	if err != nil {
+		return false
+	}
+	p, _ := strconv.Atoi(portStr)
+	if p != 0 && p != targetPort {
+		return false
+	}
+	if targetIP.String() == host {
+		return true
+	}
+	if parsed := net.ParseIP(host); parsed != nil {
+		return targetIP.Equal(parsed)
+	}
+	return false
+}
+
+// DialProxy attempts to dial target via active proxy (Shadowsocks, Trojan, VLESS) if active.
+// Returns (conn, true, err) if proxy handled it, or (nil, false, nil) if no proxy is active.
 func (e *Engine) DialProxy(targetIP net.IP, targetPort int) (net.Conn, bool, error) {
+	if e.isProxyServer(targetIP, targetPort) {
+		logf("[Engine] DialProxy: skipped dial to proxy server itself (%s:%d)", targetIP, targetPort)
+		return nil, false, nil
+	}
+	if pc := e.proxyClient.Load(); pc != nil && *pc != nil {
+		conn, err := (*pc).DialTCP(targetIP, targetPort)
+		return conn, true, err
+	}
 	if ss := e.ssClient.Load(); ss != nil {
 		conn, err := ss.DialTCP(targetIP, targetPort)
 		return conn, true, err
 	}
 	return nil, false, nil
 }
+
 

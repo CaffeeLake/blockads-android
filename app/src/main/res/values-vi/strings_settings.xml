@@ -332,6 +332,7 @@
     <string name="proxy_vpn_subtitle">Quản lý máy chủ WireGuard &amp; Outline / Shadowsocks</string>
     <string name="proxy_vpn_tab_wireguard">WireGuard</string>
     <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
+    <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
     <string name="proxy_vpn_master_toggle">Bật Proxy &amp; VPN</string>
     <string name="proxy_vpn_master_toggle_desc">Định tuyến lưu lượng mạng qua máy chủ đã chọn kết hợp lọc quảng cáo</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
@@ -346,6 +347,13 @@
     <string name="shadowsocks_active">Đang kích hoạt: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Xóa cấu hình</string>
     <string name="shadowsocks_delete_confirm_desc">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
+    <string name="proxy_node_empty_title">Chưa có proxy node nào</string>
+    <string name="proxy_node_empty_desc">Thêm liên kết proxy node (VLESS, Trojan, Shadowsocks) để định tuyến dữ liệu qua máy chủ proxy mã hóa.</string>
+    <string name="proxy_node_add_node">Thêm Proxy Node</string>
+    <string name="proxy_node_dialog_title">Thêm Proxy Node</string>
+    <string name="proxy_node_dialog_desc">Dán liên kết VLESS, Trojan hoặc Shadowsocks / Outline</string>
+    <string name="proxy_node_dialog_hint">vless://..., trojan://... hoặc ss://...</string>
+    <string name="proxy_node_dialog_invalid">Liên kết proxy không hợp lệ. Hỗ trợ: vless://, trojan://, ss://</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">Cài đặt VPN</string>

@@ -280,18 +280,21 @@ class GoTunnelAdapter(
         blockDohBypass: Boolean = false,
         blockWebRtc: Boolean = false,
         socketProtector: ((Int) -> Boolean)? = null,
-        ssConfigJson: String = ""
+        ssConfigJson: String = "",
+        proxyProtocol: String = "",
+        proxyConfigJson: String = ""
     ) {
         if (isRunning) return
         isRunning = true
 
         try {
-            engine.setShadowsocksConfig(ssConfigJson)
-            if (ssConfigJson.isNotEmpty()) {
-                Timber.d("Configured Shadowsocks outbound in Go engine")
+            if (proxyProtocol.isNotEmpty() && proxyConfigJson.isNotEmpty()) {
+                engine.setProxyNodeConfig(proxyProtocol, proxyConfigJson)
+            } else if (ssConfigJson.isNotEmpty()) {
+                engine.setShadowsocksConfig(ssConfigJson)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Failed to configure Shadowsocks in Go engine")
+            Timber.e(e, "Failed to configure proxy node in Go engine")
         }
 
         val mitmMode = httpsFilteringEnabled && certDir.isNotEmpty() && wgConfigJson.isEmpty()

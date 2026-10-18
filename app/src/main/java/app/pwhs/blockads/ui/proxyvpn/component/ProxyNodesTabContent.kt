@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.VpnKey
+import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,46 +35,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
-import app.pwhs.blockads.data.entities.ShadowsocksProfile
+import app.pwhs.blockads.data.entities.ProxyProfile
 
 @Composable
-fun ShadowsocksTabContent(
-    profiles: List<ShadowsocksProfile>,
+fun ProxyNodesTabContent(
+    profiles: List<ProxyProfile>,
     activeId: String?,
     isProxyActive: Boolean,
-    onSelectProfile: (ShadowsocksProfile) -> Unit,
-    onAddKeyClick: () -> Unit,
+    onSelectProfile: (ProxyProfile) -> Unit,
+    onAddNodeClick: () -> Unit,
     onRenameProfile: (String, String) -> Unit,
     onDeleteProfile: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var renameTarget by remember { mutableStateOf<ShadowsocksProfile?>(null) }
-    var deleteTarget by remember { mutableStateOf<ShadowsocksProfile?>(null) }
+    var renameTarget by remember { mutableStateOf<ProxyProfile?>(null) }
+    var deleteTarget by remember { mutableStateOf<ProxyProfile?>(null) }
 
     Box(modifier = modifier.fillMaxSize()) {
         if (profiles.isEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.VpnKey,
+                    imageVector = Icons.Outlined.Dns,
                     contentDescription = null,
                     modifier = Modifier.size(80.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(R.string.shadowsocks_empty_title),
+                    text = stringResource(R.string.proxy_node_empty_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.shadowsocks_empty_desc),
+                    text = stringResource(R.string.proxy_node_empty_desc),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
             }
         } else {
@@ -87,7 +88,7 @@ fun ShadowsocksTabContent(
                     items = profiles,
                     key = { it.id }
                 ) { profile ->
-                    ShadowsocksProfileRow(
+                    ProxyNodeRow(
                         profile = profile,
                         isActive = isProxyActive && profile.id == activeId,
                         onClick = { onSelectProfile(profile) },
@@ -98,11 +99,11 @@ fun ShadowsocksTabContent(
             }
         }
 
-        // Add Key FAB
+        // Add Node FAB
         ExtendedFloatingActionButton(
-            text = { Text(stringResource(R.string.shadowsocks_add_key)) },
+            text = { Text(stringResource(R.string.proxy_node_add_node)) },
             icon = { Icon(Icons.Default.Add, contentDescription = null) },
-            onClick = onAddKeyClick,
+            onClick = onAddNodeClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),

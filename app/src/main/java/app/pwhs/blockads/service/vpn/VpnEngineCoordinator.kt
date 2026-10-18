@@ -177,7 +177,10 @@ class VpnEngineCoordinator(
         }
         val isSs = when (routingMode) {
             AppPreferences.ROUTING_MODE_SHADOWSOCKS -> true
-            AppPreferences.ROUTING_MODE_PROXY_VPN -> appPrefs.getActiveProxyTypeSnapshot() == AppPreferences.PROXY_TYPE_SHADOWSOCKS
+            AppPreferences.ROUTING_MODE_PROXY_VPN -> {
+                val t = appPrefs.getActiveProxyTypeSnapshot()
+                t == AppPreferences.PROXY_TYPE_SHADOWSOCKS || t == AppPreferences.PROXY_TYPE_NODE
+            }
             else -> false
         }
 
@@ -186,7 +189,10 @@ class VpnEngineCoordinator(
         } else {
             ""
         }
-        val ssConfigJson = if (isSs) {
+        val activeProxy = if (isSs) appPrefs.getActiveProxyProfileSnapshot() else null
+        val proxyProtocol = activeProxy?.protocol?.value ?: ""
+        val proxyConfigJson = activeProxy?.toEngineJson() ?: ""
+        val ssConfigJson = if (isSs && activeProxy == null) {
             appPrefs.getSsProfileSnapshot()?.toJson() ?: ""
         } else {
             ""
@@ -201,6 +207,8 @@ class VpnEngineCoordinator(
             vpnInterface = vpnInterface,
             wgConfigJson = wgConfigJson,
             ssConfigJson = ssConfigJson,
+            proxyProtocol = proxyProtocol,
+            proxyConfigJson = proxyConfigJson,
             httpsFilteringEnabled = httpsFilteringEnabled,
             selectedBrowsers = selectedBrowsers,
             certDir = certDir,

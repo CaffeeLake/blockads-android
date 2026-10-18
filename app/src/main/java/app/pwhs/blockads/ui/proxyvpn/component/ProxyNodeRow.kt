@@ -42,17 +42,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.pwhs.blockads.R
-import app.pwhs.blockads.data.entities.ShadowsocksProfile
+import app.pwhs.blockads.data.entities.ProxyProfile
+import app.pwhs.blockads.data.entities.ProxyProtocol
 import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 
 @Composable
-fun ShadowsocksProfileRow(
-    profile: ShadowsocksProfile,
+fun ProxyNodeRow(
+    profile: ProxyProfile,
     isActive: Boolean,
     onClick: () -> Unit,
-    onRename: (ShadowsocksProfile) -> Unit,
-    onDelete: (ShadowsocksProfile) -> Unit,
+    onRename: (ProxyProfile) -> Unit,
+    onDelete: (ProxyProfile) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -69,6 +70,19 @@ fun ShadowsocksProfileRow(
         }
         val stripped = name.replace(Regex("^[\\uD83C\\uDDE6-\\uD83C\\uDDFF]{2}\\s*"), "").trim()
         stripped.ifEmpty { profile.displayName }
+    }
+
+    val subtitle = remember(profile) {
+        val details = when (profile.protocol) {
+            ProxyProtocol.SHADOWSOCKS -> profile.method.ifEmpty { "AEAD" }
+            ProxyProtocol.TROJAN -> if (profile.network == "ws") "WS • TLS" else "TLS"
+            ProxyProtocol.VLESS -> {
+                val net = if (profile.network == "ws") "WS" else "TCP"
+                val sec = if (profile.security.isNotEmpty()) profile.security.uppercase() else "TLS"
+                "$net • $sec"
+            }
+        }
+        "${profile.server}:${profile.port} • $details"
     }
 
     Card(
@@ -135,6 +149,29 @@ fun ShadowsocksProfileRow(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
                     )
+
+                    // Protocol badge
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = when (profile.protocol) {
+                            ProxyProtocol.VLESS -> MaterialTheme.colorScheme.tertiaryContainer
+                            ProxyProtocol.TROJAN -> MaterialTheme.colorScheme.secondaryContainer
+                            ProxyProtocol.SHADOWSOCKS -> MaterialTheme.colorScheme.surfaceVariant
+                        }
+                    ) {
+                        Text(
+                            text = profile.protocol.displayName,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = when (profile.protocol) {
+                                ProxyProtocol.VLESS -> MaterialTheme.colorScheme.onTertiaryContainer
+                                ProxyProtocol.TROJAN -> MaterialTheme.colorScheme.onSecondaryContainer
+                                ProxyProtocol.SHADOWSOCKS -> MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                        )
+                    }
+
                     if (isActive) {
                         Surface(
                             shape = RoundedCornerShape(6.dp),
@@ -154,7 +191,7 @@ fun ShadowsocksProfileRow(
                 }
 
                 Text(
-                    text = "${profile.server}:${profile.port} • ${profile.method}",
+                    text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

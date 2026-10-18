@@ -50,7 +50,28 @@ class VpnTunnelBuilder(
 
             val isSs = when (routingMode) {
                 AppPreferences.ROUTING_MODE_SHADOWSOCKS -> true
-                AppPreferences.ROUTING_MODE_PROXY_VPN -> runBlocking { appPrefs.getActiveProxyTypeSnapshot() } == AppPreferences.PROXY_TYPE_SHADOWSOCKS
+                AppPreferences.ROUTING_MODE_PROXY_VPN -> runBlocking {
+                    try {
+                        appPrefs.getActiveProxyTypeSnapshot()
+                    } catch (_: Exception) {
+                        ""
+                    }
+                } == AppPreferences.PROXY_TYPE_SHADOWSOCKS
+                else -> false
+            }
+
+            val isProxyOutbound = when (routingMode) {
+                AppPreferences.ROUTING_MODE_SHADOWSOCKS -> true
+                AppPreferences.ROUTING_MODE_PROXY_VPN -> {
+                    val type = runBlocking {
+                        try {
+                            appPrefs.getActiveProxyTypeSnapshot()
+                        } catch (_: Exception) {
+                            ""
+                        }
+                    }
+                    type.isNotEmpty() && type != AppPreferences.PROXY_TYPE_WIREGUARD
+                }
                 else -> false
             }
 
@@ -168,6 +189,28 @@ class VpnTunnelBuilder(
                         Timber.d("LAN excluded from direct mode VPN routes")
                     } catch (e: Exception) {
                         Timber.w(e, "Failed to exclude LAN routes")
+                    }
+                }
+                if (isProxyOutbound && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val activeProxy = runBlocking {
+                        try {
+                            appPrefs.getActiveProxyProfileSnapshot()
+                        } catch (_: Exception) {
+                            null
+                        }
+                    }
+                    val proxyHost = activeProxy?.server?.trim()
+                    if (!proxyHost.isNullOrEmpty()) {
+                        try {
+                            val addrs = InetAddress.getAllByName(proxyHost)
+                            for (addr in addrs) {
+                                val prefix = if (addr is Inet4Address) 32 else 128
+                                b.excludeRoute(IpPrefix(addr, prefix))
+                                Timber.d("Proxy server $addr excluded from VPN routes")
+                            }
+                        } catch (e: Exception) {
+                            Timber.w(e, "Failed to exclude proxy server $proxyHost from VPN routes")
+                        }
                     }
                 }
                 b

@@ -86,6 +86,11 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 	return ssConn, nil
 }
 
+// SetProtectFn updates the socket protection callback.
+func (c *Client) SetProtectFn(fn func(fd int) bool) {
+	c.protectFn = fn
+}
+
 // Config returns the underlying Config.
 func (c *Client) Config() *Config {
 	return c.config
@@ -95,3 +100,17 @@ func (c *Client) Config() *Config {
 func (c *Client) ServerAddress() string {
 	return c.serverAddr
 }
+
+// Protocol returns "shadowsocks".
+func (c *Client) Protocol() string {
+	return "shadowsocks"
+}
+
+// Tag returns profile tag or name.
+func (c *Client) Tag() string {
+	if c.config == nil {
+		return ""
+	}
+	return c.config.Tag
+}
+

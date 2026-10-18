@@ -11,6 +11,7 @@ import app.pwhs.blockads.data.datastore.prefs.ShadowsocksPreferences
 import app.pwhs.blockads.data.datastore.prefs.VpnSecurityPreferences
 import app.pwhs.blockads.data.datastore.prefs.WireGuardPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
+import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,7 @@ class AppPreferences internal constructor(
 
         const val PROXY_TYPE_WIREGUARD = ShadowsocksPreferences.PROXY_TYPE_WIREGUARD
         const val PROXY_TYPE_SHADOWSOCKS = ShadowsocksPreferences.PROXY_TYPE_SHADOWSOCKS
+        const val PROXY_TYPE_NODE = ShadowsocksPreferences.PROXY_TYPE_NODE
 
         const val PREFERRED_IP_AUTO = VpnSecurityPreferences.PREFERRED_IP_AUTO
         const val PREFERRED_IP_IPV4 = VpnSecurityPreferences.PREFERRED_IP_IPV4
@@ -268,6 +270,16 @@ class AppPreferences internal constructor(
     suspend fun setAllowAppBypass(enabled: Boolean) = wireguard.setAllowAppBypass(enabled)
 
     val activeProxyType: Flow<String> get() = shadowsocks.activeProxyType
+    val proxyProfiles: Flow<List<ProxyProfile>> get() = shadowsocks.proxyProfiles
+    val activeProxyProfileId: Flow<String?> get() = shadowsocks.activeProxyProfileId
+    val activeProxyProfile: Flow<ProxyProfile?> get() = shadowsocks.activeProxyProfile
+
+    suspend fun getActiveProxyProfileSnapshot(): ProxyProfile? = shadowsocks.getActiveProxyProfileSnapshot()
+    suspend fun setActiveProxyProfileId(id: String) = shadowsocks.setActiveProxyProfileId(id)
+    suspend fun addProxyProfile(profile: ProxyProfile) = shadowsocks.addProxyProfile(profile)
+    suspend fun deleteProxyProfile(id: String) = shadowsocks.deleteProxyProfile(id)
+    suspend fun renameProxyProfile(id: String, newName: String) = shadowsocks.renameProxyProfile(id, newName)
+
     val ssProfiles: Flow<List<ShadowsocksProfile>> get() = shadowsocks.ssProfiles
     val activeSsProfileId: Flow<String?> get() = shadowsocks.activeSsProfileId
     val ssProfile: Flow<ShadowsocksProfile?> get() = shadowsocks.ssProfile
@@ -277,7 +289,7 @@ class AppPreferences internal constructor(
     suspend fun setActiveProxyType(type: String) = shadowsocks.setActiveProxyType(type)
     suspend fun setActiveSsProfileId(id: String) = shadowsocks.setActiveProfileId(id)
     suspend fun addSsProfile(profile: ShadowsocksProfile) = shadowsocks.addProfile(profile)
+    suspend fun setSsProfile(profile: ShadowsocksProfile) = shadowsocks.addProfile(profile)
     suspend fun deleteSsProfile(id: String) = shadowsocks.deleteProfile(id)
     suspend fun renameSsProfile(id: String, newName: String) = shadowsocks.renameProfile(id, newName)
-    suspend fun setSsProfile(profile: ShadowsocksProfile?) = shadowsocks.setSsProfile(profile)
 }

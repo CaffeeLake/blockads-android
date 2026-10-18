@@ -6,8 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
+import app.pwhs.blockads.utils.ProxyLinkParser
 import app.pwhs.blockads.service.ServiceController
 import app.pwhs.blockads.service.vpn.VpnNotificationManager
 import app.pwhs.blockads.utils.WgConfigIssue
@@ -73,7 +75,14 @@ class ProxyVpnViewModel(
     private val _allowAppBypass = MutableStateFlow(false)
     val allowAppBypass: StateFlow<Boolean> = _allowAppBypass.asStateFlow()
 
-    // Shadowsocks state
+    // Proxy Nodes state (VLESS, Trojan, Shadowsocks)
+    private val _proxyProfiles = MutableStateFlow<List<ProxyProfile>>(emptyList())
+    val proxyProfiles: StateFlow<List<ProxyProfile>> = _proxyProfiles.asStateFlow()
+
+    private val _activeProxyProfileId = MutableStateFlow<String?>(null)
+    val activeProxyProfileId: StateFlow<String?> = _activeProxyProfileId.asStateFlow()
+
+    // Shadowsocks state (legacy compatibility)
     private val _ssProfiles = MutableStateFlow<List<ShadowsocksProfile>>(emptyList())
     val ssProfiles: StateFlow<List<ShadowsocksProfile>> = _ssProfiles.asStateFlow()
 
@@ -95,7 +104,15 @@ class ProxyVpnViewModel(
             _activeWgProfileId.value = active ?: list.firstOrNull { it.configIssue == null }?.id
         }.launchIn(viewModelScope)
 
-        // Collect Shadowsocks profiles
+        // Collect Proxy profiles
+        combine(appPrefs.proxyProfiles, appPrefs.activeProxyProfileId) { list, active ->
+            list to active
+        }.onEach { (list, active) ->
+            _proxyProfiles.value = list
+            _activeProxyProfileId.value = active ?: list.firstOrNull()?.id
+        }.launchIn(viewModelScope)
+
+        // Collect Shadowsocks profiles (legacy compatibility)
         combine(appPrefs.ssProfiles, appPrefs.activeSsProfileId) { list, active ->
             list to active
         }.onEach { (list, active) ->
@@ -248,12 +265,12 @@ class ProxyVpnViewModel(
         }
     }
 
-    // ── Shadowsocks / Outline Operations ─────────────────────────────────
+    // ── Proxy Nodes (VLESS, Trojan, Shadowsocks) Operations ──────────────
 
-    fun setActiveShadowsocksProfile(id: String) {
+    fun setActiveProxyProfile(id: String) {
         viewModelScope.launch {
-            val profile = _ssProfiles.value.firstOrNull { it.id == id } ?: return@launch
-            appPrefs.setActiveSsProfileId(id)
+            val profile = _proxyProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            appPrefs.setActiveProxyProfileId(id)
             appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
             appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
             _events.emit(ProxyVpnUiEvent.ProfileActivated(profile.displayName))
@@ -261,41 +278,43 @@ class ProxyVpnViewModel(
         }
     }
 
-    fun saveShadowsocksKey(rawUri: String): Result<ShadowsocksProfile> {
-        return try {
-            val json = tunnel.Tunnel.parseShadowsocksURI(rawUri)
-            val profile = ShadowsocksProfile.fromJson(json).copy(rawUri = rawUri)
-            viewModelScope.launch {
-                appPrefs.addSsProfile(profile)
-                appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
-                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
-                _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
-                ServiceController.requestRestart(getApplication())
+    fun saveProxyNodeLink(rawUri: String): Result<ProxyProfile> {
+        val parseResult = ProxyLinkParser.parse(rawUri)
+        return parseResult.fold(
+            onSuccess = { profile ->
+                viewModelScope.launch {
+                    appPrefs.addProxyProfile(profile)
+                    appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                    appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+                    _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
+                    ServiceController.requestRestart(getApplication())
+                }
+                Result.success(profile)
+            },
+            onFailure = { err ->
+                Timber.e(err, "Failed to parse proxy link: $rawUri")
+                Result.failure(err)
             }
-            Result.success(profile)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to parse and save Shadowsocks key")
-            Result.failure(e)
-        }
+        )
     }
 
-    fun renameShadowsocksProfile(id: String, newName: String) {
+    fun renameProxyProfile(id: String, newName: String) {
         val name = newName.trim()
         if (name.isEmpty()) return
         viewModelScope.launch {
-            appPrefs.renameSsProfile(id, name)
+            appPrefs.renameProxyProfile(id, name)
             _events.emit(ProxyVpnUiEvent.ProfileRenamed)
         }
     }
 
-    fun deleteShadowsocksProfile(id: String) {
+    fun deleteProxyProfile(id: String) {
         viewModelScope.launch {
-            val target = _ssProfiles.value.firstOrNull { it.id == id } ?: return@launch
-            val wasActive = _activeSsProfileId.value == id
-            appPrefs.deleteSsProfile(id)
+            val target = _proxyProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            val wasActive = _activeProxyProfileId.value == id
+            appPrefs.deleteProxyProfile(id)
             _events.emit(ProxyVpnUiEvent.ProfileDeleted(target.displayName))
-            if (wasActive && _isProxyActive.value && _activeProxyType.value == AppPreferences.PROXY_TYPE_SHADOWSOCKS) {
-                if (appPrefs.getSsProfileSnapshot() == null) {
+            if (wasActive && _isProxyActive.value && (_activeProxyType.value == AppPreferences.PROXY_TYPE_SHADOWSOCKS || _activeProxyType.value == AppPreferences.PROXY_TYPE_NODE)) {
+                if (appPrefs.getActiveProxyProfileSnapshot() == null) {
                     appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
                     _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(false))
                 }
@@ -303,6 +322,30 @@ class ProxyVpnViewModel(
             }
         }
     }
+
+    // ── Legacy Shadowsocks / Outline Operations ──────────────────────────
+
+    fun setActiveShadowsocksProfile(id: String) = setActiveProxyProfile(id)
+
+    fun saveShadowsocksKey(rawUri: String): Result<ShadowsocksProfile> {
+        val res = saveProxyNodeLink(rawUri)
+        return res.map {
+            ShadowsocksProfile(
+                id = it.id,
+                name = it.name,
+                server = it.server,
+                port = it.port,
+                method = it.method,
+                password = it.password,
+                tag = it.tag,
+                rawUri = it.rawUri
+            )
+        }
+    }
+
+    fun renameShadowsocksProfile(id: String, newName: String) = renameProxyProfile(id, newName)
+
+    fun deleteShadowsocksProfile(id: String) = deleteProxyProfile(id)
 
     private fun fixFirstMessage(profile: WireGuardProfile, issue: WgConfigIssue): String {
         val res = getApplication<Application>().resources

@@ -47,8 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
-import app.pwhs.blockads.ui.home.component.OutlineKeyDialog
-import app.pwhs.blockads.ui.proxyvpn.component.ShadowsocksTabContent
+import app.pwhs.blockads.ui.proxyvpn.component.AddProxyNodeDialog
+import app.pwhs.blockads.ui.proxyvpn.component.ProxyNodesTabContent
 import app.pwhs.blockads.ui.proxyvpn.component.WireGuardTabContent
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,13 +69,13 @@ fun ProxyVpnScreen(
     val activeWgId by viewModel.activeWgProfileId.collectAsStateWithLifecycle()
     val isLoadingWg by viewModel.isLoadingWg.collectAsStateWithLifecycle()
 
-    val ssProfiles by viewModel.ssProfiles.collectAsStateWithLifecycle()
-    val activeSsId by viewModel.activeSsProfileId.collectAsStateWithLifecycle()
+    val proxyProfiles by viewModel.proxyProfiles.collectAsStateWithLifecycle()
+    val activeProxyId by viewModel.activeProxyProfileId.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
-    var showAddSsDialog by remember { mutableStateOf(false) }
+    var showAddProxyDialog by remember { mutableStateOf(false) }
 
     val renamedMsg = stringResource(R.string.wireguard_renamed)
 
@@ -234,15 +234,15 @@ fun ProxyVpnScreen(
                                 modifier = Modifier.size(18.dp)
                             )
                             Text(
-                                text = stringResource(R.string.proxy_vpn_tab_shadowsocks),
+                                text = stringResource(R.string.proxy_vpn_tab_proxies),
                                 maxLines = 1
                             )
-                            if (ssProfiles.isNotEmpty()) {
+                            if (proxyProfiles.isNotEmpty()) {
                                 Badge(
                                     containerColor = if (selectedTab == 1) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
                                     contentColor = if (selectedTab == 1) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                                 ) {
-                                    Text("${ssProfiles.size}")
+                                    Text("${proxyProfiles.size}")
                                 }
                             }
                         }
@@ -267,25 +267,25 @@ fun ProxyVpnScreen(
                         onImportUri = { viewModel.importWireGuardFromUri(it) }
                     )
 
-                    1 -> ShadowsocksTabContent(
-                        profiles = ssProfiles,
-                        activeId = activeSsId,
-                        isProxyActive = isProxyActive && activeProxyType == AppPreferences.PROXY_TYPE_SHADOWSOCKS,
-                        onSelectProfile = { viewModel.setActiveShadowsocksProfile(it.id) },
-                        onAddKeyClick = { showAddSsDialog = true },
-                        onRenameProfile = { id, name -> viewModel.renameShadowsocksProfile(id, name) },
-                        onDeleteProfile = { viewModel.deleteShadowsocksProfile(it) }
+                    1 -> ProxyNodesTabContent(
+                        profiles = proxyProfiles,
+                        activeId = activeProxyId,
+                        isProxyActive = isProxyActive && (activeProxyType == AppPreferences.PROXY_TYPE_SHADOWSOCKS || activeProxyType == AppPreferences.PROXY_TYPE_NODE),
+                        onSelectProfile = { viewModel.setActiveProxyProfile(it.id) },
+                        onAddNodeClick = { showAddProxyDialog = true },
+                        onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
+                        onDeleteProfile = { viewModel.deleteProxyProfile(it) }
                     )
                 }
             }
         }
     }
 
-    if (showAddSsDialog) {
-        OutlineKeyDialog(
-            onDismiss = { showAddSsDialog = false },
+    if (showAddProxyDialog) {
+        AddProxyNodeDialog(
+            onDismiss = { showAddProxyDialog = false },
             onSave = { uri ->
-                val result = viewModel.saveShadowsocksKey(uri)
+                val result = viewModel.saveProxyNodeLink(uri)
                 result.isSuccess
             }
         )
