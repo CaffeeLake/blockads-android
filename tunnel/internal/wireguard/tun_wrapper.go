@@ -4,7 +4,7 @@ import (
 	"os"
 	"sync"
 
-	"golang.zx2c4.com/wireguard/tun"
+	"github.com/amnezia-vpn/amneziawg-go/tun"
 )
 
 const defaultMTU = 1280

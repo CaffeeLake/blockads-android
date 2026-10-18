@@ -165,7 +165,7 @@ var NewResolver func(protectFn func(fd int) bool) *internal/dns.Resolver
 func NewRouter() *Router
 var NewSafeSearch func() *internal/safesearch.SafeSearch
 func NewTcpIpStack() *TcpIpStack
-var NewWgOutbound func(tunDev golang.zx2c4.com/wireguard/tun.Device, ipcConfig string, protectFn func(fd int) bool) (*internal/wireguard.WgOutbound, error)
+var NewWgOutbound func(tunDev github.com/amnezia-vpn/amneziawg-go/tun.Device, ipcConfig string, protectFn func(fd int) bool) (*internal/wireguard.WgOutbound, error)
 type OutboundAdapter interface
 	method OutboundAdapter.HandlePacket(packet []byte, length int)
 	method OutboundAdapter.Name() string
@@ -324,6 +324,17 @@ type WgInterface = internal/wireguard.WgInterface
 	field WgInterface.Address []string
 	field WgInterface.ListenPort *int
 	field WgInterface.DNS []string
+	field WgInterface.Jc *int
+	field WgInterface.Jmin *int
+	field WgInterface.Jmax *int
+	field WgInterface.S1 *int
+	field WgInterface.S2 *int
+	field WgInterface.S3 *int
+	field WgInterface.S4 *int
+	field WgInterface.H1 *int64
+	field WgInterface.H2 *int64
+	field WgInterface.H3 *int64
+	field WgInterface.H4 *int64
 type WgOutbound = internal/wireguard.WgOutbound
 	method WgOutbound.HandlePacket(packet []byte, length int)
 	method WgOutbound.IsRunning() bool

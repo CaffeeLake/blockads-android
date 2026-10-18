@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	"golang.zx2c4.com/wireguard/conn"
+	"github.com/amnezia-vpn/amneziawg-go/conn"
 )
 
 type protectedBind struct {

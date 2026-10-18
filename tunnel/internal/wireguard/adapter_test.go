@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.zx2c4.com/wireguard/conn"
+	"github.com/amnezia-vpn/amneziawg-go/conn"
 )
 
 // testIpc is a minimal valid UAPI config with a random listen port.

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"golang.zx2c4.com/wireguard/conn"
-	"golang.zx2c4.com/wireguard/device"
+	"github.com/amnezia-vpn/amneziawg-go/conn"
+	"github.com/amnezia-vpn/amneziawg-go/device"
 )
 
 func key(b byte) string    { return base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{b}, 32)) }
@@ -109,6 +109,61 @@ func TestBuildIpcConfigAcceptedByWireguardGo(t *testing.T) {
 		if !strings.Contains(state, line+"\n") {
 			t.Errorf("device state missing %q:\n%s", line, state)
 		}
+	}
+}
+
+func TestBuildIpcConfigAcceptedByAmneziaWG(t *testing.T) {
+	jc := 5
+	jmin := 40
+	jmax := 160
+	s1 := 89
+	s2 := 37
+	s3 := 47
+	s4 := 19
+	h1 := int64(378180602)
+	h2 := int64(908577465)
+	h3 := int64(1143005644)
+	h4 := int64(1780226345)
+
+	cfg := &WgConfig{
+		Interface: WgInterface{
+			PrivateKey: key(1),
+			Jc:         &jc,
+			Jmin:       &jmin,
+			Jmax:       &jmax,
+			S1:         &s1,
+			S2:         &s2,
+			S3:         &s3,
+			S4:         &s4,
+			H1:         &h1,
+			H2:         &h2,
+			H3:         &h3,
+			H4:         &h4,
+		},
+		Peers: []WgPeer{{
+			PublicKey:  key(2),
+			Endpoint:   strp("127.0.0.1:17825"),
+			AllowedIPs: []string{"0.0.0.0/0"},
+		}},
+	}
+	ipc, err := BuildIpcConfig(cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, expectedDirective := range []string{
+		"jc=5", "jmin=40", "jmax=160",
+		"s1=89", "s2=37",
+		"h1=378180602", "h2=908577465", "h3=1143005644", "h4=1780226345",
+	} {
+		if !strings.Contains(ipc, expectedDirective+"\n") {
+			t.Errorf("IPC string missing %s:\n%s", expectedDirective, ipc)
+		}
+	}
+
+	dev := newTestDevice(t)
+	if err := dev.IpcSet(ipc); err != nil {
+		t.Fatalf("IpcSet rejected AmneziaWG config %q: %v", ipc, err)
 	}
 }
 

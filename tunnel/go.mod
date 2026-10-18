@@ -3,6 +3,7 @@ module github.com/nqmgaming/blockads-tunnel
 go 1.27
 
 require (
+	github.com/amnezia-vpn/amneziawg-go v1.0.4
 	github.com/apernet/hysteria/core/v2 v2.13.0
 	github.com/apernet/hysteria/extras/v2 v2.13.0
 	github.com/apernet/quic-go v0.63.1-0.20261004180939-a10df75c260c
@@ -13,13 +14,13 @@ require (
 	github.com/refraction-networking/utls v1.8.2
 	github.com/sagernet/gomobile v0.1.12
 	github.com/sagernet/sing v0.7.8-0.20250909124511-ab3827767cea
+	github.com/sagernet/sing-shadowsocks v0.2.9
 	github.com/sagernet/sing-vmess v0.2.8
 	github.com/xjasonlyu/tun2socks/v2 v2.6.0
 	golang.org/x/crypto v0.57.0
-	golang.org/x/mobile v0.0.0-20231127183840-76ac6878050a
+	golang.org/x/mobile v0.0.0-20240520174638-fa72addaaa1b
 	golang.org/x/sys v0.48.0
-	golang.zx2c4.com/wireguard v0.0.0-20250521234502-f333402bd9cb
-	gvisor.dev/gvisor v0.0.0-20250523182742-eede7a881b20
+	gvisor.dev/gvisor v0.0.0-20250606233247-e3c4c4cad86f
 )
 
 require (
@@ -34,9 +35,10 @@ require (
 	github.com/klauspost/compress v1.20.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.12 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
-	github.com/sagernet/sing-shadowsocks v0.2.9 // indirect
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/stretchr/testify v1.12.1 // indirect
+	github.com/tevino/abool v1.2.0 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
 	golang.org/x/mod v0.41.0 // indirect
@@ -49,3 +51,5 @@ require (
 	golang.zx2c4.com/wintun v0.0.0-20230126152724-0fa3db229ce2 // indirect
 	lukechampine.com/blake3 v1.4.1 // indirect
 )
+
+replace gvisor.dev/gvisor => gvisor.dev/gvisor v0.0.0-20250523182742-eede7a881b20

@@ -21,6 +21,18 @@ type WgInterface struct {
 	Address    []string `json:"address"`
 	ListenPort *int     `json:"listenPort,omitempty"`
 	DNS        []string `json:"dns"`
+	// AmneziaWG obfuscation parameters
+	Jc   *int   `json:"jc,omitempty"`
+	Jmin *int   `json:"jmin,omitempty"`
+	Jmax *int   `json:"jmax,omitempty"`
+	S1   *int   `json:"s1,omitempty"`
+	S2   *int   `json:"s2,omitempty"`
+	S3   *int   `json:"s3,omitempty"`
+	S4   *int   `json:"s4,omitempty"`
+	H1   *int64 `json:"h1,omitempty"`
+	H2   *int64 `json:"h2,omitempty"`
+	H3   *int64 `json:"h3,omitempty"`
+	H4   *int64 `json:"h4,omitempty"`
 }
 
 // WgPeer is a [Peer] section.
@@ -53,6 +65,35 @@ func BuildIpcConfig(cfg *WgConfig) (string, error) {
 
 	if cfg.Interface.ListenPort != nil && *cfg.Interface.ListenPort > 0 {
 		sb.WriteString(fmt.Sprintf("listen_port=%d\n", *cfg.Interface.ListenPort))
+	}
+
+	// AmneziaWG UAPI directives
+	if cfg.Interface.Jc != nil && *cfg.Interface.Jc > 0 {
+		sb.WriteString(fmt.Sprintf("jc=%d\n", *cfg.Interface.Jc))
+	}
+	if cfg.Interface.Jmin != nil && *cfg.Interface.Jmin > 0 {
+		sb.WriteString(fmt.Sprintf("jmin=%d\n", *cfg.Interface.Jmin))
+	}
+	if cfg.Interface.Jmax != nil && *cfg.Interface.Jmax > 0 {
+		sb.WriteString(fmt.Sprintf("jmax=%d\n", *cfg.Interface.Jmax))
+	}
+	if cfg.Interface.S1 != nil && *cfg.Interface.S1 >= 0 {
+		sb.WriteString(fmt.Sprintf("s1=%d\n", *cfg.Interface.S1))
+	}
+	if cfg.Interface.S2 != nil && *cfg.Interface.S2 >= 0 {
+		sb.WriteString(fmt.Sprintf("s2=%d\n", *cfg.Interface.S2))
+	}
+	if cfg.Interface.H1 != nil {
+		sb.WriteString(fmt.Sprintf("h1=%d\n", *cfg.Interface.H1))
+	}
+	if cfg.Interface.H2 != nil {
+		sb.WriteString(fmt.Sprintf("h2=%d\n", *cfg.Interface.H2))
+	}
+	if cfg.Interface.H3 != nil {
+		sb.WriteString(fmt.Sprintf("h3=%d\n", *cfg.Interface.H3))
+	}
+	if cfg.Interface.H4 != nil {
+		sb.WriteString(fmt.Sprintf("h4=%d\n", *cfg.Interface.H4))
 	}
 
 	for _, peer := range cfg.Peers {
