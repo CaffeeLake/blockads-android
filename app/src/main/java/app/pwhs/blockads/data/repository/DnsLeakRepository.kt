@@ -40,11 +40,15 @@ class DnsLeakRepositoryImpl(
         coerceInputValues = true
     }
 
+    companion object {
+        private const val BASE_URL = "https://edge-dns.pwhs.app"
+    }
+
     override suspend fun runLeakTest(onProgress: (String) -> Unit): Result<DnsLeakAnalyzeResponse> =
         runCatching {
             // Step 1: Initialize session
             onProgress("init")
-            val initJson = client.get("https://dns.pwhs.app/api/dns-leak/init").bodyAsText()
+            val initJson = client.get("$BASE_URL/api/dns-leak/init").bodyAsText()
             val initResponse = json.decodeFromString<DnsLeakInitResponse>(initJson)
             val sessionId = initResponse.sessionId
             Timber.d("DNS Leak session initialized: $sessionId, ws: ${initResponse.wsUrl}")
@@ -103,7 +107,7 @@ class DnsLeakRepositoryImpl(
                 resolvers = resolverItems
             )
 
-            val analyzeResponseText = client.post("https://dns.pwhs.app/api/dns-leak/analyze") {
+            val analyzeResponseText = client.post("$BASE_URL/api/dns-leak/analyze") {
                 contentType(ContentType.Application.Json)
                 setBody(json.encodeToString(DnsLeakAnalyzeRequest.serializer(), analyzeRequest))
             }.bodyAsText()
