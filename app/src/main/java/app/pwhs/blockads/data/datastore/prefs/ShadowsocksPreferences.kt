@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ProxyProfileList
 import app.pwhs.blockads.data.entities.ProxyProtocol
@@ -19,6 +20,8 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
     companion object {
         val KEY_PROXY_PROFILES_JSON = stringPreferencesKey("proxy_profiles_json")
         val KEY_PROXY_ACTIVE_PROFILE_ID = stringPreferencesKey("proxy_active_profile_id")
+        val KEY_LAST_SUBSCRIPTION_URL = stringPreferencesKey("proxy_last_subscription_url")
+        val KEY_LAST_SUBSCRIPTION_UPDATED = longPreferencesKey("proxy_last_subscription_updated")
 
         val KEY_SS_PROFILES_JSON = stringPreferencesKey("ss_profiles_json")
         val KEY_SS_ACTIVE_PROFILE_ID = stringPreferencesKey("ss_active_profile_id")
@@ -30,6 +33,9 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         const val PROXY_TYPE_NODE = "proxynode"
         const val ROUTING_MODE_SHADOWSOCKS = "shadowsocks"
     }
+
+    val lastSubscriptionUrl: Flow<String?> = dataStore.data.map { it[KEY_LAST_SUBSCRIPTION_URL] }
+    val lastSubscriptionUpdated: Flow<Long?> = dataStore.data.map { it[KEY_LAST_SUBSCRIPTION_UPDATED] }
 
     val activeProxyType: Flow<String> = dataStore.data.map { prefs ->
         prefs[KEY_ACTIVE_PROXY_TYPE] ?: PROXY_TYPE_WIREGUARD
@@ -111,14 +117,31 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun setLastSubscriptionUrl(url: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_LAST_SUBSCRIPTION_URL] = url
+            prefs[KEY_LAST_SUBSCRIPTION_UPDATED] = System.currentTimeMillis()
+        }
+    }
+
+    suspend fun getLastSubscriptionUrlSnapshot(): String? =
+        dataStore.data.first()[KEY_LAST_SUBSCRIPTION_URL]
+
     suspend fun addProxyProfile(profile: ProxyProfile) {
         dataStore.edit { prefs ->
             val current = readProxyProfiles(prefs).toMutableList()
-            current.removeAll { it.id == profile.id }
-            current.add(0, profile)
-            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(current).toJson()
-            prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = profile.id
-            prefs[KEY_SS_ACTIVE_PROFILE_ID] = profile.id
+            val existingIdx = current.indexOfFirst { it.isSameNode(profile) }
+            val profileToSave = if (existingIdx >= 0) {
+                val existing = current.removeAt(existingIdx)
+                profile.copy(id = existing.id)
+            } else {
+                profile
+            }
+            current.add(0, profileToSave)
+            val distinct = deduplicateProfiles(current)
+            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(distinct).toJson()
+            prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = profileToSave.id
+            prefs[KEY_SS_ACTIVE_PROFILE_ID] = profileToSave.id
             prefs[KEY_ACTIVE_PROXY_TYPE] = PROXY_TYPE_SHADOWSOCKS
         }
     }
@@ -128,17 +151,33 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             val current = readProxyProfiles(prefs).toMutableList()
             for (p in profiles.reversed()) {
-                current.removeAll { it.id == p.id }
-                current.add(0, p)
+                val existingIdx = current.indexOfFirst { it.isSameNode(p) }
+                if (existingIdx >= 0) {
+                    val existing = current[existingIdx]
+                    current[existingIdx] = p.copy(id = existing.id)
+                } else {
+                    current.add(0, p)
+                }
             }
-            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(current).toJson()
-            if (prefs[KEY_PROXY_ACTIVE_PROFILE_ID] == null) {
-                val first = profiles.first()
+            val distinct = deduplicateProfiles(current)
+            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(distinct).toJson()
+            if (prefs[KEY_PROXY_ACTIVE_PROFILE_ID] == null && distinct.isNotEmpty()) {
+                val first = distinct.first()
                 prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = first.id
                 prefs[KEY_SS_ACTIVE_PROFILE_ID] = first.id
                 prefs[KEY_ACTIVE_PROXY_TYPE] = PROXY_TYPE_SHADOWSOCKS
             }
         }
+    }
+
+    private fun deduplicateProfiles(list: List<ProxyProfile>): List<ProxyProfile> {
+        val seen = mutableListOf<ProxyProfile>()
+        for (item in list) {
+            if (seen.none { it.isSameNode(item) }) {
+                seen.add(item)
+            }
+        }
+        return seen
     }
 
     suspend fun deleteProxyProfile(id: String) {

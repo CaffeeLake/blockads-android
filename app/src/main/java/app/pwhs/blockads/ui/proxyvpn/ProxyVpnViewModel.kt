@@ -95,6 +95,24 @@ class ProxyVpnViewModel(
     private val _proxyProfiles = MutableStateFlow<List<ProxyProfile>>(emptyList())
     val proxyProfiles: StateFlow<List<ProxyProfile>> = _proxyProfiles.asStateFlow()
 
+    val lastSubscriptionUrl: StateFlow<String?> = appPrefs.lastSubscriptionUrl
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    private val _isUpdatingSubscription = MutableStateFlow(false)
+    val isUpdatingSubscription: StateFlow<Boolean> = _isUpdatingSubscription.asStateFlow()
+
+    fun updateSubscription() {
+        viewModelScope.launch {
+            val url = appPrefs.getLastSubscriptionUrlSnapshot() ?: return@launch
+            _isUpdatingSubscription.value = true
+            val success = saveProxyNodeLink(url)
+            _isUpdatingSubscription.value = false
+            if (success) {
+                _events.emit(ProxyVpnUiEvent.ProfileImported("Subscription updated"))
+            }
+        }
+    }
+
     private val _activeProxyProfileId = MutableStateFlow<String?>(null)
     val activeProxyProfileId: StateFlow<String?> = _activeProxyProfileId.asStateFlow()
 
@@ -318,6 +336,7 @@ class ProxyVpnViewModel(
                         Timber.w("No valid profiles found in subscription")
                         return@fold false
                     }
+                    appPrefs.setLastSubscriptionUrl(trimmed)
                     if (res.proxyProfiles.isNotEmpty()) {
                         appPrefs.addProxyProfiles(res.proxyProfiles)
                         appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)

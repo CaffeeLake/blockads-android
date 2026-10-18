@@ -98,12 +98,29 @@ class WireGuardPreferences(private val dataStore: DataStore<Preferences>) {
     suspend fun addOrUpdateWgProfile(profile: WireGuardProfile, makeActive: Boolean = false) {
         dataStore.edit { prefs ->
             val current = readProfilesFromPrefs(prefs).toMutableList()
-            val idx = current.indexOfFirst { it.id == profile.id }
-            if (idx >= 0) current[idx] = profile else current.add(profile)
-            prefs[KEY_WG_PROFILES_JSON] = WireGuardProfileList(current).toJson()
-            if (makeActive) prefs[KEY_WG_ACTIVE_PROFILE_ID] = profile.id
+            val idx = current.indexOfFirst { it.isSameProfile(profile) }
+            val profileToSave = if (idx >= 0) {
+                profile.copy(id = current[idx].id)
+            } else {
+                profile
+            }
+            if (idx >= 0) current[idx] = profileToSave else current.add(profileToSave)
+
+            val distinct = deduplicateWgProfiles(current)
+            prefs[KEY_WG_PROFILES_JSON] = WireGuardProfileList(distinct).toJson()
+            if (makeActive) prefs[KEY_WG_ACTIVE_PROFILE_ID] = profileToSave.id
             prefs.remove(KEY_WG_CONFIG_JSON)
         }
+    }
+
+    private fun deduplicateWgProfiles(list: List<WireGuardProfile>): List<WireGuardProfile> {
+        val seen = mutableListOf<WireGuardProfile>()
+        for (item in list) {
+            if (seen.none { it.isSameProfile(item) }) {
+                seen.add(item)
+            }
+        }
+        return seen
     }
 
     suspend fun removeWgProfile(id: String) {

@@ -66,7 +66,8 @@ data class ProxyProfile(
     val masquePass: String = "",
     // Metadata
     val tag: String = "",
-    val rawUri: String = ""
+    val rawUri: String = "",
+    val subscriptionUrl: String = ""
 ) {
     val displayName: String
         get() = name.ifEmpty { tag.ifEmpty { "$server:$port" } }
@@ -90,6 +91,21 @@ data class ProxyProfile(
         }
 
     /** Serializes the profile into Go engine JSON config format */
+    /** Determines if two profiles point to the same remote proxy node */
+    fun isSameNode(other: ProxyProfile): Boolean {
+        if (id == other.id) return true
+        if (protocol != other.protocol) return false
+        if (!server.equals(other.server, ignoreCase = true) || port != other.port) return false
+        val credMatch = when (protocol) {
+            ProxyProtocol.TROJAN, ProxyProtocol.HYSTERIA2 -> password.isNotEmpty() && password == other.password
+            ProxyProtocol.VLESS, ProxyProtocol.VMESS -> uuid.isNotEmpty() && uuid == other.uuid
+            ProxyProtocol.SHADOWSOCKS -> method == other.method && password == other.password
+            ProxyProtocol.TUIC -> (uuid.isNotEmpty() && uuid == other.uuid) || (password.isNotEmpty() && password == other.password)
+            ProxyProtocol.MASQUE -> masqueUser.isNotEmpty() && masqueUser == other.masqueUser
+        }
+        return credMatch || (name.isNotEmpty() && name.equals(other.name, ignoreCase = true))
+    }
+
     fun toEngineJson(): String = jsonInstance.encodeToString(serializer(), this)
 
     companion object {

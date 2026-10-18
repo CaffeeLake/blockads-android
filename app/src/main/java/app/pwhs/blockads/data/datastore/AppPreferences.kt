@@ -269,6 +269,11 @@ class AppPreferences internal constructor(
     suspend fun setExcludeLan(enabled: Boolean) = wireguard.setExcludeLan(enabled)
     suspend fun setAllowAppBypass(enabled: Boolean) = wireguard.setAllowAppBypass(enabled)
 
+    val lastSubscriptionUrl: Flow<String?> get() = shadowsocks.lastSubscriptionUrl
+    val lastSubscriptionUpdated: Flow<Long?> get() = shadowsocks.lastSubscriptionUpdated
+    suspend fun setLastSubscriptionUrl(url: String) = shadowsocks.setLastSubscriptionUrl(url)
+    suspend fun getLastSubscriptionUrlSnapshot(): String? = shadowsocks.getLastSubscriptionUrlSnapshot()
+
     val activeProxyType: Flow<String> get() = shadowsocks.activeProxyType
     val proxyProfiles: Flow<List<ProxyProfile>> get() = shadowsocks.proxyProfiles
     val activeProxyProfileId: Flow<String?> get() = shadowsocks.activeProxyProfileId

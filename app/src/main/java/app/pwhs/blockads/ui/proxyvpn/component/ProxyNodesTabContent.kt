@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material3.AlertDialog
@@ -65,6 +66,9 @@ fun ProxyNodesTabContent(
     onDeleteProfile: (String) -> Unit,
     searchQuery: String = "",
     onClearSearch: () -> Unit = {},
+    hasSubscription: Boolean = false,
+    isUpdatingSubscription: Boolean = false,
+    onUpdateSubscription: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var renameTarget by remember { mutableStateOf<ProxyProfile?>(null) }
@@ -205,6 +209,30 @@ fun ProxyNodesTabContent(
                                 modifier = Modifier.size(18.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
+                        }
+                    }
+
+                    if (hasSubscription) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                        IconButton(
+                            onClick = onUpdateSubscription,
+                            enabled = !isUpdatingSubscription,
+                            modifier = Modifier.size(34.dp)
+                        ) {
+                            if (isUpdatingSubscription) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(14.dp),
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Sync,
+                                    contentDescription = "Update Subscription",
+                                    modifier = Modifier.size(18.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
                     }
                 }

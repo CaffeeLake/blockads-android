@@ -99,6 +99,8 @@ fun ProxyVpnScreen(
     val networkType by viewModel.networkType.collectAsStateWithLifecycle()
     val currentIp by viewModel.currentIp.collectAsStateWithLifecycle()
     val isRefreshingIp by viewModel.isRefreshingIp.collectAsStateWithLifecycle()
+    val lastSubUrl by viewModel.lastSubscriptionUrl.collectAsStateWithLifecycle()
+    val isUpdatingSub by viewModel.isUpdatingSubscription.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
@@ -402,7 +404,10 @@ fun ProxyVpnScreen(
                         onAddNodeClick = { showAddProxyDialog = true },
                         onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
                         onDeleteProfile = { viewModel.deleteProxyProfile(it) },
-                        onClearSearch = { searchQuery = "" }
+                        onClearSearch = { searchQuery = "" },
+                        hasSubscription = !lastSubUrl.isNullOrBlank(),
+                        isUpdatingSubscription = isUpdatingSub,
+                        onUpdateSubscription = { viewModel.updateSubscription() }
                     )
                 }
             }

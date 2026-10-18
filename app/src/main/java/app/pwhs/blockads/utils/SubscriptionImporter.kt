@@ -11,7 +11,8 @@ data class SubscriptionImportResult(
     val proxyProfiles: List<ProxyProfile> = emptyList(),
     val wireGuardProfiles: List<WireGuardProfile> = emptyList(),
     val totalParsed: Int = 0,
-    val failedCount: Int = 0
+    val failedCount: Int = 0,
+    val subscriptionUrl: String = ""
 )
 
 object SubscriptionImporter {
@@ -24,12 +25,16 @@ object SubscriptionImporter {
             }
 
             val responseText = httpClient.get(trimmedUrl).bodyAsText().trim()
-            parseSubscriptionContent(responseText)
+            val parsed = parseSubscriptionContent(responseText)
+            parsed.copy(
+                proxyProfiles = parsed.proxyProfiles.map { it.copy(subscriptionUrl = trimmedUrl) },
+                subscriptionUrl = trimmedUrl
+            )
         }
 
     fun parseSubscriptionContent(content: String): SubscriptionImportResult {
         val trimmedRaw = content.trim()
-        if (trimmedRaw.startsWith("[") && trimmedRaw.endsWith("]")) {
+        if ((trimmedRaw.startsWith("[") && trimmedRaw.endsWith("]")) || (trimmedRaw.startsWith("{") && trimmedRaw.endsWith("}"))) {
             val jsonResult = JsonSubscriptionParser.parse(trimmedRaw)
             if (jsonResult.totalParsed > 0) {
                 return jsonResult
@@ -38,7 +43,7 @@ object SubscriptionImporter {
 
         val decodedText = decodeBase64IfPossible(trimmedRaw)
         val trimmedDecoded = decodedText.trim()
-        if (trimmedDecoded.startsWith("[") && trimmedDecoded.endsWith("]")) {
+        if ((trimmedDecoded.startsWith("[") && trimmedDecoded.endsWith("]")) || (trimmedDecoded.startsWith("{") && trimmedDecoded.endsWith("}"))) {
             val jsonResult = JsonSubscriptionParser.parse(trimmedDecoded)
             if (jsonResult.totalParsed > 0) {
                 return jsonResult
@@ -103,7 +108,7 @@ object SubscriptionImporter {
 
     private fun decodeBase64IfPossible(text: String): String {
         // If content has multiple lines and starts with a known protocol, or is JSON, it's already plain text
-        if (text.contains("://") || (text.startsWith("[") && text.endsWith("]"))) {
+        if (text.contains("://") || (text.startsWith("[") && text.endsWith("]")) || (text.startsWith("{") && text.endsWith("}"))) {
             return text
         }
         return try {

@@ -29,15 +29,27 @@ object JsonSubscriptionParser {
             return SubscriptionImportResult()
         }
 
-        if (rootElement !is JsonArray) {
-            return SubscriptionImportResult()
+        val itemsList: JsonArray = when (rootElement) {
+            is JsonArray -> rootElement
+            is JsonObject -> {
+                val outbounds = rootElement["outbounds"]?.jsonArray
+                if (outbounds != null) {
+                    JsonArray(outbounds.filterIsInstance<JsonObject>().map { ob ->
+                        val tagVal = ob["tag"] ?: ob["remarks"] ?: kotlinx.serialization.json.JsonPrimitive("Node")
+                        JsonObject(mapOf("remarks" to tagVal, "outbounds" to JsonArray(listOf(ob))))
+                    })
+                } else {
+                    return SubscriptionImportResult()
+                }
+            }
+            else -> return SubscriptionImportResult()
         }
 
         val proxyList = mutableListOf<ProxyProfile>()
         val wgList = mutableListOf<WireGuardProfile>()
         var failed = 0
 
-        for (item in rootElement) {
+        for (item in itemsList) {
             if (item !is JsonObject) continue
             val remarks = item["remarks"]?.jsonPrimitive?.content.orEmpty()
             val outbounds = item["outbounds"]?.jsonArray.orEmpty()
