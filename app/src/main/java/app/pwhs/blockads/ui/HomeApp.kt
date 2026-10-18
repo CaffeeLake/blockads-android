@@ -113,7 +113,7 @@ fun HomeApp(
     val currentBackStack = when (currentTab) {
         BottomBarScreen.Home -> homeStack
         BottomBarScreen.FilterSetup -> filterStack
-        BottomBarScreen.WireGuard -> wireguardStack
+        BottomBarScreen.Proxy -> wireguardStack
         BottomBarScreen.Firewall -> firewallStack
         BottomBarScreen.DomainRule -> domainRuleStack
         BottomBarScreen.Settings -> settingsStack
@@ -122,7 +122,7 @@ fun HomeApp(
     val bottomBarScreens = if (BuildConfig.IS_STORE) {
         listOf(
             BottomBarScreen.Home,
-            BottomBarScreen.WireGuard,
+            BottomBarScreen.Proxy,
             BottomBarScreen.Firewall,
             BottomBarScreen.DomainRule,
             BottomBarScreen.Settings
@@ -164,7 +164,7 @@ fun HomeApp(
                             selected = currentBackStack == when (screen) {
                                 BottomBarScreen.Home -> homeStack
                                 BottomBarScreen.FilterSetup -> filterStack
-                                BottomBarScreen.WireGuard -> wireguardStack
+                                BottomBarScreen.Proxy -> wireguardStack
                                 BottomBarScreen.Firewall -> firewallStack
                                 BottomBarScreen.DomainRule -> domainRuleStack
                                 BottomBarScreen.Settings -> settingsStack

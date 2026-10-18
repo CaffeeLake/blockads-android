@@ -5,6 +5,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_logs">Logs</string>
     <string name="nav_filter">Filter</string>
+    <string name="nav_proxy">Proxy</string>
     <string name="nav_settings">Settings</string>
     <string name="test_block_ads">Test Ad Blocking</string>
     <string name="home_connecting_desc">Establishing VPN connection…</string>

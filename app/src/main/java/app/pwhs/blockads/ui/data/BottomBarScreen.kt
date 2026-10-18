@@ -18,9 +18,9 @@ enum class BottomBarScreen(
         icon = R.drawable.ic_shield
     ),
 
-    WireGuard(
-        labelRes = R.string.proxy_vpn_tab_wireguard,
-        icon = R.drawable.ic_settings_wireguard
+    Proxy(
+        labelRes = R.string.nav_proxy,
+        icon = R.drawable.ic_nav_proxy
     ),
 
     Firewall(

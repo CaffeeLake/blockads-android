@@ -4,6 +4,7 @@
     <string name="nav_home">Trang chủ</string>
     <string name="nav_logs">Nhật ký</string>
     <string name="nav_filter">Bộ lọc</string>
+    <string name="nav_proxy">Proxy</string>
     <string name="nav_settings">Cài đặt</string>
     <string name="test_block_ads">Kiểm tra chặn QC</string>
     <string name="home_connecting_desc">Đang thiết lập kết nối VPN…</string>

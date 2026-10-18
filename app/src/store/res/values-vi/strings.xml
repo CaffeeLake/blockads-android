@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">ZephyrNG</string>
     <string name="app_tagline">Đường hầm Proxy &amp; Bảo mật Thế hệ mới</string>
-    <string name="nav_wireguard">WireGuard</string>
+    <string name="nav_proxy">Proxy</string>
     <string name="home_protected_desc">Đường hầm DNS bảo mật đang hoạt động</string>
     <string name="home_unprotected_desc">Nhấn nút để kết nối DNS bảo mật</string>
     <string name="home_block_rate">Tỉ lệ lọc</string>
