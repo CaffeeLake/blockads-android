@@ -24,7 +24,9 @@ data class WireGuardProfile(
         val thisPeer = config.peers.firstOrNull()
         val otherPeer = other.config.peers.firstOrNull()
         if (thisPeer != null && otherPeer != null) {
-            if (thisPeer.endpoint.isNotEmpty() && thisPeer.endpoint == otherPeer.endpoint &&
+            val end1 = thisPeer.endpoint.orEmpty()
+            val end2 = otherPeer.endpoint.orEmpty()
+            if (end1.isNotEmpty() && end1 == end2 &&
                 thisPeer.publicKey.isNotEmpty() && thisPeer.publicKey == otherPeer.publicKey) {
                 return true
             }

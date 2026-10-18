@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.activity.compose.BackHandler
+import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -101,10 +102,13 @@ fun ProxyVpnScreen(
     val isRefreshingIp by viewModel.isRefreshingIp.collectAsStateWithLifecycle()
     val lastSubUrl by viewModel.lastSubscriptionUrl.collectAsStateWithLifecycle()
     val isUpdatingSub by viewModel.isUpdatingSubscription.collectAsStateWithLifecycle()
+    val proxySubscriptions by viewModel.proxySubscriptions.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
     val resources = LocalResources.current
     var showAddProxyDialog by remember { mutableStateOf(false) }
+    var showSubscriptionsSheet by remember { mutableStateOf(false) }
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
@@ -133,6 +137,13 @@ fun ProxyVpnScreen(
                     )
                 is ProxyVpnUiEvent.HttpsFilteringDisabled ->
                     snackbarHostState.showSnackbar(resources.getString(R.string.wireguard_https_filtering_disabled))
+                is ProxyVpnUiEvent.DuplicatesRemoved ->
+                    snackbarHostState.showSnackbar(
+                        if (event.count > 0) "Removed ${event.count} duplicate node(s)"
+                        else "No duplicate nodes found"
+                    )
+                is ProxyVpnUiEvent.SubscriptionUpdated ->
+                    snackbarHostState.showSnackbar("Subscription updated ($event.count node(s))")
             }
         }
     }
@@ -405,9 +416,11 @@ fun ProxyVpnScreen(
                         onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
                         onDeleteProfile = { viewModel.deleteProxyProfile(it) },
                         onClearSearch = { searchQuery = "" },
-                        hasSubscription = !lastSubUrl.isNullOrBlank(),
+                        hasSubscription = proxySubscriptions.isNotEmpty() || !lastSubUrl.isNullOrBlank(),
                         isUpdatingSubscription = isUpdatingSub,
-                        onUpdateSubscription = { viewModel.updateSubscription() }
+                        onUpdateSubscription = { viewModel.updateSubscription() },
+                        onOpenSubscriptions = { showSubscriptionsSheet = true },
+                        onRemoveDuplicates = { viewModel.removeDuplicates() }
                     )
                 }
             }
@@ -420,6 +433,23 @@ fun ProxyVpnScreen(
             onSave = { uri ->
                 viewModel.saveProxyNodeLink(uri)
             }
+        )
+    }
+
+    if (showSubscriptionsSheet) {
+        app.pwhs.blockads.ui.proxyvpn.component.ManageSubscriptionsBottomSheet(
+            subscriptions = proxySubscriptions,
+            isUpdating = isUpdatingSub,
+            onDismiss = { showSubscriptionsSheet = false },
+            onUpdateSubscription = { viewModel.updateSubscription(it) },
+            onUpdateAll = { viewModel.updateAllSubscriptions() },
+            onDeleteSubscription = { id, deleteNodes -> viewModel.deleteSubscription(id, deleteNodes) },
+            onAddSubscription = { url ->
+                coroutineScope.launch {
+                    viewModel.saveProxyNodeLink(url)
+                }
+            },
+            onRemoveDuplicates = { viewModel.removeDuplicates() }
         )
     }
 }

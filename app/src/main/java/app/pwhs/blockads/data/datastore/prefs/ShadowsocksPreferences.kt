@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ProxyProfileList
 import app.pwhs.blockads.data.entities.ProxyProtocol
+import app.pwhs.blockads.data.entities.ProxySubscription
+import app.pwhs.blockads.data.entities.ProxySubscriptionList
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.ShadowsocksProfileList
 import app.pwhs.blockads.data.entities.toProxyProfile
@@ -22,6 +24,7 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_PROXY_ACTIVE_PROFILE_ID = stringPreferencesKey("proxy_active_profile_id")
         val KEY_LAST_SUBSCRIPTION_URL = stringPreferencesKey("proxy_last_subscription_url")
         val KEY_LAST_SUBSCRIPTION_UPDATED = longPreferencesKey("proxy_last_subscription_updated")
+        val KEY_SUBSCRIPTIONS_JSON = stringPreferencesKey("proxy_subscriptions_json")
 
         val KEY_SS_PROFILES_JSON = stringPreferencesKey("ss_profiles_json")
         val KEY_SS_ACTIVE_PROFILE_ID = stringPreferencesKey("ss_active_profile_id")
@@ -32,6 +35,12 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         const val PROXY_TYPE_SHADOWSOCKS = "shadowsocks"
         const val PROXY_TYPE_NODE = "proxynode"
         const val ROUTING_MODE_SHADOWSOCKS = "shadowsocks"
+    }
+
+    val subscriptions: Flow<List<ProxySubscription>> = dataStore.data.map { prefs ->
+        prefs[KEY_SUBSCRIPTIONS_JSON]?.let { json ->
+            ProxySubscriptionList.fromJson(json).subscriptions
+        } ?: emptyList()
     }
 
     val lastSubscriptionUrl: Flow<String?> = dataStore.data.map { it[KEY_LAST_SUBSCRIPTION_URL] }
@@ -150,7 +159,8 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         if (profiles.isEmpty()) return
         dataStore.edit { prefs ->
             val current = readProxyProfiles(prefs).toMutableList()
-            for (p in profiles.reversed()) {
+            val incomingDistinct = deduplicateProfiles(profiles)
+            for (p in incomingDistinct.reversed()) {
                 val existingIdx = current.indexOfFirst { it.isSameNode(p) }
                 if (existingIdx >= 0) {
                     val existing = current[existingIdx]
@@ -170,11 +180,129 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun removeDuplicateProfiles(): Int {
+        var removedCount = 0
+        dataStore.edit { prefs ->
+            val current = readProxyProfiles(prefs)
+            val distinct = deduplicateProfiles(current)
+            removedCount = current.size - distinct.size
+            if (removedCount > 0) {
+                prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(distinct).toJson()
+                if (prefs[KEY_PROXY_ACTIVE_PROFILE_ID] != null && distinct.none { it.id == prefs[KEY_PROXY_ACTIVE_PROFILE_ID] }) {
+                    val next = distinct.firstOrNull()?.id
+                    if (next != null) {
+                        prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = next
+                        prefs[KEY_SS_ACTIVE_PROFILE_ID] = next
+                    } else {
+                        prefs.remove(KEY_PROXY_ACTIVE_PROFILE_ID)
+                        prefs.remove(KEY_SS_ACTIVE_PROFILE_ID)
+                    }
+                }
+            }
+        }
+        return removedCount
+    }
+
+    suspend fun addOrUpdateSubscription(subscription: ProxySubscription) {
+        dataStore.edit { prefs ->
+            val list = (prefs[KEY_SUBSCRIPTIONS_JSON]?.let { ProxySubscriptionList.fromJson(it).subscriptions } ?: emptyList()).toMutableList()
+            val existingIdx = list.indexOfFirst { it.id == subscription.id || it.url.equals(subscription.url, ignoreCase = true) }
+            val toSave = if (existingIdx >= 0) subscription.copy(id = list[existingIdx].id) else subscription
+            if (existingIdx >= 0) list[existingIdx] = toSave else list.add(0, toSave)
+            prefs[KEY_SUBSCRIPTIONS_JSON] = ProxySubscriptionList(list).toJson()
+            prefs[KEY_LAST_SUBSCRIPTION_URL] = toSave.url
+            prefs[KEY_LAST_SUBSCRIPTION_UPDATED] = toSave.lastUpdated
+        }
+    }
+
+    suspend fun removeSubscription(id: String, deleteNodes: Boolean = true) {
+        dataStore.edit { prefs ->
+            val list = (prefs[KEY_SUBSCRIPTIONS_JSON]?.let { ProxySubscriptionList.fromJson(it).subscriptions } ?: emptyList()).toMutableList()
+            val target = list.firstOrNull { it.id == id }
+            list.removeAll { it.id == id }
+            prefs[KEY_SUBSCRIPTIONS_JSON] = ProxySubscriptionList(list).toJson()
+
+            if (deleteNodes && target != null) {
+                val currentProfiles = readProxyProfiles(prefs).filterNot {
+                    it.subscriptionId == id || (it.subscriptionUrl.isNotEmpty() && it.subscriptionUrl.equals(target.url, ignoreCase = true))
+                }
+                prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(currentProfiles).toJson()
+                if (prefs[KEY_PROXY_ACTIVE_PROFILE_ID] != null && currentProfiles.none { it.id == prefs[KEY_PROXY_ACTIVE_PROFILE_ID] }) {
+                    val nextActive = currentProfiles.firstOrNull()?.id
+                    if (nextActive != null) {
+                        prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = nextActive
+                        prefs[KEY_SS_ACTIVE_PROFILE_ID] = nextActive
+                    } else {
+                        prefs.remove(KEY_PROXY_ACTIVE_PROFILE_ID)
+                        prefs.remove(KEY_SS_ACTIVE_PROFILE_ID)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun syncSubscriptionProfiles(
+        subscription: ProxySubscription,
+        newProfiles: List<ProxyProfile>
+    ) {
+        dataStore.edit { prefs ->
+            val current = readProxyProfiles(prefs).toMutableList()
+            val distinctNew = deduplicateProfiles(newProfiles).map {
+                it.copy(subscriptionId = subscription.id, subscriptionUrl = subscription.url)
+            }
+
+            // Remove previous nodes belonging to this subscription
+            current.removeAll {
+                it.subscriptionId == subscription.id ||
+                    (it.subscriptionUrl.isNotEmpty() && it.subscriptionUrl.equals(subscription.url, ignoreCase = true))
+            }
+
+            // Add new nodes, matching existing nodes to preserve ID if any
+            for (incoming in distinctNew) {
+                val existing = current.firstOrNull { it.isSameNode(incoming) }
+                if (existing != null) {
+                    val idx = current.indexOf(existing)
+                    current[idx] = incoming.copy(id = existing.id)
+                } else {
+                    current.add(incoming)
+                }
+            }
+
+            val finalProfiles = deduplicateProfiles(current)
+            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(finalProfiles).toJson()
+
+            // Update subscription entry
+            val subList = (prefs[KEY_SUBSCRIPTIONS_JSON]?.let { ProxySubscriptionList.fromJson(it).subscriptions } ?: emptyList()).toMutableList()
+            val updatedSub = subscription.copy(
+                lastUpdated = System.currentTimeMillis(),
+                nodeCount = distinctNew.size
+            )
+            val sIdx = subList.indexOfFirst { it.id == subscription.id || it.url.equals(subscription.url, ignoreCase = true) }
+            if (sIdx >= 0) subList[sIdx] = updatedSub else subList.add(0, updatedSub)
+            prefs[KEY_SUBSCRIPTIONS_JSON] = ProxySubscriptionList(subList).toJson()
+            prefs[KEY_LAST_SUBSCRIPTION_URL] = updatedSub.url
+            prefs[KEY_LAST_SUBSCRIPTION_UPDATED] = updatedSub.lastUpdated
+        }
+    }
+
     private fun deduplicateProfiles(list: List<ProxyProfile>): List<ProxyProfile> {
         val seen = mutableListOf<ProxyProfile>()
         for (item in list) {
-            if (seen.none { it.isSameNode(item) }) {
+            val idx = seen.indexOfFirst { it.isSameNode(item) }
+            if (idx < 0) {
                 seen.add(item)
+            } else {
+                // Keep the most informative name or data
+                val existing = seen[idx]
+                val bestName = if (existing.name.isNotEmpty()) existing.name else item.name
+                val bestTag = if (existing.tag.isNotEmpty()) existing.tag else item.tag
+                seen[idx] = item.copy(
+                    id = existing.id,
+                    name = bestName,
+                    tag = bestTag,
+                    subscriptionId = if (existing.subscriptionId.isNotEmpty()) existing.subscriptionId else item.subscriptionId,
+                    subscriptionUrl = if (existing.subscriptionUrl.isNotEmpty()) existing.subscriptionUrl else item.subscriptionUrl
+                )
             }
         }
         return seen

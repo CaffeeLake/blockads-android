@@ -7,4 +7,6 @@ sealed interface ProxyVpnUiEvent {
     data object ProfileRenamed : ProxyVpnUiEvent
     data class ProxyVpnToggled(val enabled: Boolean) : ProxyVpnUiEvent
     data object HttpsFilteringDisabled : ProxyVpnUiEvent
+    data class DuplicatesRemoved(val count: Int) : ProxyVpnUiEvent
+    data class SubscriptionUpdated(val count: Int) : ProxyVpnUiEvent
 }

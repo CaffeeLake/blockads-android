@@ -157,8 +157,11 @@ object JsonSubscriptionParser {
 
         val masqueSettings = streamSettings?.get("masqueSettings")?.jsonObject
         val path = masqueSettings?.get("path")?.jsonPrimitive?.content.orEmpty().ifEmpty { "/.well-known/masque/ip/*/*/" }
-        val user = masqueSettings?.get("user")?.jsonPrimitive?.content.orEmpty()
-        val pass = masqueSettings?.get("pass")?.jsonPrimitive?.content.orEmpty()
+        val authObj = masqueSettings?.get("auth")?.jsonObject
+        val user = masqueSettings?.get("user")?.jsonPrimitive?.content
+            ?: authObj?.get("user")?.jsonPrimitive?.content.orEmpty()
+        val pass = masqueSettings?.get("pass")?.jsonPrimitive?.content
+            ?: authObj?.get("pass")?.jsonPrimitive?.content.orEmpty()
 
         val tlsSettings = streamSettings?.get("tlsSettings")?.jsonObject
         val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content.orEmpty().ifEmpty { address }

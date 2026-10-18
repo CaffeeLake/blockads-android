@@ -12,9 +12,11 @@ import app.pwhs.blockads.data.datastore.prefs.VpnSecurityPreferences
 import app.pwhs.blockads.data.datastore.prefs.WireGuardPreferences
 import app.pwhs.blockads.data.entities.DnsProtocol
 import app.pwhs.blockads.data.entities.ProxyProfile
+import app.pwhs.blockads.data.entities.ProxySubscription
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 val Context.blockAdsDataStore: DataStore<Preferences> by preferencesDataStore(name = "blockads_prefs")
 
@@ -271,8 +273,16 @@ class AppPreferences internal constructor(
 
     val lastSubscriptionUrl: Flow<String?> get() = shadowsocks.lastSubscriptionUrl
     val lastSubscriptionUpdated: Flow<Long?> get() = shadowsocks.lastSubscriptionUpdated
+    val proxySubscriptions: Flow<List<ProxySubscription>> get() = shadowsocks.subscriptions
     suspend fun setLastSubscriptionUrl(url: String) = shadowsocks.setLastSubscriptionUrl(url)
     suspend fun getLastSubscriptionUrlSnapshot(): String? = shadowsocks.getLastSubscriptionUrlSnapshot()
+    suspend fun removeDuplicateWgProfiles(): Int = wireguard.removeDuplicateWgProfiles()
+    suspend fun getProxySubscriptionsSnapshot(): List<ProxySubscription> = proxySubscriptions.first()
+    suspend fun addOrUpdateSubscription(subscription: ProxySubscription) = shadowsocks.addOrUpdateSubscription(subscription)
+    suspend fun removeSubscription(id: String, deleteNodes: Boolean = true) = shadowsocks.removeSubscription(id, deleteNodes)
+    suspend fun syncSubscriptionProfiles(subscription: ProxySubscription, newProfiles: List<ProxyProfile>) =
+        shadowsocks.syncSubscriptionProfiles(subscription, newProfiles)
+    suspend fun removeDuplicateProfiles(): Int = shadowsocks.removeDuplicateProfiles()
 
     val activeProxyType: Flow<String> get() = shadowsocks.activeProxyType
     val proxyProfiles: Flow<List<ProxyProfile>> get() = shadowsocks.proxyProfiles

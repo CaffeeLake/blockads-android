@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.AutoFixHigh
+import androidx.compose.material.icons.filled.RssFeed
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.utils.NodePingResult
@@ -69,6 +71,8 @@ fun ProxyNodesTabContent(
     hasSubscription: Boolean = false,
     isUpdatingSubscription: Boolean = false,
     onUpdateSubscription: () -> Unit = {},
+    onOpenSubscriptions: () -> Unit = {},
+    onRemoveDuplicates: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var renameTarget by remember { mutableStateOf<ProxyProfile?>(null) }
@@ -100,6 +104,15 @@ fun ProxyNodesTabContent(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                androidx.compose.material3.OutlinedButton(
+                    onClick = onOpenSubscriptions,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(Icons.Default.RssFeed, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Subscriptions")
+                }
             }
         } else {
             val availableProtocols = remember(profiles) {
@@ -234,6 +247,32 @@ fun ProxyNodesTabContent(
                                 )
                             }
                         }
+                    }
+
+                    Spacer(modifier = Modifier.width(4.dp))
+                    IconButton(
+                        onClick = onOpenSubscriptions,
+                        modifier = Modifier.size(34.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.RssFeed,
+                            contentDescription = "Manage Subscriptions",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(4.dp))
+                    IconButton(
+                        onClick = onRemoveDuplicates,
+                        modifier = Modifier.size(34.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AutoFixHigh,
+                            contentDescription = "Remove Duplicates",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
 

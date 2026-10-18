@@ -113,6 +113,27 @@ class WireGuardPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun removeDuplicateWgProfiles(): Int {
+        var removedCount = 0
+        dataStore.edit { prefs ->
+            val current = readProfilesFromPrefs(prefs)
+            val distinct = deduplicateWgProfiles(current)
+            removedCount = current.size - distinct.size
+            if (removedCount > 0) {
+                prefs[KEY_WG_PROFILES_JSON] = WireGuardProfileList(distinct).toJson()
+                if (prefs[KEY_WG_ACTIVE_PROFILE_ID] != null && distinct.none { it.id == prefs[KEY_WG_ACTIVE_PROFILE_ID] }) {
+                    val nextActive = distinct.firstOrNull { it.configIssue == null }?.id
+                    if (nextActive != null) {
+                        prefs[KEY_WG_ACTIVE_PROFILE_ID] = nextActive
+                    } else {
+                        prefs.remove(KEY_WG_ACTIVE_PROFILE_ID)
+                    }
+                }
+            }
+        }
+        return removedCount
+    }
+
     private fun deduplicateWgProfiles(list: List<WireGuardProfile>): List<WireGuardProfile> {
         val seen = mutableListOf<WireGuardProfile>()
         for (item in list) {

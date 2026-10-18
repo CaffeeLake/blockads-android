@@ -29,7 +29,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import app.pwhs.blockads.utils.NodePingResult
 import app.pwhs.blockads.utils.ProxyPingTester
-import app.pwhs.blockads.utils.SubscriptionImporter
+import app.pwhs.blockads.data.entities.ProxySubscription
+import app.pwhs.blockads.utils.SubscriptionManager
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -46,6 +47,7 @@ class ProxyVpnViewModel(
 
     private val appPrefs: AppPreferences by inject()
     private val httpClient: HttpClient by inject()
+    private val subscriptionManager = SubscriptionManager(appPrefs, httpClient)
 
     val preferredIPType: StateFlow<String> = appPrefs.preferredIPType.stateIn(
         scope = viewModelScope,
@@ -95,21 +97,50 @@ class ProxyVpnViewModel(
     private val _proxyProfiles = MutableStateFlow<List<ProxyProfile>>(emptyList())
     val proxyProfiles: StateFlow<List<ProxyProfile>> = _proxyProfiles.asStateFlow()
 
+    val proxySubscriptions: StateFlow<List<ProxySubscription>> = appPrefs.proxySubscriptions
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     val lastSubscriptionUrl: StateFlow<String?> = appPrefs.lastSubscriptionUrl
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     private val _isUpdatingSubscription = MutableStateFlow(false)
     val isUpdatingSubscription: StateFlow<Boolean> = _isUpdatingSubscription.asStateFlow()
 
-    fun updateSubscription() {
+    fun updateSubscription(subscription: ProxySubscription? = null) {
         viewModelScope.launch {
-            val url = appPrefs.getLastSubscriptionUrlSnapshot() ?: return@launch
             _isUpdatingSubscription.value = true
-            val success = saveProxyNodeLink(url)
-            _isUpdatingSubscription.value = false
-            if (success) {
-                _events.emit(ProxyVpnUiEvent.ProfileImported("Subscription updated"))
+            val res = if (subscription != null) {
+                subscriptionManager.updateSubscription(subscription).map { it.totalParsed }
+            } else {
+                subscriptionManager.updateAllSubscriptions()
             }
+            _isUpdatingSubscription.value = false
+            res.fold(
+                onSuccess = { count ->
+                    _events.emit(ProxyVpnUiEvent.SubscriptionUpdated(count))
+                    ServiceController.requestRestart(getApplication())
+                },
+                onFailure = { err ->
+                    _error.value = err.message ?: "Failed to update subscription"
+                }
+            )
+        }
+    }
+
+    fun updateAllSubscriptions() {
+        updateSubscription(null)
+    }
+
+    fun deleteSubscription(id: String, deleteNodes: Boolean = true) {
+        viewModelScope.launch {
+            subscriptionManager.deleteSubscription(id, deleteNodes)
+        }
+    }
+
+    fun removeDuplicates() {
+        viewModelScope.launch {
+            val count = subscriptionManager.removeDuplicates()
+            _events.emit(ProxyVpnUiEvent.DuplicatesRemoved(count))
         }
     }
 
@@ -329,23 +360,10 @@ class ProxyVpnViewModel(
 
         // 1. Subscription URL (http/https)
         if (trimmed.startsWith("http://", ignoreCase = true) || trimmed.startsWith("https://", ignoreCase = true)) {
-            val importResult = SubscriptionImporter.importFromUrl(trimmed, httpClient)
+            val importResult = subscriptionManager.importOrUpdateSubscription(trimmed)
             return importResult.fold(
-                onSuccess = { res ->
-                    if (res.totalParsed == 0) {
-                        Timber.w("No valid profiles found in subscription")
-                        return@fold false
-                    }
-                    appPrefs.setLastSubscriptionUrl(trimmed)
-                    if (res.proxyProfiles.isNotEmpty()) {
-                        appPrefs.addProxyProfiles(res.proxyProfiles)
-                        appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
-                    }
-                    for (wg in res.wireGuardProfiles) {
-                        appPrefs.addOrUpdateWgProfile(wg, makeActive = false)
-                    }
-                    appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
-                    _events.emit(ProxyVpnUiEvent.ProfileImported("${res.totalParsed} profiles"))
+                onSuccess = { (sub, res) ->
+                    _events.emit(ProxyVpnUiEvent.ProfileImported("${res.totalParsed} profiles (${sub.name})"))
                     ServiceController.requestRestart(getApplication())
                     true
                 },
@@ -368,6 +386,7 @@ class ProxyVpnViewModel(
                 }
                 val makeActive = appPrefs.getActiveWgProfileSnapshot() == null && wgProfile.configIssue == null
                 appPrefs.addOrUpdateWgProfile(wgProfile, makeActive = makeActive)
+                appPrefs.removeDuplicateWgProfiles()
                 _events.emit(ProxyVpnUiEvent.ProfileImported(wgProfile.name))
                 if (makeActive && _isProxyActive.value) {
                     ServiceController.requestRestart(getApplication())
@@ -384,6 +403,7 @@ class ProxyVpnViewModel(
         return parseResult.fold(
             onSuccess = { profile ->
                 appPrefs.addProxyProfile(profile)
+                appPrefs.removeDuplicateProfiles()
                 appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
                 appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
                 _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
@@ -445,37 +465,6 @@ class ProxyVpnViewModel(
             }
         }
     }
-
-    // ── Legacy Shadowsocks / Outline Operations ──────────────────────────
-
-    fun setActiveShadowsocksProfile(id: String) = setActiveProxyProfile(id)
-
-    fun saveShadowsocksKey(rawUri: String): Result<ShadowsocksProfile> {
-        val res = ProxyLinkParser.parse(rawUri)
-        return res.map {
-            viewModelScope.launch {
-                appPrefs.addProxyProfile(it)
-                appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
-                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
-                _events.emit(ProxyVpnUiEvent.ProfileImported(it.displayName))
-                ServiceController.requestRestart(getApplication())
-            }
-            ShadowsocksProfile(
-                id = it.id,
-                name = it.name,
-                server = it.server,
-                port = it.port,
-                method = it.method,
-                password = it.password,
-                tag = it.tag,
-                rawUri = it.rawUri
-            )
-        }
-    }
-
-    fun renameShadowsocksProfile(id: String, newName: String) = renameProxyProfile(id, newName)
-
-    fun deleteShadowsocksProfile(id: String) = deleteProxyProfile(id)
 
     private fun fixFirstMessage(profile: WireGuardProfile, issue: WgConfigIssue): String {
         val res = getApplication<Application>().resources
