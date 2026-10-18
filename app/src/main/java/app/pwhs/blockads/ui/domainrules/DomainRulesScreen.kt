@@ -59,8 +59,6 @@ fun DomainRulesScreen(
     modifier: Modifier = Modifier,
     viewModel: DomainRulesViewModel = koinViewModel()
 ) {
-    val activeConfig by viewModel.activeConfig.collectAsStateWithLifecycle()
-    val allConfigs by viewModel.allConfigs.collectAsStateWithLifecycle()
     val profileFilterRules by viewModel.profileFilterRules.collectAsStateWithLifecycle()
 
     var searchQuery by remember { mutableStateOf("") }
@@ -103,13 +101,11 @@ fun DomainRulesScreen(
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        activeConfig?.let { cfg ->
-                            Text(
-                                text = "${cfg.name} • ${displayableRules.size} profile rules",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        Text(
+                            text = "${displayableRules.size} rules",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 },
                 actions = {
@@ -256,15 +252,12 @@ fun DomainRulesScreen(
     if (showAddDialog) {
         AddFilterRuleDialog(
             initialPolicy = if (pagerState.currentPage == 0) "DIRECT" else "REJECT",
-            activeConfig = activeConfig,
-            allConfigs = allConfigs,
             onDismiss = { showAddDialog = false },
-            onSave = { type, param, policy, configId ->
+            onSave = { type, param, policy ->
                 viewModel.addProfileRule(
                     type = type,
                     param = param,
-                    policy = policy,
-                    targetConfigId = configId
+                    policy = policy
                 )
                 showAddDialog = false
             }
@@ -276,17 +269,14 @@ fun DomainRulesScreen(
             initialDomain = rule.param,
             initialType = rule.type,
             initialPolicy = rule.policy,
-            activeConfig = activeConfig,
-            allConfigs = allConfigs,
             onDismiss = { editingRule = null },
-            onSave = { type, param, policy, configId ->
+            onSave = { type, param, policy ->
                 viewModel.updateProfileRule(
                     oldRawLine = rule.rawLine,
                     oldDomain = rule.param,
                     type = type,
                     param = param,
-                    policy = policy,
-                    targetConfigId = configId
+                    policy = policy
                 )
                 editingRule = null
             }

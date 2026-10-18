@@ -114,7 +114,6 @@ fun HomeScreen(
     onNavigateToStatisticsScreen: () -> Unit = {},
     onNavigateToLogScreen: (LogFilterStatus) -> Unit = {},
     onNavigateToLogsWithQuery: (String) -> Unit = {},
-    onNavigateToProfileScreen: () -> Unit = {},
     onNavigateToBrowser: (String) -> Unit = {},
     onNavigateToFeature: (HomeFeatureTipType) -> Unit = {},
 ) {
@@ -134,7 +133,6 @@ fun HomeScreen(
     val milestoneReached by viewModel.milestoneReached.collectAsStateWithLifecycle()
     val topBlockedDomains by viewModel.topBlockedDomains.collectAsStateWithLifecycle()
     val protectionUptimeMs by viewModel.protectionUptimeMs.collectAsStateWithLifecycle()
-    val activeConfig by viewModel.activeConfig.collectAsStateWithLifecycle()
     val securityFilterIds by viewModel.securityFilterIds.collectAsStateWithLifecycle()
     val whitelistedDomains by viewModel.whitelistedDomains.collectAsStateWithLifecycle()
     val routingMode by viewModel.routingMode.collectAsStateWithLifecycle()
@@ -226,39 +224,7 @@ fun HomeScreen(
                         onRoutingModeClick = { showRoutingModeSheet = true }
                     )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = onNavigateToProfileScreen,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                ),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_settings_dns),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = activeConfig?.name ?: stringResource(R.string.profile_name_default),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.ic_edit),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
             val haptic = LocalHapticFeedback.current
             val isFirstVpnChange = remember { mutableStateOf(true) }

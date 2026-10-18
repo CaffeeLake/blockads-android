@@ -63,7 +63,6 @@ import app.pwhs.blockads.ui.data.GeoIpKey
 import app.pwhs.blockads.ui.httpsfiltering.wizard.CertInstallationWizardScreen
 import app.pwhs.blockads.ui.settings.geoip.GeoIpScreen
 import app.pwhs.blockads.ui.data.LogsKey
-import app.pwhs.blockads.ui.data.ProfileKey
 import app.pwhs.blockads.ui.data.SettingsKey
 import app.pwhs.blockads.ui.data.StatisticsKey
 import app.pwhs.blockads.ui.data.TrustedNetworksKey
@@ -80,7 +79,6 @@ import app.pwhs.blockads.ui.home.HomeScreen
 import app.pwhs.blockads.ui.home.component.HomeFeatureTipType
 import app.pwhs.blockads.ui.httpsfiltering.HttpsFilteringScreen
 import app.pwhs.blockads.ui.logs.LogsScreen
-import app.pwhs.blockads.ui.config.ConfigScreen
 import app.pwhs.blockads.ui.settings.SettingsScreen
 import app.pwhs.blockads.ui.statistics.StatisticsScreen
 import app.pwhs.blockads.ui.wireguard.WireGuardEditScreen
@@ -243,10 +241,6 @@ fun HomeApp(
                             showBottomBar = false
                             homeStack.add(StatisticsKey)
                         },
-                        onNavigateToProfileScreen = {
-                            showBottomBar = false
-                            homeStack.add(ProfileKey)
-                        },
                         onNavigateToBrowser = { url ->
                             context.startActivity(BrowserActivity.createIntent(context, url))
                         },
@@ -334,13 +328,6 @@ fun HomeApp(
                     LogsScreen(
                         initialFilterStatus = it.filterStatus,
                         initialSearchQuery = it.searchQuery,
-                        onNavigateBack = {
-                            safePop(homeStack)
-                        }
-                    )
-                }
-                entry<ProfileKey> {
-                    ConfigScreen(
                         onNavigateBack = {
                             safePop(homeStack)
                         }

@@ -14,7 +14,6 @@ import app.pwhs.blockads.ui.filter.FilterSetupViewModel
 import app.pwhs.blockads.ui.home.HomeViewModel
 import app.pwhs.blockads.ui.logs.LogViewModel
 import app.pwhs.blockads.ui.onboarding.OnboardingViewModel
-import app.pwhs.blockads.ui.config.ConfigViewModel
 import app.pwhs.blockads.ui.appearance.AppearanceViewModel
 import app.pwhs.blockads.ui.settings.SettingsViewModel
 import app.pwhs.blockads.ui.statistics.StatisticsViewModel
@@ -138,7 +137,6 @@ val appModule = module {
             appPrefs = get(),
             dnsLogDao = get(),
             filterRepo = get(),
-            configDao = get(),
             filterListDao = get(),
             whitelistDomainDao = get(),
             customDnsRuleDao = get()
@@ -225,18 +223,6 @@ val appModule = module {
         OnboardingViewModel(
             appPrefs = get(),
             application = androidApplication()
-        )
-    }
-    viewModel {
-        ConfigViewModel(
-            configDao = get(),
-            client = get(),
-            application = androidApplication(),
-            appPreferences = get(),
-            customDnsRuleDao = get(),
-            whitelistDomainDao = get(),
-            filterListDao = get(),
-            firewallRuleDao = get()
         )
     }
     viewModel {

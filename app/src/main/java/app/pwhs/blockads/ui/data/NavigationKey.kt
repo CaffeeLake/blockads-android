@@ -38,9 +38,6 @@ data class LogsKey(
 ) : NavKey
 
 @Serializable
-data object ProfileKey : NavKey
-
-@Serializable
 data class FilterDetailKey(val filterId: Long) : NavKey
 
 @Serializable

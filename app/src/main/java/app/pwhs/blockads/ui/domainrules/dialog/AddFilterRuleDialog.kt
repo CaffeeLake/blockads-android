@@ -58,7 +58,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.view.WindowCompat
 import app.pwhs.blockads.R
-import app.pwhs.blockads.data.entities.ConfigProfile
 
 private val FILTER_TYPES = listOf(
     "HOST-SUFFIX",
@@ -75,35 +74,22 @@ private val FILTER_POLICIES = listOf("REJECT", "DIRECT", "PROXY")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterRuleDialog(
-    activeConfig: ConfigProfile?,
-    allConfigs: List<ConfigProfile>,
     onDismiss: () -> Unit,
-    onSave: (type: String, param: String, policy: String, configId: Long?) -> Unit,
+    onSave: (type: String, param: String, policy: String) -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.filter_rule_title),
     subtitle: String = stringResource(R.string.filter_rule_subtitle),
     initialType: String = "HOST-SUFFIX",
     initialParam: String = "",
-    initialPolicy: String = "REJECT",
-    initialConfigId: Long? = null
+    initialPolicy: String = "REJECT"
 ) {
     var type by remember(initialType) { mutableStateOf(initialType) }
     var param by remember(initialParam) { mutableStateOf(initialParam) }
     var policy by remember(initialPolicy) { mutableStateOf(initialPolicy) }
-    var selectedConfigId by remember(initialConfigId, activeConfig) {
-        mutableStateOf(initialConfigId ?: activeConfig?.id)
-    }
 
     var showTypeDropdown by remember { mutableStateOf(false) }
     var showPolicyDropdown by remember { mutableStateOf(false) }
-    var showConfigDropdown by remember { mutableStateOf(false) }
     var showDocSheet by remember { mutableStateOf(false) }
-
-    val currentConfigName = remember(selectedConfigId, activeConfig, allConfigs) {
-        allConfigs.find { it.id == selectedConfigId }?.name
-            ?: activeConfig?.name
-            ?: "Current Configuration Profile"
-    }
 
     val isConfirmEnabled = remember(type, param, policy) {
         if (type.equals("FINAL", ignoreCase = true)) {
@@ -176,7 +162,7 @@ fun FilterRuleDialog(
                         contentDescription = stringResource(R.string.wireguard_action_save),
                         enabled = isConfirmEnabled,
                         onClick = {
-                            onSave(type, param, policy, selectedConfigId)
+                            onSave(type, param, policy)
                             onDismiss()
                         }
                     )
@@ -337,48 +323,7 @@ fun FilterRuleDialog(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(28.dp))
-
-                // Field 4: Save To
-                FormFieldLabel(label = stringResource(R.string.rule_field_save_to), isRequired = false)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showConfigDropdown = true }
-                        .padding(vertical = 10.dp)
-                ) {
-                    Text(
-                        text = currentConfigName,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
-                    )
-
-                    if (allConfigs.isNotEmpty()) {
-                        DropdownMenu(
-                            expanded = showConfigDropdown,
-                            onDismissRequest = { showConfigDropdown = false }
-                        ) {
-                            allConfigs.forEach { cfg ->
-                                val isCurrent = cfg.id == selectedConfigId
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            text = cfg.name + if (cfg.isActive) " (Active)" else "",
-                                            fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal
-                                        )
-                                    },
-                                    onClick = {
-                                        selectedConfigId = cfg.id
-                                        showConfigDropdown = false
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
-
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
 
@@ -388,21 +333,15 @@ fun FilterRuleDialog(
     }
 }
 
-
-
 @Composable
 fun AddFilterRuleDialog(
     initialPolicy: String = "REJECT",
-    activeConfig: ConfigProfile?,
-    allConfigs: List<ConfigProfile>,
     onDismiss: () -> Unit,
-    onSave: (type: String, param: String, policy: String, configId: Long?) -> Unit,
+    onSave: (type: String, param: String, policy: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     FilterRuleDialog(
         initialPolicy = initialPolicy,
-        activeConfig = activeConfig,
-        allConfigs = allConfigs,
         onDismiss = onDismiss,
         onSave = onSave,
         modifier = modifier
