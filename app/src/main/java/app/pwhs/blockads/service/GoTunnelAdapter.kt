@@ -92,6 +92,10 @@ class GoTunnelAdapter(
         engine.setYouTubeRestricted(youtubeRestricted)
     }
 
+    fun setPreferredIPType(type: String) {
+        engine.setPreferredIPType(type)
+    }
+
     /**
      * Toggle the experimental userspace TCP/IP stack path (HTTPS
      * filtering refactor, Phases C+). When enabled, non-DNS packets

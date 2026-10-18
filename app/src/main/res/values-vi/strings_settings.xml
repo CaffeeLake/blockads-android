@@ -346,5 +346,16 @@
     <string name="shadowsocks_active">Đang kích hoạt: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Xóa cấu hình</string>
     <string name="shadowsocks_delete_confirm_desc">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
+
+    <!-- Preferred IP Type & VPN Settings -->
+    <string name="vpn_settings_title">Cài đặt VPN</string>
+    <string name="vpn_settings_section_general">Chung</string>
+    <string name="vpn_settings_section_routing">Định tuyến &amp; Mạng</string>
+    <string name="vpn_settings_section_security">Bảo mật &amp; Rò rỉ</string>
+    <string name="preferred_ip_type_title">Loại IP ưu tiên</string>
+    <string name="preferred_ip_type_desc">Chọn loại giao thức IP khi kết nối</string>
+    <string name="preferred_ip_type_auto">Auto</string>
+    <string name="preferred_ip_type_ipv4">IPv4</string>
+    <string name="preferred_ip_type_ipv6">IPv6</string>
 </resources>
 

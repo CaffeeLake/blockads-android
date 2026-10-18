@@ -71,6 +71,7 @@ class AdBlockVpnServiceShellTest {
         every { splitDnsZones } returns flowOf("")
         every { excludeLan } returns flowOf(false)
         every { allowAppBypass } returns flowOf(false)
+        every { preferredIPType } returns flowOf("auto")
         every { lastMilestoneBlocked } returns flowOf(0L)
         every { getSelectedBrowsersSnapshot() } returns emptySet()
         coEvery { getWhitelistedAppsSnapshot() } returns emptySet()

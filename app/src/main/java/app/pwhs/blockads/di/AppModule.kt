@@ -277,6 +277,12 @@ val appModule = module {
         )
     }
     viewModel {
+        app.pwhs.blockads.ui.vpnsettings.VpnSettingsViewModel(
+            application = androidApplication(),
+            appPrefs = get()
+        )
+    }
+    viewModel {
         WireGuardEditViewModel(
             application = androidApplication()
         )

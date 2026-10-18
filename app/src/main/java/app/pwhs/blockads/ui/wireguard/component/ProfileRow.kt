@@ -82,6 +82,15 @@ fun ProfileRow(
     val flagEmoji = countryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }
     val countryName = countryCode?.let { GeoIpLookup.getCountryName(it) }
 
+    val cleanName = remember(profile.name, flagEmoji) {
+        var name = profile.name.trim()
+        if (flagEmoji != null && name.startsWith(flagEmoji)) {
+            name = name.removePrefix(flagEmoji).trim()
+        }
+        val stripped = name.replace(Regex("^[\\uD83C\\uDDE6-\\uD83C\\uDDFF]{2}\\s*"), "").trim()
+        stripped.ifEmpty { profile.name }
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -169,7 +178,7 @@ fun ProfileRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     Text(
-                        text = profile.name,
+                        text = cleanName,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,

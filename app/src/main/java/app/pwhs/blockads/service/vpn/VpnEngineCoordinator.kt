@@ -117,6 +117,9 @@ class VpnEngineCoordinator(
 
         val splitDnsZones = appPrefs.splitDnsZones.first()
         goTunnelAdapter.setSplitDNSZones(splitDnsZones)
+
+        val preferredIPType = appPrefs.preferredIPType.first()
+        goTunnelAdapter.setPreferredIPType(preferredIPType)
     }
 
     suspend fun isTrustedNetworkWithSystemDns(): Boolean {

@@ -301,7 +301,11 @@ func (r *Resolver) query(rawQuery []byte, protocol DNSProtocol, server, dohURL s
 	case ProtocolDoT:
 		return r.queryDoT(rawQuery, server)
 	case ProtocolDoQ:
-		return r.queryDoQ(rawQuery, server)
+		target := dohURL
+		if target == "" {
+			target = server
+		}
+		return r.queryDoQ(rawQuery, target)
 	case ProtocolODoH:
 		r.mu.RLock()
 		relayURL := r.odohRelayURL

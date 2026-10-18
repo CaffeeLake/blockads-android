@@ -29,6 +29,20 @@ func (e *Engine) serveDNS(w dns.ResponseWriter, r *dns.Msg, appOverride string) 
 	domain = strings.TrimSuffix(domain, ".")
 	queryType := r.Question[0].Qtype
 
+	// Preferred IP Type filtering:
+	// - "auto" (default): do nothing, resolve both IPv4 (A) and IPv6 (AAAA).
+	// - "ipv4": suppress AAAA queries so clients fall back to IPv4 (A records).
+	// - "ipv6": suppress A queries so clients fall back to IPv6 (AAAA records).
+	pref := e.getPreferredIPType()
+	if (pref == "ipv4" && queryType == dns.TypeAAAA) || (pref == "ipv6" && queryType == dns.TypeA) {
+		m := new(dns.Msg)
+		m.SetReply(r)
+		m.Rcode = dns.RcodeSuccess
+		_ = w.WriteMsg(m)
+		e.totalQueries.Add(1)
+		return
+	}
+
 	// Local asset host: synthesize a response with a routable IP from
 	// the RFC 5737 documentation range so the browser can SYN to it
 	// and have the packet enter our TUN.

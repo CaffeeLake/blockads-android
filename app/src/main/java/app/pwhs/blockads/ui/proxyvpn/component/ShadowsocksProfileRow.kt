@@ -62,6 +62,15 @@ fun ShadowsocksProfileRow(
     }
     val flagEmoji = countryCode?.let { GeoIpLookup.countryCodeToEmoji(it) }
 
+    val cleanDisplayName = remember(profile.displayName, flagEmoji) {
+        var name = profile.displayName.trim()
+        if (flagEmoji != null && name.startsWith(flagEmoji)) {
+            name = name.removePrefix(flagEmoji).trim()
+        }
+        val stripped = name.replace(Regex("^[\\uD83C\\uDDE6-\\uD83C\\uDDFF]{2}\\s*"), "").trim()
+        stripped.ifEmpty { profile.displayName }
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -118,12 +127,13 @@ fun ShadowsocksProfileRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = profile.displayName,
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = cleanDisplayName,
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = if (isActive) FontWeight.Bold else FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
                     )
                     if (isActive) {
                         Surface(
@@ -135,6 +145,8 @@ fun ShadowsocksProfileRow(
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                softWrap = false,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -152,11 +164,17 @@ fun ShadowsocksProfileRow(
 
             RadioButton(
                 selected = isActive,
-                onClick = onClick
+                onClick = onClick,
+                modifier = Modifier.size(36.dp)
             )
 
+            Spacer(modifier = Modifier.width(4.dp))
+
             Box {
-                IconButton(onClick = { menuExpanded = true }) {
+                IconButton(
+                    onClick = { menuExpanded = true },
+                    modifier = Modifier.size(36.dp)
+                ) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = null,

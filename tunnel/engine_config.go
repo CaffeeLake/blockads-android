@@ -86,3 +86,20 @@ func parseSplitZones(zones string) []string {
 	}
 	return result
 }
+
+// SetPreferredIPType sets the IP type preference for DNS resolution:
+// - "auto" (default): dual stack, both A (IPv4) and AAAA (IPv6) queries are resolved.
+// - "ipv4": IPv4 preferred/only; AAAA queries are suppressed with empty NOERROR answer.
+// - "ipv6": IPv6 preferred/only; A queries are suppressed with empty NOERROR answer.
+func (e *Engine) SetPreferredIPType(ipType string) {
+	norm := strings.ToLower(strings.TrimSpace(ipType))
+	e.preferredIPType.Store(&norm)
+}
+
+func (e *Engine) getPreferredIPType() string {
+	p := e.preferredIPType.Load()
+	if p == nil {
+		return "auto"
+	}
+	return *p
+}

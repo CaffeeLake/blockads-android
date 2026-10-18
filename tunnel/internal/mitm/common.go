@@ -44,6 +44,8 @@ func bidiCopyFlow(a, b net.Conn) {
 		io.Copy(b, a)
 		if cw, ok := b.(interface{ CloseWrite() error }); ok {
 			cw.CloseWrite()
+		} else {
+			b.Close()
 		}
 	}()
 	go func() {
@@ -51,6 +53,8 @@ func bidiCopyFlow(a, b net.Conn) {
 		io.Copy(a, b)
 		if cw, ok := a.(interface{ CloseWrite() error }); ok {
 			cw.CloseWrite()
+		} else {
+			a.Close()
 		}
 	}()
 

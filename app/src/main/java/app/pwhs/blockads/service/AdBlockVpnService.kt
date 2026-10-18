@@ -206,6 +206,11 @@ class AdBlockVpnService : VpnService() {
             }
         }
         serviceScope.launch {
+            appPrefs.preferredIPType.collect { ipType ->
+                if (::goTunnelAdapter.isInitialized) goTunnelAdapter.setPreferredIPType(ipType)
+            }
+        }
+        serviceScope.launch {
             kotlinx.coroutines.flow.combine(
                 appPrefs.useSystemDnsOnTrustedEnabled,
                 appPrefs.trustedSsids

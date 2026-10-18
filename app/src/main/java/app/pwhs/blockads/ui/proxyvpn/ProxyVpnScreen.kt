@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -56,6 +57,7 @@ import org.koin.androidx.compose.koinViewModel
 fun ProxyVpnScreen(
     onNavigateBack: () -> Unit,
     onEditProfile: (String) -> Unit,
+    onNavigateToVpnSettings: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProxyVpnViewModel = koinViewModel()
 ) {
@@ -66,9 +68,6 @@ fun ProxyVpnScreen(
     val wgProfiles by viewModel.wgProfiles.collectAsStateWithLifecycle()
     val activeWgId by viewModel.activeWgProfileId.collectAsStateWithLifecycle()
     val isLoadingWg by viewModel.isLoadingWg.collectAsStateWithLifecycle()
-    val splitDnsZones by viewModel.splitDnsZones.collectAsStateWithLifecycle()
-    val excludeLan by viewModel.excludeLan.collectAsStateWithLifecycle()
-    val allowAppBypass by viewModel.allowAppBypass.collectAsStateWithLifecycle()
 
     val ssProfiles by viewModel.ssProfiles.collectAsStateWithLifecycle()
     val activeSsId by viewModel.activeSsProfileId.collectAsStateWithLifecycle()
@@ -119,6 +118,14 @@ fun ProxyVpnScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.accessibility_navigate_back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onNavigateToVpnSettings) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.vpn_settings_title)
                         )
                     }
                 },
@@ -188,23 +195,26 @@ fun ProxyVpnScreen(
                     selected = selectedTab == 0,
                     onClick = { viewModel.selectTab(0) },
                     text = {
-                        BadgedBox(
-                            badge = {
-                                if (wgProfiles.isNotEmpty()) {
-                                    Badge { Text("${wgProfiles.size}") }
-                                }
-                            }
+                        androidx.compose.foundation.layout.Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)
                         ) {
-                            androidx.compose.foundation.layout.Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Security,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-                                Text(stringResource(R.string.proxy_vpn_tab_wireguard))
+                            Icon(
+                                imageVector = Icons.Default.Security,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.proxy_vpn_tab_wireguard),
+                                maxLines = 1
+                            )
+                            if (wgProfiles.isNotEmpty()) {
+                                Badge(
+                                    containerColor = if (selectedTab == 0) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (selectedTab == 0) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                                ) {
+                                    Text("${wgProfiles.size}")
+                                }
                             }
                         }
                     }
@@ -214,23 +224,26 @@ fun ProxyVpnScreen(
                     selected = selectedTab == 1,
                     onClick = { viewModel.selectTab(1) },
                     text = {
-                        BadgedBox(
-                            badge = {
-                                if (ssProfiles.isNotEmpty()) {
-                                    Badge { Text("${ssProfiles.size}") }
-                                }
-                            }
+                        androidx.compose.foundation.layout.Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)
                         ) {
-                            androidx.compose.foundation.layout.Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.VpnKey,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-                                Text(stringResource(R.string.proxy_vpn_tab_shadowsocks))
+                            Icon(
+                                imageVector = Icons.Default.VpnKey,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.proxy_vpn_tab_shadowsocks),
+                                maxLines = 1
+                            )
+                            if (ssProfiles.isNotEmpty()) {
+                                Badge(
+                                    containerColor = if (selectedTab == 1) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                                    contentColor = if (selectedTab == 1) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                                ) {
+                                    Text("${ssProfiles.size}")
+                                }
                             }
                         }
                     }
@@ -247,17 +260,11 @@ fun ProxyVpnScreen(
                         activeId = activeWgId,
                         isProxyActive = isProxyActive && activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD,
                         isLoading = isLoadingWg,
-                        splitDnsZones = splitDnsZones,
-                        excludeLan = excludeLan,
-                        allowAppBypass = allowAppBypass,
                         onSelectProfile = { viewModel.setActiveWireGuardProfile(it) },
                         onEditProfile = onEditProfile,
                         onRenameProfile = { id, name -> viewModel.renameWireGuardProfile(id, name) },
                         onDeleteProfile = { viewModel.deleteWireGuardProfile(it) },
-                        onImportUri = { viewModel.importWireGuardFromUri(it) },
-                        onSplitDnsZonesChange = { viewModel.setSplitDnsZones(it) },
-                        onExcludeLanChange = { viewModel.setExcludeLan(it) },
-                        onAllowAppBypassChange = { viewModel.setAllowAppBypass(it) }
+                        onImportUri = { viewModel.importWireGuardFromUri(it) }
                     )
 
                     1 -> ShadowsocksTabContent(

@@ -46,6 +46,11 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_STABILITY_TIP_LAST_ALWAYS_ON =
             booleanPreferencesKey("stability_tip_last_always_on")
         val KEY_DISMISSED_FEATURE_TIPS = stringSetPreferencesKey("dismissed_feature_tips")
+        val KEY_PREFERRED_IP_TYPE = stringPreferencesKey("preferred_ip_type")
+
+        const val PREFERRED_IP_AUTO = "auto"
+        const val PREFERRED_IP_IPV4 = "ipv4"
+        const val PREFERRED_IP_IPV6 = "ipv6"
     }
 
     val stabilityTipDismissed: Flow<Boolean> = dataStore.data.map { prefs ->
@@ -330,6 +335,18 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             val current = prefs[KEY_DISMISSED_FEATURE_TIPS] ?: emptySet()
             prefs[KEY_DISMISSED_FEATURE_TIPS] = current + tipId
+        }
+    }
+
+    val preferredIPType: Flow<String> = dataStore.data.map { prefs ->
+        prefs[KEY_PREFERRED_IP_TYPE] ?: PREFERRED_IP_AUTO
+    }
+
+    suspend fun getPreferredIPTypeSnapshot(): String = preferredIPType.first()
+
+    suspend fun setPreferredIPType(type: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_PREFERRED_IP_TYPE] = type
         }
     }
 }

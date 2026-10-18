@@ -44,6 +44,8 @@ class VpnSecurityPreferencesTest {
             assertFalse(pausedByTrusted.first())
             assertFalse(getPausedByTrustedSnapshot())
             assertEquals("", pausedTrustedSsid.first())
+            assertEquals(VpnSecurityPreferences.PREFERRED_IP_AUTO, preferredIPType.first())
+            assertEquals(VpnSecurityPreferences.PREFERRED_IP_AUTO, getPreferredIPTypeSnapshot())
         }
     }
 
@@ -65,6 +67,7 @@ class VpnSecurityPreferencesTest {
             setCrashReportingEnabled(true)
             setHideFromRecents(true)
             setPauseOnTrustedEnabled(true)
+            setPreferredIPType(VpnSecurityPreferences.PREFERRED_IP_IPV4)
 
             assertTrue(vpnEnabled.first())
             assertFalse(autoReconnect.first())
@@ -81,6 +84,8 @@ class VpnSecurityPreferencesTest {
             assertTrue(crashReportingEnabled.first())
             assertTrue(hideFromRecents.first())
             assertTrue(getPauseOnTrustedEnabledSnapshot())
+            assertEquals(VpnSecurityPreferences.PREFERRED_IP_IPV4, preferredIPType.first())
+            assertEquals(VpnSecurityPreferences.PREFERRED_IP_IPV4, getPreferredIPTypeSnapshot())
         }
     }
 

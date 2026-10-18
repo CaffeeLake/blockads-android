@@ -157,6 +157,12 @@ type Engine struct {
 	// Shadowsocks / Outline client
 	ssClient atomic.Pointer[ShadowsocksClient]
 
+	// preferredIPType controls whether IPv4 or IPv6 DNS records are preferred:
+	// "auto" (default): dual stack, allow both A and AAAA queries.
+	// "ipv4": IPv4 preferred/only; suppress AAAA queries.
+	// "ipv6": IPv6 preferred/only; suppress A queries.
+	preferredIPType atomic.Pointer[string]
+
 	// UID resolver — supplied by Kotlin. When nil, flow-level UID lookup
 	// falls back to UIDUnknown. Stored on the engine so both the stack
 	// (once created) and any future consumer can pull from one place.

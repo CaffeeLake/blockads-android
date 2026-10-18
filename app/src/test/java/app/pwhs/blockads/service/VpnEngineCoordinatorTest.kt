@@ -48,6 +48,7 @@ class VpnEngineCoordinatorTest {
         every { dnsProviderId } answers { flowOf(providerId) }
         every { odohRelayUrl } returns flowOf("")
         every { splitDnsZones } returns flowOf("lan")
+        every { preferredIPType } returns flowOf("auto")
         every { getSelectedBrowsersSnapshot() } returns setOf("com.android.chrome")
         coEvery { getWhitelistedAppsSnapshot() } returns setOf("com.bank")
         coEvery { getRoutingModeSnapshot() } answers { this@VpnEngineCoordinatorTest.routingMode }
@@ -121,6 +122,7 @@ class VpnEngineCoordinatorTest {
         verify { adapter.setBlockResponseType("REFUSED") }
         verify { adapter.configureSafeSearch(false, true) }
         verify { adapter.setSplitDNSZones("lan") }
+        verify { adapter.setPreferredIPType("auto") }
     }
 
     @Test

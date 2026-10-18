@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -36,6 +38,12 @@ class ProxyVpnViewModel(
 ) : AndroidViewModel(application), KoinComponent {
 
     private val appPrefs: AppPreferences by inject()
+
+    val preferredIPType: StateFlow<String> = appPrefs.preferredIPType.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = AppPreferences.PREFERRED_IP_AUTO
+    )
 
     private val _selectedTab = MutableStateFlow(0)
     val selectedTab: StateFlow<Int> = _selectedTab.asStateFlow()
@@ -133,6 +141,12 @@ class ProxyVpnViewModel(
                 _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(true))
             }
             ServiceController.requestRestart(getApplication())
+        }
+    }
+
+    fun setPreferredIPType(type: String) {
+        viewModelScope.launch {
+            appPrefs.setPreferredIPType(type)
         }
     }
 

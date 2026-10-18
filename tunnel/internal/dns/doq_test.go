@@ -203,7 +203,6 @@ func TestDoQResetDoesNotLeakSockets(t *testing.T) {
 // The DoQ server URL arrives in dohURL (the same field DoH uses), but
 // query() hands queryDoQ the primary server instead.
 func TestDoQUsesConfiguredURL(t *testing.T) {
-	t.Skip("known bug: query() passes primaryServer, not dohURL, to queryDoQ")
 	srv := startDoQ(t, "192.0.2.81")
 	r := NewResolver(nil)
 	defer r.Shutdown()

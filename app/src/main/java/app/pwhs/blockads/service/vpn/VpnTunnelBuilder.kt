@@ -48,6 +48,12 @@ class VpnTunnelBuilder(
                 else -> false
             }
 
+            val isSs = when (routingMode) {
+                AppPreferences.ROUTING_MODE_SHADOWSOCKS -> true
+                AppPreferences.ROUTING_MODE_PROXY_VPN -> runBlocking { appPrefs.getActiveProxyTypeSnapshot() } == AppPreferences.PROXY_TYPE_SHADOWSOCKS
+                else -> false
+            }
+
             val wgConfig: WireGuardConfig? =
                 if (isWg) {
                     val json = runBlocking { appPrefs.getWgConfigJsonSnapshot() }
@@ -125,27 +131,40 @@ class VpnTunnelBuilder(
                 b
             } else {
                 val excludeLan = runBlocking { appPrefs.excludeLan.first() }
-                Timber.d("Establishing VPN in direct mode (fullTunnel=true, excludeLan=$excludeLan)")
+                val preferredIp = runBlocking { appPrefs.preferredIPType.first() }
+                val allowIpv6 = preferredIp != AppPreferences.PREFERRED_IP_IPV4
+                val allowIpv4 = preferredIp != AppPreferences.PREFERRED_IP_IPV6
+                Timber.d("Establishing VPN in direct mode (fullTunnel=true, excludeLan=$excludeLan, preferredIp=$preferredIp)")
                 val b = vpnService.Builder()
-                    .setSession("BlockAds")
+                    .setSession(if (isSs) "BlockAds Outline" else "BlockAds")
                     .addAddress("100.64.100.2", 32)
                     .addRoute("100.64.100.1", 32)
                     .addDnsServer("100.64.100.1")
-                    .addAddress("fd00::2", 128)
-                    .addRoute("fd00::1", 128)
-                    .addDnsServer("fd00::1")
                     .setBlocking(false)
                     .setMtu(1350)
-                addIpv4Routes(b, excludeLan)
-                addIpv6Routes(b, excludeLan)
+                if (allowIpv6) {
+                    b.addAddress("fd00::2", 128)
+                    b.addRoute("fd00::1", 128)
+                    b.addDnsServer("fd00::1")
+                }
+                if (allowIpv4) {
+                    addIpv4Routes(b, excludeLan)
+                }
+                if (allowIpv6) {
+                    addIpv6Routes(b, excludeLan)
+                }
                 if (excludeLan && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     try {
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
+                        if (allowIpv4) {
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
+                        }
+                        if (allowIpv6) {
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
+                        }
                         Timber.d("LAN excluded from direct mode VPN routes")
                     } catch (e: Exception) {
                         Timber.w(e, "Failed to exclude LAN routes")

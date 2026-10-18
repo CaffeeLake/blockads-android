@@ -81,3 +81,6 @@ data object CertInstallationWizardKey : NavKey
 
 @Serializable
 data object GeoIpKey : NavKey
+
+@Serializable
+data object VpnSettingsKey : NavKey

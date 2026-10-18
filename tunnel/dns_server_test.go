@@ -148,6 +148,19 @@ func TestServeDNSPipeline(t *testing.T) {
 		{name: "resolver failure SERVFAIL", domain: "clean.example", qtype: dns.TypeA,
 			setup:     func(e *Engine) { e.resolver.Configure(ProtocolPlain, deadUpstream, deadUpstream, "") },
 			wantRcode: dns.RcodeServerFailure, wantLog: true, wantApp: "RootProxy"},
+		{name: "preferred IP auto allows AAAA", domain: "clean.example", qtype: dns.TypeAAAA,
+			setup:   func(e *Engine) { e.SetPreferredIPType("auto") },
+			wantIPs: "2001:db8::1", wantLog: true, wantApp: "RootProxy"},
+		{name: "preferred IP ipv4 suppresses AAAA", domain: "clean.example", qtype: dns.TypeAAAA,
+			setup: func(e *Engine) { e.SetPreferredIPType("ipv4") }},
+		{name: "preferred IP ipv4 allows A", domain: "clean.example", qtype: dns.TypeA,
+			setup:   func(e *Engine) { e.SetPreferredIPType("ipv4") },
+			wantIPs: "192.0.2.1", wantLog: true, wantApp: "RootProxy"},
+		{name: "preferred IP ipv6 suppresses A", domain: "clean.example", qtype: dns.TypeA,
+			setup: func(e *Engine) { e.SetPreferredIPType("ipv6") }},
+		{name: "preferred IP ipv6 allows AAAA", domain: "clean.example", qtype: dns.TypeAAAA,
+			setup:   func(e *Engine) { e.SetPreferredIPType("ipv6") },
+			wantIPs: "2001:db8::1", wantLog: true, wantApp: "RootProxy"},
 	}
 
 	for _, tc := range cases {

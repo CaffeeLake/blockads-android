@@ -22,10 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.AltRoute
-import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.FileOpen
-import androidx.compose.material.icons.filled.Lan
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -50,7 +47,6 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.ui.wireguard.component.EmptyState
 import app.pwhs.blockads.ui.wireguard.component.ProfileRow
-import app.pwhs.blockads.ui.wireguard.component.SettingToggleCard
 
 @Composable
 fun WireGuardTabContent(
@@ -58,17 +54,11 @@ fun WireGuardTabContent(
     activeId: String?,
     isProxyActive: Boolean,
     isLoading: Boolean,
-    splitDnsZones: String,
-    excludeLan: Boolean,
-    allowAppBypass: Boolean,
     onSelectProfile: (String) -> Unit,
     onEditProfile: (String) -> Unit,
     onRenameProfile: (String, String) -> Unit,
     onDeleteProfile: (String) -> Unit,
     onImportUri: (Uri) -> Unit,
-    onSplitDnsZonesChange: (String) -> Unit,
-    onExcludeLanChange: (Boolean) -> Unit,
-    onAllowAppBypassChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var renameTarget by remember { mutableStateOf<WireGuardProfile?>(null) }
@@ -106,33 +96,6 @@ fun WireGuardTabContent(
                         onEdit = { onEditProfile(profile.id) },
                         onRename = { renameTarget = profile },
                         onDelete = { deleteTarget = profile },
-                    )
-                }
-
-                item {
-                    SplitDnsCard(
-                        value = splitDnsZones,
-                        onValueChange = onSplitDnsZonesChange,
-                    )
-                }
-
-                item {
-                    SettingToggleCard(
-                        icon = Icons.Filled.Lan,
-                        title = stringResource(R.string.exclude_lan_title),
-                        description = stringResource(R.string.exclude_lan_description),
-                        checked = excludeLan,
-                        onCheckedChange = onExcludeLanChange,
-                    )
-                }
-
-                item {
-                    SettingToggleCard(
-                        icon = Icons.AutoMirrored.Filled.AltRoute,
-                        title = stringResource(R.string.allow_app_bypass_title),
-                        description = stringResource(R.string.allow_app_bypass_description),
-                        checked = allowAppBypass,
-                        onCheckedChange = onAllowAppBypassChange,
                     )
                 }
             }
@@ -199,51 +162,5 @@ fun WireGuardTabContent(
                 }
             },
         )
-    }
-}
-
-@Composable
-private fun SplitDnsCard(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Dns,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp),
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.split_dns_title),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            Text(
-                text = stringResource(R.string.split_dns_description),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            OutlinedTextField(
-                value = value,
-                onValueChange = onValueChange,
-                placeholder = { Text(stringResource(R.string.wireguard_split_dns_placeholder)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
-            )
-        }
     }
 }

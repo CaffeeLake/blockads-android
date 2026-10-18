@@ -41,6 +41,10 @@ class AppPreferences internal constructor(
         const val PROXY_TYPE_WIREGUARD = ShadowsocksPreferences.PROXY_TYPE_WIREGUARD
         const val PROXY_TYPE_SHADOWSOCKS = ShadowsocksPreferences.PROXY_TYPE_SHADOWSOCKS
 
+        const val PREFERRED_IP_AUTO = VpnSecurityPreferences.PREFERRED_IP_AUTO
+        const val PREFERRED_IP_IPV4 = VpnSecurityPreferences.PREFERRED_IP_IPV4
+        const val PREFERRED_IP_IPV6 = VpnSecurityPreferences.PREFERRED_IP_IPV6
+
         const val PROTECTION_BASIC = FilterPreferences.PROTECTION_BASIC
         const val PROTECTION_STANDARD = FilterPreferences.PROTECTION_STANDARD
         const val PROTECTION_STRICT = FilterPreferences.PROTECTION_STRICT
@@ -129,6 +133,7 @@ class AppPreferences internal constructor(
     val stabilityTipLastBatteryIgnored: Flow<Boolean> get() = vpnSecurity.stabilityTipLastBatteryIgnored
     val stabilityTipLastAlwaysOn: Flow<Boolean> get() = vpnSecurity.stabilityTipLastAlwaysOn
     val dismissedFeatureTips: Flow<Set<String>> get() = vpnSecurity.dismissedFeatureTips
+    val preferredIPType: Flow<String> get() = vpnSecurity.preferredIPType
 
     // ── DNS Flows ────────────────────────────────────────────────────────
     val upstreamDns: Flow<String> get() = dns.upstreamDns
@@ -212,6 +217,8 @@ class AppPreferences internal constructor(
     suspend fun updateStabilityTipHardwareState(batteryIgnored: Boolean, alwaysOn: Boolean) =
         vpnSecurity.updateStabilityTipHardwareState(batteryIgnored, alwaysOn)
     suspend fun dismissFeatureTip(tipId: String) = vpnSecurity.dismissFeatureTip(tipId)
+    suspend fun getPreferredIPTypeSnapshot(): String = vpnSecurity.getPreferredIPTypeSnapshot()
+    suspend fun setPreferredIPType(type: String) = vpnSecurity.setPreferredIPType(type)
 
     suspend fun setUpstreamDns(dnsServer: String) = dns.setUpstreamDns(dnsServer)
     suspend fun setFallbackDns(dnsServer: String) = dns.setFallbackDns(dnsServer)

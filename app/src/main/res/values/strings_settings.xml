@@ -387,5 +387,16 @@
     <string name="shadowsocks_active">Active: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Delete Profile</string>
     <string name="shadowsocks_delete_confirm_desc">Are you sure you want to delete \"%1$s\"?</string>
+
+    <!-- Preferred IP Type & VPN Settings -->
+    <string name="vpn_settings_title">VPN Settings</string>
+    <string name="vpn_settings_section_general">General</string>
+    <string name="vpn_settings_section_routing">Routing &amp; Network</string>
+    <string name="vpn_settings_section_security">Security &amp; Leaks</string>
+    <string name="preferred_ip_type_title">Preferred IP Type</string>
+    <string name="preferred_ip_type_desc">Select IP version preference for connection</string>
+    <string name="preferred_ip_type_auto">Auto</string>
+    <string name="preferred_ip_type_ipv4">IPv4</string>
+    <string name="preferred_ip_type_ipv6">IPv6</string>
 </resources>
 
