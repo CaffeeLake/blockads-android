@@ -432,6 +432,9 @@ object JsonSubscriptionParser {
         val tlsSettings = streamSettings?.get("tlsSettings")?.jsonObject
         val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content.orEmpty().ifEmpty { address }
         val alpn = tlsSettings?.get("alpn")?.jsonArray?.joinToString(",") { it.jsonPrimitive.content }.orEmpty()
+        val allowInsecure = tlsSettings?.get("allowInsecure")?.jsonPrimitive?.booleanOrNull
+            ?: tlsSettings?.get("insecure")?.jsonPrimitive?.booleanOrNull
+            ?: false
 
         return ProxyProfile(
             name = remarks.ifEmpty { "Hysteria 2" },
@@ -443,6 +446,7 @@ object JsonSubscriptionParser {
             obfsPassword = obfsPassword,
             sni = sni,
             alpn = alpn,
+            allowInsecure = allowInsecure,
             tag = remarks
         )
     }

@@ -2,6 +2,7 @@ package tunnel
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -100,7 +101,19 @@ func testProxyNodeDelayWithProtect(protocol string, configJSON string, timeoutMs
 		if parseErr != nil {
 			return -1, parseErr
 		}
-		client, err = masque.NewClient(cfg, protectFn)
+		masqueClient, mErr := masque.NewClient(cfg, protectFn)
+		if mErr != nil {
+			return -1, fmt.Errorf("init client failed: %w", mErr)
+		}
+		defer masqueClient.Close()
+
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+		duration, pingErr := masqueClient.Ping(ctx)
+		if pingErr != nil {
+			return -1, fmt.Errorf("masque ping failed: %w", pingErr)
+		}
+		return duration.Milliseconds(), nil
 
 	default:
 		return -1, fmt.Errorf("unsupported protocol: %s", protocol)

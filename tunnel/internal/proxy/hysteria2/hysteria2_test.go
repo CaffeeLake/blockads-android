@@ -48,6 +48,31 @@ func TestConfigJSON(t *testing.T) {
 	}
 }
 
+func TestConfigJSONWithALPNFormats(t *testing.T) {
+	// String ALPN (as sent from Kotlin ProxyProfile)
+	jsonStr1 := `{"server":"vpn.pwhs.app","port":43822,"password":"pwd","alpn":"h3","allowInsecure":true}`
+	cfg1, err := FromJSON(jsonStr1)
+	if err != nil {
+		t.Fatalf("FromJSON with string alpn failed: %v", err)
+	}
+	if len(cfg1.ALPN) != 1 || cfg1.ALPN[0] != "h3" {
+		t.Errorf("expected [h3], got %v", cfg1.ALPN)
+	}
+	if !cfg1.AllowInsecure {
+		t.Errorf("expected allowInsecure=true")
+	}
+
+	// Array ALPN
+	jsonStr2 := `{"server":"vpn.pwhs.app","port":43822,"password":"pwd","alpn":["h3","h2"]}`
+	cfg2, err := FromJSON(jsonStr2)
+	if err != nil {
+		t.Fatalf("FromJSON with array alpn failed: %v", err)
+	}
+	if len(cfg2.ALPN) != 2 || cfg2.ALPN[0] != "h3" || cfg2.ALPN[1] != "h2" {
+		t.Errorf("expected [h3, h2], got %v", cfg2.ALPN)
+	}
+}
+
 func TestNewClient(t *testing.T) {
 	cfg := &Config{
 		Server:   "1.2.3.4",

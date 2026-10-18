@@ -153,6 +153,59 @@ func (c *Client) Close() error {
 	return nil
 }
 
+// Ping measures the round-trip latency to the MASQUE server by establishing
+// a QUIC connection, performing HTTP/3 settings exchange, and sending a CONNECT-IP request.
+func (c *Client) Ping(ctx context.Context) (time.Duration, error) {
+	start := time.Now()
+	clientConn, _, err := c.getOrInitClientConn(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	reqStream, err := clientConn.OpenRequestStream(ctx)
+	if err != nil {
+		c.Close()
+		return 0, fmt.Errorf("open masque request stream failed: %w", err)
+	}
+	defer func() {
+		reqStream.CancelRead(0)
+		_ = reqStream.Close()
+	}()
+
+	authority := c.config.SNI
+	if c.config.Port != 443 {
+		authority = net.JoinHostPort(c.config.SNI, strconv.Itoa(c.config.Port))
+	}
+	reqURL := "https://" + authority + c.config.Path
+	req, err := http.NewRequestWithContext(ctx, http.MethodConnect, reqURL, nil)
+	if err != nil {
+		return 0, err
+	}
+	req.Proto = "connect-ip"
+	req.Host = authority
+	req.Header.Set("Capsule-Protocol", "?1")
+	if c.config.User != "" || c.config.Password != "" {
+		req.SetBasicAuth(c.config.User, c.config.Password)
+	}
+
+	if err := reqStream.SendRequestHeader(req); err != nil {
+		c.Close()
+		return 0, fmt.Errorf("send masque request header failed: %w", err)
+	}
+
+	resp, err := reqStream.ReadResponse()
+	if err != nil {
+		c.Close()
+		return 0, fmt.Errorf("read masque response failed: %w", err)
+	}
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return 0, fmt.Errorf("masque proxy error: status %d %s", resp.StatusCode, resp.Status)
+	}
+
+	return time.Since(start), nil
+}
+
 // DialTCP establishes a MASQUE HTTP/3 CONNECT tunnel to targetIP:targetPort.
 func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -169,29 +222,20 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 		return nil, fmt.Errorf("open masque request stream failed: %w", err)
 	}
 
-	targetAddr := net.JoinHostPort(targetIP.String(), strconv.Itoa(targetPort))
-	portStr := strconv.Itoa(targetPort)
-	ipStr := targetIP.String()
-	targetPath := ipStr + "/" + portStr + "/"
-
-	reqPath := c.config.Path
-	if strings.Contains(reqPath, "*/*/") {
-		reqPath = strings.Replace(reqPath, "*/*/", targetPath, 1)
-	} else if strings.Contains(reqPath, "*/*") {
-		reqPath = strings.Replace(reqPath, "*/*", ipStr+"/"+portStr, 1)
-	} else if strings.Contains(reqPath, "{target}/{port}") {
-		reqPath = strings.Replace(reqPath, "{target}/{port}", ipStr+"/"+portStr, 1)
-	} else if strings.HasSuffix(reqPath, "/") {
-		reqPath = reqPath + targetPath
+	authority := c.config.SNI
+	if c.config.Port != 443 {
+		authority = net.JoinHostPort(c.config.SNI, strconv.Itoa(c.config.Port))
 	}
+	reqURL := "https://" + authority + c.config.Path
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodConnect, "https://"+c.config.SNI+reqPath, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodConnect, reqURL, nil)
 	if err != nil {
 		reqStream.CancelRead(0)
 		_ = reqStream.Close()
 		return nil, err
 	}
-	req.Host = targetAddr
+	req.Proto = "connect-ip"
+	req.Host = authority
 	req.Header.Set("Capsule-Protocol", "?1")
 	if c.config.User != "" || c.config.Password != "" {
 		req.SetBasicAuth(c.config.User, c.config.Password)

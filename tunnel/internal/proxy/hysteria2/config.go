@@ -22,6 +22,19 @@ type Config struct {
 	Tag           string   `json:"tag,omitempty"`
 }
 
+type rawConfig struct {
+	Server         string          `json:"server"`
+	Port           int             `json:"port"`
+	Password       string          `json:"password"`
+	SNI            string          `json:"sni,omitempty"`
+	AllowInsecure  bool            `json:"allow_insecure,omitempty"`
+	AllowInsecureK bool            `json:"allowInsecure,omitempty"`
+	ALPN           json.RawMessage `json:"alpn,omitempty"`
+	Obfs           string          `json:"obfs,omitempty"`
+	ObfsPassword   string          `json:"obfsPassword,omitempty"`
+	Tag            string          `json:"tag,omitempty"`
+}
+
 // ToJSON serializes the config to a JSON string.
 func (c *Config) ToJSON() string {
 	b, _ := json.Marshal(c)
@@ -30,20 +43,53 @@ func (c *Config) ToJSON() string {
 
 // FromJSON parses a JSON string into a Config.
 func FromJSON(data string) (*Config, error) {
-	var c Config
-	if err := json.Unmarshal([]byte(data), &c); err != nil {
+	var raw rawConfig
+	if err := json.Unmarshal([]byte(data), &raw); err != nil {
 		return nil, err
 	}
-	if c.Server == "" || c.Port <= 0 {
+	if raw.Server == "" || raw.Port <= 0 {
 		return nil, fmt.Errorf("invalid hysteria2 config: missing required fields")
 	}
-	if c.SNI == "" {
-		c.SNI = c.Server
+	sni := raw.SNI
+	if sni == "" {
+		sni = raw.Server
 	}
-	if len(c.ALPN) == 0 {
-		c.ALPN = []string{"h3"}
+
+	var alpn []string
+	if len(raw.ALPN) > 0 {
+		var list []string
+		if err := json.Unmarshal(raw.ALPN, &list); err == nil {
+			alpn = list
+		} else {
+			var str string
+			if err := json.Unmarshal(raw.ALPN, &str); err == nil && str != "" {
+				for _, part := range strings.Split(str, ",") {
+					part = strings.TrimSpace(part)
+					if part != "" {
+						alpn = append(alpn, part)
+					}
+				}
+			}
+		}
 	}
-	return &c, nil
+	if len(alpn) == 0 {
+		alpn = []string{"h3"}
+	}
+
+	allowInsecure := raw.AllowInsecure || raw.AllowInsecureK
+
+	c := &Config{
+		Server:        raw.Server,
+		Port:          raw.Port,
+		Password:      raw.Password,
+		SNI:           sni,
+		AllowInsecure: allowInsecure,
+		ALPN:          alpn,
+		Obfs:          raw.Obfs,
+		ObfsPassword:  raw.ObfsPassword,
+		Tag:           raw.Tag,
+	}
+	return c, nil
 }
 
 // ParseURI parses standard hysteria2:// and hy2:// URIs.
