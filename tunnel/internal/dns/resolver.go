@@ -11,8 +11,8 @@ import (
 	"time"
 
 	miekgdns "github.com/miekg/dns"
-	"github.com/quic-go/quic-go"
-	"github.com/quic-go/quic-go/http3"
+	"github.com/apernet/quic-go"
+	"github.com/apernet/quic-go/http3"
 )
 
 // DNSProtocol represents the DNS transport protocol.
@@ -67,7 +67,7 @@ type Resolver struct {
 	h3Client *http.Client
 	// QUIC connection for DoQ (reusable)
 	quicMu     sync.Mutex
-	quicConn   quic.Connection
+	quicConn   *quic.Conn
 	quicServer string
 }
 
@@ -108,7 +108,7 @@ func NewResolver(protectFn func(fd int) bool) *Resolver {
 		QUICConfig: &quic.Config{
 			MaxIdleTimeout: 30 * time.Second,
 		},
-		Dial: func(ctx context.Context, addr string, tlsCfg *tls.Config, cfg *quic.Config) (quic.EarlyConnection, error) {
+		Dial: func(ctx context.Context, addr string, tlsCfg *tls.Config, cfg *quic.Config) (*quic.Conn, error) {
 			host, port, err := net.SplitHostPort(addr)
 			if err != nil {
 				host = addr
@@ -141,7 +141,7 @@ func NewResolver(protectFn func(fd int) bool) *Resolver {
 				}
 			}
 			tr := &quic.Transport{Conn: udpConn}
-			return tr.DialEarly(ctx, udpAddr, tlsCfg, cfg)
+			return tr.Dial(ctx, udpAddr, tlsCfg, cfg)
 		},
 	}
 	r.h3Client = &http.Client{

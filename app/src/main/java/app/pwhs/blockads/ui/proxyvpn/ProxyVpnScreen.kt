@@ -71,6 +71,8 @@ fun ProxyVpnScreen(
 
     val proxyProfiles by viewModel.proxyProfiles.collectAsStateWithLifecycle()
     val activeProxyId by viewModel.activeProxyProfileId.collectAsStateWithLifecycle()
+    val pingResults by viewModel.pingResults.collectAsStateWithLifecycle()
+    val isPingingAll by viewModel.isPingingAll.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -271,6 +273,10 @@ fun ProxyVpnScreen(
                         profiles = proxyProfiles,
                         activeId = activeProxyId,
                         isProxyActive = isProxyActive && (activeProxyType == AppPreferences.PROXY_TYPE_SHADOWSOCKS || activeProxyType == AppPreferences.PROXY_TYPE_NODE),
+                        pingResults = pingResults,
+                        isPingingAll = isPingingAll,
+                        onPingNode = { viewModel.pingProxyNode(it) },
+                        onPingAll = { viewModel.pingAllProxyNodes() },
                         onSelectProfile = { viewModel.setActiveProxyProfile(it.id) },
                         onAddNodeClick = { showAddProxyDialog = true },
                         onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },

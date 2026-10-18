@@ -17,9 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -36,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,12 +48,15 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ProxyProtocol
 import app.pwhs.blockads.data.geoip.GeoIpLookup
+import app.pwhs.blockads.utils.NodePingResult
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 
 @Composable
 fun ProxyNodeRow(
     profile: ProxyProfile,
     isActive: Boolean,
+    pingResult: NodePingResult? = null,
+    onPing: () -> Unit,
     onClick: () -> Unit,
     onRename: (ProxyProfile) -> Unit,
     onDelete: (ProxyProfile) -> Unit,
@@ -203,13 +209,25 @@ fun ProxyNodeRow(
                     }
                 }
 
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(top = 2.dp)
+                ) {
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+
+                    ProxyPingBadge(
+                        result = pingResult,
+                        onClick = onPing
+                    )
+                }
             }
 
             RadioButton(
@@ -236,6 +254,19 @@ fun ProxyNodeRow(
                     expanded = menuExpanded,
                     onDismissRequest = { menuExpanded = false }
                 ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.proxy_ping_single)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,
+                                contentDescription = null
+                            )
+                        },
+                        onClick = {
+                            menuExpanded = false
+                            onPing()
+                        }
+                    )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.wireguard_action_rename)) },
                         leadingIcon = {
@@ -269,6 +300,113 @@ fun ProxyNodeRow(
                         }
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProxyPingBadge(
+    result: NodePingResult?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (result) {
+        null -> {
+            Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                modifier = modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable(onClick = onClick)
+            ) {
+                Text(
+                    text = "Ping",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                )
+            }
+        }
+        is NodePingResult.Testing -> {
+            Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                modifier = modifier
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(8.dp),
+                        strokeWidth = 1.5.dp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "…",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+        is NodePingResult.Success -> {
+            val textColor = when {
+                result.latencyMs < 150 -> Color(0xFF4CAF50)
+                result.latencyMs < 350 -> Color(0xFFFFA000)
+                else -> MaterialTheme.colorScheme.error
+            }
+            Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = textColor.copy(alpha = 0.15f),
+                modifier = modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable(onClick = onClick)
+            ) {
+                Text(
+                    text = stringResource(R.string.proxy_ping_ms, result.latencyMs),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                )
+            }
+        }
+        is NodePingResult.Timeout -> {
+            Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
+                modifier = modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable(onClick = onClick)
+            ) {
+                Text(
+                    text = stringResource(R.string.proxy_ping_timeout),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                )
+            }
+        }
+        is NodePingResult.Error -> {
+            Surface(
+                shape = RoundedCornerShape(4.dp),
+                color = MaterialTheme.colorScheme.error.copy(alpha = 0.15f),
+                modifier = modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable(onClick = onClick)
+            ) {
+                Text(
+                    text = stringResource(R.string.proxy_ping_error),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                )
             }
         }
     }

@@ -12,11 +12,14 @@ import (
 
 // Config represents a parsed Shadowsocks / Outline configuration.
 type Config struct {
-	Method   string `json:"method"`
-	Password string `json:"password"`
-	Server   string `json:"server"`
-	Port     int    `json:"port"`
-	Tag      string `json:"tag,omitempty"`
+	Method        string `json:"method"`
+	Password      string `json:"password"`
+	Server        string `json:"server"`
+	Port          int    `json:"port"`
+	Tag           string `json:"tag,omitempty"`
+	Security      string `json:"security,omitempty"`
+	SNI           string `json:"sni,omitempty"`
+	AllowInsecure bool   `json:"allowInsecure,omitempty"`
 }
 
 // ToJSON serializes the config to a JSON string.

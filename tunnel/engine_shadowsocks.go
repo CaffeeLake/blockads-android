@@ -7,13 +7,14 @@ import (
 	"strings"
 
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/hysteria2"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vmess"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 )
 
-// SetProxyNodeConfig configures an outbound proxy node (shadowsocks, trojan, vless).
+// SetProxyNodeConfig configures an outbound proxy node (shadowsocks, trojan, vless, vmess, hysteria2).
 // Empty string or empty protocol clears the active proxy node.
 func (e *Engine) SetProxyNodeConfig(protocol string, configJSON string) error {
 	protocol = strings.ToLower(strings.TrimSpace(protocol))
@@ -83,6 +84,21 @@ func (e *Engine) SetProxyNodeConfig(protocol string, configJSON string) error {
 		var pClient proxy.Client = client
 		e.proxyClient.Store(&pClient)
 		logf("Proxy node (vmess) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
+		return nil
+
+	case "hysteria2", "hy2":
+		cfg, err := hysteria2.FromJSON(configJSON)
+		if err != nil {
+			return err
+		}
+		client, err := hysteria2.NewClient(cfg, e.protectFn)
+		if err != nil {
+			return err
+		}
+		e.ssClient.Store(nil)
+		var pClient proxy.Client = client
+		e.proxyClient.Store(&pClient)
+		logf("Proxy node (hysteria2) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
 		return nil
 
 	default:

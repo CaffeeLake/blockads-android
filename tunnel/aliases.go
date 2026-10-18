@@ -7,6 +7,7 @@ import (
 	"github.com/nqmgaming/blockads-tunnel/internal/geoip"
 	"github.com/nqmgaming/blockads-tunnel/internal/mitm"
 	"github.com/nqmgaming/blockads-tunnel/internal/packet"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/hysteria2"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vmess"
@@ -160,5 +161,15 @@ func ParseVmessURI(rawURI string) (string, error) {
 	}
 	return cfg.ToJSON(), nil
 }
+
+// ParseHysteria2URI parses a hysteria2:// or hy2:// URI and returns its JSON configuration.
+func ParseHysteria2URI(rawURI string) (string, error) {
+	cfg, err := hysteria2.ParseURI(rawURI)
+	if err != nil {
+		return "", err
+	}
+	return cfg.ToJSON(), nil
+}
+
 
 

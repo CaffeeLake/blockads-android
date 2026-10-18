@@ -65,6 +65,12 @@ class AdBlockVpnService : VpnService() {
 
         val privateDnsStrict: StateFlow<Boolean> = status.privateDnsStrict.asStateFlow()
 
+        @Volatile
+        var socketProtector: ((java.net.Socket) -> Boolean)? = null
+
+        @Volatile
+        var tunnelSocketProtector: tunnel.SocketProtector? = null
+
         fun updatePrivateDnsState(linkProperties: android.net.LinkProperties?) {
             status.privateDnsStrict.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
                 linkProperties?.privateDnsServerName != null
@@ -109,6 +115,20 @@ class AdBlockVpnService : VpnService() {
 
     override fun onCreate() {
         super.onCreate()
+        socketProtector = { socket ->
+            try {
+                protect(socket)
+            } catch (_: Exception) {
+                false
+            }
+        }
+        tunnelSocketProtector = tunnel.SocketProtector { fd ->
+            try {
+                protect(fd.toInt())
+            } catch (_: Exception) {
+                false
+            }
+        }
         val koin = org.koin.java.KoinJavaComponent.getKoin()
         filterRepo = koin.get()
         appPrefs = koin.get()
@@ -271,6 +291,8 @@ class AdBlockVpnService : VpnService() {
     }
 
     override fun onDestroy() {
+        socketProtector = null
+        tunnelSocketProtector = null
         session.onDestroy()
         super.onDestroy()
     }

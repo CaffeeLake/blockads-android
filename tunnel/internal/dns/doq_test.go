@@ -12,7 +12,7 @@ import (
 	"time"
 
 	miekgdns "github.com/miekg/dns"
-	"github.com/quic-go/quic-go"
+	"github.com/apernet/quic-go"
 )
 
 // doqServer is a minimal RFC 9250 server on loopback.
@@ -23,7 +23,7 @@ type doqServer struct {
 	unframed atomic.Bool
 
 	mu    sync.Mutex
-	conns []quic.Connection
+	conns []*quic.Conn
 }
 
 func startDoQ(t *testing.T, ip string) *doqServer {
@@ -55,13 +55,13 @@ func startDoQ(t *testing.T, ip string) *doqServer {
 	return s
 }
 
-func (s *doqServer) serveConn(ctx context.Context, conn quic.Connection, ip string) {
+func (s *doqServer) serveConn(ctx context.Context, conn *quic.Conn, ip string) {
 	for {
 		stream, err := conn.AcceptStream(ctx)
 		if err != nil {
 			return
 		}
-		go func(stream quic.Stream) {
+		go func(stream *quic.Stream) {
 			defer stream.Close()
 			data, err := io.ReadAll(stream)
 			if err != nil || len(data) < 2 {

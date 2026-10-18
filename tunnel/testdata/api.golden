@@ -129,6 +129,7 @@ type Engine struct
 	method Engine.StartStandalone(port int) error
 	method Engine.Stop()
 	method Engine.StopStackMitm()
+	method Engine.TestProxyDelay(protocol string, configJSON string, timeoutMs int) (int64, error)
 type FirewallChecker interface
 	method FirewallChecker.ShouldBlock(appName string) bool
 type GeoIPDatabase = internal/geoip.Database
@@ -172,6 +173,7 @@ type OutboundAdapter interface
 	method OutboundAdapter.Stop()
 	method OutboundAdapter.SupportsStreams() bool
 func ParseDNSStamp(stamp string) (string, error)
+func ParseHysteria2URI(rawURI string) (string, error)
 var ParseProtocol func(s string) internal/dns.DNSProtocol
 func ParseQuanXSummary(content string) string
 var ParseResponseType func(s string) internal/packet.ResponseType
@@ -287,6 +289,9 @@ type ShadowsocksConfig = internal/shadowsocks.Config
 	field ShadowsocksConfig.Server string
 	field ShadowsocksConfig.Port int
 	field ShadowsocksConfig.Tag string
+	field ShadowsocksConfig.Security string
+	field ShadowsocksConfig.SNI string
+	field ShadowsocksConfig.AllowInsecure bool
 	method ShadowsocksConfig.ToJSON() string
 type SocketProtector interface
 	method SocketProtector.Protect(fd int) bool
@@ -305,6 +310,8 @@ type TcpIpStack struct
 	method TcpIpStack.Stop()
 	method TcpIpStack.TcpFlowCount() int64
 	method TcpIpStack.UdpFlowCount() int64
+func TestProxyNodeDelay(protocol string, configJSON string, timeoutMs int) (int64, error)
+func TestProxyNodeDelayProtected(protocol string, configJSON string, timeoutMs int, protector SocketProtector) (int64, error)
 type UIDResolver interface
 	method UIDResolver.ResolveUID(protocol int, localIP string, localPort int, remoteIP string, remotePort int) int
 const UIDUnknown untyped int = -1

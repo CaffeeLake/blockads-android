@@ -1,12 +1,17 @@
 package shadowsocks
 
 import (
+	"crypto/tls"
 	"encoding/binary"
 	"fmt"
 	"net"
+	"strings"
 	"syscall"
 	"time"
 
+	ss2022 "github.com/sagernet/sing-shadowsocks"
+	"github.com/sagernet/sing-shadowsocks/shadowaead_2022"
+	M "github.com/sagernet/sing/common/metadata"
 	sscore "github.com/xjasonlyu/tun2socks/v2/transport/shadowsocks/core"
 )
 
@@ -14,20 +19,36 @@ import (
 type Client struct {
 	config     *Config
 	cipher     sscore.Cipher
+	method2022 ss2022.Method
 	serverAddr string
 	protectFn  func(fd int) bool
 }
 
 // NewClient creates an initialized Shadowsocks client.
 func NewClient(cfg *Config, protectFn func(fd int) bool) (*Client, error) {
-	cipher, err := sscore.PickCipher(cfg.Method, nil, cfg.Password)
-	if err != nil {
-		return nil, fmt.Errorf("pick cipher '%s' failed: %w", cfg.Method, err)
+	methodLower := strings.ToLower(strings.TrimSpace(cfg.Method))
+
+	var cipher sscore.Cipher
+	var method2022 ss2022.Method
+
+	if strings.HasPrefix(methodLower, "2022-blake3-") {
+		var err error
+		method2022, err = shadowaead_2022.NewWithPassword(methodLower, cfg.Password, nil)
+		if err != nil {
+			return nil, fmt.Errorf("init ss-2022 cipher '%s' failed: %w", cfg.Method, err)
+		}
+	} else {
+		var err error
+		cipher, err = sscore.PickCipher(cfg.Method, nil, cfg.Password)
+		if err != nil {
+			return nil, fmt.Errorf("pick cipher '%s' failed: %w", cfg.Method, err)
+		}
 	}
 
 	return &Client{
 		config:     cfg,
 		cipher:     cipher,
+		method2022: method2022,
 		serverAddr: fmt.Sprintf("%s:%d", cfg.Server, cfg.Port),
 		protectFn:  protectFn,
 	}, nil
@@ -57,6 +78,27 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 	rawConn, err := dialer.Dial("tcp", c.serverAddr)
 	if err != nil {
 		return nil, fmt.Errorf("dial ss server %s failed: %w", c.serverAddr, err)
+	}
+
+	if strings.EqualFold(c.config.Security, "tls") {
+		sni := c.config.SNI
+		if sni == "" {
+			sni = c.config.Server
+		}
+		tlsConn := tls.Client(rawConn, &tls.Config{
+			ServerName:         sni,
+			InsecureSkipVerify: c.config.AllowInsecure,
+		})
+		if err := tlsConn.Handshake(); err != nil {
+			rawConn.Close()
+			return nil, fmt.Errorf("tls handshake failed: %w", err)
+		}
+		rawConn = tlsConn
+	}
+
+	if c.method2022 != nil {
+		dest := M.ParseSocksaddrHostPort(targetIP.String(), uint16(targetPort))
+		return c.method2022.DialConn(rawConn, dest)
 	}
 
 	ssConn := c.cipher.StreamConn(rawConn)
@@ -113,4 +155,3 @@ func (c *Client) Tag() string {
 	}
 	return c.config.Tag
 }
-

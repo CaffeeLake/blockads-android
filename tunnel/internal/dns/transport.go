@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/quic-go/quic-go"
+	"github.com/apernet/quic-go"
 )
 
 // queryDoH sends a DNS query via DNS-over-HTTPS (RFC 8484 POST).
@@ -191,7 +191,7 @@ func (r *Resolver) queryDoQ(rawQuery []byte, doqURL string) ([]byte, error) {
 	return respData, nil
 }
 
-func (r *Resolver) getOrCreateQUICConn(host, port string) (quic.Connection, error) {
+func (r *Resolver) getOrCreateQUICConn(host, port string) (*quic.Conn, error) {
 	r.quicMu.Lock()
 	defer r.quicMu.Unlock()
 

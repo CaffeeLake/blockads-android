@@ -395,6 +395,12 @@
     <string name="proxy_node_dialog_desc">Paste a proxy link (VLESS, Trojan, VMess, Shadowsocks, WireGuard) or a subscription URL</string>
     <string name="proxy_node_dialog_hint">vless://, vmess://, trojan://, ss://, wireguard:// or https://...</string>
     <string name="proxy_node_dialog_invalid">Invalid link or subscription URL. Supported: vless://, vmess://, trojan://, ss://, wireguard:// or http(s):// subscription.</string>
+    <string name="proxy_ping_test_all">Check Ping</string>
+    <string name="proxy_ping_testing">Testing…</string>
+    <string name="proxy_ping_single">Check ping</string>
+    <string name="proxy_ping_timeout">Timeout</string>
+    <string name="proxy_ping_error">Error</string>
+    <string name="proxy_ping_ms">%1$d ms</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">VPN Settings</string>

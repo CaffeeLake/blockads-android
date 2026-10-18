@@ -27,10 +27,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import app.pwhs.blockads.utils.NodePingResult
+import app.pwhs.blockads.utils.ProxyPingTester
 import app.pwhs.blockads.utils.SubscriptionImporter
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -91,6 +94,12 @@ class ProxyVpnViewModel(
 
     private val _activeSsProfileId = MutableStateFlow<String?>(null)
     val activeSsProfileId: StateFlow<String?> = _activeSsProfileId.asStateFlow()
+
+    private val _pingResults = MutableStateFlow<Map<String, NodePingResult>>(emptyMap())
+    val pingResults: StateFlow<Map<String, NodePingResult>> = _pingResults.asStateFlow()
+
+    private val _isPingingAll = MutableStateFlow(false)
+    val isPingingAll: StateFlow<Boolean> = _isPingingAll.asStateFlow()
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
@@ -346,6 +355,30 @@ class ProxyVpnViewModel(
                 false
             }
         )
+    }
+
+    fun pingProxyNode(profileId: String) {
+        val target = _proxyProfiles.value.firstOrNull { it.id == profileId } ?: return
+        viewModelScope.launch {
+            _pingResults.update { it + (profileId to NodePingResult.Testing) }
+            val res = ProxyPingTester.pingNode(target)
+            _pingResults.update { it + (profileId to res) }
+        }
+    }
+
+    fun pingAllProxyNodes() {
+        val profiles = _proxyProfiles.value
+        if (profiles.isEmpty() || _isPingingAll.value) return
+        viewModelScope.launch {
+            _isPingingAll.value = true
+            _pingResults.update { current ->
+                current + profiles.associate { it.id to NodePingResult.Testing }
+            }
+            ProxyPingTester.pingAll(profiles) { id, res ->
+                _pingResults.update { it + (id to res) }
+            }
+            _isPingingAll.value = false
+        }
     }
 
     fun renameProxyProfile(id: String, newName: String) {
