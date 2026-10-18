@@ -14,19 +14,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -89,24 +95,118 @@ fun ProxyNodesTabContent(
                 )
             }
         } else {
+            val availableProtocols = remember(profiles) {
+                profiles.map { it.protocol }.distinct()
+            }
+            var searchQuery by remember { mutableStateOf("") }
+            var selectedProtocol by remember { mutableStateOf<app.pwhs.blockads.data.entities.ProxyProtocol?>(null) }
+
+            val filteredProfiles = remember(profiles, searchQuery, selectedProtocol) {
+                profiles.filter { profile ->
+                    val matchesProtocol = selectedProtocol == null || profile.protocol == selectedProtocol
+                    val matchesQuery = searchQuery.isBlank() ||
+                        profile.displayName.contains(searchQuery, ignoreCase = true) ||
+                        profile.server.contains(searchQuery, ignoreCase = true) ||
+                        profile.tag.contains(searchQuery, ignoreCase = true)
+                    matchesProtocol && matchesQuery
+                }
+            }
+
             Column(modifier = Modifier.fillMaxSize()) {
+                // Compact Search Field
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.proxy_search_hint),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
+                        focusedBorderColor = MaterialTheme.colorScheme.primary
+                    )
+                )
+
+                // Compact Filter Chips + Ping All Row
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 2.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(horizontal = 16.dp, vertical = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "${profiles.size} ${if (profiles.size == 1) "node" else "nodes"}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    androidx.compose.foundation.lazy.LazyRow(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        item {
+                            androidx.compose.material3.FilterChip(
+                                selected = selectedProtocol == null,
+                                onClick = { selectedProtocol = null },
+                                label = {
+                                    Text(
+                                        "${stringResource(R.string.proxy_filter_all)} (${profiles.size})",
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                        }
+                        if (availableProtocols.size > 1) {
+                            items(availableProtocols) { protocol ->
+                                val count = profiles.count { it.protocol == protocol }
+                                androidx.compose.material3.FilterChip(
+                                    selected = selectedProtocol == protocol,
+                                    onClick = {
+                                        selectedProtocol = if (selectedProtocol == protocol) null else protocol
+                                    },
+                                    label = {
+                                        Text(
+                                            "${protocol.displayName} ($count)",
+                                            style = MaterialTheme.typography.labelSmall
+                                        )
+                                    },
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                            }
+                        }
+                    }
 
-                    TextButton(
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    IconButton(
                         onClick = onPingAll,
                         enabled = !isPingingAll,
-                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                        modifier = Modifier.size(34.dp)
                     ) {
                         if (isPingingAll) {
                             CircularProgressIndicator(
@@ -114,45 +214,60 @@ fun ProxyNodesTabContent(
                                 strokeWidth = 2.dp,
                                 color = MaterialTheme.colorScheme.primary
                             )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(R.string.proxy_ping_testing),
-                                style = MaterialTheme.typography.labelMedium
-                            )
                         } else {
                             Icon(
                                 imageVector = Icons.Default.Refresh,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = stringResource(R.string.proxy_ping_test_all),
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.SemiBold
+                                contentDescription = stringResource(R.string.proxy_ping_test_all),
+                                modifier = Modifier.size(18.dp),
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
                 }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(
-                        items = profiles,
-                        key = { it.id }
-                    ) { profile ->
-                        ProxyNodeRow(
-                            profile = profile,
-                            isActive = isProxyActive && profile.id == activeId,
-                            pingResult = pingResults[profile.id],
-                            onPing = { onPingNode(profile.id) },
-                            onClick = { onSelectProfile(profile) },
-                            onRename = { renameTarget = it },
-                            onDelete = { deleteTarget = it }
+                // List or Empty Search
+                if (filteredProfiles.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.proxy_search_empty),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClick = {
+                            searchQuery = ""
+                            selectedProtocol = null
+                        }) {
+                            Text(stringResource(R.string.firewall_clear_search))
+                        }
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(
+                            items = filteredProfiles,
+                            key = { it.id }
+                        ) { profile ->
+                            ProxyNodeRow(
+                                profile = profile,
+                                isActive = isProxyActive && profile.id == activeId,
+                                pingResult = pingResults[profile.id],
+                                onPing = { onPingNode(profile.id) },
+                                onClick = { onSelectProfile(profile) },
+                                onRename = { renameTarget = it },
+                                onDelete = { deleteTarget = it }
+                            )
+                        }
                     }
                 }
             }

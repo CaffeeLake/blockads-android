@@ -401,6 +401,9 @@
     <string name="proxy_ping_timeout">Timeout</string>
     <string name="proxy_ping_error">Error</string>
     <string name="proxy_ping_ms">%1$d ms</string>
+    <string name="proxy_search_hint">Search nodes or locations…</string>
+    <string name="proxy_filter_all">All</string>
+    <string name="proxy_search_empty">No matching proxy nodes</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">VPN Settings</string>

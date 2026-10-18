@@ -98,110 +98,60 @@ fun ProfileRow(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (issue != null) {
-                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.6f)
+                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
             } else if (isActive) {
-                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
             } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
             }
-        )
+        ),
+        border = if (issue != null) {
+            androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f))
+        } else if (isActive) {
+            androidx.compose.foundation.BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.8f))
+        } else {
+            androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+        }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(
-                modifier = Modifier.size(38.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (flagEmoji != null && issue == null) {
-                    Box(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(CircleShape)
-                            .background(
-                                if (isActive) MaterialTheme.colorScheme.primaryContainer
-                                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
-                            ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = flagEmoji,
-                            fontSize = 20.sp,
-                        )
-                    }
-                    if (isActive) {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(14.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primary),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier.size(10.dp),
-                            )
-                        }
-                    }
-                } else {
+            if (issue != null) {
+                Box(
+                    modifier = Modifier
+                        .size(34.dp, 24.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)),
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        imageVector = when {
-                            issue != null -> Icons.Filled.ErrorOutline
-                            isActive -> Icons.Filled.CheckCircle
-                            else -> Icons.Outlined.VpnLock
-                        },
+                        imageVector = Icons.Filled.ErrorOutline,
                         contentDescription = null,
-                        tint = if (issue != null) {
-                            MaterialTheme.colorScheme.error
-                        } else if (isActive) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(16.dp),
                     )
                 }
+            } else {
+                app.pwhs.blockads.ui.proxyvpn.component.CountryFlag(countryCode = countryCode)
             }
             Spacer(Modifier.width(12.dp))
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    Text(
-                        text = cleanName,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false),
-                    )
-                    if (!countryName.isNullOrEmpty()) {
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
-                        ) {
-                            Text(
-                                text = countryName,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                maxLines = 1,
-                            )
-                        }
-                    }
-                }
                 Text(
-                    text = endpoint,
+                    text = cleanName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = if (isActive) FontWeight.Bold else FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                val endpointDisplay = if (!countryName.isNullOrEmpty()) "$endpoint • $countryName" else endpoint
+                Text(
+                    text = endpointDisplay,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

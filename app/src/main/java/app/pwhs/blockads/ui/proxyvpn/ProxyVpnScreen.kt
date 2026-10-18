@@ -124,6 +124,11 @@ fun ProxyVpnScreen(
                     }
                 },
                 actions = {
+                    Switch(
+                        checked = isProxyActive,
+                        onCheckedChange = { viewModel.toggleProxyVpn() },
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
                     IconButton(onClick = onNavigateToVpnSettings) {
                         Icon(
                             imageVector = Icons.Default.Settings,
@@ -143,46 +148,6 @@ fun ProxyVpnScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Master Toggle Card
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 6.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isProxyActive) {
-                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
-                    }
-                )
-            ) {
-                androidx.compose.foundation.layout.Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(R.string.proxy_vpn_master_toggle),
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = stringResource(R.string.proxy_vpn_master_toggle_desc),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    Switch(
-                        checked = isProxyActive,
-                        onCheckedChange = { viewModel.toggleProxyVpn() }
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(4.dp))
 
