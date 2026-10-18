@@ -403,7 +403,13 @@
     <string name="proxy_ping_ms">%1$d ms</string>
     <string name="proxy_search_hint">Search nodes or locations…</string>
     <string name="proxy_filter_all">All</string>
+    <string name="proxy_filter_obfuscated">Stealth</string>
     <string name="proxy_search_empty">No matching proxy nodes</string>
+    <string name="proxy_hero_status_on">ON</string>
+    <string name="proxy_hero_status_off">OFF</string>
+    <string name="proxy_hero_tap_to_connect">Tap to connect</string>
+    <string name="proxy_hero_connected_desc">Encrypted &amp; Protected</string>
+    <string name="proxy_hero_no_server_selected">No server selected</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">VPN Settings</string>
@@ -415,5 +421,15 @@
     <string name="preferred_ip_type_auto">Auto</string>
     <string name="preferred_ip_type_ipv4">IPv4</string>
     <string name="preferred_ip_type_ipv6">IPv6</string>
+
+    <!-- Hero Card Network & IP labels -->
+    <string name="proxy_hero_network_label">Network</string>
+    <string name="proxy_hero_ip_label">IP</string>
+    <string name="proxy_hero_network_wifi">Wi-Fi</string>
+    <string name="proxy_hero_network_cellular">Cellular</string>
+    <string name="proxy_hero_network_ethernet">Ethernet</string>
+    <string name="proxy_hero_network_disconnected">Offline</string>
+    <string name="proxy_refresh_ip">Refresh IP</string>
+    <string name="proxy_refreshing_ip">Refreshing…</string>
 </resources>
 

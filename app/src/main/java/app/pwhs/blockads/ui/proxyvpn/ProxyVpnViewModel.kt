@@ -53,6 +53,16 @@ class ProxyVpnViewModel(
         initialValue = AppPreferences.PREFERRED_IP_AUTO
     )
 
+    private val networkInfoDelegate = app.pwhs.blockads.ui.proxyvpn.delegate.ProxyNetworkInfoDelegate(
+        context = application,
+        httpClient = httpClient,
+        scope = viewModelScope
+    )
+    val networkName: StateFlow<String> = networkInfoDelegate.networkName
+    val networkType: StateFlow<app.pwhs.blockads.utils.CurrentNetworkType> = networkInfoDelegate.networkType
+    val currentIp: StateFlow<String?> = networkInfoDelegate.currentIp
+    val isRefreshingIp: StateFlow<Boolean> = networkInfoDelegate.isRefreshingIp
+
     private val _selectedTab = MutableStateFlow(0)
     val selectedTab: StateFlow<Int> = _selectedTab.asStateFlow()
 
@@ -140,6 +150,7 @@ class ProxyVpnViewModel(
                 mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
                 mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
             _activeProxyType.value = type
+            networkInfoDelegate.refreshAfterVpnToggle()
         }.launchIn(viewModelScope)
 
         viewModelScope.launch {
@@ -147,6 +158,10 @@ class ProxyVpnViewModel(
             _excludeLan.value = appPrefs.excludeLan.first()
             _allowAppBypass.value = appPrefs.allowAppBypass.first()
         }
+    }
+
+    fun refreshNetworkAndIp() {
+        networkInfoDelegate.refreshPublicIp()
     }
 
     fun selectTab(index: Int) {
@@ -461,5 +476,10 @@ class ProxyVpnViewModel(
         var n = 1
         while ("Tunnel $n" in existing) n++
         return "Tunnel $n"
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        networkInfoDelegate.cleanUp()
     }
 }

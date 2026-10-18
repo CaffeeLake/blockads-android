@@ -1,8 +1,11 @@
 package app.pwhs.blockads.ui.proxyvpn
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VpnKey
@@ -26,6 +32,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -48,8 +64,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.ui.proxyvpn.component.AddProxyNodeDialog
+import app.pwhs.blockads.ui.proxyvpn.component.CountryFlagRegistry
 import app.pwhs.blockads.ui.proxyvpn.component.ProxyNodesTabContent
+import app.pwhs.blockads.ui.proxyvpn.component.WindscribeHeroCard
 import app.pwhs.blockads.ui.proxyvpn.component.WireGuardTabContent
+import app.pwhs.blockads.utils.NodePingResult
+import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,9 +95,21 @@ fun ProxyVpnScreen(
     val isPingingAll by viewModel.isPingingAll.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
 
+    val networkName by viewModel.networkName.collectAsStateWithLifecycle()
+    val networkType by viewModel.networkType.collectAsStateWithLifecycle()
+    val currentIp by viewModel.currentIp.collectAsStateWithLifecycle()
+    val isRefreshingIp by viewModel.isRefreshingIp.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
     var showAddProxyDialog by remember { mutableStateOf(false) }
+    var isSearchActive by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+
+    BackHandler(enabled = isSearchActive) {
+        isSearchActive = false
+        searchQuery = ""
+    }
 
     val renamedMsg = stringResource(R.string.wireguard_renamed)
 
@@ -110,36 +142,137 @@ fun ProxyVpnScreen(
         }
     }
 
+    val activeWg = remember(wgProfiles, activeWgId) {
+        wgProfiles.firstOrNull { it.id == activeWgId } ?: wgProfiles.firstOrNull()
+    }
+    val activeProxy = remember(proxyProfiles, activeProxyId) {
+        proxyProfiles.firstOrNull { it.id == activeProxyId } ?: proxyProfiles.firstOrNull()
+    }
+
+    val isWgActive = activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD
+    val showWg = if (isProxyActive) isWgActive else (selectedTab == 0)
+
+    val isCardConnected = isProxyActive && (if (isWgActive) activeWg != null else activeProxy != null)
+
+    val heroServerName = if (showWg) {
+        activeWg?.name.orEmpty()
+    } else {
+        activeProxy?.displayName.orEmpty()
+    }
+
+    val heroCountryCode: String? = remember(showWg, activeWg, activeProxy) {
+        if (showWg) {
+            activeWg?.name?.let { WireGuardGeoIpHelper.getCountryCodeFast(it, it) }
+        } else {
+            activeProxy?.let { WireGuardGeoIpHelper.getCountryCodeFast(it.server, it.tag) }
+        }
+    }
+
+    val heroProtocolText = if (showWg) {
+        "WireGuard"
+    } else {
+        activeProxy?.protocolBadgeText ?: "Proxy"
+    }
+
+    val heroPort = if (showWg) {
+        activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringAfterLast(":", "")?.toIntOrNull() ?: 51820
+    } else {
+        activeProxy?.port ?: 443
+    }
+
+    val heroLatency = if (showWg) {
+        null
+    } else {
+        (activeProxy?.let { pingResults[it.id] } as? NodePingResult.Success)?.latencyMs
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.proxy_vpn_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.accessibility_navigate_back)
+            if (isSearchActive) {
+                val focusRequester = remember { FocusRequester() }
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
+                TopAppBar(
+                    title = {
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            placeholder = {
+                                Text(
+                                    stringResource(R.string.proxy_search_hint),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                )
+                            },
+                            singleLine = true,
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester)
                         )
-                    }
-                },
-                actions = {
-                    Switch(
-                        checked = isProxyActive,
-                        onCheckedChange = { viewModel.toggleProxyVpn() },
-                        modifier = Modifier.padding(end = 4.dp)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            isSearchActive = false
+                            searchQuery = ""
+                        }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_navigate_back)
+                            )
+                        }
+                    },
+                    actions = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
                     )
-                    IconButton(onClick = onNavigateToVpnSettings) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.vpn_settings_title)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
                 )
-            )
+            } else {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.proxy_vpn_title)) },
+                    navigationIcon = {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.accessibility_navigate_back)
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { isSearchActive = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = stringResource(R.string.proxy_search_hint)
+                            )
+                        }
+                        IconButton(onClick = onNavigateToVpnSettings) {
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = stringResource(R.string.vpn_settings_title)
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    )
+                )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
@@ -148,76 +281,97 @@ fun ProxyVpnScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Protocol Tabs
-            TabRow(
-                selectedTabIndex = selectedTab,
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.primary,
-                divider = { }
-            ) {
-                Tab(
-                    selected = selectedTab == 0,
-                    onClick = { viewModel.selectTab(0) },
-                    text = {
-                        androidx.compose.foundation.layout.Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Security,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.proxy_vpn_tab_wireguard),
-                                maxLines = 1
-                            )
-                            if (wgProfiles.isNotEmpty()) {
-                                Badge(
-                                    containerColor = if (selectedTab == 0) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-                                    contentColor = if (selectedTab == 0) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
-                                ) {
-                                    Text("${wgProfiles.size}")
-                                }
-                            }
-                        }
-                    }
-                )
-
-                Tab(
-                    selected = selectedTab == 1,
-                    onClick = { viewModel.selectTab(1) },
-                    text = {
-                        androidx.compose.foundation.layout.Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.VpnKey,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Text(
-                                text = stringResource(R.string.proxy_vpn_tab_proxies),
-                                maxLines = 1
-                            )
-                            if (proxyProfiles.isNotEmpty()) {
-                                Badge(
-                                    containerColor = if (selectedTab == 1) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-                                    contentColor = if (selectedTab == 1) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
-                                ) {
-                                    Text("${proxyProfiles.size}")
-                                }
-                            }
-                        }
-                    }
-                )
+            val heroHost = if (showWg) {
+                activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringBeforeLast(":") ?: "wireguard.vpn"
+            } else {
+                activeProxy?.server ?: "vpn.pwhs.app"
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            // Windscribe-style Cyber Dark Cockpit Hero Card
+            WindscribeHeroCard(
+                isConnected = isCardConnected,
+                onToggleConnection = { viewModel.toggleProxyVpn() },
+                serverName = heroServerName,
+                countryCode = heroCountryCode,
+                protocol = heroProtocolText,
+                port = heroPort,
+                serverHost = heroHost,
+                latencyMs = heroLatency,
+                networkName = networkName,
+                networkType = networkType,
+                currentIp = currentIp,
+                isRefreshingIp = isRefreshingIp,
+                onRefreshIp = { viewModel.refreshNetworkAndIp() }
+            )
+
+            // Modern Segmented Pill Tabs
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                shape = RoundedCornerShape(14.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    // Tab 1: WireGuard
+                    Surface(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable { viewModel.selectTab(0) },
+                        shape = RoundedCornerShape(10.dp),
+                        color = if (selectedTab == 0) MaterialTheme.colorScheme.surface else Color.Transparent,
+                        shadowElevation = if (selectedTab == 0) 2.dp else 0.dp
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(vertical = 9.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val countText = if (wgProfiles.isNotEmpty()) " (${wgProfiles.size})" else ""
+                            Text(
+                                text = "${stringResource(R.string.proxy_vpn_tab_wireguard)}$countText",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Medium,
+                                color = if (selectedTab == 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    // Tab 2: Proxy Nodes
+                    Surface(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable { viewModel.selectTab(1) },
+                        shape = RoundedCornerShape(10.dp),
+                        color = if (selectedTab == 1) MaterialTheme.colorScheme.surface else Color.Transparent,
+                        shadowElevation = if (selectedTab == 1) 2.dp else 0.dp
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(vertical = 9.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val countText = if (proxyProfiles.isNotEmpty()) " (${proxyProfiles.size})" else ""
+                            Text(
+                                text = "${stringResource(R.string.proxy_vpn_tab_proxies)}$countText",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Medium,
+                                color = if (selectedTab == 1) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             // Tab Content
             Box(modifier = Modifier.weight(1f)) {
@@ -227,6 +381,7 @@ fun ProxyVpnScreen(
                         activeId = activeWgId,
                         isProxyActive = isProxyActive && activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD,
                         isLoading = isLoadingWg,
+                        searchQuery = searchQuery,
                         onSelectProfile = { viewModel.setActiveWireGuardProfile(it) },
                         onEditProfile = onEditProfile,
                         onRenameProfile = { id, name -> viewModel.renameWireGuardProfile(id, name) },
@@ -240,12 +395,14 @@ fun ProxyVpnScreen(
                         isProxyActive = isProxyActive && (activeProxyType == AppPreferences.PROXY_TYPE_SHADOWSOCKS || activeProxyType == AppPreferences.PROXY_TYPE_NODE),
                         pingResults = pingResults,
                         isPingingAll = isPingingAll,
+                        searchQuery = searchQuery,
                         onPingNode = { viewModel.pingProxyNode(it) },
                         onPingAll = { viewModel.pingAllProxyNodes() },
                         onSelectProfile = { viewModel.setActiveProxyProfile(it.id) },
                         onAddNodeClick = { showAddProxyDialog = true },
                         onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
-                        onDeleteProfile = { viewModel.deleteProxyProfile(it) }
+                        onDeleteProfile = { viewModel.deleteProxyProfile(it) },
+                        onClearSearch = { searchQuery = "" }
                     )
                 }
             }

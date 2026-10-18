@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -62,6 +63,8 @@ fun ProxyNodesTabContent(
     onAddNodeClick: () -> Unit,
     onRenameProfile: (String, String) -> Unit,
     onDeleteProfile: (String) -> Unit,
+    searchQuery: String = "",
+    onClearSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var renameTarget by remember { mutableStateOf<ProxyProfile?>(null) }
@@ -98,65 +101,24 @@ fun ProxyNodesTabContent(
             val availableProtocols = remember(profiles) {
                 profiles.map { it.protocol }.distinct()
             }
-            var searchQuery by remember { mutableStateOf("") }
             var selectedProtocol by remember { mutableStateOf<app.pwhs.blockads.data.entities.ProxyProtocol?>(null) }
+            var filterObfuscatedOnly by remember { mutableStateOf(false) }
 
-            val filteredProfiles = remember(profiles, searchQuery, selectedProtocol) {
+            val obfuscatedCount = remember(profiles) { profiles.count { it.isObfuscated } }
+
+            val filteredProfiles = remember(profiles, searchQuery, selectedProtocol, filterObfuscatedOnly) {
                 profiles.filter { profile ->
+                    val matchesObfs = !filterObfuscatedOnly || profile.isObfuscated
                     val matchesProtocol = selectedProtocol == null || profile.protocol == selectedProtocol
                     val matchesQuery = searchQuery.isBlank() ||
                         profile.displayName.contains(searchQuery, ignoreCase = true) ||
                         profile.server.contains(searchQuery, ignoreCase = true) ||
                         profile.tag.contains(searchQuery, ignoreCase = true)
-                    matchesProtocol && matchesQuery
+                    matchesObfs && matchesProtocol && matchesQuery
                 }
             }
 
             Column(modifier = Modifier.fillMaxSize()) {
-                // Compact Search Field
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.proxy_search_hint),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
-                        focusedBorderColor = MaterialTheme.colorScheme.primary
-                    )
-                )
-
                 // Compact Filter Chips + Ping All Row
                 Row(
                     modifier = Modifier
@@ -170,8 +132,11 @@ fun ProxyNodesTabContent(
                     ) {
                         item {
                             androidx.compose.material3.FilterChip(
-                                selected = selectedProtocol == null,
-                                onClick = { selectedProtocol = null },
+                                selected = selectedProtocol == null && !filterObfuscatedOnly,
+                                onClick = {
+                                    selectedProtocol = null
+                                    filterObfuscatedOnly = false
+                                },
                                 label = {
                                     Text(
                                         "${stringResource(R.string.proxy_filter_all)} (${profiles.size})",
@@ -181,12 +146,31 @@ fun ProxyNodesTabContent(
                                 shape = RoundedCornerShape(8.dp)
                             )
                         }
+                        if (obfuscatedCount > 0) {
+                            item {
+                                androidx.compose.material3.FilterChip(
+                                    selected = filterObfuscatedOnly,
+                                    onClick = {
+                                        filterObfuscatedOnly = !filterObfuscatedOnly
+                                        if (filterObfuscatedOnly) selectedProtocol = null
+                                    },
+                                    label = {
+                                        Text(
+                                            "${stringResource(R.string.proxy_filter_obfuscated)} ($obfuscatedCount)",
+                                            style = MaterialTheme.typography.labelSmall
+                                        )
+                                    },
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                            }
+                        }
                         if (availableProtocols.size > 1) {
                             items(availableProtocols) { protocol ->
                                 val count = profiles.count { it.protocol == protocol }
                                 androidx.compose.material3.FilterChip(
-                                    selected = selectedProtocol == protocol,
+                                    selected = selectedProtocol == protocol && !filterObfuscatedOnly,
                                     onClick = {
+                                        filterObfuscatedOnly = false
                                         selectedProtocol = if (selectedProtocol == protocol) null else protocol
                                     },
                                     label = {
@@ -242,8 +226,9 @@ fun ProxyNodesTabContent(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         TextButton(onClick = {
-                            searchQuery = ""
+                            onClearSearch()
                             selectedProtocol = null
+                            filterObfuscatedOnly = false
                         }) {
                             Text(stringResource(R.string.firewall_clear_search))
                         }

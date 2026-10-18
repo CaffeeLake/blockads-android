@@ -59,6 +59,7 @@ fun WireGuardTabContent(
     onRenameProfile: (String, String) -> Unit,
     onDeleteProfile: (String) -> Unit,
     onImportUri: (Uri) -> Unit,
+    searchQuery: String = "",
     modifier: Modifier = Modifier
 ) {
     var renameTarget by remember { mutableStateOf<WireGuardProfile?>(null) }
@@ -68,6 +69,19 @@ fun WireGuardTabContent(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
         uri?.let { onImportUri(it) }
+    }
+
+    val filteredProfiles = remember(profiles, searchQuery) {
+        if (searchQuery.isBlank()) profiles
+        else {
+            profiles.filter { profile ->
+                val endpoint = profile.config.peers.firstOrNull()?.endpoint.orEmpty()
+                val address = profile.config.interfaceConfig.address.firstOrNull().orEmpty()
+                profile.name.contains(searchQuery, ignoreCase = true) ||
+                    endpoint.contains(searchQuery, ignoreCase = true) ||
+                    address.contains(searchQuery, ignoreCase = true)
+            }
+        }
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -80,15 +94,15 @@ fun WireGuardTabContent(
             CircularProgressIndicator()
         }
 
-        if (profiles.isEmpty() && !isLoading) {
+        if (filteredProfiles.isEmpty() && !isLoading) {
             EmptyState(modifier = Modifier.fillMaxSize())
-        } else if (profiles.isNotEmpty()) {
+        } else if (filteredProfiles.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 96.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(profiles, key = { it.id }) { profile ->
+                items(filteredProfiles, key = { it.id }) { profile ->
                     ProfileRow(
                         profile = profile,
                         isActive = isProxyActive && profile.id == activeId,

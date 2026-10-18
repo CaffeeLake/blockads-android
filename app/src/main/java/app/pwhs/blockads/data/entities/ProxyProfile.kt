@@ -59,6 +59,22 @@ data class ProxyProfile(
     val displayName: String
         get() = name.ifEmpty { tag.ifEmpty { "$server:$port" } }
 
+    /** Indicates whether this profile uses DPI-resistant stealth obfuscation */
+    val isObfuscated: Boolean
+        get() = security.equals("reality", ignoreCase = true) ||
+                protocol == ProxyProtocol.TROJAN ||
+                network.equals("ws", ignoreCase = true) ||
+                (protocol == ProxyProtocol.HYSTERIA2 && obfs.isNotEmpty())
+
+    val protocolBadgeText: String
+        get() = when {
+            security.equals("reality", ignoreCase = true) -> "REALITY"
+            protocol == ProxyProtocol.TROJAN -> "Trojan"
+            network.equals("ws", ignoreCase = true) -> "${protocol.displayName}+WS"
+            protocol == ProxyProtocol.HYSTERIA2 -> "Hysteria 2"
+            else -> protocol.displayName
+        }
+
     /** Serializes the profile into Go engine JSON config format */
     fun toEngineJson(): String = jsonInstance.encodeToString(serializer(), this)
 

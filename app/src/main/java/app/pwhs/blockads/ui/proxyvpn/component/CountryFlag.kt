@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Dns
@@ -96,40 +97,53 @@ fun CountryFlag(
     val flagRes = CountryFlagRegistry.getFlagResId(countryCode)
 
     if (flagRes != null) {
-        // High-definition real flag image (Surfshark / NordVPN style)
+        // High-definition circular flag image (Windscribe style)
         Image(
             painter = painterResource(id = flagRes),
             contentDescription = countryCode,
             contentScale = ContentScale.Crop,
             modifier = modifier
-                .size(width = 34.dp, height = 24.dp)
-                .clip(RoundedCornerShape(4.dp))
+                .size(32.dp)
+                .clip(CircleShape)
                 .border(
-                    width = 0.5.dp,
+                    width = 1.dp,
                     color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(4.dp)
+                    shape = CircleShape
                 )
         )
     } else if (!countryCode.isNullOrEmpty()) {
         // Fallback to emoji flag
         val flagEmoji = GeoIpLookup.countryCodeToEmoji(countryCode)
         Box(
-            modifier = modifier.size(34.dp, 24.dp),
+            modifier = modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = flagEmoji,
-                fontSize = 20.sp,
+                fontSize = 17.sp,
                 textAlign = TextAlign.Center
             )
         }
     } else {
-        // Sleek squircle server glyph
+        // Sleek circular server glyph
         Box(
             modifier = modifier
-                .size(34.dp, 24.dp)
-                .clip(RoundedCornerShape(6.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(

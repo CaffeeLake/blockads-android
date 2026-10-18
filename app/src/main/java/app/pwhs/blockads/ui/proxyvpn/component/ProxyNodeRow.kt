@@ -89,7 +89,7 @@ fun ProxyNodeRow(
     }
 
     val subtitle = remember(profile) {
-        "${profile.protocol.displayName} • ${profile.server}:${profile.port}"
+        "${profile.protocolBadgeText} • ${profile.server}:${profile.port}"
     }
 
     Card(
@@ -241,25 +241,7 @@ private fun NodeLatencyBadge(
         contentAlignment = Alignment.Center
     ) {
         when (result) {
-            null -> {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(3.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Speed,
-                        contentDescription = stringResource(R.string.proxy_ping_single),
-                        modifier = Modifier.size(13.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                    )
-                    Text(
-                        text = "Ping",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
+            null -> Unit
             is NodePingResult.Testing -> {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

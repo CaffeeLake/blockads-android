@@ -362,7 +362,13 @@
     <string name="proxy_ping_ms">%1$d ms</string>
     <string name="proxy_search_hint">Tìm kiếm máy chủ…</string>
     <string name="proxy_filter_all">Tất cả</string>
+    <string name="proxy_filter_obfuscated">Ngụy trang</string>
     <string name="proxy_search_empty">Không tìm thấy máy chủ phù hợp</string>
+    <string name="proxy_hero_status_on">BẬT</string>
+    <string name="proxy_hero_status_off">TẮT</string>
+    <string name="proxy_hero_tap_to_connect">Chạm để kết nối</string>
+    <string name="proxy_hero_connected_desc">Đã mã hóa &amp; bảo vệ</string>
+    <string name="proxy_hero_no_server_selected">Chưa chọn máy chủ</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">Cài đặt VPN</string>
@@ -374,5 +380,15 @@
     <string name="preferred_ip_type_auto">Auto</string>
     <string name="preferred_ip_type_ipv4">IPv4</string>
     <string name="preferred_ip_type_ipv6">IPv6</string>
+
+    <!-- Hero Card Network & IP labels -->
+    <string name="proxy_hero_network_label">Mạng</string>
+    <string name="proxy_hero_ip_label">IP</string>
+    <string name="proxy_hero_network_wifi">Wi-Fi</string>
+    <string name="proxy_hero_network_cellular">Di động</string>
+    <string name="proxy_hero_network_ethernet">Ethernet</string>
+    <string name="proxy_hero_network_disconnected">Ngoại tuyến</string>
+    <string name="proxy_refresh_ip">Tải lại IP</string>
+    <string name="proxy_refreshing_ip">Đang tải…</string>
 </resources>
 
