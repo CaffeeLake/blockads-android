@@ -28,7 +28,23 @@ object SubscriptionImporter {
         }
 
     fun parseSubscriptionContent(content: String): SubscriptionImportResult {
-        val decodedText = decodeBase64IfPossible(content.trim())
+        val trimmedRaw = content.trim()
+        if (trimmedRaw.startsWith("[") && trimmedRaw.endsWith("]")) {
+            val jsonResult = JsonSubscriptionParser.parse(trimmedRaw)
+            if (jsonResult.totalParsed > 0) {
+                return jsonResult
+            }
+        }
+
+        val decodedText = decodeBase64IfPossible(trimmedRaw)
+        val trimmedDecoded = decodedText.trim()
+        if (trimmedDecoded.startsWith("[") && trimmedDecoded.endsWith("]")) {
+            val jsonResult = JsonSubscriptionParser.parse(trimmedDecoded)
+            if (jsonResult.totalParsed > 0) {
+                return jsonResult
+            }
+        }
+
         val lines = decodedText.lines().map { it.trim() }.filter { it.isNotEmpty() }
 
         val proxyList = mutableListOf<ProxyProfile>()
@@ -62,7 +78,8 @@ object SubscriptionImporter {
                 line.startsWith("ss://", ignoreCase = true) ||
                 line.startsWith("hysteria2://", ignoreCase = true) ||
                 line.startsWith("hy2://", ignoreCase = true) ||
-                line.startsWith("tuic://", ignoreCase = true) -> {
+                line.startsWith("tuic://", ignoreCase = true) ||
+                line.startsWith("masque://", ignoreCase = true) -> {
                     val result = ProxyLinkParser.parse(line)
                     result.onSuccess { proxyList.add(it) }
                         .onFailure {
@@ -85,8 +102,8 @@ object SubscriptionImporter {
     }
 
     private fun decodeBase64IfPossible(text: String): String {
-        // If content has multiple lines and starts with a known protocol, it's already plain text
-        if (text.contains("://")) {
+        // If content has multiple lines and starts with a known protocol, or is JSON, it's already plain text
+        if (text.contains("://") || (text.startsWith("[") && text.endsWith("]"))) {
             return text
         }
         return try {

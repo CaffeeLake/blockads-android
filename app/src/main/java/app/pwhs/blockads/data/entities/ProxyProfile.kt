@@ -11,7 +11,8 @@ enum class ProxyProtocol(val value: String, val displayName: String) {
     VLESS("vless", "VLESS"),
     VMESS("vmess", "VMess"),
     HYSTERIA2("hysteria2", "Hysteria 2"),
-    TUIC("tuic", "TUIC");
+    TUIC("tuic", "TUIC"),
+    MASQUE("masque", "MASQUE");
 
     companion object {
         fun fromValue(value: String): ProxyProtocol = when (value.lowercase()) {
@@ -20,6 +21,7 @@ enum class ProxyProtocol(val value: String, val displayName: String) {
             "vmess" -> VMESS
             "hysteria2", "hy2" -> HYSTERIA2
             "tuic" -> TUIC
+            "masque" -> MASQUE
             else -> SHADOWSOCKS
         }
     }
@@ -58,6 +60,10 @@ data class ProxyProfile(
     val congestionControl: String = "bbr",
     val udpRelayMode: String = "native",
     val alpn: String = "",
+    // MASQUE specific
+    val masquePath: String = "",
+    val masqueUser: String = "",
+    val masquePass: String = "",
     // Metadata
     val tag: String = "",
     val rawUri: String = ""
@@ -70,7 +76,8 @@ data class ProxyProfile(
         get() = security.equals("reality", ignoreCase = true) ||
                 protocol == ProxyProtocol.TROJAN ||
                 network.equals("ws", ignoreCase = true) ||
-                (protocol == ProxyProtocol.HYSTERIA2 && obfs.isNotEmpty())
+                (protocol == ProxyProtocol.HYSTERIA2 && obfs.isNotEmpty()) ||
+                protocol == ProxyProtocol.MASQUE
 
     val protocolBadgeText: String
         get() = when {
@@ -78,6 +85,7 @@ data class ProxyProfile(
             protocol == ProxyProtocol.TROJAN -> "Trojan"
             network.equals("ws", ignoreCase = true) -> "${protocol.displayName}+WS"
             protocol == ProxyProtocol.HYSTERIA2 -> "Hysteria 2"
+            protocol == ProxyProtocol.MASQUE -> "MASQUE (H3)"
             else -> protocol.displayName
         }
 

@@ -392,9 +392,9 @@
     <string name="proxy_node_empty_desc">Add a proxy node link (VLESS, Trojan, Shadowsocks) to route traffic through an encrypted proxy.</string>
     <string name="proxy_node_add_node">Add Proxy Node</string>
     <string name="proxy_node_dialog_title">Add Proxy Node / Subscription</string>
-    <string name="proxy_node_dialog_desc">Paste a proxy link (VLESS, TUIC, Trojan, VMess, Shadowsocks, WireGuard, AmneziaWG) or a subscription URL</string>
-    <string name="proxy_node_dialog_hint">vless://, tuic://, trojan://, ss://, wireguard://, vpn:// or https://…</string>
-    <string name="proxy_node_dialog_invalid">Invalid link or subscription URL. Supported: vless, tuic, trojan, vmess, ss, wireguard, amnezia or http(s):// subscription.</string>
+    <string name="proxy_node_dialog_desc">Paste a proxy link (VLESS, TUIC, MASQUE, Trojan, VMess, Shadowsocks, WireGuard, AmneziaWG) or a subscription URL</string>
+    <string name="proxy_node_dialog_hint">vless://, tuic://, masque://, trojan://, ss://, wireguard://, vpn:// or https://…</string>
+    <string name="proxy_node_dialog_invalid">Invalid link or subscription URL. Supported: vless, tuic, masque, trojan, vmess, ss, wireguard, amnezia or http(s):// subscription.</string>
     <string name="proxy_ping_test_all">Check Ping</string>
     <string name="proxy_ping_testing">Testing…</string>
     <string name="proxy_ping_single">Check ping</string>

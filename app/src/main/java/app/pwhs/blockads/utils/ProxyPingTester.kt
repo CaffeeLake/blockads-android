@@ -52,7 +52,7 @@ object ProxyPingTester {
                 val msg = t.message.orEmpty()
                 if (msg.contains("timeout", ignoreCase = true) || msg.contains("deadline", ignoreCase = true)) {
                     NodePingResult.Timeout
-                } else if (profile.protocol != ProxyProtocol.HYSTERIA2) {
+                } else if (!isUdpOnly(profile.protocol)) {
                     fallbackPing(profile, timeoutMs)
                 } else {
                     NodePingResult.Error(msg.ifEmpty { "Failed" })
@@ -60,8 +60,13 @@ object ProxyPingTester {
             }
         }
 
+    private fun isUdpOnly(protocol: ProxyProtocol): Boolean =
+        protocol == ProxyProtocol.HYSTERIA2 ||
+        protocol == ProxyProtocol.TUIC ||
+        protocol == ProxyProtocol.MASQUE
+
     private suspend fun fallbackPing(profile: ProxyProfile, timeoutMs: Int): NodePingResult {
-        if (profile.protocol == ProxyProtocol.HYSTERIA2) {
+        if (isUdpOnly(profile.protocol)) {
             return NodePingResult.Error("Failed")
         }
         return ping(profile.server, profile.port, timeoutMs)

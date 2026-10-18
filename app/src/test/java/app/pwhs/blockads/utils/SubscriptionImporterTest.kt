@@ -157,4 +157,109 @@ class SubscriptionImporterTest {
         assertEquals(37485, tuic.port)
         assertEquals("bbr", tuic.congestionControl)
     }
+
+    @Test
+    fun parseMasqueUri_extractsAllParameters() {
+        val uri = "masque://user123:pass456@vpn.pwhs.app:51911?path=%2F.well-known%2Fmasque%2Fip%2F*%2F*%2F&sni=vpn.pwhs.app&alpn=h3#MASQUE-Server"
+        val result = ProxyLinkParser.parse(uri)
+        assertTrue(result.isSuccess)
+
+        val profile = result.getOrThrow()
+        assertEquals(ProxyProtocol.MASQUE, profile.protocol)
+        assertEquals("vpn.pwhs.app", profile.server)
+        assertEquals(51911, profile.port)
+        assertEquals("user123", profile.masqueUser)
+        assertEquals("pass456", profile.masquePass)
+        assertEquals("/.well-known/masque/ip/*/*/", profile.masquePath)
+        assertEquals("vpn.pwhs.app", profile.sni)
+        assertEquals("h3", profile.alpn)
+        assertEquals("MASQUE-Server", profile.name)
+        assertEquals("MASQUE (H3)", profile.protocolBadgeText)
+        assertTrue(profile.isObfuscated)
+    }
+
+    @Test
+    fun parseJsonSubscription_withMasque_extractsAllNodes() {
+        val jsonContent = """
+        [
+          {
+            "remarks": "Trojan-Node",
+            "outbounds": [
+              {
+                "protocol": "trojan",
+                "tag": "proxy",
+                "settings": {
+                  "servers": [{"address": "vpn.pwhs.app", "port": 19095, "password": "pass"}]
+                },
+                "streamSettings": {
+                  "network": "tcp",
+                  "security": "tls",
+                  "tlsSettings": {"serverName": "vpn.pwhs.app", "alpn": ["h2"]}
+                }
+              }
+            ]
+          },
+          {
+            "remarks": "Wireguard-Node",
+            "outbounds": [
+              {
+                "protocol": "wireguard",
+                "tag": "proxy",
+                "settings": {
+                  "secretKey": "privkey=",
+                  "address": ["10.0.0.2/32"],
+                  "peers": [{"endpoint": "vpn.pwhs.app:57442", "publicKey": "pubkey="}]
+                }
+              }
+            ]
+          },
+          {
+            "remarks": "MASQUE-Node",
+            "outbounds": [
+              {
+                "protocol": "masque",
+                "tag": "proxy",
+                "settings": {
+                  "address": "vpn.pwhs.app",
+                  "port": 51911
+                },
+                "streamSettings": {
+                  "network": "masque",
+                  "security": "tls",
+                  "tlsSettings": {
+                    "alpn": ["h3"],
+                    "serverName": "vpn.pwhs.app"
+                  },
+                  "masqueSettings": {
+                    "path": "/.well-known/masque/ip/*/*/",
+                    "user": "mtlpmbmf7g",
+                    "pass": "secrettoken"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+        """.trimIndent()
+
+        val result = SubscriptionImporter.parseSubscriptionContent(jsonContent)
+        assertEquals(3, result.totalParsed)
+        assertEquals(1, result.wireGuardProfiles.size)
+        assertEquals(2, result.proxyProfiles.size)
+
+        val wg = result.wireGuardProfiles.first()
+        assertEquals("Wireguard-Node", wg.name)
+        assertEquals("vpn.pwhs.app:57442", wg.config.peers[0].endpoint)
+
+        val masque = result.proxyProfiles.first { it.protocol == ProxyProtocol.MASQUE }
+        assertEquals("MASQUE-Node", masque.name)
+        assertEquals("vpn.pwhs.app", masque.server)
+        assertEquals(51911, masque.port)
+        assertEquals("mtlpmbmf7g", masque.masqueUser)
+        assertEquals("secrettoken", masque.masquePass)
+        assertEquals("/.well-known/masque/ip/*/*/", masque.masquePath)
+        assertEquals("h3", masque.alpn)
+        assertEquals("MASQUE (H3)", masque.protocolBadgeText)
+    }
 }
+

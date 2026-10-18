@@ -20,9 +20,43 @@ object ProxyLinkParser {
             trimmed.startsWith("vmess://", ignoreCase = true) -> parseVmessUri(trimmed)
             trimmed.startsWith("hysteria2://", ignoreCase = true) || trimmed.startsWith("hy2://", ignoreCase = true) -> parseHysteria2Uri(trimmed)
             trimmed.startsWith("tuic://", ignoreCase = true) -> parseTuicUri(trimmed)
+            trimmed.startsWith("masque://", ignoreCase = true) -> parseMasqueUri(trimmed)
             trimmed.startsWith("ss://", ignoreCase = true) -> parseShadowsocksUri(trimmed)
-            else -> throw IllegalArgumentException("Unsupported proxy URI. Expected trojan://, vless://, vmess://, hysteria2://, tuic://, or ss://")
+            else -> throw IllegalArgumentException("Unsupported proxy URI. Expected trojan://, vless://, vmess://, hysteria2://, tuic://, masque://, or ss://")
         }
+    }
+
+    private fun parseMasqueUri(trimmed: String): ProxyProfile {
+        val uri = URI(trimmed)
+        val rawUserInfo = uri.rawUserInfo.orEmpty()
+        val decodedUserInfo = URLDecoder.decode(rawUserInfo, StandardCharsets.UTF_8.name())
+        val colonIdx = decodedUserInfo.indexOf(':')
+        val user = if (colonIdx != -1) decodedUserInfo.substring(0, colonIdx) else decodedUserInfo
+        val pass = if (colonIdx != -1) decodedUserInfo.substring(colonIdx + 1) else ""
+
+        val server = uri.host.orEmpty()
+        val port = if (uri.port != -1) uri.port else 443
+        val query = parseQuery(uri.rawQuery)
+        val sni = query["sni"].orEmpty().ifEmpty { server }
+        val alpn = query["alpn"].orEmpty().ifEmpty { "h3" }
+        val path = query["path"].orEmpty().ifEmpty { "/.well-known/masque/ip/*/*/" }
+        val allowInsecure = query["allow_insecure"] == "1" || query["allow_insecure"].equals("true", ignoreCase = true)
+        val tag = decodeFragment(uri.rawFragment)
+
+        return ProxyProfile(
+            name = tag.ifEmpty { "$server:$port" },
+            protocol = ProxyProtocol.MASQUE,
+            server = server,
+            port = port,
+            masqueUser = user,
+            masquePass = pass,
+            masquePath = path,
+            sni = sni,
+            alpn = alpn,
+            allowInsecure = allowInsecure,
+            tag = tag,
+            rawUri = trimmed
+        )
     }
 
     private fun parseTuicUri(trimmed: String): ProxyProfile {

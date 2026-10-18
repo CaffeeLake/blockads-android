@@ -337,10 +337,16 @@ class ProxyVpnViewModel(
             )
         }
 
-        // 2. WireGuard URI (wireguard://)
-        if (trimmed.startsWith("wireguard://", ignoreCase = true)) {
+        // 2. WireGuard / AmneziaWG URI (wireguard://, vpn://, awg://)
+        if (trimmed.startsWith("wireguard://", ignoreCase = true) ||
+            trimmed.startsWith("vpn://", ignoreCase = true) ||
+            trimmed.startsWith("awg://", ignoreCase = true)) {
             return try {
-                val wgProfile = WireGuardConfigParser.parseUri(trimmed)
+                val wgProfile = if (trimmed.startsWith("wireguard://", ignoreCase = true)) {
+                    WireGuardConfigParser.parseUri(trimmed)
+                } else {
+                    WireGuardConfigParser.parseVpnUri(trimmed)
+                }
                 val makeActive = appPrefs.getActiveWgProfileSnapshot() == null && wgProfile.configIssue == null
                 appPrefs.addOrUpdateWgProfile(wgProfile, makeActive = makeActive)
                 _events.emit(ProxyVpnUiEvent.ProfileImported(wgProfile.name))
@@ -349,7 +355,7 @@ class ProxyVpnViewModel(
                 }
                 true
             } catch (e: Exception) {
-                Timber.e(e, "Failed to parse wireguard link: %s", trimmed)
+                Timber.e(e, "Failed to parse wireguard/vpn link: %s", trimmed)
                 false
             }
         }
