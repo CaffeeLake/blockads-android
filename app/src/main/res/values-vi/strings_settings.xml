@@ -351,9 +351,9 @@
     <string name="proxy_node_empty_desc">Thêm liên kết proxy node (VLESS, Trojan, Shadowsocks) để định tuyến dữ liệu qua máy chủ proxy mã hóa.</string>
     <string name="proxy_node_add_node">Thêm Proxy Node</string>
     <string name="proxy_node_dialog_title">Thêm Proxy Node / Gói đăng ký</string>
-    <string name="proxy_node_dialog_desc">Dán liên kết proxy (VLESS, Trojan, VMess, SS, WireGuard) hoặc URL gói đăng ký</string>
-    <string name="proxy_node_dialog_hint">vless://, vmess://, trojan://, ss://, wireguard:// hoặc https://...</string>
-    <string name="proxy_node_dialog_invalid">Liên kết không hợp lệ. Hỗ trợ: vless, vmess, trojan, ss, wireguard hoặc link subscription http(s)://</string>
+    <string name="proxy_node_dialog_desc">Dán liên kết proxy (VLESS, TUIC, Trojan, VMess, SS, WireGuard, AmneziaWG) hoặc URL gói đăng ký</string>
+    <string name="proxy_node_dialog_hint">vless://, tuic://, trojan://, ss://, wireguard://, vpn:// hoặc https://…</string>
+    <string name="proxy_node_dialog_invalid">Liên kết không hợp lệ. Hỗ trợ: vless, tuic, trojan, vmess, ss, wireguard, amnezia hoặc link subscription http(s)://</string>
     <string name="proxy_ping_test_all">Kiểm tra ping</string>
     <string name="proxy_ping_testing">Đang đo…</string>
     <string name="proxy_ping_single">Kiểm tra ping</string>

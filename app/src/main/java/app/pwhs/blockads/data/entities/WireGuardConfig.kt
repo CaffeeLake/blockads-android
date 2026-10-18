@@ -16,6 +16,9 @@ data class WireGuardConfig(
     val interfaceConfig: WireGuardInterface,
     val peers: List<WireGuardPeer>
 ) {
+    val isAmnezia: Boolean
+        get() = interfaceConfig.isAmnezia
+
     fun toJson(): String = json.encodeToString(this)
 
     companion object {
@@ -27,15 +30,30 @@ data class WireGuardConfig(
 }
 
 /**
- * Represents the [Interface] section of a WireGuard .conf file.
+ * Represents the [Interface] section of a WireGuard / AmneziaWG .conf file.
  */
 @Serializable
 data class WireGuardInterface(
     val privateKey: String,
     val address: List<String>,
     val listenPort: Int? = null,
-    val dns: List<String> = emptyList()
-)
+    val dns: List<String> = emptyList(),
+    // AmneziaWG obfuscation parameters
+    val jc: Int? = null,
+    val jmin: Int? = null,
+    val jmax: Int? = null,
+    val s1: Int? = null,
+    val s2: Int? = null,
+    val s3: Int? = null,
+    val s4: Int? = null,
+    val h1: Long? = null,
+    val h2: Long? = null,
+    val h3: Long? = null,
+    val h4: Long? = null
+) {
+    val isAmnezia: Boolean
+        get() = jc != null || s1 != null || h1 != null
+}
 
 /**
  * Represents a [Peer] section of a WireGuard .conf file.

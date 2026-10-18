@@ -37,6 +37,17 @@ object WireGuardConfigParser {
         val addresses = mutableListOf<String>()
         var listenPort: Int? = null
         val dns = mutableListOf<String>()
+        var jc: Int? = null
+        var jmin: Int? = null
+        var jmax: Int? = null
+        var s1: Int? = null
+        var s2: Int? = null
+        var s3: Int? = null
+        var s4: Int? = null
+        var h1: Long? = null
+        var h2: Long? = null
+        var h3: Long? = null
+        var h4: Long? = null
 
         // Peer accumulator
         data class PeerBuilder(
@@ -96,6 +107,17 @@ object WireGuardConfigParser {
                         "dns" -> dns.addAll(
                             value.split(",").map { it.trim() }.filter { it.isNotEmpty() }
                         )
+                        "jc" -> jc = value.toIntOrNull()
+                        "jmin" -> jmin = value.toIntOrNull()
+                        "jmax" -> jmax = value.toIntOrNull()
+                        "s1" -> s1 = value.toIntOrNull()
+                        "s2" -> s2 = value.toIntOrNull()
+                        "s3" -> s3 = value.toIntOrNull()
+                        "s4" -> s4 = value.toIntOrNull()
+                        "h1" -> h1 = value.toLongOrNull()
+                        "h2" -> h2 = value.toLongOrNull()
+                        "h3" -> h3 = value.toLongOrNull()
+                        "h4" -> h4 = value.toLongOrNull()
                     }
                 }
                 Section.PEER -> {
@@ -137,7 +159,18 @@ object WireGuardConfigParser {
                 privateKey = privateKey,
                 address = addresses.toList(),
                 listenPort = listenPort,
-                dns = dns.toList()
+                dns = dns.toList(),
+                jc = jc,
+                jmin = jmin,
+                jmax = jmax,
+                s1 = s1,
+                s2 = s2,
+                s3 = s3,
+                s4 = s4,
+                h1 = h1,
+                h2 = h2,
+                h3 = h3,
+                h4 = h4
             ),
             peers = parsedPeers
         )
@@ -209,5 +242,55 @@ object WireGuardConfigParser {
             name = name,
             config = config
         )
+    }
+
+    /**
+     * Parses a vpn:// or awg:// base64 URI into a [WireGuardProfile] with AmneziaWG configuration.
+     *
+     * Example: vpn://<base64_encoded_conf>#<name>
+     */
+    fun parseVpnUri(rawUri: String): WireGuardProfile {
+        val trimmed = rawUri.trim()
+        val base64Content = when {
+            trimmed.startsWith("vpn://", ignoreCase = true) -> trimmed.substring(6)
+            trimmed.startsWith("awg://", ignoreCase = true) -> trimmed.substring(6)
+            else -> trimmed
+        }.substringBefore("#")
+
+        val decoded = decodeBase64Safe(base64Content)
+        val fragment = trimmed.substringAfter("#", "")
+        val profileName = if (fragment.isNotEmpty()) {
+            URLDecoder.decode(fragment, StandardCharsets.UTF_8.name())
+        } else {
+            val commentName = decoded.lines()
+                .firstOrNull { it.trim().startsWith("#") && !it.trim().startsWith("#[") }
+                ?.removePrefix("#")?.trim()
+            commentName?.ifEmpty { "AmneziaWG" } ?: "AmneziaWG"
+        }
+
+        val config = parse(decoded)
+        return WireGuardProfile(
+            id = WireGuardProfile.newId(),
+            name = profileName,
+            config = config
+        )
+    }
+
+    private fun decodeBase64Safe(input: String): String {
+        val clean = input.trim()
+        val bytes = try {
+            java.util.Base64.getDecoder().decode(clean)
+        } catch (_: Exception) {
+            try {
+                java.util.Base64.getUrlDecoder().decode(clean)
+            } catch (_: Exception) {
+                try {
+                    java.util.Base64.getMimeDecoder().decode(clean)
+                } catch (_: Exception) {
+                    android.util.Base64.decode(clean, android.util.Base64.DEFAULT)
+                }
+            }
+        }
+        return String(bytes, StandardCharsets.UTF_8)
     }
 }

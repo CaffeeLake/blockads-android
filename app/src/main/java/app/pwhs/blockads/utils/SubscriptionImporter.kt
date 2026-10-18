@@ -46,12 +46,23 @@ object SubscriptionImporter {
                         failed++
                     }
                 }
+                line.startsWith("vpn://", ignoreCase = true) ||
+                line.startsWith("awg://", ignoreCase = true) -> {
+                    try {
+                        val wgProfile = WireGuardConfigParser.parseVpnUri(line)
+                        wgList.add(wgProfile)
+                    } catch (e: Exception) {
+                        Timber.w(e, "Failed to parse amnezia vpn link: %s", line)
+                        failed++
+                    }
+                }
                 line.startsWith("trojan://", ignoreCase = true) ||
                 line.startsWith("vless://", ignoreCase = true) ||
                 line.startsWith("vmess://", ignoreCase = true) ||
                 line.startsWith("ss://", ignoreCase = true) ||
                 line.startsWith("hysteria2://", ignoreCase = true) ||
-                line.startsWith("hy2://", ignoreCase = true) -> {
+                line.startsWith("hy2://", ignoreCase = true) ||
+                line.startsWith("tuic://", ignoreCase = true) -> {
                     val result = ProxyLinkParser.parse(line)
                     result.onSuccess { proxyList.add(it) }
                         .onFailure {

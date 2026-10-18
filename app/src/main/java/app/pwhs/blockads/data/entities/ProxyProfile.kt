@@ -10,7 +10,8 @@ enum class ProxyProtocol(val value: String, val displayName: String) {
     TROJAN("trojan", "Trojan"),
     VLESS("vless", "VLESS"),
     VMESS("vmess", "VMess"),
-    HYSTERIA2("hysteria2", "Hysteria 2");
+    HYSTERIA2("hysteria2", "Hysteria 2"),
+    TUIC("tuic", "TUIC");
 
     companion object {
         fun fromValue(value: String): ProxyProtocol = when (value.lowercase()) {
@@ -18,6 +19,7 @@ enum class ProxyProtocol(val value: String, val displayName: String) {
             "vless" -> VLESS
             "vmess" -> VMESS
             "hysteria2", "hy2" -> HYSTERIA2
+            "tuic" -> TUIC
             else -> SHADOWSOCKS
         }
     }
@@ -32,9 +34,9 @@ data class ProxyProfile(
     val port: Int = 443,
     // Shadowsocks specific
     val method: String = "",
-    // Shadowsocks & Trojan & Hysteria2 specific
+    // Shadowsocks & Trojan & Hysteria2 & TUIC specific
     val password: String = "",
-    // VLESS & VMess specific
+    // VLESS & VMess & TUIC specific
     val uuid: String = "",
     val alterId: Int = 0,
     // TLS / Transport
@@ -52,6 +54,10 @@ data class ProxyProfile(
     // Hysteria2 specific
     val obfs: String = "",
     val obfsPassword: String = "",
+    // TUIC specific
+    val congestionControl: String = "bbr",
+    val udpRelayMode: String = "native",
+    val alpn: String = "",
     // Metadata
     val tag: String = "",
     val rawUri: String = ""

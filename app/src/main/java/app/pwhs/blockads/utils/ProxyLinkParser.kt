@@ -19,9 +19,46 @@ object ProxyLinkParser {
             trimmed.startsWith("vless://", ignoreCase = true) -> parseVlessUri(trimmed)
             trimmed.startsWith("vmess://", ignoreCase = true) -> parseVmessUri(trimmed)
             trimmed.startsWith("hysteria2://", ignoreCase = true) || trimmed.startsWith("hy2://", ignoreCase = true) -> parseHysteria2Uri(trimmed)
+            trimmed.startsWith("tuic://", ignoreCase = true) -> parseTuicUri(trimmed)
             trimmed.startsWith("ss://", ignoreCase = true) -> parseShadowsocksUri(trimmed)
-            else -> throw IllegalArgumentException("Unsupported proxy URI. Expected trojan://, vless://, vmess://, hysteria2://, or ss://")
+            else -> throw IllegalArgumentException("Unsupported proxy URI. Expected trojan://, vless://, vmess://, hysteria2://, tuic://, or ss://")
         }
+    }
+
+    private fun parseTuicUri(trimmed: String): ProxyProfile {
+        val uri = URI(trimmed)
+        val rawUserInfo = uri.rawUserInfo.orEmpty()
+        val decodedUserInfo = URLDecoder.decode(rawUserInfo, StandardCharsets.UTF_8.name())
+        val colonIdx = decodedUserInfo.indexOf(':')
+        val uuid = if (colonIdx != -1) decodedUserInfo.substring(0, colonIdx) else decodedUserInfo
+        val password = if (colonIdx != -1) decodedUserInfo.substring(colonIdx + 1) else ""
+        require(uuid.isNotEmpty()) { "Missing UUID in tuic URI" }
+
+        val server = uri.host.orEmpty()
+        val port = if (uri.port != -1) uri.port else 443
+        val query = parseQuery(uri.rawQuery)
+        val sni = query["sni"].orEmpty().ifEmpty { server }
+        val alpn = query["alpn"].orEmpty()
+        val congestionControl = query["congestion_control"].orEmpty().ifEmpty { "bbr" }
+        val udpRelayMode = query["udp_relay_mode"].orEmpty().ifEmpty { "native" }
+        val allowInsecure = query["allow_insecure"] == "1" || query["allow_insecure"].equals("true", ignoreCase = true)
+        val tag = decodeFragment(uri.rawFragment)
+
+        return ProxyProfile(
+            name = tag.ifEmpty { "$server:$port" },
+            protocol = ProxyProtocol.TUIC,
+            server = server,
+            port = port,
+            uuid = uuid,
+            password = password,
+            sni = sni,
+            alpn = alpn,
+            congestionControl = congestionControl,
+            udpRelayMode = udpRelayMode,
+            allowInsecure = allowInsecure,
+            tag = tag,
+            rawUri = trimmed
+        )
     }
 
     private fun parseTrojanUri(trimmed: String): ProxyProfile {

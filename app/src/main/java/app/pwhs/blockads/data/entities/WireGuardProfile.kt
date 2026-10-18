@@ -16,6 +16,9 @@ data class WireGuardProfile(
     val name: String,
     val config: WireGuardConfig,
 ) {
+    val isAmnezia: Boolean
+        get() = config.isAmnezia
+
     companion object {
         fun newId(): String = UUID.randomUUID().toString()
     }
