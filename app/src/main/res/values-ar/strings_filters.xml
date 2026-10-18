@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="add_custom_rule">إضافة قاعدة مخصصة</string>
-    <string name="add_rule_hint">أدخل قاعدة DNS مخصصة:
-• حظر: ||example.com^ أو example.com
-• سماح: @@||example.com^
-• تعليق: ! هذا تعليق</string>
-    <string name="all_rules_deleted">تم حذف جميع القواعد</string>
     <string name="block_reason_custom_rule">قاعدة حظر مخصصة</string>
     <string name="block_reason_filter_list">قائمة التصفية</string>
     <string name="block_reason_firewall">جدار الحماية</string>
     <string name="block_reason_security">موقع ويب خطير</string>
     <string name="block_this_domain">حظر هذا النطاق</string>
     <string name="custom_rules">قواعد مخصصة</string>
-    <string name="custom_rules_help">مساعدة القواعد المخصصة</string>
-    <string name="custom_rules_help_text">يتم تطبيق القواعد المخصصة قبل قوائم التصفية، مما يمنحها أولوية أعلى.
-
-التنسيقات المدعومة:
-• حظر النطاق: ||example.com^ أو example.com
-• السماح بالنطاق: @@||example.com^
-• تعليق: ! هذا تعليق
-
-أمثلة:
-• ||ads.example.com^ - يحظر ads.example.com
-• @@||example.com^ - يسمح بـ example.com (يتجاوز قوائم الحظر)
-• ! قواعدي المخصصة - سطر تعليق</string>
-    <string name="delete_all_rules">حذف جميع القواعد</string>
-    <string name="delete_all_rules_confirmation">هل أنت متأكد أنك تريد حذف جميع القواعد المخصصة؟ لا يمكن التراجع عن هذا الإجراء.</string>
-    <string name="export_rules">تصدير القواعد</string>
     <string name="filter_built_in">مضمن</string>
     <string name="filter_category_ad">حظر الإعلانات</string>
     <string name="filter_category_security">الأمان</string>
@@ -71,18 +50,8 @@
     <string name="firewall_schedule_to">إلى</string>
     <string name="firewall_search">البحث في التطبيقات…</string>
     <string name="firewall_title">جدار الحماية</string>
-    <string name="import_label">استيراد</string>
-    <string name="import_rules">استيراد القواعد</string>
-    <string name="import_rules_hint">الصق القواعد (واحدة لكل سطر):</string>
     <string name="block_reason_upstream_dns">DNS الرئيسي</string>
-    <string name="no_custom_rules">لا توجد قواعد مخصصة</string>
-    <string name="no_rules_to_export">لا توجد قواعد للتصدير</string>
-    <string name="rule">قاعدة</string>
     <string name="rule_added">تمت إضافة القاعدة بنجاح</string>
-    <string name="rules">القواعد</string>
-    <string name="rules_copied_to_clipboard">تم نسخ القواعد إلى الحافظة</string>
-    <string name="rules_imported">تم استيراد %d قاعدة</string>
-    <string name="tap_add_to_create_rule">انقر على + لإنشاء أول قاعدة مخصصة لك</string>
     <string name="whitelist_domains_add">إضافة نطاق</string>
     <string name="whitelist_domains_empty">لا توجد نطاقات في القائمة البيضاء</string>
     <string name="whitelist_domains_hint">مثال: example.com</string>
@@ -94,13 +63,6 @@
     <string name="blocklist_domain_removed">تم إزالة النطاق من قائمة الحظر</string>
     <string name="blocklist_domain_already_exists">النطاق محظور بالفعل</string>
     <string name="import_from_file">استيراد من ملف</string>
-    <string name="export_to_file">تصدير إلى ملف</string>
-    <string name="export_format_title">تنسيق التصدير</string>
-    <string name="export_format_json">JSON (.json)</string>
-    <string name="export_format_txt">نص (.txt)</string>
-    <string name="rules_exported">تم تصدير %d من القواعد</string>
-    <string name="export_failed">فشل التصدير: %s</string>
-    <string name="import_failed">فشل الاستيراد: %s</string>
     <string name="https_filtering_title">تصفية HTTPS</string>
     <string name="https_filtering_toggle_label">فلتر الإعلانات HTTPS</string>
     <string name="https_filtering_status_active">نشط — جاري إخفاء الإعلانات</string>
@@ -154,11 +116,8 @@
     <string name="https_filtering_http3_title">تصفية HTTP/3 (QUIC)</string>
     <string name="https_filtering_http3_desc">حظر QUIC في المتصفح لفرض اتصالات قابلة للتصفية للحصول على أقصى تصفية للإعلانات. قد يتسبب في تحميل بعض الصفحات جزئياً. أوقفه إذا لم يتم تحميل الصفحات بالكامل.</string>
     <string name="https_filtering_root_install">تثبيت الشهادة عبر Root</string>
-    <string name="https_filtering_root_install_desc">تثبيت شهادة CA تلقائياً في مخزن النظام (يتطلب صلاحيات Root).</string>
     <string name="https_wizard_title">إعداد الشهادة</string>
     <string name="https_wizard_step_indicator_format">الخطوة %1$d من %2$d: %3$s</string>
-    <string name="https_wizard_overview_title">نظرة عامة والخصوصية</string>
-    <string name="https_wizard_overview_subtitle">لماذا يحتاج BlockAds إلى شهادة محلية</string>
     <string name="https_wizard_security_title">الأمان والخصوصية</string>
     <string name="https_wizard_security_desc">يتم إنشاء شهادة Root CA محلياً على جهازك ولا تغادر هاتفك أبداً. يستخدمها BlockAds بدقة لإزالة الإعلانات على مواقع الويب. لا يتم اعتراض الخدمات الحساسة مثل التطبيقات المصرفية وحسابات Google أبداً.</string>
     <string name="https_wizard_explain_title">لماذا تصفية HTTPS؟</string>
@@ -167,14 +126,12 @@
     <string name="https_wizard_benefit_1">القضاء على الإعلانات على منصات الفيديو ومواقع الأخبار</string>
     <string name="https_wizard_benefit_2">إخفاء المساحات الإعلانية الفارغة واللافتات والنوافذ المنبثقة المزعجة</string>
     <string name="https_wizard_benefit_3">تنفيذ البريمجات لإحباط آليات مكافحة حظر الإعلانات</string>
-    <string name="https_wizard_privacy_title">ضمانات الخصوصية الصارمة</string>
     <string name="https_wizard_privacy_on_device_title" formatted="false">100% على الجهاز</string>
     <string name="https_wizard_privacy_on_device_desc">يتم إنشاء المفاتيح والشهادة محلياً على هاتفك ولا يتم إرسالها إلى أي مكان.</string>
     <string name="https_wizard_privacy_bypass_title">يتجاوز التطبيقات المصرفية والمالية</string>
     <string name="https_wizard_privacy_bypass_desc">يتم توجيه النطاقات الحساسة (البنوك، الهوية، Google) مباشرة ولا يتم فك تشفيرها أبداً.</string>
     <string name="https_wizard_privacy_browser_title">نطاق المتصفح الخاضع للتحكم</string>
     <string name="https_wizard_privacy_browser_desc">لديك سيطرة كاملة على المتصفحات التي تستخدم تصفية HTTPS، ويمكنك تعطيلها في أي وقت.</string>
-    <string name="https_wizard_cert_file_label">ملف شهادة CA</string>
     <string name="https_wizard_cert_file_type">شهادة X.509 CA (.crt)</string>
     <string name="https_wizard_cert_status_exported">تم الحفظ في التنزيلات</string>
     <string name="https_wizard_cert_status_not_exported">جاهز للحفظ</string>
@@ -182,7 +139,6 @@
     <string name="https_wizard_device_brand_format">الجهاز المستهدف: %1$s</string>
     <string name="https_wizard_device_brand_generic">جهاز Android الخاص بك</string>
     <string name="https_wizard_install_instructions_title">دليل خطوة بخطوة</string>
-    <string name="https_wizard_install_instructions_desc">اتبع هذه الخطوات في إعدادات أمان هاتفك:</string>
     <string name="https_wizard_root_detected_title">تم اكتشاف صلاحيات Root (مستحسن)</string>
     <string name="https_wizard_root_detected_desc">جهازك به صلاحيات Root. يمكنك تثبيت شهادة CA تلقائياً دون تكوين يدوي.</string>
     <string name="https_wizard_checking_title">جارٍ التحقق من الشهادة…</string>
@@ -199,11 +155,8 @@
     <string name="https_wizard_next">متابعة</string>
     <string name="https_wizard_prev">رجوع</string>
     <string name="https_wizard_finish">إنهاء وتمكين</string>
-    <string name="https_wizard_root_title">التثبيت عبر Root</string>
     <string name="https_wizard_root_fast">تثبيت سريع</string>
-    <string name="https_wizard_root_fast_desc">يتم تثبيتها مباشرة في مخزن شهادات المستخدم. تسري على الفور دون الحاجة إلى إعادة التشغيل.</string>
     <string name="https_wizard_root_module">وحدة Magisk</string>
-    <string name="https_wizard_root_module_desc">ينشئ وحدة نظام Magisk/KernelSU. يتطلب إعادة تشغيل الجهاز لتفعيلها كشهادة نظام CA دائمة.</string>
     <string name="https_wizard_copy_filename">نسخ اسم الملف</string>
     <string name="https_wizard_filename_copied">تم نسخ اسم ملف الشهادة إلى الحافظة</string>
     <string name="https_wizard_verified_success">تم التحقق من الشهادة وهي جاهزة للاستخدام!</string>

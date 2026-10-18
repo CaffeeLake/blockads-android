@@ -6,7 +6,6 @@
     <string name="about_title">&quot;Hakkında&quot;</string>
     <string name="about_description">&quot;Ücretsiz, açık kaynaklı reklam engelleyici.
 Veri toplama yok. İzleme yok.&quot;</string>
-    <string name="about_version">&quot;Sürüm %s&quot;</string>
     <string name="about_github">&quot;Kaynak Kod (GitHub)&quot;</string>
     <string name="about_website">&quot;Web sitesi&quot;</string>
     <string name="about_privacy_policy">&quot;Gizlilik Politikası&quot;</string>
@@ -117,8 +116,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="settings_daily_summary_desc">Gün sonunda engelleme özetini göster</string>
     <string name="settings_milestone_notifications">Kilometre taşı bildirimleri</string>
     <string name="settings_milestone_notifications_desc">Engelleme hedeflerine ulaştığınızda bildir</string>
-    <string name="profile_title">Koruma Profilleri</string>
-    <string name="profile_name_default">Varsayılan</string>
     <string name="settings_firewall">Güvenlik Duvarı</string>
     <string name="settings_sponsor">Bize Sponsor Olun</string>
     <string name="settings_sponsor_desc">GitHub\'da BlockAds gelişimini destekleyin</string>

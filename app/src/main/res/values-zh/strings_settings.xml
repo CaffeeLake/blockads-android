@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">系统应用</string>
     <string name="about_title">关于</string>
     <string name="about_description">免费开源广告拦截器。\n无数据收集。无跟踪。</string>
-    <string name="about_version">版本 %s</string>
     <string name="about_github">源代码 (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">隐私政策</string>
@@ -104,8 +103,6 @@
     <string name="app_management_system">系统</string>
     <string name="app_management_vpn_toggle">%s 的VPN路由</string>
     <string name="settings_firewall">防火墙</string>
-    <string name="profile_title">防护配置</string>
-    <string name="profile_name_default">默认</string>
     <string name="daily_summary_channel_name">每日摘要</string>
     <string name="daily_summary_channel_description">每日结束时的广告拦截总结</string>
     <string name="daily_summary_title">每日防护总结</string>

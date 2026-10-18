@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7 дней</string>
     <string name="home_top_blocked">Чаще всего блокируемые домены</string>
     <string name="home_chart_no_data">Нет данных</string>
-    <string name="add">Добавить</string>
-    <string name="delete">Удалить</string>
     <string name="cancel">Отмена</string>
     <string name="nav_statistics">Статистика</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

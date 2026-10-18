@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7 ימים</string>
     <string name="home_top_blocked">הדומיינים החסומים ביותר</string>
     <string name="home_chart_no_data">אין נתונים זמינים</string>
-    <string name="add">הוסף</string>
-    <string name="delete">מחק</string>
     <string name="cancel">ביטול</string>
     <string name="nav_statistics">סטטיסטיקות</string>
     <string name="open_settings">פתח הגדרות</string>

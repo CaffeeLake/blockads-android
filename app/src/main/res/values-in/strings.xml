@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7 Hari</string>
     <string name="home_top_blocked">Domain Teratas Diblokir</string>
     <string name="home_chart_no_data">Tidak ada data tersedia</string>
-    <string name="add">Tambah</string>
-    <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>
     <string name="nav_statistics">Statistik</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Ứng dụng hệ thống</string>
     <string name="about_title">Giới thiệu</string>
     <string name="about_description">Ứng dụng chặn quảng cáo miễn phí, mã nguồn mở.\nKhông thu thập dữ liệu. Không theo dõi.</string>
-    <string name="about_version">Phiên bản %s</string>
     <string name="about_github">Mã nguồn (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">Chính sách bảo mật</string>
@@ -126,7 +125,6 @@
     <string name="settings_daily_summary_desc">Hiển thị tóm tắt chặn cuối ngày</string>
     <string name="settings_milestone_notifications">Thông báo cột mốc</string>
     <string name="settings_milestone_notifications_desc">Thông báo khi đạt cột mốc chặn</string>
-    <string name="profile_name_default">Mặc định</string>
     <string name="settings_firewall">Tường lửa</string>
     <string name="settings_sponsor">Tài trợ</string>
     <string name="settings_sponsor_desc">Hỗ trợ phát triển BlockAds trên GitHub</string>
@@ -165,38 +163,7 @@
     <string name="trusted_networks_empty">Chưa có mạng tin cậy nào. Thêm mạng đang dùng để tạm dừng BlockAds tại đó.</string>
     <string name="trusted_networks_paused_title">Đã tạm dừng ở mạng tin cậy</string>
     <string name="trusted_networks_paused_text">BlockAds đang tạm dừng ở &quot;%1$s&quot; — tự bật lại khi bạn rời mạng này.</string>
-    <string name="config_activated">Đã kích hoạt cấu hình</string>
-    <string name="config_added">Đã thêm cấu hình</string>
-    <string name="config_updated">Đã cập nhật cấu hình</string>
-    <string name="config_deleted">Đã xóa cấu hình</string>
-    <string name="config_fetch_failed">Tải cấu hình từ URL thất bại</string>
-    <string name="config_add_dialog_title">Thêm cấu hình</string>
-    <string name="config_name_label">Tên cấu hình</string>
-    <string name="config_url_label">URL Subscription (.conf / .snippet)</string>
-    <string name="config_content_label">Nội dung cấu hình</string>
-    <string name="config_save">Lưu</string>
-    <string name="profile_title">Hồ sơ Cấu hình</string>
-    <string name="profile_subtitle">Cấu hình chính chứa toàn bộ proxy, bộ lọc và các thiết lập khác.</string>
-    <string name="profile_action_snippets">Snippets</string>
-    <string name="profile_action_edit">Sửa cấu hình</string>
-    <string name="profile_action_import">Nhập</string>
-    <string name="profile_action_export">Xuất</string>
-    <string name="profile_action_download">Tải về</string>
-    <string name="profile_action_sample">Cấu hình mẫu</string>
-    <string name="profile_action_reset">Đặt lại</string>
-    <string name="profile_panel_toolbar">Đổi Cấu hình</string>
-    <string name="profile_misc_settings">Cài đặt khác</string>
-    <string name="profile_to_section">Chuyển đến phần</string>
-    <string name="profile_reset_confirm_title">Đặt lại Cấu hình</string>
-    <string name="profile_reset_confirm_msg">Bạn có chắc chắn muốn đặt lại cấu hình đang chọn về mặc định không?</string>
-    <string name="profile_copied_to_clipboard">Đã sao chép vào bộ nhớ tạm</string>
-    <string name="profile_sample_loaded">Đã tải cấu hình mẫu</string>
-    <string name="profile_action_migrate">Đồng bộ từ cài đặt app</string>
-    <string name="profile_migrate_desc">Tạo profile cấu hình từ DNS và bộ lọc chặn hiện tại</string>
-    <string name="profile_migrated_success">Đã tạo profile mới từ cài đặt hiện tại của app</string>
-    <string name="profile_choose_icon">Chọn biểu tượng</string>
-    <string name="profile_icon_updated">Đã cập nhật biểu tượng hồ sơ</string>
-
+    <string name="trusted_networks_paused_text_generic">BlockAds tạm dừng trên mạng Wi-Fi tin cậy — sẽ tự động tiếp tục khi bạn ngắt kết nối.</string>
     <!-- DNS Leak Protection / DoH Bypass -->
     <string name="dns_category_advanced_security">Bảo mật DNS nâng cao</string>
     <string name="dns_block_doh_bypass_title">Chặn rò rỉ DNS qua DoH/DoT</string>
@@ -223,7 +190,6 @@
     <string name="dns_custom_relay_hint">Máy chủ proxy HTTP chuyển tiếp gói tin mã hóa giấu IP của bạn</string>
     <string name="dns_custom_server_ip">Địa chỉ máy chủ</string>
     <string name="dns_custom_presets">Mẫu cấu hình nhanh</string>
-    <string name="dns_custom_preset_cf_odoh">Cloudflare ODoH</string>
     <string name="dns_custom_active_badge">Đang dùng DNS tùy chỉnh</string>
 
     <!-- Profile Rule Creation -->
@@ -234,7 +200,6 @@
     <string name="rule_field_param_hint">Nhập tên miền, dải IP hoặc từ khóa…</string>
     <string name="rule_field_policy">Chính sách</string>
     <string name="rule_field_policy_hint">Chọn chính sách xử lý.</string>
-    <string name="rule_field_save_to">Lưu vào cấu hình</string>
     <string name="config_rule_added">Đã thêm quy tắc vào: %s</string>
     <string name="rule_param_hint_host_suffix">vd: example.com (khớp cả *.example.com)</string>
     <string name="rule_param_hint_host">vd: ads.example.com (chỉ khớp chính xác tên miền này)</string>
@@ -282,6 +247,7 @@
     <string name="geoip_source_credit">Nguồn: sapics/ip-location-db (CC0 1.0 Universal)</string>
     <string name="geoip_import_success">Đã nhập thành công %s dải IP</string>
     <string name="geoip_import_invalid">Tệp cơ sở dữ liệu GeoIP không đúng định dạng</string>
+    <string name="geoip_update_success">Đã cập nhật cơ sở dữ liệu GeoIP thành công</string>
     <string name="dns_leak_test_title">Kiểm tra DNS Leak</string>
     <string name="dns_leak_test_btn">Kiểm tra rò rỉ DNS</string>
     <string name="dns_leak_test_desc">Xác minh các truy vấn DNS của bạn được mã hóa an toàn và không bị rò rỉ cho nhà mạng</string>
@@ -291,9 +257,7 @@
     <string name="dns_leak_testing_init">Đang khởi tạo phiên kiểm tra…</string>
     <string name="dns_leak_testing_probing">Đang gửi gói tin thăm dò DNS…</string>
     <string name="dns_leak_testing_analyzing">Đang phân tích kết quả bảo mật…</string>
-    <string name="dns_leak_resolvers_title">Máy chủ DNS phát hiện được</string>
     <string name="dns_leak_client_network">Mạng của bạn</string>
-    <string name="dns_leak_latency">Độ trễ phản hồi</string>
     <string name="dns_leak_retest">Kiểm tra lại</string>
     <string name="dns_security_title">Bảo mật DNS (DNSSEC)</string>
     <string name="dns_security_authenticated">Được bảo vệ (Đã xác thực DNSSEC)</string>
@@ -307,20 +271,12 @@
     <string name="routing_mode_sheet_desc">Chọn phương thức chặn quảng cáo và định tuyến lưu lượng trên thiết bị của bạn.</string>
     <string name="routing_mode_local_vpn_title">Local VPN Mode</string>
     <string name="routing_mode_local_vpn_desc">Lọc quảng cáo cục bộ qua Android VPN Service. Không cần root, bảo vệ riêng tư 100%.</string>
-    <string name="routing_mode_wireguard_title">WireGuard Mode</string>
-    <string name="routing_mode_wireguard_desc">Định tuyến toàn bộ mạng qua máy chủ WireGuard cá nhân kết hợp lọc quảng cáo.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy Mode</string>
     <string name="routing_mode_root_proxy_desc">Chuyển hướng DNS bằng iptables không cần VPN. Tiết kiệm pin và không chiếm slot VPN.</string>
-    <string name="routing_mode_active">Đang dùng</string>
     <string name="routing_mode_recommended">Khuyên dùng</string>
-    <string name="routing_mode_no_wg_profile">Chưa cấu hình profile</string>
-    <string name="routing_mode_configure_wg">Cài đặt WireGuard</string>
     <string name="routing_mode_root_available">Đã có quyền Root</string>
     <string name="routing_mode_root_unavailable">Chưa có quyền Root</string>
-    <string name="routing_mode_shadowsocks_title">Outline / Shadowsocks</string>
-    <string name="routing_mode_shadowsocks_desc">Định tuyến mạng qua proxy Outline / Shadowsocks kết hợp lọc quảng cáo on-device.</string>
     <string name="routing_mode_no_ss_profile">Chưa có Outline key</string>
-    <string name="routing_mode_configure_ss">Cài đặt Key</string>
     <string name="outline_dialog_title">Outline VPN Key</string>
     <string name="outline_dialog_desc">Dán mã truy cập Outline (ss://...) để kết nối qua máy chủ proxy được mã hóa.</string>
     <string name="outline_dialog_save">Lưu &amp; Kết nối</string>
@@ -331,20 +287,11 @@
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">Quản lý máy chủ WireGuard &amp; Outline / Shadowsocks</string>
     <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
     <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
-    <string name="proxy_vpn_master_toggle">Bật Proxy &amp; VPN</string>
-    <string name="proxy_vpn_master_toggle_desc">Định tuyến lưu lượng mạng qua máy chủ đã chọn kết hợp lọc quảng cáo</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Định tuyến toàn bộ mạng qua máy chủ WireGuard hoặc proxy Outline kết hợp lọc quảng cáo on-device.</string>
     <string name="routing_mode_no_proxy_profile">Chưa cấu hình máy chủ</string>
     <string name="routing_mode_configure_proxy">Cài đặt Proxy &amp; VPN</string>
-    <string name="shadowsocks_empty_title">Chưa có khóa Outline nào</string>
-    <string name="shadowsocks_empty_desc">Thêm mã truy cập Outline (ss://...) để kết nối qua proxy mã hóa.</string>
-    <string name="shadowsocks_add_key">Thêm khóa Outline</string>
-    <string name="shadowsocks_imported">Đã thêm: %1$s</string>
-    <string name="shadowsocks_deleted">Đã xóa: %1$s</string>
-    <string name="shadowsocks_active">Đang kích hoạt: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Xóa cấu hình</string>
     <string name="shadowsocks_delete_confirm_desc">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
     <string name="proxy_node_empty_title">Chưa có proxy node nào</string>
@@ -355,7 +302,6 @@
     <string name="proxy_node_dialog_hint">vless://, tuic://, masque://, trojan://, ss://, wireguard://, vpn:// hoặc https://…</string>
     <string name="proxy_node_dialog_invalid">Liên kết không hợp lệ. Hỗ trợ: vless, tuic, masque, trojan, vmess, ss, wireguard, amnezia hoặc link subscription http(s)://</string>
     <string name="proxy_ping_test_all">Kiểm tra ping</string>
-    <string name="proxy_ping_testing">Đang đo…</string>
     <string name="proxy_ping_single">Kiểm tra ping</string>
     <string name="proxy_ping_timeout">Hết giờ</string>
     <string name="proxy_ping_error">Lỗi</string>
@@ -366,7 +312,6 @@
     <string name="proxy_search_empty">Không tìm thấy máy chủ phù hợp</string>
     <string name="proxy_hero_status_on">BẬT</string>
     <string name="proxy_hero_status_off">TẮT</string>
-    <string name="proxy_hero_tap_to_connect">Chạm để kết nối</string>
     <string name="proxy_hero_connected_desc">Đã mã hóa &amp; bảo vệ</string>
     <string name="proxy_hero_no_server_selected">Chưa chọn máy chủ</string>
 
@@ -382,8 +327,6 @@
     <string name="preferred_ip_type_ipv6">IPv6</string>
 
     <!-- Hero Card Network & IP labels -->
-    <string name="proxy_hero_network_label">Mạng</string>
-    <string name="proxy_hero_ip_label">IP</string>
     <string name="proxy_hero_network_wifi">Wi-Fi</string>
     <string name="proxy_hero_network_cellular">Di động</string>
     <string name="proxy_hero_network_ethernet">Ethernet</string>

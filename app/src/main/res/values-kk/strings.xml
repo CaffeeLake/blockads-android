@@ -20,8 +20,6 @@
     <string name="home_top_blocked">Ең көп бұғатталған домендер</string>
     <string name="home_chart_no_data">Деректер жоқ</string>
     <string name="home_paused_trusted_short">Сенімді желіде кідіртілді</string>
-    <string name="add">Қосу</string>
-    <string name="delete">Жою</string>
     <string name="cancel">Бас тарту</string>
     <string name="nav_statistics">Статистика</string>
     <string name="open_settings">Параметрлерді ашу</string>

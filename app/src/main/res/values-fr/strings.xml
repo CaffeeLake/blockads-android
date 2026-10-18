@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7 jours</string>
     <string name="home_top_blocked">Principaux domaines bloqués</string>
     <string name="home_chart_no_data">Aucune donnée disponible</string>
-    <string name="add">Ajouter</string>
-    <string name="delete">Supprimer</string>
     <string name="cancel">Annuler</string>
     <string name="nav_statistics">Statistiques</string>
     <string name="open_settings">Ouvrir les paramètres</string>

@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Aplikasi Sistem</string>
     <string name="about_title">Tentang</string>
     <string name="about_description">Pemblokir iklan gratis bersumber terbuka.\nTanpa pengumpulan data. Tanpa pelacakan.</string>
-    <string name="about_version">Versi %s</string>
     <string name="about_github">Kode Sumber (GitHub)</string>
     <string name="about_website">Situs Web</string>
     <string name="about_privacy_policy">Kebijakan Privasi</string>
@@ -120,8 +119,6 @@
     <string name="settings_daily_summary_desc">Tampilkan ringkasan pemblokiran di akhir hari</string>
     <string name="settings_milestone_notifications">Notifikasi pencapaian</string>
     <string name="settings_milestone_notifications_desc">Beri tahu saat Anda mencapai tonggak pemblokiran</string>
-    <string name="profile_title">Profil Perlindungan</string>
-    <string name="profile_name_default">Bawaan</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsori Kami</string>
     <string name="settings_sponsor_desc">Dukung pengembangan BlockAds di GitHub</string>

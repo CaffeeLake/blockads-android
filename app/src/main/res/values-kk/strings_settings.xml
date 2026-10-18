@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Жүйелік қолданбалар</string>
     <string name="about_title">Қолданба туралы</string>
     <string name="about_description">Тегін, ашық бастапқы кодты жарнама бұғаттағышы.\nДеректер жиналмайды. Бақылау жоқ.</string>
-    <string name="about_version">Нұсқа %s</string>
     <string name="about_github">Бастапқы код (GitHub)</string>
     <string name="about_website">Веб-сайт</string>
     <string name="about_privacy_policy">Құпиялылық саясаты</string>
@@ -131,8 +130,6 @@
     <string name="settings_daily_summary_desc">Күн соңындағы бұғаттау есебін көрсету</string>
     <string name="settings_milestone_notifications">Жетістік хабарландырулары</string>
     <string name="settings_milestone_notifications_desc">Бұғаттау межелеріне жеткенде хабарлау</string>
-    <string name="profile_title">Қорғаныс профильдері</string>
-    <string name="profile_name_default">Әдепкі</string>
     <string name="settings_firewall">Брандмауэр</string>
     <string name="settings_sponsor">Бізді қолдау</string>
     <string name="settings_sponsor_desc">BlockAds әзірлеуін GitHub-та қолдаңыз</string>

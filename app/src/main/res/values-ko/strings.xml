@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7일</string>
     <string name="home_top_blocked">가장 많이 차단된 도메인</string>
     <string name="home_chart_no_data">데이터가 없습니다</string>
-    <string name="add">추가</string>
-    <string name="delete">삭제</string>
     <string name="cancel">취소</string>
     <string name="nav_statistics">통계</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

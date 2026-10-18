@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Системні додатки</string>
     <string name="about_title">Про додаток</string>
     <string name="about_description">Безкоштовний блокувальник реклами з відкритим кодом.\nЖодного збору даних. Жодного відстеження.</string>
-    <string name="about_version">Версія %s</string>
     <string name="about_github">Вихідний код (GitHub)</string>
     <string name="about_website">Вебсайт</string>
     <string name="about_privacy_policy">Політика конфіденційності</string>
@@ -120,8 +119,6 @@
     <string name="settings_daily_summary_desc">Показувати підсумок блокування наприкінці дня</string>
     <string name="settings_milestone_notifications">Сповіщення про досягнення</string>
     <string name="settings_milestone_notifications_desc">Сповіщати, коли ви досягаєте певних етапів блокування</string>
-    <string name="profile_title">Профілі захисту</string>
-    <string name="profile_name_default">За замовчуванням</string>
     <string name="settings_firewall">Брандмауер (Файрвол)</string>
     <string name="settings_sponsor">Спонсорувати нас</string>
     <string name="settings_sponsor_desc">Підтримайте розробку BlockAds на GitHub</string>

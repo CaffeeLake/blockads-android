@@ -18,8 +18,6 @@
     <string name="home_chart_7d">Ultimi 7 Giorni</string>
     <string name="home_top_blocked">Domini Più Bloccati</string>
     <string name="home_chart_no_data">Nessun dato disponibile</string>
-    <string name="add">Aggiungi</string>
-    <string name="delete">Elimina</string>
     <string name="cancel">Annulla</string>
     <string name="nav_statistics">Statistiche</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

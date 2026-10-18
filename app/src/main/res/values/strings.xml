@@ -24,8 +24,6 @@
     <string name="home_top_blocked">Top Blocked Domains</string>
     <string name="home_chart_no_data">No data available</string>
     <string name="home_paused_trusted_short">Paused on a trusted network</string>
-    <string name="add">Add</string>
-    <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="ok" translatable="false">OK</string>
     <string name="nav_statistics">Stats</string>

@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">แอประบบ</string>
     <string name="about_title">เกี่ยวกับแอป</string>
     <string name="about_description">ตัวบล็อกโฆษณาโอเพนซอร์สฟรี\nไม่เก็บข้อมูล ไม่ติดตาม</string>
-    <string name="about_version">เวอร์ชัน %s</string>
     <string name="about_github">ซอร์สโค้ด (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">นโยบายความเป็นส่วนตัว</string>
@@ -104,8 +103,6 @@
     <string name="app_management_system">ระบบ</string>
     <string name="app_management_vpn_toggle">การกำหนดเส้นทาง VPN สำหรับ %s</string>
     <string name="settings_firewall">ไฟร์วอลล์</string>
-    <string name="profile_title">โปรไฟล์การป้องกัน</string>
-    <string name="profile_name_default">เริ่มต้น</string>
     <string name="daily_summary_channel_name">สรุปรายวัน</string>
     <string name="daily_summary_channel_description">สรุปการบล็อกโฆษณาเมื่อสิ้นสุดวัน</string>
     <string name="daily_summary_title">สรุปการป้องกันรายวัน</string>

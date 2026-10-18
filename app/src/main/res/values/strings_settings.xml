@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">System Apps</string>
     <string name="about_title">About</string>
     <string name="about_description">Free, open-source ad blocker.\nNo data collection. No tracking.</string>
-    <string name="about_version">Version %s</string>
     <string name="about_github">Source Code (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">Privacy Policy</string>
@@ -75,48 +74,6 @@
     <string name="trusted_networks_paused_title">Paused on trusted network</string>
     <string name="trusted_networks_paused_text">BlockAds is paused on \&quot;%1$s\&quot; — it resumes automatically when you leave this network.</string>
     <string name="trusted_networks_paused_text_generic">BlockAds is paused on a trusted Wi-Fi network — it resumes automatically when you leave.</string>
-    <string name="config_activated">Configuration activated</string>
-    <string name="config_added">Configuration added</string>
-    <string name="config_updated">Configuration updated</string>
-    <string name="config_deleted">Configuration deleted</string>
-    <string name="config_fetch_failed">Failed to download configuration</string>
-    <string name="config_add_dialog_title">Add Configuration</string>
-    <string name="config_name_label">Name</string>
-    <string name="config_url_label">Subscription URL (.conf / .snippet)</string>
-    <string name="config_content_label">Raw Config Content</string>
-    <string name="config_add_remote_title">Add Remote Subscription</string>
-    <string name="config_refresh_remote">Update</string>
-    <string name="config_save">Save</string>
-    <string name="profile_title">Profile</string>
-    <string name="profile_subtitle">The main profile contains all the proxies, filters and other settings.</string>
-    <string name="profile_action_snippets">Snippets</string>
-    <string name="profile_action_edit">Edit</string>
-    <string name="profile_action_import">Import</string>
-    <string name="profile_action_export">Export</string>
-    <string name="profile_action_download">Download</string>
-    <string name="profile_action_sample">Sample</string>
-    <string name="profile_action_reset">Reset</string>
-    <string name="profile_panel_toolbar">Switch Profile</string>
-    <string name="profile_misc_settings">Misc Settings</string>
-    <string name="profile_to_section">To Section</string>
-    <string name="profile_reset_confirm_title">Reset Configuration</string>
-    <string name="profile_reset_confirm_msg">Are you sure you want to reset configuration to defaults?</string>
-    <string name="profile_copied_to_clipboard">Copied to clipboard</string>
-    <string name="profile_sample_loaded">Sample configuration loaded</string>
-    <string name="profile_subscriptions_rulesets">Subscriptions &amp; Rulesets</string>
-    <string name="profile_subscriptions_desc">Remote subscription rulesets and sync status</string>
-    <string name="profile_action_migrate">Migrate App Settings</string>
-    <string name="profile_migrate_desc">Generate config profile from current DNS and adblock filters</string>
-    <string name="profile_migrated_success">Successfully generated profile from app settings</string>
-    <string name="profile_no_subscriptions">No remote subscriptions</string>
-    <string name="profile_no_subscriptions_desc">Profiles with remote URLs or filter rulesets will appear here</string>
-    <string name="profile_tap_to_switch">Active Profile • Tap to switch</string>
-    <string name="profile_import_file">Import File</string>
-    <string name="profile_choose_file">Choose File</string>
-    <string name="profile_choose_file_desc">Select a .conf, .snippet, or .txt file</string>
-    <string name="profile_change_file">Change</string>
-    <string name="profile_choose_icon">Choose Profile Icon</string>
-    <string name="profile_icon_updated">Profile icon updated</string>
     <string name="settings_whitelist_domains">Whitelisted Domains</string>
     <string name="settings_export">Export</string>
     <string name="settings_import">Import</string>
@@ -182,9 +139,7 @@
     <string name="dns_leak_testing_init">Initializing test session…</string>
     <string name="dns_leak_testing_probing">Probing DNS resolvers…</string>
     <string name="dns_leak_testing_analyzing">Analyzing security results…</string>
-    <string name="dns_leak_resolvers_title">Detected DNS Resolvers</string>
     <string name="dns_leak_client_network">Your Network Identity</string>
-    <string name="dns_leak_latency">Response Latency</string>
     <string name="dns_leak_retest">Run Test Again</string>
     <string name="dns_security_title">DNS Security (DNSSEC)</string>
     <string name="dns_security_authenticated">Protected (DNSSEC Validated)</string>
@@ -231,7 +186,6 @@
     <string name="settings_daily_summary_desc">Show end-of-day blocking summary</string>
     <string name="settings_milestone_notifications">Milestone notifications</string>
     <string name="settings_milestone_notifications_desc">Notify when you reach blocking milestones</string>
-    <string name="profile_name_default">Default</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsor Us</string>
     <string name="settings_sponsor_desc">Support BlockAds development on GitHub</string>
@@ -283,7 +237,6 @@
     <string name="dns_custom_relay_hint" translatable="false">Oblivious HTTP proxy forwarding encrypted queries to the resolver</string>
     <string name="dns_custom_server_ip" translatable="false">Server Address</string>
     <string name="dns_custom_presets" translatable="false">Quick Presets</string>
-    <string name="dns_custom_preset_cf_odoh" translatable="false">Cloudflare ODoH</string>
     <string name="dns_custom_active_badge" translatable="false">Using Custom DNS</string>
 
     <!-- Profile Rule Creation -->
@@ -294,7 +247,6 @@
     <string name="rule_field_param_hint">The param for this type of filter.</string>
     <string name="rule_field_policy">Policy</string>
     <string name="rule_field_policy_hint">Choose the policy.</string>
-    <string name="rule_field_save_to">Save To</string>
     <string name="config_rule_added">Rule added to profile: %s</string>
     <string name="rule_param_hint_host_suffix">e.g. example.com (matches *.example.com)</string>
     <string name="rule_param_hint_host">e.g. ads.example.com (exact host only)</string>
@@ -347,20 +299,12 @@
     <string name="routing_mode_sheet_desc">Choose how BlockAds intercepts and routes traffic on your device.</string>
     <string name="routing_mode_local_vpn_title">Local VPN Mode</string>
     <string name="routing_mode_local_vpn_desc">Filters traffic directly on-device using Android VPN Service. No root required, 100% private.</string>
-    <string name="routing_mode_wireguard_title">WireGuard Mode</string>
-    <string name="routing_mode_wireguard_desc">Routes all traffic through your personal WireGuard server with ad blocking applied.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy Mode</string>
     <string name="routing_mode_root_proxy_desc">Redirects DNS via iptables without creating a VPN connection. Saves battery and keeps VPN slot free.</string>
-    <string name="routing_mode_active">Active</string>
     <string name="routing_mode_recommended">Recommended</string>
-    <string name="routing_mode_no_wg_profile">No profile imported</string>
-    <string name="routing_mode_configure_wg">Configure WireGuard</string>
     <string name="routing_mode_root_available">Root access available</string>
     <string name="routing_mode_root_unavailable">Root access not detected</string>
-    <string name="routing_mode_shadowsocks_title">Outline / Shadowsocks</string>
-    <string name="routing_mode_shadowsocks_desc">Routes traffic through an Outline / Shadowsocks proxy with on-device ad blocking.</string>
     <string name="routing_mode_no_ss_profile">No Outline key configured</string>
-    <string name="routing_mode_configure_ss">Configure Key</string>
     <string name="outline_dialog_title">Outline VPN Key</string>
     <string name="outline_dialog_desc">Paste an Outline access key (ss://...) to connect through an encrypted proxy.</string>
     <string name="outline_dialog_hint" translatable="false">ss://...</string>
@@ -372,20 +316,11 @@
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">Manage WireGuard &amp; Outline / Shadowsocks servers</string>
     <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_shadowsocks">Outline / Shadowsocks</string>
     <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
-    <string name="proxy_vpn_master_toggle">Enable Proxy &amp; VPN</string>
-    <string name="proxy_vpn_master_toggle_desc">Route traffic through the active server with ad blocking</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Routes all traffic through a remote WireGuard or Outline proxy server while blocking ads locally.</string>
     <string name="routing_mode_no_proxy_profile">No server configured</string>
     <string name="routing_mode_configure_proxy">Configure Proxy &amp; VPN</string>
-    <string name="shadowsocks_empty_title">No Outline keys added</string>
-    <string name="shadowsocks_empty_desc">Add an Outline access key (ss://...) to route traffic through an encrypted proxy.</string>
-    <string name="shadowsocks_add_key">Add Outline Key</string>
-    <string name="shadowsocks_imported">Imported: %1$s</string>
-    <string name="shadowsocks_deleted">Deleted: %1$s</string>
-    <string name="shadowsocks_active">Active: %1$s</string>
     <string name="shadowsocks_delete_confirm_title">Delete Profile</string>
     <string name="shadowsocks_delete_confirm_desc">Are you sure you want to delete \"%1$s\"?</string>
     <string name="proxy_node_empty_title">No proxy nodes added</string>
@@ -396,7 +331,6 @@
     <string name="proxy_node_dialog_hint">vless://, tuic://, masque://, trojan://, ss://, wireguard://, vpn:// or https://…</string>
     <string name="proxy_node_dialog_invalid">Invalid link or subscription URL. Supported: vless, tuic, masque, trojan, vmess, ss, wireguard, amnezia or http(s):// subscription.</string>
     <string name="proxy_ping_test_all">Check Ping</string>
-    <string name="proxy_ping_testing">Testing…</string>
     <string name="proxy_ping_single">Check ping</string>
     <string name="proxy_ping_timeout">Timeout</string>
     <string name="proxy_ping_error">Error</string>
@@ -407,7 +341,6 @@
     <string name="proxy_search_empty">No matching proxy nodes</string>
     <string name="proxy_hero_status_on">ON</string>
     <string name="proxy_hero_status_off">OFF</string>
-    <string name="proxy_hero_tap_to_connect">Tap to connect</string>
     <string name="proxy_hero_connected_desc">Encrypted &amp; Protected</string>
     <string name="proxy_hero_no_server_selected">No server selected</string>
 
@@ -423,8 +356,6 @@
     <string name="preferred_ip_type_ipv6">IPv6</string>
 
     <!-- Hero Card Network & IP labels -->
-    <string name="proxy_hero_network_label">Network</string>
-    <string name="proxy_hero_ip_label">IP</string>
     <string name="proxy_hero_network_wifi">Wi-Fi</string>
     <string name="proxy_hero_network_cellular">Cellular</string>
     <string name="proxy_hero_network_ethernet">Ethernet</string>

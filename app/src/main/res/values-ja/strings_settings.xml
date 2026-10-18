@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">システムアプリ</string>
     <string name="about_title">アプリについて</string>
     <string name="about_description">無料のオープンソース広告ブロッカー。\nデータ収集なし。トラッキングなし。</string>
-    <string name="about_version">バージョン %s</string>
     <string name="about_github">ソースコード (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">プライバシーポリシー</string>
@@ -104,8 +103,6 @@
     <string name="app_management_system">システム</string>
     <string name="app_management_vpn_toggle">%s のVPNルーティング</string>
     <string name="settings_firewall">ファイアウォール</string>
-    <string name="profile_title">保護プロファイル</string>
-    <string name="profile_name_default">デフォルト</string>
     <string name="daily_summary_channel_name">日次サマリー</string>
     <string name="daily_summary_channel_description">1日の終わりの広告ブロックサマリー</string>
     <string name="daily_summary_title">日次保護サマリー</string>

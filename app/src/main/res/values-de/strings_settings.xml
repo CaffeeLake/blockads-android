@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">System-Apps</string>
     <string name="about_title">Über</string>
     <string name="about_description">Kostenloser Open-Source-Werbeblocker.\nKeine Datenerfassung. Kein Tracking.</string>
-    <string name="about_version">Version %s</string>
     <string name="about_github">Quellcode (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">Datenschutzerklärung</string>
@@ -120,8 +119,6 @@
     <string name="settings_daily_summary_desc">Zusammenfassung am Tagesende anzeigen</string>
     <string name="settings_milestone_notifications">Meilenstein-Meldungen</string>
     <string name="settings_milestone_notifications_desc">Benachrichtigung bei Erreichen von Meilensteinen</string>
-    <string name="profile_title">Schutzprofile</string>
-    <string name="profile_name_default">Standard</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sponsern Sie uns</string>
     <string name="settings_sponsor_desc">Unterstützen Sie die Entwicklung auf GitHub</string>

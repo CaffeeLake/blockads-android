@@ -41,34 +41,9 @@
     <string name="filter_update_notification_channel">Filter Updates</string>
     <string name="filter_update_notification_channel_desc">Notifications for filter list updates</string>
     <string name="custom_rules">Custom Rules</string>
-    <string name="add_custom_rule">Add Custom Rule</string>
-    <string name="import_rules">Import Rules</string>
-    <string name="export_rules">Export Rules</string>
-    <string name="delete_all_rules">Delete All Rules</string>
-    <string name="delete_all_rules_confirmation">Are you sure you want to delete all custom rules? This action cannot be undone.</string>
-    <string name="all_rules_deleted">All rules deleted</string>
     <string name="rule_added">Rule added successfully</string>
-    <string name="rules_imported">Imported %d rules</string>
-    <string name="rules_copied_to_clipboard">Rules copied to clipboard</string>
-    <string name="no_rules_to_export">No rules to export</string>
-    <string name="no_custom_rules">No custom rules</string>
-    <string name="tap_add_to_create_rule">Tap + to create your first custom rule</string>
-    <string name="rule">Rule</string>
-    <string name="rules">Rules</string>
-    <string name="add_rule_hint">Enter a custom DNS rule:\n• Block: ||example.com^ or example.com\n• Block wildcard: ||*.ads.example.com^ or *.ads.example.com\n• Allow: @@||example.com^\n• Comment: ! This is a comment</string>
-    <string name="import_rules_hint">Paste rules (one per line):</string>
-    <string name="import_label">Import</string>
-    <string name="custom_rules_help">Custom Rules Help</string>
-    <string name="custom_rules_help_text">Custom rules are applied before filter lists, giving them higher priority.\n\nSupported formats:\n• Block domain: ||example.com^ or example.com\n• Block wildcard: ||*.ads.example.com^ or *.ads.example.com\n• Allow domain: @@||example.com^\n• Allow wildcard: @@||*.example.com^\n• Comment: ! This is a comment\n\nExamples:\n• ||ads.example.com^ - Blocks ads.example.com and all subdomains\n• ||*.tracker.com^ - Blocks any subdomain of tracker.com (but not tracker.com itself)\n• @@||example.com^ - Allows example.com (overrides blocklists)\n• *.ads.example.com - Blocks x.ads.example.com, y.ads.example.com, etc.\n• ! My custom rules - A comment line</string>
     <string name="block_this_domain">Block this domain</string>
     <string name="import_from_file">Import from File</string>
-    <string name="export_to_file">Export to File</string>
-    <string name="export_format_title">Export Format</string>
-    <string name="export_format_json">JSON (.json)</string>
-    <string name="export_format_txt">Text (.txt)</string>
-    <string name="rules_exported">Exported %d rules</string>
-    <string name="export_failed">Export failed: %s</string>
-    <string name="import_failed">Import failed: %s</string>
     <string name="block_reason_custom_rule">Custom Block Rule</string>
     <string name="block_reason_filter_list">Filter List</string>
     <string name="block_reason_security">Dangerous Website</string>
@@ -146,7 +121,6 @@
     <string name="https_filtering_cert_checking">Checking…</string>
     <string name="https_filtering_cert_vpn_required">Tap \&quot;Verify Certificate\&quot; to check</string>
     <string name="https_filtering_root_install">Install to System Store (Root)</string>
-    <string name="https_filtering_root_install_desc">Device has root access (Magisk/KernelSU). Install directly to system store for automatic trusted filtering.</string>
     <string name="edit_custom_filter">Edit Custom Filter</string>
     <string name="filter_name">Filter Name</string>
     <string name="filter_url_domain">Filter URL/Domain</string>
@@ -179,9 +153,7 @@
     <string name="filter_build_mode_server_desc">Cloud-accelerated build with CSS element hiding &amp; scriptlets</string>
     <string name="filter_paste_clipboard">Paste from clipboard</string>
     <string name="filter_merge_badge">Merging %1$d filter lists into one</string>
-    <string name="filter_multi_url_hint">Enter filter URL</string>
     <string name="filter_add_url_button">Add URL</string>
-    <string name="filter_url_list_count">%1$d filter URL(s) to merge</string>
     <string name="filter_action_edit">Edit</string>
     <string name="filter_action_save">Save</string>
     <string name="filter_edit_title">Edit Filter List</string>
@@ -190,8 +162,6 @@
     <!-- HTTPS Wizard Strings -->
     <string name="https_wizard_title">Certificate Setup</string>
     <string name="https_wizard_step_indicator_format">Step %1$d of %2$d: %3$s</string>
-    <string name="https_wizard_overview_title">Overview &amp; Privacy</string>
-    <string name="https_wizard_overview_subtitle">Why BlockAds needs a local certificate</string>
     <string name="https_wizard_security_title">Security &amp; Privacy</string>
     <string name="https_wizard_security_desc">The Root CA certificate is generated locally on your device and never leaves your phone. BlockAds uses it strictly to remove cosmetic ads on websites. Sensitive services such as banking apps and Google accounts are never intercepted.</string>
     <string name="https_wizard_explain_title">Why HTTPS Filtering?</string>
@@ -200,14 +170,12 @@
     <string name="https_wizard_benefit_1">Eliminate ads on video platforms &amp; news websites</string>
     <string name="https_wizard_benefit_2">Hide blank placeholders, banners, and intrusive popups</string>
     <string name="https_wizard_benefit_3">Execute Scriptlets to defeat anti-adblock mechanisms</string>
-    <string name="https_wizard_privacy_title">Strict Privacy Safeguards</string>
     <string name="https_wizard_privacy_on_device_title" formatted="false">100% On-Device</string>
     <string name="https_wizard_privacy_on_device_desc">Keys and certificate are generated locally on your phone and never transmitted anywhere.</string>
     <string name="https_wizard_privacy_bypass_title">Bypasses Banking &amp; Financial Apps</string>
     <string name="https_wizard_privacy_bypass_desc">Sensitive domains (banks, identification, Google) are directly forwarded and never decrypted.</string>
     <string name="https_wizard_privacy_browser_title">Controlled Browser Scope</string>
     <string name="https_wizard_privacy_browser_desc">You have full control over which browsers use HTTPS filtering, and can disable it anytime.</string>
-    <string name="https_wizard_cert_file_label">CA Certificate File</string>
     <string name="https_wizard_cert_file_type">X.509 CA Certificate (.crt)</string>
     <string name="https_wizard_cert_status_exported">Saved to Downloads</string>
     <string name="https_wizard_cert_status_not_exported">Ready to save</string>
@@ -215,7 +183,6 @@
     <string name="https_wizard_device_brand_format">Target Device: %1$s</string>
     <string name="https_wizard_device_brand_generic">Your Android Device</string>
     <string name="https_wizard_install_instructions_title">Step-by-step Guide</string>
-    <string name="https_wizard_install_instructions_desc">Follow these steps in your phone\'s Security Settings:</string>
     <string name="https_wizard_root_detected_title">Root Access Detected (Recommended)</string>
     <string name="https_wizard_root_detected_desc">Your device has root access. You can install the CA certificate automatically without manual configuration.</string>
     <string name="https_wizard_checking_title">Verifying Certificate…</string>
@@ -232,11 +199,8 @@
     <string name="https_wizard_next">Continue</string>
     <string name="https_wizard_prev">Back</string>
     <string name="https_wizard_finish">Finish &amp; Enable</string>
-    <string name="https_wizard_root_title">Root Installation</string>
     <string name="https_wizard_root_fast">Quick Install</string>
-    <string name="https_wizard_root_fast_desc">Installed directly into user cert store. Takes effect immediately without needing a reboot.</string>
     <string name="https_wizard_root_module">Magisk Module</string>
-    <string name="https_wizard_root_module_desc">Creates a Magisk/KernelSU system module. Requires a device reboot to activate as a system CA.</string>
     <string name="https_wizard_copy_filename">Copy filename</string>
     <string name="https_wizard_filename_copied">Certificate filename copied to clipboard</string>
     <string name="https_wizard_verified_success">Certificate is verified and ready to use!</string>

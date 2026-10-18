@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Systémové</string>
     <string name="about_title">O aplikaci</string>
     <string name="about_description">Bezplatný open-source blokátor reklam.\nŽádný sběr dat. Žádné sledování.</string>
-    <string name="about_version">Verze %s</string>
     <string name="about_github">Zdrojový kód (GitHub)</string>
     <string name="about_website">Webové stránky</string>
     <string name="about_privacy_policy">Zásady soukromí</string>
@@ -84,8 +83,6 @@
     <string name="settings_daily_summary_desc">Zobrazit souhrn blokování na konci dne</string>
     <string name="settings_milestone_notifications">Upozornění na milníky</string>
     <string name="settings_milestone_notifications_desc">Upozornit při dosažení milníku v blokování</string>
-    <string name="profile_title">Profily ochrany</string>
-    <string name="profile_name_default">Výchozí</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Podpořte nás</string>
     <string name="settings_sponsor_desc">Podpořte vývoj BlockAds na GitHubu</string>

@@ -21,8 +21,6 @@
     <string name="home_chart_7d">7 Ngày</string>
     <string name="home_top_blocked">Domain bị chặn nhiều nhất</string>
     <string name="home_chart_no_data">Chưa có dữ liệu</string>
-    <string name="add">Thêm</string>
-    <string name="delete">Xóa</string>
     <string name="cancel">Hủy</string>
     <string name="nav_statistics">Thống kê</string>
     <string name="nav_browser">Trình duyệt</string>

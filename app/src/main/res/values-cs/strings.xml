@@ -17,8 +17,6 @@
     <string name="home_chart_7d">7 dní</string>
     <string name="home_top_blocked">Nejčastěji blokované domény</string>
     <string name="home_chart_no_data">Žádná data nejsou k dispozici</string>
-    <string name="add">Přidat</string>
-    <string name="delete">Smazat</string>
     <string name="cancel">Zrušit</string>
     <string name="nav_statistics">Statistiky</string>
     <string name="open_settings">Otevřít nastavení</string>

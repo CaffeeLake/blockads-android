@@ -2,10 +2,8 @@
 <resources>
     <string name="accessibility_navigate_back">العودة للخلف</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>
-    <string name="add">إضافة</string>
     <string name="app_tagline">تصفح بلا إعلانات</string>
     <string name="cancel">إلغاء</string>
-    <string name="delete">حذف</string>
     <string name="home_block_rate">معدل الحظر</string>
     <string name="home_chart_24h">24 ساعة</string>
     <string name="home_chart_7d">7 أيام</string>

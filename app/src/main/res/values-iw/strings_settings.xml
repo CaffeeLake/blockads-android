@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">אפליקציות מערכת</string>
     <string name="about_title">אודות</string>
     <string name="about_description">חוסם פרסומות חינמי וקוד פתוח.\nללא איסוף נתונים. ללא מעקב.</string>
-    <string name="about_version">גרסה %s</string>
     <string name="about_github">קוד מקור (GitHub)</string>
     <string name="about_website">אתר אינטרנט</string>
     <string name="about_privacy_policy">מדיניות פרטיות</string>
@@ -120,8 +119,6 @@
     <string name="settings_daily_summary_desc">הצג סיכום חסימות בסוף היום</string>
     <string name="settings_milestone_notifications">התראות ציוני דרך</string>
     <string name="settings_milestone_notifications_desc">הודע לי כאשר אני מגיע לציוני דרך בחסימה</string>
-    <string name="profile_title">פרופילי הגנה</string>
-    <string name="profile_name_default">ברירת מחדל</string>
     <string name="settings_firewall">חומת אש</string>
     <string name="settings_sponsor">תמוך בנו (Sponsor)</string>
     <string name="settings_sponsor_desc">תמוך בפיתוח של BlockAds ב-GitHub</string>

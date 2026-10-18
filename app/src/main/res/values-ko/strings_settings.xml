@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">시스템 앱</string>
     <string name="about_title">정보</string>
     <string name="about_description">무료 오픈 소스 광고 차단기.\n데이터 수집 없음. 추적 없음.</string>
-    <string name="about_version">버전 %s</string>
     <string name="about_github">소스 코드 (GitHub)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">개인정보 처리방침</string>
@@ -104,8 +103,6 @@
     <string name="app_management_system">시스템</string>
     <string name="app_management_vpn_toggle">%s의 VPN 라우팅</string>
     <string name="settings_firewall">방화벽</string>
-    <string name="profile_title">보호 프로필</string>
-    <string name="profile_name_default">기본</string>
     <string name="daily_summary_channel_name">일일 요약</string>
     <string name="daily_summary_channel_description">하루 일과 후 광고 차단 요약</string>
     <string name="daily_summary_title">일일 보호 요약</string>

@@ -18,8 +18,6 @@
     <string name="home_chart_7d">7 วัน</string>
     <string name="home_top_blocked">โดเมนที่ถูกบล็อกมากที่สุด</string>
     <string name="home_chart_no_data">ไม่มีข้อมูล</string>
-    <string name="add">เพิ่ม</string>
-    <string name="delete">ลบ</string>
     <string name="cancel">ยกเลิก</string>
     <string name="nav_statistics">สถิติ</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

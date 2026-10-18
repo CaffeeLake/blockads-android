@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Aplikacje systemowe</string>
     <string name="about_title">O aplikacji</string>
     <string name="about_description">Darmowy bloker reklam o otwartym kodzie źródłowym.\nBrak gromadzenia danych. Brak śledzenia.</string>
-    <string name="about_version">Wersja %s</string>
     <string name="about_github">Kod źródłowy (GitHub)</string>
     <string name="about_website">Strona internetowa</string>
     <string name="about_privacy_policy">Polityka prywatności</string>
@@ -120,8 +119,6 @@
     <string name="settings_daily_summary_desc">Pokaż podsumowanie blokowania na koniec dnia</string>
     <string name="settings_milestone_notifications">Powiadomienia o kamieniach milowych</string>
     <string name="settings_milestone_notifications_desc">Powiadom, gdy osiągniesz określony próg blokowania</string>
-    <string name="profile_title">Profile ochrony</string>
-    <string name="profile_name_default">Domyślny</string>
     <string name="settings_firewall">Zapora (Firewall)</string>
     <string name="settings_sponsor">Wesprzyj nas</string>
     <string name="settings_sponsor_desc">Wesprzyj rozwój BlockAds na GitHubie</string>

@@ -18,8 +18,6 @@
     <string name="home_chart_7d">&quot;7 Gün&quot;</string>
     <string name="home_top_blocked">&quot;En Çok Engellenen Alan Adları&quot;</string>
     <string name="home_chart_no_data">&quot;Veri mevcut değil.&quot;</string>
-    <string name="add">&quot;Eklemek&quot;</string>
-    <string name="delete">&quot;Silmek&quot;</string>
     <string name="cancel">&quot;İptal etmek&quot;</string>
     <string name="nav_statistics">İstatistikler</string>
     <string name="accessibility_stat_card">%1$s: %2$s</string>

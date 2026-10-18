@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">App di Sistema</string>
     <string name="about_title">Informazioni</string>
     <string name="about_description">Blocco annunci gratuito e open source.\nNessuna raccolta dati. Nessun tracciamento.</string>
-    <string name="about_version">Versione %s</string>
     <string name="about_github">Codice Sorgente (GitHub)</string>
     <string name="about_website">Sito Web</string>
     <string name="about_privacy_policy">Informativa sulla Privacy</string>
@@ -117,8 +116,6 @@
     <string name="settings_daily_summary_desc">Mostra il riepilogo serale dei blocchi</string>
     <string name="settings_milestone_notifications">Notifiche traguardi</string>
     <string name="settings_milestone_notifications_desc">Notifica al raggiungimento di traguardi di blocco</string>
-    <string name="profile_title">Profili di Protezione</string>
-    <string name="profile_name_default">Predefinito</string>
     <string name="settings_firewall">Firewall</string>
     <string name="settings_sponsor">Sostienici</string>
     <string name="settings_sponsor_desc">Supporta lo sviluppo di BlockAds su GitHub</string>

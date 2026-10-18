@@ -5,7 +5,6 @@
     <string name="whitelist_tab_system">Системные</string>
     <string name="about_title">О приложении</string>
     <string name="about_description">Бесплатный блокировщик рекламы с открытым исходным кодом.\nБез сбора данных. Без отслеживания.</string>
-    <string name="about_version">Версия %s</string>
     <string name="about_github">Исходный код (GitHub)</string>
     <string name="about_website">Сайт</string>
     <string name="about_privacy_policy">Политика конфиденциальности</string>
@@ -117,8 +116,6 @@
     <string name="settings_daily_summary_desc">Показывать итоговую сводку блокировок за день</string>
     <string name="settings_milestone_notifications">Уведомления о достижениях</string>
     <string name="settings_milestone_notifications_desc">Уведомлять при достижении этапов блокировки</string>
-    <string name="profile_title">Профили защиты</string>
-    <string name="profile_name_default">По умолчанию</string>
     <string name="settings_firewall">Брандмауэр</string>
     <string name="settings_sponsor">Поддержать проект</string>
     <string name="settings_sponsor_desc">Поддержите развитие BlockAds на GitHub</string>
