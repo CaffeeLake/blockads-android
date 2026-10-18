@@ -81,6 +81,15 @@ fun ProxyNodeRow(
                 val sec = if (profile.security.isNotEmpty()) profile.security.uppercase() else "TLS"
                 "$net • $sec"
             }
+            ProxyProtocol.VMESS -> {
+                val net = if (profile.network == "ws") "WS" else "TCP"
+                val sec = if (profile.security.isNotEmpty()) profile.security.uppercase() else "NONE"
+                "$net • $sec"
+            }
+            ProxyProtocol.HYSTERIA2 -> {
+                val obfs = if (profile.obfs.isNotEmpty()) " • ${profile.obfs.uppercase()}" else ""
+                "UDP$obfs"
+            }
         }
         "${profile.server}:${profile.port} • $details"
     }
@@ -156,6 +165,8 @@ fun ProxyNodeRow(
                         color = when (profile.protocol) {
                             ProxyProtocol.VLESS -> MaterialTheme.colorScheme.tertiaryContainer
                             ProxyProtocol.TROJAN -> MaterialTheme.colorScheme.secondaryContainer
+                            ProxyProtocol.VMESS -> MaterialTheme.colorScheme.primaryContainer
+                            ProxyProtocol.HYSTERIA2 -> MaterialTheme.colorScheme.errorContainer
                             ProxyProtocol.SHADOWSOCKS -> MaterialTheme.colorScheme.surfaceVariant
                         }
                     ) {
@@ -165,6 +176,8 @@ fun ProxyNodeRow(
                             color = when (profile.protocol) {
                                 ProxyProtocol.VLESS -> MaterialTheme.colorScheme.onTertiaryContainer
                                 ProxyProtocol.TROJAN -> MaterialTheme.colorScheme.onSecondaryContainer
+                                ProxyProtocol.VMESS -> MaterialTheme.colorScheme.onPrimaryContainer
+                                ProxyProtocol.HYSTERIA2 -> MaterialTheme.colorScheme.onErrorContainer
                                 ProxyProtocol.SHADOWSOCKS -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             fontWeight = FontWeight.Bold,

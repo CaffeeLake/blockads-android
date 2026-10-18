@@ -9,6 +9,7 @@ import (
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vmess"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
 )
 
@@ -67,6 +68,21 @@ func (e *Engine) SetProxyNodeConfig(protocol string, configJSON string) error {
 		var pClient proxy.Client = client
 		e.proxyClient.Store(&pClient)
 		logf("Proxy node (vless) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
+		return nil
+
+	case "vmess":
+		cfg, err := vmess.FromJSON(configJSON)
+		if err != nil {
+			return err
+		}
+		client, err := vmess.NewClient(cfg, e.protectFn)
+		if err != nil {
+			return err
+		}
+		e.ssClient.Store(nil)
+		var pClient proxy.Client = client
+		e.proxyClient.Store(&pClient)
+		logf("Proxy node (vmess) configured for %s (tag: %s)", client.ServerAddress(), client.Tag())
 		return nil
 
 	default:

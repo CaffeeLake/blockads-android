@@ -391,10 +391,10 @@
     <string name="proxy_node_empty_title">No proxy nodes added</string>
     <string name="proxy_node_empty_desc">Add a proxy node link (VLESS, Trojan, Shadowsocks) to route traffic through an encrypted proxy.</string>
     <string name="proxy_node_add_node">Add Proxy Node</string>
-    <string name="proxy_node_dialog_title">Add Proxy Node</string>
-    <string name="proxy_node_dialog_desc">Paste a VLESS, Trojan, or Shadowsocks / Outline link</string>
-    <string name="proxy_node_dialog_hint">vless://..., trojan://..., or ss://...</string>
-    <string name="proxy_node_dialog_invalid">Invalid proxy link. Supported schemes: vless://, trojan://, ss://</string>
+    <string name="proxy_node_dialog_title">Add Proxy Node / Subscription</string>
+    <string name="proxy_node_dialog_desc">Paste a proxy link (VLESS, Trojan, VMess, Shadowsocks, WireGuard) or a subscription URL</string>
+    <string name="proxy_node_dialog_hint">vless://, vmess://, trojan://, ss://, wireguard:// or https://...</string>
+    <string name="proxy_node_dialog_invalid">Invalid link or subscription URL. Supported: vless://, vmess://, trojan://, ss://, wireguard:// or http(s):// subscription.</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">VPN Settings</string>

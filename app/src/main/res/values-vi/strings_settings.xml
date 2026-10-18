@@ -350,10 +350,10 @@
     <string name="proxy_node_empty_title">Chưa có proxy node nào</string>
     <string name="proxy_node_empty_desc">Thêm liên kết proxy node (VLESS, Trojan, Shadowsocks) để định tuyến dữ liệu qua máy chủ proxy mã hóa.</string>
     <string name="proxy_node_add_node">Thêm Proxy Node</string>
-    <string name="proxy_node_dialog_title">Thêm Proxy Node</string>
-    <string name="proxy_node_dialog_desc">Dán liên kết VLESS, Trojan hoặc Shadowsocks / Outline</string>
-    <string name="proxy_node_dialog_hint">vless://..., trojan://... hoặc ss://...</string>
-    <string name="proxy_node_dialog_invalid">Liên kết proxy không hợp lệ. Hỗ trợ: vless://, trojan://, ss://</string>
+    <string name="proxy_node_dialog_title">Thêm Proxy Node / Gói đăng ký</string>
+    <string name="proxy_node_dialog_desc">Dán liên kết proxy (VLESS, Trojan, VMess, SS, WireGuard) hoặc URL gói đăng ký</string>
+    <string name="proxy_node_dialog_hint">vless://, vmess://, trojan://, ss://, wireguard:// hoặc https://...</string>
+    <string name="proxy_node_dialog_invalid">Liên kết không hợp lệ. Hỗ trợ: vless, vmess, trojan, ss, wireguard hoặc link subscription http(s)://</string>
 
     <!-- Preferred IP Type & VPN Settings -->
     <string name="vpn_settings_title">Cài đặt VPN</string>

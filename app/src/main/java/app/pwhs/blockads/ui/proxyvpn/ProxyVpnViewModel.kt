@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import app.pwhs.blockads.utils.SubscriptionImporter
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -40,6 +42,7 @@ class ProxyVpnViewModel(
 ) : AndroidViewModel(application), KoinComponent {
 
     private val appPrefs: AppPreferences by inject()
+    private val httpClient: HttpClient by inject()
 
     val preferredIPType: StateFlow<String> = appPrefs.preferredIPType.stateIn(
         scope = viewModelScope,
@@ -278,22 +281,69 @@ class ProxyVpnViewModel(
         }
     }
 
-    fun saveProxyNodeLink(rawUri: String): Result<ProxyProfile> {
-        val parseResult = ProxyLinkParser.parse(rawUri)
-        return parseResult.fold(
-            onSuccess = { profile ->
-                viewModelScope.launch {
-                    appPrefs.addProxyProfile(profile)
-                    appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+    suspend fun saveProxyNodeLink(rawUri: String): Boolean {
+        val trimmed = rawUri.trim()
+        if (trimmed.isEmpty()) return false
+
+        // 1. Subscription URL (http/https)
+        if (trimmed.startsWith("http://", ignoreCase = true) || trimmed.startsWith("https://", ignoreCase = true)) {
+            val importResult = SubscriptionImporter.importFromUrl(trimmed, httpClient)
+            return importResult.fold(
+                onSuccess = { res ->
+                    if (res.totalParsed == 0) {
+                        Timber.w("No valid profiles found in subscription")
+                        return@fold false
+                    }
+                    if (res.proxyProfiles.isNotEmpty()) {
+                        appPrefs.addProxyProfiles(res.proxyProfiles)
+                        appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                    }
+                    for (wg in res.wireGuardProfiles) {
+                        appPrefs.addOrUpdateWgProfile(wg, makeActive = false)
+                    }
                     appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
-                    _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
+                    _events.emit(ProxyVpnUiEvent.ProfileImported("${res.totalParsed} profiles"))
+                    ServiceController.requestRestart(getApplication())
+                    true
+                },
+                onFailure = { err ->
+                    Timber.e(err, "Failed to import subscription: %s", trimmed)
+                    false
+                }
+            )
+        }
+
+        // 2. WireGuard URI (wireguard://)
+        if (trimmed.startsWith("wireguard://", ignoreCase = true)) {
+            return try {
+                val wgProfile = WireGuardConfigParser.parseUri(trimmed)
+                val makeActive = appPrefs.getActiveWgProfileSnapshot() == null && wgProfile.configIssue == null
+                appPrefs.addOrUpdateWgProfile(wgProfile, makeActive = makeActive)
+                _events.emit(ProxyVpnUiEvent.ProfileImported(wgProfile.name))
+                if (makeActive && _isProxyActive.value) {
                     ServiceController.requestRestart(getApplication())
                 }
-                Result.success(profile)
+                true
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to parse wireguard link: %s", trimmed)
+                false
+            }
+        }
+
+        // 3. Single proxy link (vless://, vmess://, trojan://, ss://, hysteria2://, hy2://)
+        val parseResult = ProxyLinkParser.parse(trimmed)
+        return parseResult.fold(
+            onSuccess = { profile ->
+                appPrefs.addProxyProfile(profile)
+                appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+                _events.emit(ProxyVpnUiEvent.ProfileImported(profile.displayName))
+                ServiceController.requestRestart(getApplication())
+                true
             },
             onFailure = { err ->
-                Timber.e(err, "Failed to parse proxy link: $rawUri")
-                Result.failure(err)
+                Timber.e(err, "Failed to parse proxy link: %s", trimmed)
+                false
             }
         )
     }
@@ -328,8 +378,15 @@ class ProxyVpnViewModel(
     fun setActiveShadowsocksProfile(id: String) = setActiveProxyProfile(id)
 
     fun saveShadowsocksKey(rawUri: String): Result<ShadowsocksProfile> {
-        val res = saveProxyNodeLink(rawUri)
+        val res = ProxyLinkParser.parse(rawUri)
         return res.map {
+            viewModelScope.launch {
+                appPrefs.addProxyProfile(it)
+                appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
+                _events.emit(ProxyVpnUiEvent.ProfileImported(it.displayName))
+                ServiceController.requestRestart(getApplication())
+            }
             ShadowsocksProfile(
                 id = it.id,
                 name = it.name,

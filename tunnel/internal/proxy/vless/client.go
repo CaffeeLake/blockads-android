@@ -1,8 +1,19 @@
 package vless
 
 import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/ecdh"
+	"crypto/ed25519"
+	"crypto/hmac"
+	"crypto/sha256"
+	"crypto/sha512"
 	"crypto/tls"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net"
@@ -11,6 +22,8 @@ import (
 	"time"
 
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy"
+	utls "github.com/refraction-networking/utls"
+	"golang.org/x/crypto/hkdf"
 )
 
 // Client handles communication to a VLESS server.
@@ -105,6 +118,13 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 			return nil, fmt.Errorf("vless tls handshake to %s failed: %w", c.serverAddr, err)
 		}
 		sessionConn = tlsConn
+	} else if c.config.Security == "reality" {
+		realityConn, err := c.handshakeReality(rawConn)
+		if err != nil {
+			rawConn.Close()
+			return nil, err
+		}
+		sessionConn = realityConn
 	}
 
 	if c.config.Network == "ws" {
@@ -128,15 +148,26 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 	// Build VLESS request header:
 	// [1 byte version (0x00)]
 	// [16 bytes raw UUID]
-	// [1 byte addon len (0x00)]
+	// [1 byte addon len (M)]
+	// [M bytes addon payload]
 	// [1 byte command (0x01 TCP)]
 	// [2 bytes port (BigEndian)]
 	// [1 byte address type: 0x01=IPv4, 0x03=IPv6]
 	// [address bytes]
-	header := make([]byte, 0, 1+16+1+1+2+1+16)
+	var addon []byte
+	if c.config.Flow != "" {
+		flowBytes := []byte(c.config.Flow)
+		addon = append(addon, 0x0a, byte(len(flowBytes)))
+		addon = append(addon, flowBytes...)
+	}
+
+	header := make([]byte, 0, 1+16+1+len(addon)+1+2+1+16)
 	header = append(header, 0x00) // version 0
 	header = append(header, c.rawUUID[:]...)
-	header = append(header, 0x00) // addon length 0
+	header = append(header, byte(len(addon)))
+	if len(addon) > 0 {
+		header = append(header, addon...)
+	}
 	header = append(header, 0x01) // TCP command
 
 	portBuf := make([]byte, 2)
@@ -178,3 +209,104 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 
 	return sessionConn, nil
 }
+
+func (c *Client) handshakeReality(rawConn net.Conn) (net.Conn, error) {
+	var verified bool
+	var authKey []byte
+
+	utlsConfig := &utls.Config{
+		ServerName:             c.config.SNI,
+		InsecureSkipVerify:     true,
+		SessionTicketsDisabled: true,
+		VerifyPeerCertificate: func(rawCerts [][]byte, _ [][]*x509.Certificate) error {
+			if len(rawCerts) == 0 {
+				return fmt.Errorf("no server certificates")
+			}
+			cert, err := x509.ParseCertificate(rawCerts[0])
+			if err != nil {
+				return err
+			}
+			if pub, ok := cert.PublicKey.(ed25519.PublicKey); ok {
+				h := hmac.New(sha512.New, authKey)
+				h.Write(pub)
+				if bytes.Equal(h.Sum(nil), cert.Signature) {
+					verified = true
+					return nil
+				}
+			}
+			return nil
+		},
+	}
+
+	uConn := utls.UClient(rawConn, utlsConfig, utls.HelloChrome_Auto)
+	if err := uConn.BuildHandshakeState(); err != nil {
+		return nil, fmt.Errorf("reality build handshake state: %w", err)
+	}
+
+	hello := uConn.HandshakeState.Hello
+	hello.SessionId = make([]byte, 32)
+	copy(hello.Raw[39:], hello.SessionId)
+	hello.SessionId[0] = 1
+	hello.SessionId[1] = 8
+	hello.SessionId[2] = 0
+	hello.SessionId[3] = 0
+	binary.BigEndian.PutUint32(hello.SessionId[4:], uint32(time.Now().Unix()))
+
+	shortIDBytes, _ := hex.DecodeString(c.config.ShortID)
+	copy(hello.SessionId[8:], shortIDBytes)
+
+	pubKeyBytes, err := base64.RawURLEncoding.DecodeString(c.config.PublicKey)
+	if err != nil {
+		pubKeyBytes, err = base64.StdEncoding.DecodeString(c.config.PublicKey)
+		if err != nil {
+			return nil, fmt.Errorf("decode reality public key failed: %w", err)
+		}
+	}
+	serverPubKey, err := ecdh.X25519().NewPublicKey(pubKeyBytes)
+	if err != nil {
+		return nil, fmt.Errorf("invalid reality public key: %w", err)
+	}
+
+	ecdhe := uConn.HandshakeState.State13.KeyShareKeys.Ecdhe
+	if ecdhe == nil {
+		ecdhe = uConn.HandshakeState.State13.KeyShareKeys.MlkemEcdhe
+	}
+	if ecdhe == nil {
+		return nil, fmt.Errorf("TLS 1.3 key share not found")
+	}
+
+	sharedKey, err := ecdhe.ECDH(serverPubKey)
+	if err != nil {
+		return nil, fmt.Errorf("reality ecdh failed: %w", err)
+	}
+
+	authKey = make([]byte, 32)
+	hkdfReader := hkdf.New(sha256.New, sharedKey, hello.Random[:20], []byte("REALITY"))
+	if _, err := io.ReadFull(hkdfReader, authKey); err != nil {
+		return nil, fmt.Errorf("reality hkdf failed: %w", err)
+	}
+
+	block, err := aes.NewCipher(authKey)
+	if err != nil {
+		return nil, fmt.Errorf("reality aes cipher failed: %w", err)
+	}
+	aead, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, fmt.Errorf("reality gcm failed: %w", err)
+	}
+
+	aead.Seal(hello.SessionId[:0], hello.Random[20:], hello.SessionId[:16], hello.Raw)
+	copy(hello.Raw[39:], hello.SessionId)
+
+	if err := uConn.Handshake(); err != nil {
+		return nil, fmt.Errorf("reality handshake failed: %w", err)
+	}
+
+	if !verified {
+		uConn.Close()
+		return nil, fmt.Errorf("reality verification failed: received untrusted certificate")
+	}
+
+	return uConn, nil
+}
+

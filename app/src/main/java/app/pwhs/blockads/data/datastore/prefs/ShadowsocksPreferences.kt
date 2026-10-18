@@ -123,6 +123,24 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun addProxyProfiles(profiles: List<ProxyProfile>) {
+        if (profiles.isEmpty()) return
+        dataStore.edit { prefs ->
+            val current = readProxyProfiles(prefs).toMutableList()
+            for (p in profiles.reversed()) {
+                current.removeAll { it.id == p.id }
+                current.add(0, p)
+            }
+            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(current).toJson()
+            if (prefs[KEY_PROXY_ACTIVE_PROFILE_ID] == null) {
+                val first = profiles.first()
+                prefs[KEY_PROXY_ACTIVE_PROFILE_ID] = first.id
+                prefs[KEY_SS_ACTIVE_PROFILE_ID] = first.id
+                prefs[KEY_ACTIVE_PROXY_TYPE] = PROXY_TYPE_SHADOWSOCKS
+            }
+        }
+    }
+
     suspend fun deleteProxyProfile(id: String) {
         dataStore.edit { prefs ->
             val current = readProxyProfiles(prefs).filterNot { it.id == id }

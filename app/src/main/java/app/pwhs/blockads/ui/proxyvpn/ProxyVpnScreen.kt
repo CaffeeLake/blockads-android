@@ -285,8 +285,7 @@ fun ProxyVpnScreen(
         AddProxyNodeDialog(
             onDismiss = { showAddProxyDialog = false },
             onSave = { uri ->
-                val result = viewModel.saveProxyNodeLink(uri)
-                result.isSuccess
+                viewModel.saveProxyNodeLink(uri)
             }
         )
     }

@@ -9,6 +9,7 @@ import (
 	"github.com/nqmgaming/blockads-tunnel/internal/packet"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/trojan"
 	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vless"
+	"github.com/nqmgaming/blockads-tunnel/internal/proxy/vmess"
 	"github.com/nqmgaming/blockads-tunnel/internal/safesearch"
 	"github.com/nqmgaming/blockads-tunnel/internal/scriptlet"
 	"github.com/nqmgaming/blockads-tunnel/internal/shadowsocks"
@@ -150,4 +151,14 @@ func ParseVlessURI(rawURI string) (string, error) {
 	}
 	return cfg.ToJSON(), nil
 }
+
+// ParseVmessURI parses a vmess:// URI and returns its JSON configuration.
+func ParseVmessURI(rawURI string) (string, error) {
+	cfg, err := vmess.ParseURI(rawURI)
+	if err != nil {
+		return "", err
+	}
+	return cfg.ToJSON(), nil
+}
+
 

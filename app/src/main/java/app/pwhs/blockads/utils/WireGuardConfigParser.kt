@@ -3,15 +3,20 @@ package app.pwhs.blockads.utils
 import app.pwhs.blockads.data.entities.WireGuardConfig
 import app.pwhs.blockads.data.entities.WireGuardInterface
 import app.pwhs.blockads.data.entities.WireGuardPeer
+import app.pwhs.blockads.data.entities.WireGuardProfile
+import java.net.URI
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 /**
- * Robust parser for standard WireGuard .conf files.
+ * Robust parser for standard WireGuard .conf files and wireguard:// URIs.
  *
  * Handles:
  * - [Interface] and multiple [Peer] sections
  * - Comments (lines starting with #)
  * - Empty / blank lines
  * - Whitespace around keys and values
+ * - wireguard:// URIs
  */
 object WireGuardConfigParser {
 
@@ -135,6 +140,74 @@ object WireGuardConfigParser {
                 dns = dns.toList()
             ),
             peers = parsedPeers
+        )
+    }
+
+    /**
+     * Parses a wireguard:// URI into a [WireGuardProfile].
+     *
+     * Example:
+     * wireguard://<private_key>@<host>:<port>?address=<ip>&mtu=<mtu>&publickey=<pub_key>#<name>
+     */
+    fun parseUri(rawUri: String): WireGuardProfile {
+        val trimmed = rawUri.trim()
+        val uri = URI(trimmed)
+        require(uri.scheme.equals("wireguard", ignoreCase = true)) { "Invalid scheme: ${uri.scheme}" }
+
+        val rawUserInfo = uri.rawUserInfo ?: throw IllegalArgumentException("Missing private key in userInfo")
+        val privateKey = URLDecoder.decode(rawUserInfo, StandardCharsets.UTF_8.name())
+
+        val host = uri.host ?: throw IllegalArgumentException("Missing host in wireguard URI")
+        val port = if (uri.port != -1) uri.port else 51820
+        val endpoint = "$host:$port"
+
+        val queryParams = mutableMapOf<String, String>()
+        uri.rawQuery?.split("&")?.forEach { part ->
+            val eq = part.indexOf('=')
+            if (eq != -1) {
+                val k = URLDecoder.decode(part.substring(0, eq), StandardCharsets.UTF_8.name()).lowercase()
+                val v = URLDecoder.decode(part.substring(eq + 1), StandardCharsets.UTF_8.name())
+                queryParams[k] = v
+            }
+        }
+
+        val addresses = queryParams["address"]?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
+            ?: listOf("10.0.0.2/32")
+        val publicKey = queryParams["publickey"] ?: throw IllegalArgumentException("Missing publickey query param")
+        val presharedKey = queryParams["presharedkey"]
+        val allowedIps = queryParams["allowedips"]?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
+            ?: listOf("0.0.0.0/0", "::/0")
+        val dns = queryParams["dns"]?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
+        val keepalive = queryParams["persistentkeepalive"]?.toIntOrNull()
+
+        val rawFragment = uri.rawFragment
+        val name = if (!rawFragment.isNullOrEmpty()) {
+            URLDecoder.decode(rawFragment, StandardCharsets.UTF_8.name())
+        } else {
+            "WireGuard-${host}"
+        }
+
+        val config = WireGuardConfig(
+            interfaceConfig = WireGuardInterface(
+                privateKey = privateKey,
+                address = addresses,
+                dns = dns
+            ),
+            peers = listOf(
+                WireGuardPeer(
+                    publicKey = publicKey,
+                    presharedKey = presharedKey,
+                    endpoint = endpoint,
+                    allowedIPs = allowedIps,
+                    persistentKeepalive = keepalive
+                )
+            )
+        )
+
+        return WireGuardProfile(
+            id = WireGuardProfile.newId(),
+            name = name,
+            config = config
         )
     }
 }

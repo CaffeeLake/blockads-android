@@ -12,16 +12,21 @@ import (
 
 // Config represents a parsed VLESS configuration.
 type Config struct {
-	Server        string `json:"server"`
-	Port          int    `json:"port"`
-	UUID          string `json:"uuid"`
-	SNI           string `json:"sni,omitempty"`
-	Security      string `json:"security,omitempty"` // "tls" (default for 443) or "none"
-	AllowInsecure bool   `json:"allowInsecure,omitempty"`
+	Server        string   `json:"server"`
+	Port          int      `json:"port"`
+	UUID          string   `json:"uuid"`
+	SNI           string   `json:"sni,omitempty"`
+	Security      string   `json:"security,omitempty"` // "tls", "reality", or "none"
+	AllowInsecure bool     `json:"allowInsecure,omitempty"`
 	Network       string   `json:"network,omitempty"` // "tcp" (default) or "ws"
 	WSPath        string   `json:"wsPath,omitempty"`
 	WSHost        string   `json:"wsHost,omitempty"`
 	ALPN          []string `json:"alpn,omitempty"`
+	PublicKey     string   `json:"publicKey,omitempty"`
+	ShortID       string   `json:"shortId,omitempty"`
+	SpiderX       string   `json:"spiderX,omitempty"`
+	Fingerprint   string   `json:"fingerprint,omitempty"`
+	Flow          string   `json:"flow,omitempty"`
 	Tag           string   `json:"tag,omitempty"`
 }
 
@@ -144,6 +149,12 @@ func ParseURI(rawURI string) (*Config, error) {
 		}
 	}
 
+	publicKey := q.Get("pbk")
+	shortID := q.Get("sid")
+	spiderX := q.Get("spx")
+	fingerprint := q.Get("fp")
+	flow := q.Get("flow")
+
 	tag := u.Fragment
 	if tag != "" {
 		if unescaped, err := url.QueryUnescape(tag); err == nil {
@@ -162,6 +173,11 @@ func ParseURI(rawURI string) (*Config, error) {
 		WSPath:        wsPath,
 		WSHost:        wsHost,
 		ALPN:          alpn,
+		PublicKey:     publicKey,
+		ShortID:       shortID,
+		SpiderX:       spiderX,
+		Fingerprint:   fingerprint,
+		Flow:          flow,
 		Tag:           tag,
 	}, nil
 }

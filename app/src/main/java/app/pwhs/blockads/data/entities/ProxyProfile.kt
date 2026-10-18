@@ -8,12 +8,16 @@ import java.util.UUID
 enum class ProxyProtocol(val value: String, val displayName: String) {
     SHADOWSOCKS("shadowsocks", "SS"),
     TROJAN("trojan", "Trojan"),
-    VLESS("vless", "VLESS");
+    VLESS("vless", "VLESS"),
+    VMESS("vmess", "VMess"),
+    HYSTERIA2("hysteria2", "Hysteria 2");
 
     companion object {
         fun fromValue(value: String): ProxyProtocol = when (value.lowercase()) {
             "trojan" -> TROJAN
             "vless" -> VLESS
+            "vmess" -> VMESS
+            "hysteria2", "hy2" -> HYSTERIA2
             else -> SHADOWSOCKS
         }
     }
@@ -28,17 +32,26 @@ data class ProxyProfile(
     val port: Int = 443,
     // Shadowsocks specific
     val method: String = "",
-    // Shadowsocks & Trojan specific
+    // Shadowsocks & Trojan & Hysteria2 specific
     val password: String = "",
-    // VLESS specific
+    // VLESS & VMess specific
     val uuid: String = "",
+    val alterId: Int = 0,
     // TLS / Transport
     val sni: String = "",
     val allowInsecure: Boolean = false,
-    val security: String = "tls", // "tls" or "none"
+    val security: String = "tls", // "tls", "reality", or "none"
     val network: String = "tcp",  // "tcp" or "ws"
     val wsPath: String = "",
     val wsHost: String = "",
+    // VLESS Reality specific
+    val publicKey: String = "",
+    val shortId: String = "",
+    val spiderX: String = "",
+    val fingerprint: String = "",
+    // Hysteria2 specific
+    val obfs: String = "",
+    val obfsPassword: String = "",
     // Metadata
     val tag: String = "",
     val rawUri: String = ""

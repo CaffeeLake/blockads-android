@@ -180,6 +180,7 @@ func ParseShadowsocksURI(rawURI string) (string, error)
 var ParseTUNPacket func(packet []byte, length int) *internal/packet.DNSQueryInfo
 func ParseTrojanURI(rawURI string) (string, error)
 func ParseVlessURI(rawURI string) (string, error)
+func ParseVmessURI(rawURI string) (string, error)
 var ParseWgConfigJSON func(jsonStr string) (*internal/wireguard.WgConfig, error)
 const ProtocolDoH internal/dns.DNSProtocol = 1
 const ProtocolDoH3 internal/dns.DNSProtocol = 5
