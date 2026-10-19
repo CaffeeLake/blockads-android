@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">클립보드에서 붙여넣기</string>
     <string name="filter_category_starred">즐겨찾기</string>
     <string name="filter_starred_empty">아직 즐겨찾는 필터가 없습니다. 필터의 별표 아이콘을 탭하여 여기에 고정하고 빠르게 액세스하세요.</string>
+    <string name="filter_supported_formats_title">지원되는 형식</string>
+    <string name="filter_supported_formats_desc">BlockAds는 모든 표준 차단 목록 및 광고 차단 구문을 지원합니다:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Hosts 파일</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">도메인 및 와일드카드</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">TLD 와일드카드</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (스팸 TLD 목록)</string>
+    <string name="filter_build_mode_local_desc">Go 엔진을 통해 기기에서 컴파일됨 (DNS 규칙 전용, 100% 오프라인)</string>
+    <string name="filter_build_mode_server_desc">CSS 요소 숨김 및 스크립틀릿을 지원하는 클라우드 가속 빌드</string>
+    <string name="filter_paste_clipboard">클립보드에서 붙여넣기</string>
+    <string name="filter_merge_badge">%1$d개의 필터 목록을 하나로 병합 중</string>
+    <string name="filter_add_url_button">URL 추가</string>
+    <string name="filter_action_edit">편집</string>
+    <string name="filter_action_save">저장</string>
+    <string name="filter_edit_title">필터 목록 편집</string>
+    <string name="filter_edit_url_dialog_title">필터 URL 편집</string>
 </resources>

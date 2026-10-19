@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Tempel dari papan klip</string>
     <string name="filter_category_starred">Berbintang</string>
     <string name="filter_starred_empty">Belum ada filter berbintang. Ketuk ikon bintang pada filter mana pun untuk menyematkannya di sini agar mudah diakses.</string>
+    <string name="filter_supported_formats_title">Format yang Didukung</string>
+    <string name="filter_supported_formats_desc">BlockAds mendukung semua sintaks daftar blokir dan adblock standar:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">File Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Domain &amp; Wildcard</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">Wildcard TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Daftar TLD spam)</string>
+    <string name="filter_build_mode_local_desc">Dikompilasi di perangkat melalui Go engine (hanya aturan DNS, 100% offline)</string>
+    <string name="filter_build_mode_server_desc">Kompilasi dengan akselerasi cloud dengan penyembunyian elemen CSS &amp; skriplet</string>
+    <string name="filter_paste_clipboard">Tempel dari papan klip</string>
+    <string name="filter_merge_badge">Menggabungkan %1$d daftar filter menjadi satu</string>
+    <string name="filter_add_url_button">Tambah URL</string>
+    <string name="filter_action_edit">Edit</string>
+    <string name="filter_action_save">Simpan</string>
+    <string name="filter_edit_title">Edit Daftar Filter</string>
+    <string name="filter_edit_url_dialog_title">Edit URL Filter</string>
 </resources>

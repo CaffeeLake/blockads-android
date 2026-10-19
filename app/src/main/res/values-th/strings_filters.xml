@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">วางจากคลิปบอร์ด</string>
     <string name="filter_category_starred">ติดดาว</string>
     <string name="filter_starred_empty">ยังไม่มีตัวกรองที่ติดดาว แตะไอคอนรูปดาวบนตัวกรองใดก็ได้เพื่อปักหมุดไว้ที่นี่เพื่อให้เข้าถึงได้อย่างรวดเร็ว</string>
+    <string name="filter_supported_formats_title">รูปแบบที่รองรับ</string>
+    <string name="filter_supported_formats_desc">BlockAds รองรับไวยากรณ์รายการบล็อกและ adblock มาตรฐานทั้งหมด:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">ไฟล์ Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">โดเมนและไวลด์การ์ด</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">ไวลด์การ์ด TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (รายการ TLD สแปม)</string>
+    <string name="filter_build_mode_local_desc">คอมไพล์บนอุปกรณ์ผ่านเครื่องมือ Go (กฎ DNS เท่านั้น ออฟไลน์ 100%)</string>
+    <string name="filter_build_mode_server_desc">บิลด์ที่เร่งความเร็วด้วยคลาวด์ พร้อมการซ่อนองค์ประกอบ CSS และสคริปต์เล็ต</string>
+    <string name="filter_paste_clipboard">วางจากคลิปบอร์ด</string>
+    <string name="filter_merge_badge">กำลังรวมรายการตัวกรอง %1$d รายการเป็นหนึ่งเดียว</string>
+    <string name="filter_add_url_button">เพิ่ม URL</string>
+    <string name="filter_action_edit">แก้ไข</string>
+    <string name="filter_action_save">บันทึก</string>
+    <string name="filter_edit_title">แก้ไขรายการตัวกรอง</string>
+    <string name="filter_edit_url_dialog_title">แก้ไข URL ตัวกรอง</string>
 </resources>

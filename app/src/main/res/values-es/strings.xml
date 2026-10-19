@@ -30,4 +30,5 @@
     <string name="nav_browser">Navegador</string>
     <string name="home_downloaded">Descargado</string>
     <string name="home_uploaded">Subido</string>
+    <string name="nav_proxy">Proxy</string>
 </resources>

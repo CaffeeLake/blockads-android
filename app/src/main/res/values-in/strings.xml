@@ -30,4 +30,5 @@
     <string name="nav_browser">Browser</string>
     <string name="home_downloaded">Diunduh</string>
     <string name="home_uploaded">Diunggah</string>
+    <string name="nav_proxy">Proksi</string>
 </resources>

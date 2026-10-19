@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Colar da área de transferência</string>
     <string name="filter_category_starred">Com estrela</string>
     <string name="filter_starred_empty">Nenhum filtro com estrela ainda. Toque no ícone de estrela em qualquer filtro para fixá-lo aqui para acesso rápido.</string>
+    <string name="filter_supported_formats_title">Formatos suportados</string>
+    <string name="filter_supported_formats_desc">O BlockAds suporta todas as sintaxes padrão de listas de bloqueio e adblock:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Arquivo Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Domínios e curingas</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">Curingas de TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (listas de TLD de spam)</string>
+    <string name="filter_build_mode_local_desc">Compilado no dispositivo via mecanismo Go (apenas regras DNS, 100% offline)</string>
+    <string name="filter_build_mode_server_desc">Compilação acelerada na nuvem com ocultação de elementos CSS e scriptlets</string>
+    <string name="filter_paste_clipboard">Colar da área de transferência</string>
+    <string name="filter_merge_badge">Mesclando %1$d listas de filtros em uma</string>
+    <string name="filter_add_url_button">Adicionar URL</string>
+    <string name="filter_action_edit">Editar</string>
+    <string name="filter_action_save">Salvar</string>
+    <string name="filter_edit_title">Editar lista de filtros</string>
+    <string name="filter_edit_url_dialog_title">Editar URL do filtro</string>
 </resources>

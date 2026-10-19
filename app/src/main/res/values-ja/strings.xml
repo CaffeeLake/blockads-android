@@ -30,4 +30,5 @@
     <string name="nav_browser">ブラウザ</string>
     <string name="home_downloaded">ダウンロード済み</string>
     <string name="home_uploaded">アップロード済み</string>
+    <string name="nav_proxy">プロキシ</string>
 </resources>

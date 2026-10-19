@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Coller depuis le presse-papiers</string>
     <string name="filter_category_starred">Favoris</string>
     <string name="filter_starred_empty">Aucun filtre favori pour le moment. Appuyez sur l\'icône étoile d\'un filtre pour l\'épingler ici pour un accès rapide.</string>
+    <string name="filter_supported_formats_title">Formats pris en charge</string>
+    <string name="filter_supported_formats_desc">BlockAds prend en charge toutes les syntaxes standard de listes de blocage et adblock :</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Fichier Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Domaines et caractères génériques</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">Caractères génériques de TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (listes de TLD de spam)</string>
+    <string name="filter_build_mode_local_desc">Compilé sur l appareil via le moteur Go (règles DNS uniquement, 100% hors ligne)</string>
+    <string name="filter_build_mode_server_desc">Compilation accélérée par le cloud avec masquage d éléments CSS et scriptlets</string>
+    <string name="filter_paste_clipboard">Coller depuis le presse-papiers</string>
+    <string name="filter_merge_badge">Fusion de %1$d listes de filtres en une seule</string>
+    <string name="filter_add_url_button">Ajouter une URL</string>
+    <string name="filter_action_edit">Modifier</string>
+    <string name="filter_action_save">Enregistrer</string>
+    <string name="filter_edit_title">Modifier la liste des filtres</string>
+    <string name="filter_edit_url_dialog_title">Modifier l URL du filtre</string>
 </resources>

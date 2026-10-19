@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">从剪贴板粘贴</string>
     <string name="filter_category_starred">已加星标</string>
     <string name="filter_starred_empty">暂无加星标的规则。点击任何规则上的星标图标即可固定在此处以便快速访问。</string>
+    <string name="filter_supported_formats_title">支持的格式</string>
+    <string name="filter_supported_formats_desc">BlockAds 支持所有标准的阻止列表和广告拦截语法：</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Hosts 文件</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">域名和通配符</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">TLD 通配符</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (垃圾顶级域名列表)</string>
+    <string name="filter_build_mode_local_desc">通过 Go 引擎在设备端编译（仅限 DNS 规则，100% 离线）</string>
+    <string name="filter_build_mode_server_desc">支持 CSS 元素隐藏和小脚本的云端加速构建</string>
+    <string name="filter_paste_clipboard">从剪贴板粘贴</string>
+    <string name="filter_merge_badge">正在将 %1$d 个过滤列表合并为一个</string>
+    <string name="filter_add_url_button">添加 URL</string>
+    <string name="filter_action_edit">编辑</string>
+    <string name="filter_action_save">保存</string>
+    <string name="filter_edit_title">编辑过滤列表</string>
+    <string name="filter_edit_url_dialog_title">编辑过滤规则 URL</string>
 </resources>

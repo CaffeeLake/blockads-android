@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Panodan yapıştır</string>
     <string name="filter_category_starred">Yıldızlı</string>
     <string name="filter_starred_empty">Henüz yıldızlı filtre yok. Hızlı erişim için buraya sabitlemek üzere herhangi bir filtredeki yıldız simgesine dokunun.</string>
+    <string name="filter_supported_formats_title">Desteklenen Formatlar</string>
+    <string name="filter_supported_formats_desc">BlockAds, tüm standart engelleme listesi ve adblock sözdizimlerini destekler:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Hosts Dosyası</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Alan Adları ve Joker Karakterler</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">TLD Joker Karakterleri</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Spam TLD listeleri)</string>
+    <string name="filter_build_mode_local_desc">Go motoru aracılığıyla cihazda derlendi (yalnızca DNS kuralları, %100 çevrimdışı)</string>
+    <string name="filter_build_mode_server_desc">CSS öğesi gizleme ve komut dosyacıkları ile bulut hızlandırmalı derleme</string>
+    <string name="filter_paste_clipboard">Panodan yapıştır</string>
+    <string name="filter_merge_badge">%1$d filtre listesi tek bir listede birleştiriliyor</string>
+    <string name="filter_add_url_button">URL Ekle</string>
+    <string name="filter_action_edit">Düzenle</string>
+    <string name="filter_action_save">Kaydet</string>
+    <string name="filter_edit_title">Filtre Listesini Düzenle</string>
+    <string name="filter_edit_url_dialog_title">Filtre URL sini Düzenle</string>
 </resources>

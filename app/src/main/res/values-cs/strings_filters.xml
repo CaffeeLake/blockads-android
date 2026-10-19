@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Vložit ze schránky</string>
     <string name="filter_category_starred">S hvězdičkou</string>
     <string name="filter_starred_empty">Zatím žádné filtry s hvězdičkou. Klepnutím na ikonu hvězdičky u libovolného filtru jej sem připnete pro rychlý přístup.</string>
+    <string name="filter_supported_formats_title">Podporované formáty</string>
+    <string name="filter_supported_formats_desc">BlockAds podporuje všechny standardní syntaxe seznamů blokování a adblocku:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Soubor Hosts</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Domény a zástupné znaky</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">Zástupné znaky TLD</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (seznamy spamových TLD)</string>
+    <string name="filter_build_mode_local_desc">Zkompilováno v zařízení pomocí Go engine (pouze pravidla DNS, 100% offline)</string>
+    <string name="filter_build_mode_server_desc">Cloudem urychlené sestavení se skrýváním prvků CSS a scriptlety</string>
+    <string name="filter_paste_clipboard">Vložit ze schránky</string>
+    <string name="filter_merge_badge">Sloučení %1$d seznamů filtrů do jednoho</string>
+    <string name="filter_add_url_button">Přidat URL</string>
+    <string name="filter_action_edit">Upravit</string>
+    <string name="filter_action_save">Uložit</string>
+    <string name="filter_edit_title">Upravit seznam filtrů</string>
+    <string name="filter_edit_url_dialog_title">Upravit URL filtru</string>
 </resources>

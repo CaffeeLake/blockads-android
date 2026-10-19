@@ -30,4 +30,5 @@
     <string name="nav_browser">المتصفح</string>
     <string name="home_downloaded">تم التنزيل</string>
     <string name="home_uploaded">تم الرفع</string>
+    <string name="nav_proxy">الوكيل</string>
 </resources>

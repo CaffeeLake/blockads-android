@@ -180,4 +180,25 @@
     <string name="paste_from_clipboard">Алмасу буферінен қою</string>
     <string name="filter_category_starred">Жұлдызшалы</string>
     <string name="filter_starred_empty">Әзірше жұлдызшалы сүзгілер жоқ. Жылдам қол жеткізу үшін осы жерге бекіту мақсатында кез келген сүзгідегі жұлдызша белгішесін түртіңіз.</string>
+    <string name="filter_supported_formats_title">Қолдау көрсетілетін пішімдер</string>
+    <string name="filter_supported_formats_desc">BlockAds барлық стандартты бұғаттау тізімдері мен adblock синтаксисін қолдайды:</string>
+    <string name="filter_format_adblock_title">AdBlock / uBlock</string>
+    <string name="filter_format_adblock_desc">||example.com^, ||*.domain.com^, $all, $important</string>
+    <string name="filter_format_hosts_title">Hosts файлы</string>
+    <string name="filter_format_hosts_desc">0.0.0.0 ads.example.com, 127.0.0.1 tracker.com</string>
+    <string name="filter_format_domains_title">Домендер мен қосалқы таңбалар</string>
+    <string name="filter_format_domains_desc">example.com, *.domain.com (HaGeZi, OISD)</string>
+    <string name="filter_format_dnsmasq_title">dnsmasq / Pi-hole</string>
+    <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
+    <string name="filter_format_tld_title">TLD қосалқы таңбалары</string>
+    <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Спам TLD тізімдері)</string>
+    <string name="filter_build_mode_local_desc">Go қозғалтқышы арқылы құрылғыда құрастырылған (тек DNS ережелері, 100% офлайн)</string>
+    <string name="filter_build_mode_server_desc">CSS элементтерін жасыру және скриптлеттері бар бұлтпен жеделдетілген құрастыру</string>
+    <string name="filter_paste_clipboard">Алмасу буферінен қою</string>
+    <string name="filter_merge_badge">%1$d сүзгі тізімін біреуге біріктіру</string>
+    <string name="filter_add_url_button">URL қосу</string>
+    <string name="filter_action_edit">Өзгерту</string>
+    <string name="filter_action_save">Сақтау</string>
+    <string name="filter_edit_title">Сүзгі тізімін өзгерту</string>
+    <string name="filter_edit_url_dialog_title">Сүзгінің URL мекенжайын өзгерту</string>
 </resources>
