@@ -65,6 +65,9 @@ data object ProxyVpnKey : NavKey
 data class WireGuardEditKey(val profileId: String) : NavKey
 
 @Serializable
+data class ProxyEditKey(val profileId: String? = null) : NavKey
+
+@Serializable
 data object HttpsFilteringKey : NavKey
 
 @Serializable

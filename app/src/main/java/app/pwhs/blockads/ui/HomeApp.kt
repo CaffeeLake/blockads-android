@@ -68,8 +68,10 @@ import app.pwhs.blockads.ui.data.StatisticsKey
 import app.pwhs.blockads.ui.data.TrustedNetworksKey
 import app.pwhs.blockads.ui.data.WireGuardEditKey
 import app.pwhs.blockads.ui.data.ProxyVpnKey
+import app.pwhs.blockads.ui.data.ProxyEditKey
 import app.pwhs.blockads.ui.data.VpnSettingsKey
 import app.pwhs.blockads.ui.data.WireGuardImportKey
+import app.pwhs.blockads.ui.proxyvpn.edit.ProxyEditScreen
 import app.pwhs.blockads.ui.dnsprovider.DnsProviderScreen
 import app.pwhs.blockads.ui.domainrules.DomainRulesScreen
 import app.pwhs.blockads.ui.filter.FilterSetupScreen
@@ -385,6 +387,12 @@ fun HomeApp(
                         onEditProfile = { profileId ->
                             currentBackStack.add(WireGuardEditKey(profileId))
                         },
+                        onEditProxyProfile = { profileId ->
+                            currentBackStack.add(ProxyEditKey(profileId))
+                        },
+                        onAddCustomProxy = {
+                            currentBackStack.add(ProxyEditKey(null))
+                        },
                         onNavigateToVpnSettings = {
                             currentBackStack.add(VpnSettingsKey)
                         },
@@ -397,6 +405,12 @@ fun HomeApp(
                         },
                         onEditProfile = { profileId ->
                             currentBackStack.add(WireGuardEditKey(profileId))
+                        },
+                        onEditProxyProfile = { profileId ->
+                            currentBackStack.add(ProxyEditKey(profileId))
+                        },
+                        onAddCustomProxy = {
+                            currentBackStack.add(ProxyEditKey(null))
                         },
                         onNavigateToVpnSettings = {
                             currentBackStack.add(VpnSettingsKey)
@@ -412,6 +426,14 @@ fun HomeApp(
                 }
                 entry<WireGuardEditKey> { key ->
                     WireGuardEditScreen(
+                        profileId = key.profileId,
+                        onNavigateBack = {
+                            safePop(currentBackStack)
+                        },
+                    )
+                }
+                entry<ProxyEditKey> { key ->
+                    ProxyEditScreen(
                         profileId = key.profileId,
                         onNavigateBack = {
                             safePop(currentBackStack)

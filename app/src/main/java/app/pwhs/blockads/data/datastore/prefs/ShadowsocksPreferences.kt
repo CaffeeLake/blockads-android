@@ -334,6 +334,22 @@ class ShadowsocksPreferences(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun updateProxyProfile(profile: ProxyProfile) {
+        dataStore.edit { prefs ->
+            val current = readProxyProfiles(prefs).toMutableList()
+            val idx = current.indexOfFirst { it.id == profile.id }
+            if (idx >= 0) {
+                current[idx] = profile
+            } else {
+                current.add(0, profile)
+            }
+            prefs[KEY_PROXY_PROFILES_JSON] = ProxyProfileList(current).toJson()
+        }
+    }
+
+    suspend fun getProxyProfile(id: String): ProxyProfile? =
+        proxyProfiles.first().firstOrNull { it.id == id }
+
     // Legacy method delegates
     suspend fun setActiveProfileId(id: String) = setActiveProxyProfileId(id)
 

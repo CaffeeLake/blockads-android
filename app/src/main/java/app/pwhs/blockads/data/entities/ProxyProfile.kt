@@ -53,6 +53,7 @@ data class ProxyProfile(
     val shortId: String = "",
     val spiderX: String = "",
     val fingerprint: String = "",
+    val flow: String = "",
     // Hysteria2 specific
     val obfs: String = "",
     val obfsPassword: String = "",
@@ -112,6 +113,8 @@ data class ProxyProfile(
     }
 
     fun toEngineJson(): String = jsonInstance.encodeToString(serializer(), this)
+
+    fun toShareLink(): String = rawUri.ifEmpty { app.pwhs.blockads.utils.ProxyLinkBuilder.buildLink(this) }
 
     companion object {
         private val jsonInstance = Json { ignoreUnknownKeys = true }

@@ -126,34 +126,62 @@ func testProxyNodeDelayWithProtect(protocol string, configJSON string, timeoutMs
 		defer closer.Close()
 	}
 
-	// Anycast Cloudflare IP for cp.cloudflare.com
-	targetIP := net.ParseIP("104.16.132.229")
-	start := time.Now()
-
-	// Dial through the proxy client
-	conn, err := client.DialTCP(targetIP, 80)
-	if err != nil {
-		return -1, fmt.Errorf("dial proxy failed: %w", err)
+	type delayEndpoint struct {
+		ip   net.IP
+		host string
 	}
-	defer conn.Close()
-
-	_ = conn.SetDeadline(time.Now().Add(timeout))
-
-	req := "GET /generate_204 HTTP/1.1\r\nHost: cp.cloudflare.com\r\nUser-Agent: BlockAds/1.0\r\nConnection: close\r\n\r\n"
-	if _, err := conn.Write([]byte(req)); err != nil {
-		return -1, fmt.Errorf("write http request failed: %w", err)
+	endpoints := []delayEndpoint{
+		{ip: net.ParseIP("104.16.132.229"), host: "cp.cloudflare.com"},
+		{ip: net.ParseIP("104.16.133.229"), host: "cp.cloudflare.com"},
+		{ip: net.ParseIP("142.250.190.46"), host: "www.google.com"},
 	}
 
-	resp, err := http.ReadResponse(bufio.NewReader(conn), nil)
-	if err != nil {
-		return -1, fmt.Errorf("read http response failed: %w", err)
-	}
-	_ = resp.Body.Close()
+	deadline := time.Now().Add(timeout)
+	var lastErr error
 
-	if resp.StatusCode != 204 && resp.StatusCode != 200 {
-		return -1, fmt.Errorf("unexpected http status: %d", resp.StatusCode)
+	for _, ep := range endpoints {
+		if time.Now().After(deadline) {
+			break
+		}
+		perAttemptTimeout := time.Until(deadline)
+		if perAttemptTimeout > 2500*time.Millisecond && len(endpoints) > 1 {
+			perAttemptTimeout = 2500 * time.Millisecond
+		}
+
+		start := time.Now()
+		conn, err := client.DialTCP(ep.ip, 80)
+		if err != nil {
+			lastErr = fmt.Errorf("dial proxy (%s): %w", ep.host, err)
+			continue
+		}
+
+		_ = conn.SetDeadline(time.Now().Add(perAttemptTimeout))
+
+		req := fmt.Sprintf("GET /generate_204 HTTP/1.1\r\nHost: %s\r\nUser-Agent: BlockAds/1.0\r\nConnection: close\r\n\r\n", ep.host)
+		if _, err := conn.Write([]byte(req)); err != nil {
+			_ = conn.Close()
+			lastErr = fmt.Errorf("write http request (%s): %w", ep.host, err)
+			continue
+		}
+
+		resp, err := http.ReadResponse(bufio.NewReader(conn), nil)
+		if err != nil {
+			_ = conn.Close()
+			lastErr = fmt.Errorf("read http response (%s): %w", ep.host, err)
+			continue
+		}
+		_ = resp.Body.Close()
+		_ = conn.Close()
+
+		if resp.StatusCode == 204 || resp.StatusCode == 200 {
+			latency := time.Since(start).Milliseconds()
+			return latency, nil
+		}
+		lastErr = fmt.Errorf("unexpected http status %d from %s", resp.StatusCode, ep.host)
 	}
 
-	latency := time.Since(start).Milliseconds()
-	return latency, nil
+	if lastErr != nil {
+		return -1, lastErr
+	}
+	return -1, fmt.Errorf("proxy test timed out")
 }

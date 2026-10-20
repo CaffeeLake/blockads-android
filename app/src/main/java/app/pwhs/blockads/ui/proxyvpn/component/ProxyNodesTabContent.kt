@@ -47,10 +47,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.AutoFixHigh
 import androidx.compose.material.icons.filled.RssFeed
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
+import app.pwhs.blockads.data.entities.ProxySortOption
 import app.pwhs.blockads.utils.NodePingResult
 
 @Composable
@@ -63,6 +67,7 @@ fun ProxyNodesTabContent(
     onPingNode: (String) -> Unit = {},
     onPingAll: () -> Unit = {},
     onSelectProfile: (ProxyProfile) -> Unit,
+    onEditProfile: (ProxyProfile) -> Unit,
     onAddNodeClick: () -> Unit,
     onRenameProfile: (String, String) -> Unit,
     onDeleteProfile: (String) -> Unit,
@@ -121,10 +126,13 @@ fun ProxyNodesTabContent(
             var selectedProtocol by remember { mutableStateOf<app.pwhs.blockads.data.entities.ProxyProtocol?>(null) }
             var filterObfuscatedOnly by remember { mutableStateOf(false) }
 
+            var sortOption by remember { mutableStateOf(ProxySortOption.DEFAULT) }
+            var showSortMenu by remember { mutableStateOf(false) }
+
             val obfuscatedCount = remember(profiles) { profiles.count { it.isObfuscated } }
 
-            val filteredProfiles = remember(profiles, searchQuery, selectedProtocol, filterObfuscatedOnly) {
-                profiles.filter { profile ->
+            val filteredProfiles = remember(profiles, searchQuery, selectedProtocol, filterObfuscatedOnly, sortOption, pingResults) {
+                val list = profiles.filter { profile ->
                     val matchesObfs = !filterObfuscatedOnly || profile.isObfuscated
                     val matchesProtocol = selectedProtocol == null || profile.protocol == selectedProtocol
                     val matchesQuery = searchQuery.isBlank() ||
@@ -132,6 +140,29 @@ fun ProxyNodesTabContent(
                         profile.server.contains(searchQuery, ignoreCase = true) ||
                         profile.tag.contains(searchQuery, ignoreCase = true)
                     matchesObfs && matchesProtocol && matchesQuery
+                }
+                when (sortOption) {
+                    ProxySortOption.DEFAULT -> list
+                    ProxySortOption.NAME -> list.sortedBy { it.displayName.lowercase() }
+                    ProxySortOption.LATENCY -> list.sortedWith { a, b ->
+                        val resA = pingResults[a.id]
+                        val resB = pingResults[b.id]
+                        val scoreA = when (resA) {
+                            is NodePingResult.Success -> resA.latencyMs
+                            is NodePingResult.Testing -> Long.MAX_VALUE - 3
+                            null -> Long.MAX_VALUE - 2
+                            is NodePingResult.Timeout -> Long.MAX_VALUE - 1
+                            is NodePingResult.Error -> Long.MAX_VALUE
+                        }
+                        val scoreB = when (resB) {
+                            is NodePingResult.Success -> resB.latencyMs
+                            is NodePingResult.Testing -> Long.MAX_VALUE - 3
+                            null -> Long.MAX_VALUE - 2
+                            is NodePingResult.Timeout -> Long.MAX_VALUE - 1
+                            is NodePingResult.Error -> Long.MAX_VALUE
+                        }
+                        scoreA.compareTo(scoreB)
+                    }
                 }
             }
 
@@ -221,6 +252,68 @@ fun ProxyNodesTabContent(
                                 contentDescription = stringResource(R.string.proxy_ping_test_all),
                                 modifier = Modifier.size(18.dp),
                                 tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Box {
+                        IconButton(
+                            onClick = { showSortMenu = true },
+                            modifier = Modifier.size(34.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.Sort,
+                                contentDescription = stringResource(R.string.proxy_sort),
+                                modifier = Modifier.size(18.dp),
+                                tint = if (sortOption != ProxySortOption.DEFAULT) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = showSortMenu,
+                            onDismissRequest = { showSortMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        stringResource(R.string.proxy_sort_default),
+                                        fontWeight = if (sortOption == ProxySortOption.DEFAULT) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                },
+                                onClick = {
+                                    sortOption = ProxySortOption.DEFAULT
+                                    showSortMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        stringResource(R.string.proxy_sort_latency),
+                                        fontWeight = if (sortOption == ProxySortOption.LATENCY) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                },
+                                onClick = {
+                                    sortOption = ProxySortOption.LATENCY
+                                    showSortMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        stringResource(R.string.proxy_sort_name),
+                                        fontWeight = if (sortOption == ProxySortOption.NAME) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                },
+                                onClick = {
+                                    sortOption = ProxySortOption.NAME
+                                    showSortMenu = false
+                                }
                             )
                         }
                     }
@@ -316,6 +409,7 @@ fun ProxyNodesTabContent(
                                 pingResult = pingResults[profile.id],
                                 onPing = { onPingNode(profile.id) },
                                 onClick = { onSelectProfile(profile) },
+                                onEdit = { onEditProfile(it) },
                                 onRename = { renameTarget = it },
                                 onDelete = { deleteTarget = it }
                             )
@@ -338,70 +432,19 @@ fun ProxyNodesTabContent(
         )
     }
 
-    // Rename Dialog
     renameTarget?.let { profile ->
-        var newName by remember(profile.id) { mutableStateOf(profile.name.ifEmpty { profile.tag }) }
-        AlertDialog(
-            onDismissRequest = { renameTarget = null },
-            title = { Text(stringResource(R.string.wireguard_rename_dialog_title)) },
-            text = {
-                OutlinedTextField(
-                    value = newName,
-                    onValueChange = { newName = it },
-                    label = { Text(stringResource(R.string.wireguard_rename_dialog_title)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp)
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        val trimmed = newName.trim()
-                        if (trimmed.isNotEmpty()) {
-                            onRenameProfile(profile.id, trimmed)
-                        }
-                        renameTarget = null
-                    },
-                    enabled = newName.isNotBlank()
-                ) {
-                    Text(stringResource(R.string.wireguard_action_save))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { renameTarget = null }) {
-                    Text(stringResource(R.string.wireguard_action_cancel))
-                }
-            }
+        ProxyNodeRenameDialog(
+            profile = profile,
+            onDismiss = { renameTarget = null },
+            onRename = onRenameProfile
         )
     }
 
-    // Delete Confirmation Dialog
     deleteTarget?.let { profile ->
-        AlertDialog(
-            onDismissRequest = { deleteTarget = null },
-            title = { Text(stringResource(R.string.shadowsocks_delete_confirm_title)) },
-            text = {
-                Text(stringResource(R.string.shadowsocks_delete_confirm_desc, profile.displayName))
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        onDeleteProfile(profile.id)
-                        deleteTarget = null
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text(stringResource(R.string.wireguard_action_delete))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { deleteTarget = null }) {
-                    Text(stringResource(R.string.wireguard_action_cancel))
-                }
-            }
+        ProxyNodeDeleteDialog(
+            profile = profile,
+            onDismiss = { deleteTarget = null },
+            onDelete = onDeleteProfile
         )
     }
 }

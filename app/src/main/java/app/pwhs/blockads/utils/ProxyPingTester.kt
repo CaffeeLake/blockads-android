@@ -45,15 +45,16 @@ object ProxyPingTester {
                     NodePingResult.Success(delayMs)
                 } else {
                     timber.log.Timber.w("pingNode: negative delay returned for ${profile.displayName}")
-                    fallbackPing(profile, timeoutMs)
+                    NodePingResult.Error("Test failed")
                 }
             } catch (t: Throwable) {
                 timber.log.Timber.w(t, "pingNode: proxy delay failed for ${profile.displayName}: ${t.message}")
                 val msg = t.message.orEmpty()
-                if (msg.contains("timeout", ignoreCase = true) || msg.contains("deadline", ignoreCase = true)) {
-                    NodePingResult.Timeout
-                } else if (!isUdpOnly(profile.protocol)) {
+                if (t is UnsatisfiedLinkError || t is NoClassDefFoundError) {
+                    // Running in JVM test environment without native Go library
                     fallbackPing(profile, timeoutMs)
+                } else if (msg.contains("timeout", ignoreCase = true) || msg.contains("deadline", ignoreCase = true)) {
+                    NodePingResult.Timeout
                 } else {
                     NodePingResult.Error(msg.ifEmpty { "Failed" })
                 }

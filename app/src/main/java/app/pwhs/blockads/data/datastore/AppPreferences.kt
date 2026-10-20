@@ -292,6 +292,8 @@ class AppPreferences internal constructor(
     suspend fun getActiveProxyProfileSnapshot(): ProxyProfile? = shadowsocks.getActiveProxyProfileSnapshot()
     suspend fun setActiveProxyProfileId(id: String) = shadowsocks.setActiveProxyProfileId(id)
     suspend fun addProxyProfile(profile: ProxyProfile) = shadowsocks.addProxyProfile(profile)
+    suspend fun updateProxyProfile(profile: ProxyProfile) = shadowsocks.updateProxyProfile(profile)
+    suspend fun getProxyProfile(id: String): ProxyProfile? = shadowsocks.getProxyProfile(id)
     suspend fun addProxyProfiles(profiles: List<ProxyProfile>) = shadowsocks.addProxyProfiles(profiles)
     suspend fun deleteProxyProfile(id: String) = shadowsocks.deleteProxyProfile(id)
     suspend fun renameProxyProfile(id: String, newName: String) = shadowsocks.renameProxyProfile(id, newName)

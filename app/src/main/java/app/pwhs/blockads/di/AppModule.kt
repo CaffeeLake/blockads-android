@@ -274,6 +274,12 @@ val appModule = module {
         )
     }
     viewModel {
+        app.pwhs.blockads.ui.proxyvpn.edit.ProxyEditViewModel(
+            application = androidApplication(),
+            appPrefs = get()
+        )
+    }
+    viewModel {
         HttpsFilteringViewModel(
             application = androidApplication()
         )

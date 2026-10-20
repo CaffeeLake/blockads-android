@@ -36,7 +36,7 @@ class BrowserRuleRepositoryImpl(
 
     companion object {
         const val DEFAULT_RULES_URL =
-            "https://raw.githubusercontent.com/pass-with-high-score/blockads-android/main/rules/browser_rules.json"
+            "https://filter.pwhs.app/rules/browser_rules.json"
     }
 
     private val json = Json {

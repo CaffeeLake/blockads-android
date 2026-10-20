@@ -142,6 +142,7 @@ object ProxyLinkParser {
         val shortId = query["sid"].orEmpty()
         val spiderX = query["spx"].orEmpty()
         val fingerprint = query["fp"].orEmpty()
+        val flow = query["flow"].orEmpty()
         val tag = decodeFragment(uri.rawFragment)
 
         return ProxyProfile(
@@ -160,6 +161,7 @@ object ProxyLinkParser {
             shortId = shortId,
             spiderX = spiderX,
             fingerprint = fingerprint,
+            flow = flow,
             tag = tag,
             rawUri = trimmed
         )

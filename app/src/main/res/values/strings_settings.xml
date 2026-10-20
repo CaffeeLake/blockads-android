@@ -335,6 +335,10 @@
     <string name="proxy_ping_timeout">Timeout</string>
     <string name="proxy_ping_error">Error</string>
     <string name="proxy_ping_ms">%1$d ms</string>
+    <string name="proxy_sort">Sort</string>
+    <string name="proxy_sort_default">Default order</string>
+    <string name="proxy_sort_latency">By latency (fastest)</string>
+    <string name="proxy_sort_name">By name</string>
     <string name="proxy_search_hint">Search nodes or locations…</string>
     <string name="proxy_filter_all">All</string>
     <string name="proxy_filter_obfuscated">Stealth</string>
@@ -362,5 +366,53 @@
     <string name="proxy_hero_network_disconnected">Offline</string>
     <string name="proxy_refresh_ip">Refresh IP</string>
     <string name="proxy_refreshing_ip">Refreshing…</string>
+
+    <!-- Proxy Custom & Edit Config -->
+    <string name="proxy_edit_title">Edit Proxy Config</string>
+    <string name="proxy_add_custom_title">Add Custom Config</string>
+    <string name="proxy_add_choice_title">Add Proxy</string>
+    <string name="proxy_add_choice_import">Import from Link / Clipboard</string>
+    <string name="proxy_add_choice_import_desc">Paste vless://, vmess://, ss://, trojan://, or subscription URL</string>
+    <string name="proxy_add_choice_custom">Manual Custom Configuration</string>
+    <string name="proxy_add_choice_custom_desc">Configure VLESS, VMess, Shadowsocks, Trojan, Hysteria 2, TUIC</string>
+    <string name="proxy_field_remark">Remarks / Profile Name</string>
+    <string name="proxy_field_protocol">Protocol</string>
+    <string name="proxy_field_server">Server Address</string>
+    <string name="proxy_field_port">Server Port</string>
+    <string name="proxy_field_uuid">User ID (UUID)</string>
+    <string name="proxy_field_password">Password</string>
+    <string name="proxy_field_method">Cipher / Encryption Method</string>
+    <string name="proxy_field_alter_id">AlterId</string>
+    <string name="proxy_field_security">Security</string>
+    <string name="proxy_field_flow">Flow</string>
+    <string name="proxy_field_network">Network / Transport</string>
+    <string name="proxy_field_ws_path">WebSocket Path</string>
+    <string name="proxy_field_ws_host">WebSocket Host</string>
+    <string name="proxy_field_sni">SNI (Server Name Indication)</string>
+    <string name="proxy_field_allow_insecure">Allow Insecure TLS</string>
+    <string name="proxy_field_public_key">Public Key (pbk)</string>
+    <string name="proxy_field_short_id">Short ID (sid)</string>
+    <string name="proxy_field_spider_x">SpiderX (spx)</string>
+    <string name="proxy_field_fingerprint">Fingerprint (uTLS)</string>
+    <string name="proxy_field_obfs">Obfuscation (obfs)</string>
+    <string name="proxy_field_obfs_password">Obfs Password</string>
+    <string name="proxy_field_congestion_control">Congestion Control</string>
+    <string name="proxy_field_udp_relay_mode">UDP Relay Mode</string>
+    <string name="proxy_field_alpn">ALPN</string>
+    <string name="proxy_field_generate_uuid">Generate UUID</string>
+    <string name="proxy_section_basic">Basic Information</string>
+    <string name="proxy_section_credentials">Credentials</string>
+    <string name="proxy_section_transport">Stream Settings (Transport)</string>
+    <string name="proxy_section_tls">TLS / Reality</string>
+    <string name="proxy_section_advanced">Custom Configuration (JSON)</string>
+    <string name="proxy_raw_json_toggle">Edit Raw Engine JSON</string>
+    <string name="proxy_copy_link">Copy Share Link</string>
+    <string name="proxy_link_copied">Link copied to clipboard</string>
+    <string name="proxy_save_success">Saved \'%1$s\'</string>
+    <string name="proxy_err_server_required">Server address is required</string>
+    <string name="proxy_err_port_invalid">Invalid port (must be 1–65535)</string>
+    <string name="proxy_err_uuid_required">UUID is required</string>
+    <string name="proxy_err_password_required">Password is required</string>
+    <string name="proxy_err_json_invalid">Invalid JSON format</string>
 </resources>
 

@@ -79,6 +79,8 @@ fun ProxyVpnScreen(
     canNavigateBack: Boolean = true,
     onNavigateBack: () -> Unit,
     onEditProfile: (String) -> Unit,
+    onEditProxyProfile: (String) -> Unit = {},
+    onAddCustomProxy: () -> Unit = {},
     onNavigateToVpnSettings: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProxyVpnViewModel = koinViewModel()
@@ -108,6 +110,7 @@ fun ProxyVpnScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
     val resources = LocalResources.current
+    var showAddChoiceSheet by remember { mutableStateOf(false) }
     var showAddProxyDialog by remember { mutableStateOf(false) }
     var showSubscriptionsSheet by remember { mutableStateOf(false) }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -415,7 +418,8 @@ fun ProxyVpnScreen(
                         onPingNode = { viewModel.pingProxyNode(it) },
                         onPingAll = { viewModel.pingAllProxyNodes() },
                         onSelectProfile = { viewModel.setActiveProxyProfile(it.id) },
-                        onAddNodeClick = { showAddProxyDialog = true },
+                        onEditProfile = { onEditProxyProfile(it.id) },
+                        onAddNodeClick = { showAddChoiceSheet = true },
                         onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
                         onDeleteProfile = { viewModel.deleteProxyProfile(it) },
                         onClearSearch = { searchQuery = "" },
@@ -428,6 +432,15 @@ fun ProxyVpnScreen(
                 }
             }
         }
+    }
+
+    if (showAddChoiceSheet) {
+        app.pwhs.blockads.ui.proxyvpn.component.AddProxyChoiceBottomSheet(
+            onDismiss = { showAddChoiceSheet = false },
+            onImportLink = { showAddProxyDialog = true },
+            onAddCustom = onAddCustomProxy,
+            onOpenSubscriptions = { showSubscriptionsSheet = true }
+        )
     }
 
     if (showAddProxyDialog) {

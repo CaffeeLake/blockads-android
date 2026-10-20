@@ -306,6 +306,10 @@
     <string name="proxy_ping_timeout">Hết giờ</string>
     <string name="proxy_ping_error">Lỗi</string>
     <string name="proxy_ping_ms">%1$d ms</string>
+    <string name="proxy_sort">Sắp xếp</string>
+    <string name="proxy_sort_default">Thứ tự mặc định</string>
+    <string name="proxy_sort_latency">Theo độ trễ (nhanh nhất)</string>
+    <string name="proxy_sort_name">Theo tên</string>
     <string name="proxy_search_hint">Tìm kiếm máy chủ…</string>
     <string name="proxy_filter_all">Tất cả</string>
     <string name="proxy_filter_obfuscated">Ngụy trang</string>
@@ -333,5 +337,53 @@
     <string name="proxy_hero_network_disconnected">Ngoại tuyến</string>
     <string name="proxy_refresh_ip">Tải lại IP</string>
     <string name="proxy_refreshing_ip">Đang tải…</string>
+
+    <!-- Proxy Custom & Edit Config -->
+    <string name="proxy_edit_title">Sửa cấu hình Proxy</string>
+    <string name="proxy_add_custom_title">Thêm cấu hình tùy chỉnh</string>
+    <string name="proxy_add_choice_title">Thêm Proxy</string>
+    <string name="proxy_add_choice_import">Nhập từ Liên kết / Bộ nhớ tạm</string>
+    <string name="proxy_add_choice_import_desc">Dán liên kết vless://, vmess://, ss://, trojan:// hoặc URL đăng ký</string>
+    <string name="proxy_add_choice_custom">Thêm cấu hình thủ công (Custom)</string>
+    <string name="proxy_add_choice_custom_desc">Cấu hình VLESS, VMess, Shadowsocks, Trojan, Hysteria 2, TUIC</string>
+    <string name="proxy_field_remark">Ghi chú / Tên cấu hình</string>
+    <string name="proxy_field_protocol">Giao thức</string>
+    <string name="proxy_field_server">Địa chỉ máy chủ</string>
+    <string name="proxy_field_port">Cổng máy chủ</string>
+    <string name="proxy_field_uuid">Mã người dùng (UUID)</string>
+    <string name="proxy_field_password">Mật khẩu</string>
+    <string name="proxy_field_method">Phương thức mã hóa</string>
+    <string name="proxy_field_alter_id">AlterId</string>
+    <string name="proxy_field_security">Bảo mật</string>
+    <string name="proxy_field_flow">Flow</string>
+    <string name="proxy_field_network">Mạng truyền tải (Transport)</string>
+    <string name="proxy_field_ws_path">Đường dẫn WebSocket</string>
+    <string name="proxy_field_ws_host">Máy chủ WebSocket (Host)</string>
+    <string name="proxy_field_sni">SNI (Tên máy chủ TLS)</string>
+    <string name="proxy_field_allow_insecure">Cho phép TLS không an toàn</string>
+    <string name="proxy_field_public_key">Khóa công khai (Public Key)</string>
+    <string name="proxy_field_short_id">Short ID</string>
+    <string name="proxy_field_spider_x">SpiderX</string>
+    <string name="proxy_field_fingerprint">Fingerprint (uTLS)</string>
+    <string name="proxy_field_obfs">Làm mờ (Obfs)</string>
+    <string name="proxy_field_obfs_password">Mật khẩu Obfs</string>
+    <string name="proxy_field_congestion_control">Kiểm soát tắc nghẽn (Congestion)</string>
+    <string name="proxy_field_udp_relay_mode">Chế độ chuyển tiếp UDP</string>
+    <string name="proxy_field_alpn">ALPN</string>
+    <string name="proxy_field_generate_uuid">Tạo UUID ngẫu nhiên</string>
+    <string name="proxy_section_basic">Thông tin cơ bản</string>
+    <string name="proxy_section_credentials">Thông tin xác thực</string>
+    <string name="proxy_section_transport">Cấu hình luồng (Transport)</string>
+    <string name="proxy_section_tls">Bảo mật TLS / Reality</string>
+    <string name="proxy_section_advanced">Cấu hình nâng cao (JSON)</string>
+    <string name="proxy_raw_json_toggle">Chỉnh sửa JSON thô</string>
+    <string name="proxy_copy_link">Sao chép liên kết chia sẻ</string>
+    <string name="proxy_link_copied">Đã sao chép liên kết</string>
+    <string name="proxy_save_success">Đã lưu \'%1$s\'</string>
+    <string name="proxy_err_server_required">Vui lòng nhập địa chỉ máy chủ</string>
+    <string name="proxy_err_port_invalid">Cổng không hợp lệ (1–65535)</string>
+    <string name="proxy_err_uuid_required">Vui lòng nhập UUID</string>
+    <string name="proxy_err_password_required">Vui lòng nhập mật khẩu</string>
+    <string name="proxy_err_json_invalid">Định dạng JSON không hợp lệ</string>
 </resources>
 

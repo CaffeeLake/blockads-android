@@ -52,6 +52,10 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.utils.NodePingResult
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 
 @Composable
@@ -61,11 +65,13 @@ fun ProxyNodeRow(
     pingResult: NodePingResult? = null,
     onPing: () -> Unit,
     onClick: () -> Unit,
+    onEdit: (ProxyProfile) -> Unit,
     onRename: (ProxyProfile) -> Unit,
     onDelete: (ProxyProfile) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
+    val clipboardManager = LocalClipboardManager.current
 
     var countryCode by remember(profile.server, profile.tag) {
         mutableStateOf(WireGuardGeoIpHelper.getCountryCodeFast(profile.server, profile.tag))
@@ -190,6 +196,19 @@ fun ProxyNodeRow(
                         }
                     )
                     DropdownMenuItem(
+                        text = { Text(stringResource(R.string.wireguard_action_edit)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Tune,
+                                contentDescription = null
+                            )
+                        },
+                        onClick = {
+                            menuExpanded = false
+                            onEdit(profile)
+                        }
+                    )
+                    DropdownMenuItem(
                         text = { Text(stringResource(R.string.wireguard_action_rename)) },
                         leadingIcon = {
                             Icon(
@@ -200,6 +219,19 @@ fun ProxyNodeRow(
                         onClick = {
                             menuExpanded = false
                             onRename(profile)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.proxy_copy_link)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = null
+                            )
+                        },
+                        onClick = {
+                            menuExpanded = false
+                            clipboardManager.setText(AnnotatedString(profile.toShareLink()))
                         }
                     )
                     DropdownMenuItem(

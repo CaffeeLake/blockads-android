@@ -1,6 +1,6 @@
 {
-  "version": 17,
-  "updatedAt": 1726300000000,
+  "version": 19,
+  "updatedAt": 1792510523210,
   "adDomains": [
     "doubleclick.net",
     "googleadservices.com",
@@ -337,6 +337,6 @@
     "/metrika/tag",
     "/tag.min.js"
   ],
-  "cosmeticCss": "https://raw.githubusercontent.com/pass-with-high-score/blockads-android/main/app/src/main/assets/browser/adblock_cosmetic.css",
-  "scriptletsJs": "https://raw.githubusercontent.com/pass-with-high-score/blockads-android/main/app/src/main/assets/browser/adguard_scriptlets.js"
+  "cosmeticCss": "https://filter.pwhs.app/browser/adblock_cosmetic.css",
+  "scriptletsJs": "https://filter.pwhs.app/browser/adguard_scriptlets.js"
 }
