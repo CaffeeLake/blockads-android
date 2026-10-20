@@ -22,6 +22,7 @@ interface BrowserRuleRepository {
     val updateStatus: StateFlow<BrowserRuleUpdateStatus>
 
     suspend fun checkAndUpdate(customUrl: String? = null): Result<Boolean>
+    suspend fun checkAndUpdateModules(customUrl: String? = null): Result<Boolean>
     suspend fun resetToDefaults()
 }
 
@@ -37,6 +38,8 @@ class BrowserRuleRepositoryImpl(
     companion object {
         const val DEFAULT_RULES_URL =
             "https://filter.pwhs.app/rules/browser_rules.json"
+        const val DEFAULT_MODULES_URL =
+            "https://filter.pwhs.app/rules/modules.json"
     }
 
     private val json = Json {
@@ -127,6 +130,30 @@ class BrowserRuleRepositoryImpl(
         } catch (e: Exception) {
             Timber.e(e, "Error updating browser rules")
             _updateStatus.value = BrowserRuleUpdateStatus.Error(e.localizedMessage ?: "Network error")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun checkAndUpdateModules(customUrl: String?): Result<Boolean> = withContext(ioDispatcher) {
+        val targetUrl = customUrl ?: DEFAULT_MODULES_URL
+        try {
+            Timber.d("Checking for modular rule updates from: %s", targetUrl)
+            val response = client.get(targetUrl)
+            if (response.status.value !in 200..299) {
+                val err = "Server returned HTTP ${response.status.value}"
+                Timber.w("Failed to fetch modules.json: %s", err)
+                return@withContext Result.failure(IllegalStateException(err))
+            }
+            val text = response.bodyAsText()
+            if (text.isBlank()) {
+                return@withContext Result.failure(IllegalStateException("Empty modules response"))
+            }
+            json.decodeFromString<app.pwhs.blockads.data.models.ModulesPackage>(text)
+            val saved = storage.saveModulesJson(text)
+            Timber.i("Successfully updated modules.json from remote")
+            Result.success(saved)
+        } catch (e: Exception) {
+            Timber.e(e, "Error updating modules.json")
             Result.failure(e)
         }
     }

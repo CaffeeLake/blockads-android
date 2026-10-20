@@ -61,6 +61,30 @@ class BrowserRuleStorage(private val context: Context) {
         }
     }
 
+    private val modulesFile: File
+        get() = rulesDir.resolve("modules.json")
+
+    /**
+     * Atomically writes raw modules.json to disk.
+     */
+    fun saveModulesJson(content: String): Boolean {
+        return try {
+            val tempFile = rulesDir.resolve("modules.json.tmp")
+            tempFile.writeText(content)
+            if (tempFile.renameTo(modulesFile)) {
+                Timber.i("Successfully saved modules.json")
+                true
+            } else {
+                tempFile.copyTo(modulesFile, overwrite = true)
+                tempFile.delete()
+                true
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to save modules.json")
+            false
+        }
+    }
+
     /**
      * Constructs the baseline package directly from bundled browser_rules.json asset.
      */

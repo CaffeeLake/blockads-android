@@ -82,6 +82,20 @@ func servePerHostCSS(req *http.Request) *http.Response {
 	host = strings.ToLower(host)
 
 	css := defaultCosmeticStore.GetCSSForHost(host)
+	if modCSS := ActiveModuleStore.GetCosmeticCSS(host); len(modCSS) > 0 {
+		var b strings.Builder
+		if css != "" {
+			b.WriteString(css)
+			b.WriteString("\n")
+		}
+		b.WriteString("/* Module CSS for " + host + " */\n")
+		for _, rule := range modCSS {
+			b.WriteString(rule)
+			b.WriteString("\n")
+		}
+		css = b.String()
+	}
+
 	if css == "" {
 		css = "/* BlockAds: no custom CSS for " + host + " */"
 	}
@@ -155,6 +169,16 @@ func servePerHostScriptlets(req *http.Request) *http.Response {
 		if strings.TrimSpace(cs) != "" {
 			jsBuilder.WriteString("\n// [RuleManifest] custom script\n")
 			jsBuilder.WriteString(cs)
+			jsBuilder.WriteString("\n")
+		}
+	}
+
+	// Append domain-specific scripts declared in ActiveModuleStore
+	moduleScripts := ActiveModuleStore.GetScripts(host)
+	for _, ms := range moduleScripts {
+		if strings.TrimSpace(ms) != "" {
+			jsBuilder.WriteString("\n// [WebModule] custom script\n")
+			jsBuilder.WriteString(ms)
 			jsBuilder.WriteString("\n")
 		}
 	}

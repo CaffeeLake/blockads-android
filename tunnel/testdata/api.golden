@@ -107,6 +107,7 @@ type Engine struct
 	method Engine.SetGeoIPDatabaseFromFd(fd int, offset int64, length int64) error
 	method Engine.SetLogCallback(cb LogCallback)
 	method Engine.SetMitmAllowedUIDs(uidsCsv string)
+	method Engine.SetModulesConfig(jsonStr string) error
 	method Engine.SetODoHRelay(relayURL string)
 	method Engine.SetOutboundAdapter(adapter OutboundAdapter)
 	method Engine.SetPreferredIPType(ipType string)
@@ -275,6 +276,7 @@ type ScriptletRule = internal/scriptlet.Rule
 	field ScriptletRule.Args []string
 var ServeLocalAsset func(req *net/http.Request) *net/http.Response
 var SetCosmeticCSS func(css string)
+func SetModulesConfigJSON(jsonStr string) error
 var SetRuleManifestJSON func(jsonStr string) error
 var SetScriptletStore func(s *internal/scriptlet.Store)
 var SetScriptletsRuntime func(js string)

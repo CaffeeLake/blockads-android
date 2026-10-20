@@ -152,6 +152,7 @@ func mitmHTTPFlow(
 func buildFlowPipeline(hostname string, filter *MitmFilter, blocker adBlockChecker) *InterceptorPipeline {
 	return NewInterceptorPipeline(
 		NewLocalAssetInterceptor(),
+		NewModuleInterceptor(ActiveModuleStore),
 		NewManifestInterceptor(defaultManifest),
 		NewYouTubeInterceptor(),
 		NewBlocklistInterceptor(hostname, blocker, filter),

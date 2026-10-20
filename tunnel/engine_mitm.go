@@ -462,3 +462,9 @@ func (e *Engine) LogConnection(flow mitm.FlowID, protocol int) {
 		serverPort: int(flow.ServerPort()),
 	}, protocol)
 }
+
+// SetModulesConfig loads the modular rules configuration JSON (modules.json).
+func (e *Engine) SetModulesConfig(jsonStr string) error {
+	return SetModulesConfigJSON(jsonStr)
+}
+

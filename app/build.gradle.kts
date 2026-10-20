@@ -19,7 +19,9 @@ val tunnelSource = providers.gradleProperty("tunnel.source").orNull
 val tunnelFromFile = tunnelSource == "local" || tunnelSource == "prebuilt"
 
 val syncBrowserRules = tasks.register<Copy>("syncBrowserRules") {
-    from(rootProject.file("rules/browser_rules.json"))
+    from(rootProject.file("rules")) {
+        include("*.json")
+    }
     into(file("src/main/assets/browser"))
 }
 

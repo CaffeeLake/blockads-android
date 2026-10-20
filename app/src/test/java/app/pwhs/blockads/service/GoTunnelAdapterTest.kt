@@ -151,6 +151,7 @@ class GoTunnelAdapterTest {
         verify { f.engine.setCosmeticCSS(match { it.isNotEmpty() }) }
         verify { f.engine.setScriptletsRuntime(match { it.isNotEmpty() }) }
         verify { f.engine.setRuleManifestJSON(match { it.isNotEmpty() }) }
+        verify { f.engine.setModulesConfig(match { it.isNotEmpty() }) }
         verify { f.engine.setScriptletRules("") }
         verify { f.engine.setAdPathPatterns(match { it.isNotEmpty() }) }
         verify { f.engine.setDoHBlocklist(match { it.isNotEmpty() }) }

@@ -172,5 +172,7 @@ func ParseHysteria2URI(rawURI string) (string, error) {
 	return cfg.ToJSON(), nil
 }
 
-
-
+// SetModulesConfigJSON updates ActiveModuleStore with modules.json string.
+func SetModulesConfigJSON(jsonStr string) error {
+	return mitm.SetModulesConfigJSON(jsonStr)
+}

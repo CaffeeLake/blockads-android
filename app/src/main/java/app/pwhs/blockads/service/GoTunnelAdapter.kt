@@ -45,9 +45,7 @@ class GoTunnelAdapter(
     /**
      * Hot-reload the GeoIP database into the Go engine when a new version is downloaded.
      */
-    fun reloadGeoIp() {
-        TunnelRuleLoader.loadGeoIPDatabase(context, engine)
-    }
+    fun reloadGeoIp() = TunnelRuleLoader.loadGeoIPDatabase(context, engine)
 
     @Volatile
     private var isRunning = false
@@ -68,47 +66,18 @@ class GoTunnelAdapter(
         }
     }
 
-    /**
-     * Configure the block response type.
-     * @param responseType "CUSTOM_IP", "NXDOMAIN", or "REFUSED"
-     */
-    fun setBlockResponseType(responseType: String) {
-        engine.setBlockResponseType(responseType)
-    }
+    fun setBlockResponseType(responseType: String) = engine.setBlockResponseType(responseType)
 
-    /**
-     * Configure split-DNS zones for WireGuard internal domains.
-     * @param zones Comma-separated zone suffixes (e.g., "internal,local,lan")
-     */
-    fun setSplitDNSZones(zones: String) {
-        engine.setSplitDNSZones(zones)
-    }
+    fun setSplitDNSZones(zones: String) = engine.setSplitDNSZones(zones)
 
-    /**
-     * Configure SafeSearch and YouTube restricted mode.
-     */
     fun configureSafeSearch(safeSearchEnabled: Boolean, youtubeRestricted: Boolean) {
         engine.setSafeSearch(safeSearchEnabled)
         engine.setYouTubeRestricted(youtubeRestricted)
     }
 
-    fun setPreferredIPType(type: String) {
-        engine.setPreferredIPType(type)
-    }
+    fun setPreferredIPType(type: String) = engine.setPreferredIPType(type)
 
-    /**
-     * Toggle the experimental userspace TCP/IP stack path (HTTPS
-     * filtering refactor, Phases C+). When enabled, non-DNS packets
-     * are diverted from the legacy Router into a gVisor-backed
-     * userspace stack that terminates each TCP/UDP flow with per-app
-     * UID visibility.
-     *
-     * Must be called BEFORE [start]; runtime toggling is not supported
-     * in Phase C. Default false (legacy path).
-     */
-    fun setUseTcpStack(enabled: Boolean) {
-        engine.setUseTcpStack(enabled)
-    }
+    fun setUseTcpStack(enabled: Boolean) = engine.setUseTcpStack(enabled)
 
     private fun setupDomainChecker() {
         engine.setDomainChecker(object : DomainChecker {
@@ -455,6 +424,10 @@ class GoTunnelAdapter(
             engine.setRuleManifestJSON(manifest)
             Timber.d("Rule manifest updated for engine: %d bytes", manifest.length)
         }.onFailure { Timber.e(it, "Failed to load rule manifest for engine") }
+
+        runCatching {
+            TunnelRuleLoader.loadModules(context, engine)
+        }.onFailure { Timber.e(it, "Failed to load modular rules for engine") }
 
         runCatching {
             val sp = filterRepo.getScriptletsPath()

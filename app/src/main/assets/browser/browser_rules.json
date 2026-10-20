@@ -1,6 +1,6 @@
 {
-  "version": 19,
-  "updatedAt": 1792510523210,
+  "version": 1792513963,
+  "updatedAt": 1792513963944,
   "adDomains": [
     "doubleclick.net",
     "googleadservices.com",
@@ -303,12 +303,6 @@
     "/ads.js",
     "/widget/ads.js",
     "/doubleclick/",
-    "/ad_status",
-    "/get_midroll_info",
-    "/api/stats/ads",
-    "/youtubei/v1/player/ad_break",
-    "googletagservices.com/tag/js/gpt.js",
-    "/static/doubleclick/instream",
     "/popunder",
     "/popads",
     "/advertisement",
@@ -335,72 +329,13 @@
     "AdsScript",
     "/jquery.openxtag.js",
     "/metrika/tag",
-    "/tag.min.js"
+    "/tag.min.js",
+    "/static/doubleclick/instream",
+    "/ad_status",
+    "/tr/",
+    "/signals_log",
+    "/privacy/mutation"
   ],
   "cosmeticCss": "https://filter.pwhs.app/browser/adblock_cosmetic.css",
-  "scriptletsJs": "https://filter.pwhs.app/browser/adguard_scriptlets.js",
-  "modules": [
-    {
-      "id": "youtube",
-      "domains": [
-        "youtube.com",
-        "m.youtube.com",
-        "googlevideo.com",
-        "youtubei.googleapis.com"
-      ],
-      "intercepts": [
-        {
-          "path_pattern": "^/api/stats/(ads|atr|delayplay|qoe)",
-          "action": "mock_204"
-        },
-        {
-          "path_pattern": "^/youtubei/v1/(player/ad_break|survey|feedback|log_event)",
-          "action": "mock_json",
-          "mock_body": "{}"
-        },
-        {
-          "path_pattern": "^/(pagead|ptracking|pcs/activeview|get_midroll_info)",
-          "action": "mock_json",
-          "mock_body": "{}"
-        }
-      ],
-      "header_rewrites": [
-        {
-          "path_pattern": "^/youtubei/",
-          "set_headers": {
-            "Accept-Encoding": "identity"
-          }
-        }
-      ],
-      "css_rules": [
-        "ytd-promoted-video-renderer, ytd-display-ad-renderer, ytd-banner-promo-renderer, ytd-ad-slot-renderer, ytm-promoted-sparkles-web-renderer, ytm-companion-ad-renderer, ytm-ad-slot-renderer, ytm-rich-item-renderer:has(ytm-ad-slot-renderer), .ytp-ad-module, .ytp-ad-overlay-container, .ytp-ad-player-overlay, #player-ads, #masthead-ad { display: none !important; }"
-      ]
-    },
-    {
-      "id": "facebook",
-      "domains": [
-        "facebook.com",
-        "m.facebook.com"
-      ],
-      "intercepts": [
-        {
-          "path_pattern": "^/ajax/bz",
-          "action": "mock_204"
-        }
-      ]
-    },
-    {
-      "id": "tiktok",
-      "domains": [
-        "tiktok.com",
-        "m.tiktok.com"
-      ],
-      "intercepts": [
-        {
-          "path_pattern": "^/api/ad/",
-          "action": "mock_204"
-        }
-      ]
-    }
-  ]
+  "scriptletsJs": "https://filter.pwhs.app/browser/adguard_scriptlets.js"
 }

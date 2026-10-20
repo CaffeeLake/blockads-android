@@ -107,6 +107,62 @@ object TunnelRuleLoader {
         }
     }
 
+    /**
+     * Loads modular rules from modules.json (cached OTA update or local asset),
+     * resolves asset script references, and passes the compiled JSON to the Go engine.
+     */
+    fun loadModules(context: Context, engine: tunnel.Engine) {
+        try {
+            val jsonStr = loadModulesJson(context)
+            if (jsonStr.isNotBlank()) {
+                engine.setModulesConfig(jsonStr)
+                Timber.d("Modular rules loaded successfully into Go engine (%d bytes)", jsonStr.length)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to load modular rules into Go engine")
+        }
+    }
+
+    /**
+     * Reads modules.json, resolves any bundled script names, and returns the JSON string.
+     */
+    fun loadModulesJson(context: Context): String {
+        return try {
+            val cachedFile = java.io.File(context.filesDir, "browser_rules/modules.json")
+            val raw = if (cachedFile.exists() && cachedFile.length() > 0) {
+                cachedFile.readText()
+            } else {
+                runCatching {
+                    context.assets.open("browser/modules.json").bufferedReader().use { it.readText() }
+                }.getOrDefault("")
+            }
+            if (raw.isBlank()) return ""
+
+            val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true; isLenient = true }
+            val pkg = json.decodeFromString<app.pwhs.blockads.data.models.ModulesPackage>(raw)
+
+            val resolvedModules = pkg.modules.map { mod ->
+                val resolvedScripts = mod.scripts.map { scriptRef ->
+                    if (scriptRef.endsWith(".js")) {
+                        runCatching {
+                            context.assets.open("browser/$scriptRef").bufferedReader().use { it.readText() }
+                        }.getOrDefault(scriptRef)
+                    } else {
+                        scriptRef
+                    }
+                }
+                mod.copy(scripts = resolvedScripts)
+            }
+            json.encodeToString(
+                app.pwhs.blockads.data.models.ModulesPackage.serializer(),
+                pkg.copy(modules = resolvedModules)
+            )
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to load and resolve modules.json")
+            ""
+        }
+    }
+
     fun loadPresetBrowsers(context: Context): Set<String> = runCatching {
         context.assets.open("preset/browsers.txt").bufferedReader().useLines { lines ->
             lines.map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }.toSet()
