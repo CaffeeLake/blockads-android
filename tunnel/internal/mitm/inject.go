@@ -33,9 +33,12 @@ import (
 //     per host, browser caches the response.
 const injectionTags = `<link rel="stylesheet" href="https://local.pwhs.app/cosmetic.css">` +
 	`<script src="https://local.pwhs.app/scriptlets.js"></script>` +
-	`<script>(function(){var s=document.createElement('script');` +
-	`s.src='https://local.pwhs.app/sl-'+encodeURIComponent(location.hostname)+'.js';` +
-	`(document.head||document.documentElement).appendChild(s);})();</script>`
+	`<script>(function(){` +
+	`var d=document,h=encodeURIComponent(location.hostname);` +
+	`var l=d.createElement('link');l.rel='stylesheet';l.href='https://local.pwhs.app/cs-'+h+'.css';` +
+	`var s=d.createElement('script');s.src='https://local.pwhs.app/sl-'+h+'.js';` +
+	`var t=(d.head||d.documentElement);if(t){t.appendChild(l);t.appendChild(s);}` +
+	`})();</script>`
 
 // headTagBytes is the pattern to search for (case-insensitive matching done manually).
 var headTagBytes = []byte("<head") // matches both <head> and <head ...attributes>
@@ -58,6 +61,7 @@ func SetCosmeticCSS(css string) {
 	cosmeticMu.Lock()
 	cosmeticCSS = css
 	cosmeticMu.Unlock()
+	defaultCosmeticStore.ParseAndLoad(css)
 	logf("Cosmetic CSS updated: %d bytes", len(css))
 }
 

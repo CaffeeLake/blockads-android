@@ -97,7 +97,6 @@ class HomeViewModelTest {
             appPrefs,
             dnsLogDao,
             repo,
-            mockk<app.pwhs.blockads.data.dao.ConfigDao>(relaxed = true),
             filterListDao,
             whitelistDomainDao,
             customDnsRuleDao

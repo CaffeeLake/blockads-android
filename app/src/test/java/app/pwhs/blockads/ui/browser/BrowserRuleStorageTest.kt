@@ -2,7 +2,6 @@ package app.pwhs.blockads.ui.browser
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import app.pwhs.blockads.ui.browser.rules.BrowserRuleDefaults
 import app.pwhs.blockads.ui.browser.rules.BrowserRulePackage
 import app.pwhs.blockads.ui.browser.rules.BrowserRuleStorage
 import org.junit.Assert.assertEquals
@@ -59,30 +58,34 @@ class BrowserRuleStorageTest {
     }
 
     @Test
-    fun `defaults come from bundled lists and assets`() {
+    fun `defaults come from bundled json and assets`() {
         val defaults = storage.loadDefaultPackage()
-        assertEquals(BrowserRuleDefaults.INITIAL_VERSION, defaults.version)
-        assertEquals(BrowserRuleDefaults.AD_HOST_SUFFIXES, defaults.adDomains)
+        assertTrue(defaults.version > 0L)
+        assertTrue(defaults.adDomains.isNotEmpty())
+        assertTrue(defaults.modules.isNotEmpty())
         assertTrue(defaults.cosmeticCss!!.isNotBlank())
         assertTrue(defaults.scriptletsJs!!.isNotBlank())
     }
 
     @Test
     fun `active package prefers a newer cache over the bundled defaults`() {
-        storage.savePackage(pkg(BrowserRuleDefaults.INITIAL_VERSION + 1))
-        assertEquals(BrowserRuleDefaults.INITIAL_VERSION + 1, storage.getActivePackage().version)
+        val baseVersion = storage.loadDefaultPackage().version
+        storage.savePackage(pkg(baseVersion + 1))
+        assertEquals(baseVersion + 1, storage.getActivePackage().version)
     }
 
     @Test
     fun `active package keeps an equal-version cache`() {
-        storage.savePackage(pkg(BrowserRuleDefaults.INITIAL_VERSION))
+        val baseVersion = storage.loadDefaultPackage().version
+        storage.savePackage(pkg(baseVersion))
         assertEquals(listOf("x.test"), storage.getActivePackage().adDomains)
     }
 
     @Test
     fun `active package falls back to defaults when the bundle is newer`() {
-        storage.savePackage(pkg(BrowserRuleDefaults.INITIAL_VERSION - 1))
-        assertEquals(BrowserRuleDefaults.AD_HOST_SUFFIXES, storage.getActivePackage().adDomains)
+        val defaults = storage.loadDefaultPackage()
+        storage.savePackage(pkg(defaults.version - 1))
+        assertEquals(defaults.adDomains, storage.getActivePackage().adDomains)
     }
 
     @Test
@@ -90,6 +93,6 @@ class BrowserRuleStorageTest {
         storage.savePackage(pkg(99))
         val defaults = storage.resetToDefaults()
         assertFalse(cacheFile.exists())
-        assertEquals(BrowserRuleDefaults.INITIAL_VERSION, defaults.version)
+        assertTrue(defaults.version > 0L)
     }
 }

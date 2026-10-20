@@ -338,5 +338,69 @@
     "/tag.min.js"
   ],
   "cosmeticCss": "https://filter.pwhs.app/browser/adblock_cosmetic.css",
-  "scriptletsJs": "https://filter.pwhs.app/browser/adguard_scriptlets.js"
+  "scriptletsJs": "https://filter.pwhs.app/browser/adguard_scriptlets.js",
+  "modules": [
+    {
+      "id": "youtube",
+      "domains": [
+        "youtube.com",
+        "m.youtube.com",
+        "googlevideo.com",
+        "youtubei.googleapis.com"
+      ],
+      "intercepts": [
+        {
+          "path_pattern": "^/api/stats/(ads|atr|delayplay|qoe)",
+          "action": "mock_204"
+        },
+        {
+          "path_pattern": "^/youtubei/v1/(player/ad_break|survey|feedback|log_event)",
+          "action": "mock_json",
+          "mock_body": "{}"
+        },
+        {
+          "path_pattern": "^/(pagead|ptracking|pcs/activeview|get_midroll_info)",
+          "action": "mock_json",
+          "mock_body": "{}"
+        }
+      ],
+      "header_rewrites": [
+        {
+          "path_pattern": "^/youtubei/",
+          "set_headers": {
+            "Accept-Encoding": "identity"
+          }
+        }
+      ],
+      "css_rules": [
+        "ytd-promoted-video-renderer, ytd-display-ad-renderer, ytd-banner-promo-renderer, ytd-ad-slot-renderer, ytm-promoted-sparkles-web-renderer, ytm-companion-ad-renderer, ytm-ad-slot-renderer, ytm-rich-item-renderer:has(ytm-ad-slot-renderer), .ytp-ad-module, .ytp-ad-overlay-container, .ytp-ad-player-overlay, #player-ads, #masthead-ad { display: none !important; }"
+      ]
+    },
+    {
+      "id": "facebook",
+      "domains": [
+        "facebook.com",
+        "m.facebook.com"
+      ],
+      "intercepts": [
+        {
+          "path_pattern": "^/ajax/bz",
+          "action": "mock_204"
+        }
+      ]
+    },
+    {
+      "id": "tiktok",
+      "domains": [
+        "tiktok.com",
+        "m.tiktok.com"
+      ],
+      "intercepts": [
+        {
+          "path_pattern": "^/api/ad/",
+          "action": "mock_204"
+        }
+      ]
+    }
+  ]
 }

@@ -97,6 +97,7 @@ var (
 	newMitmTcpHandler    = mitm.NewMitmTcpHandler
 	newMitmUdpHandler    = mitm.NewMitmUdpHandler
 	SetCosmeticCSS       = mitm.SetCosmeticCSS
+	SetRuleManifestJSON  = mitm.SetRuleManifestJSON
 	SetScriptletStore    = mitm.SetScriptletStore
 	SetScriptletsRuntime = mitm.SetScriptletsRuntime
 	ServeLocalAsset      = mitm.ServeLocalAsset

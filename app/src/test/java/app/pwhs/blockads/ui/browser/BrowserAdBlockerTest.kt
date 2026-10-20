@@ -3,7 +3,6 @@ package app.pwhs.blockads.ui.browser
 import android.net.Uri
 import android.webkit.WebResourceRequest
 import app.pwhs.blockads.ui.browser.interceptor.BrowserAdBlocker
-import app.pwhs.blockads.ui.browser.rules.BrowserRuleDefaults
 import app.pwhs.blockads.ui.browser.rules.BrowserRulePackage
 import io.mockk.every
 import io.mockk.mockk
@@ -22,6 +21,9 @@ import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 class BrowserAdBlockerTest {
+
+    @org.junit.Before
+    fun setUp() = resetBrowserAdBlocker()
 
     @After
     fun restoreDefaults() = resetBrowserAdBlocker()
@@ -84,13 +86,14 @@ class BrowserAdBlockerTest {
 
     @Test
     fun `applyRulePackage replaces non-empty lists and keeps the rest`() {
+        val initialKeywords = BrowserAdBlocker.keywordsCount
         BrowserAdBlocker.applyRulePackage(
             BrowserRulePackage(adDomains = listOf("tracker.test"), gamblingKeywords = emptyList(), adPathPatterns = emptyList())
         )
         assertEquals(1, BrowserAdBlocker.domainsCount)
         assertTrue(blocks("https://a.tracker.test/"))
         assertFalse(blocks("https://ads.doubleclick.net/"))
-        assertEquals(BrowserRuleDefaults.GAMBLING_POPUNDER_KEYWORDS.size, BrowserAdBlocker.keywordsCount)
+        assertEquals(initialKeywords, BrowserAdBlocker.keywordsCount)
         assertTrue(blocks("https://cdn.example.com/static/ads.js"))
     }
 
@@ -155,11 +158,8 @@ class BrowserAdBlockerTest {
 
 /** BrowserAdBlocker is a process-wide object; restore the bundled lists between tests. */
 fun resetBrowserAdBlocker() {
+    val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
     BrowserAdBlocker.applyRulePackage(
-        BrowserRulePackage(
-            adDomains = BrowserRuleDefaults.AD_HOST_SUFFIXES,
-            gamblingKeywords = BrowserRuleDefaults.GAMBLING_POPUNDER_KEYWORDS,
-            adPathPatterns = BrowserRuleDefaults.AD_PATH_PATTERNS,
-        )
+        app.pwhs.blockads.ui.browser.rules.BrowserRuleStorage(context).loadDefaultPackage()
     )
 }

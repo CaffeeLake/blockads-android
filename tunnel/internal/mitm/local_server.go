@@ -46,6 +46,8 @@ func ServeLocalAsset(req *http.Request) *http.Response {
 		return serveCACert(req)
 	case path == "/cosmetic.css":
 		return serveCSS(req)
+	case strings.HasPrefix(path, "/cs-") && strings.HasSuffix(path, ".css"):
+		return servePerHostCSS(req)
 	case path == "/scriptlets.js":
 		return serveScriptlets(req)
 	case strings.HasPrefix(path, "/sl-") && strings.HasSuffix(path, ".js"):
@@ -57,16 +59,32 @@ func ServeLocalAsset(req *http.Request) *http.Response {
 	}
 }
 
-// serveCSS returns the cosmetic filter CSS from memory.
+// serveCSS returns the generic cosmetic filter CSS from memory.
 func serveCSS(req *http.Request) *http.Response {
-	cosmeticMu.RLock()
-	css := cosmeticCSS
-	cosmeticMu.RUnlock()
+	css := defaultCosmeticStore.GetGenericCSS()
+	if css == "" {
+		cosmeticMu.RLock()
+		css = cosmeticCSS
+		cosmeticMu.RUnlock()
+	}
 
 	if css == "" {
 		css = "/* BlockAds: no cosmetic rules loaded */"
 	}
 
+	return buildTextResponse(req, 200, "text/css; charset=utf-8", css)
+}
+
+// servePerHostCSS returns cosmetic CSS specific to the requested hostname.
+func servePerHostCSS(req *http.Request) *http.Response {
+	path := req.URL.Path
+	host := strings.TrimSuffix(strings.TrimPrefix(path, "/cs-"), ".css")
+	host = strings.ToLower(host)
+
+	css := defaultCosmeticStore.GetCSSForHost(host)
+	if css == "" {
+		css = "/* BlockAds: no custom CSS for " + host + " */"
+	}
 	return buildTextResponse(req, 200, "text/css; charset=utf-8", css)
 }
 
@@ -123,10 +141,25 @@ func servePerHostScriptlets(req *http.Request) *http.Response {
 	store := scriptletDb
 	scriptletsMu.RUnlock()
 
-	js := ""
+	var jsBuilder strings.Builder
 	if store != nil {
-		js = store.BuildHostInvocations(host)
+		if inv := store.BuildHostInvocations(host); inv != "" {
+			jsBuilder.WriteString(inv)
+			jsBuilder.WriteString("\n")
+		}
 	}
+
+	// Append domain-specific scripts declared in RuleManifest
+	customScripts := defaultManifest.GetDomainScripts(host)
+	for _, cs := range customScripts {
+		if strings.TrimSpace(cs) != "" {
+			jsBuilder.WriteString("\n// [RuleManifest] custom script\n")
+			jsBuilder.WriteString(cs)
+			jsBuilder.WriteString("\n")
+		}
+	}
+
+	js := jsBuilder.String()
 	if js == "" {
 		js = "/* BlockAds: no scriptlets for " + host + " */"
 	}

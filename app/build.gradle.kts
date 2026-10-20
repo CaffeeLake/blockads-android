@@ -18,6 +18,15 @@ plugins {
 val tunnelSource = providers.gradleProperty("tunnel.source").orNull
 val tunnelFromFile = tunnelSource == "local" || tunnelSource == "prebuilt"
 
+val syncBrowserRules = tasks.register<Copy>("syncBrowserRules") {
+    from(rootProject.file("rules/browser_rules.json"))
+    into(file("src/main/assets/browser"))
+}
+
+tasks.named("preBuild") {
+    dependsOn(syncBrowserRules)
+}
+
 when (tunnelSource) {
     "local" -> tasks.named("preBuild") { dependsOn(":buildGoTunnel") }
     // "prebuilt" means the caller already produced the aar, so there is nothing

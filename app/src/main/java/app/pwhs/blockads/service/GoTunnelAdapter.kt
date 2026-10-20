@@ -435,36 +435,41 @@ class GoTunnelAdapter(
      * and send them to the Go engine.
      */
     fun updateCosmeticRules() {
-        try {
+        runCatching {
             val css = TunnelRuleLoader.loadCosmeticCss(context)
             engine.setCosmeticCSS(css)
             Timber.d("Cosmetic CSS updated for engine: %d bytes", css.length)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to load cosmetic CSS for engine")
+        }.onFailure {
+            Timber.e(it, "Failed to load cosmetic CSS for engine")
             engine.setCosmeticCSS("")
         }
-        try {
+
+        runCatching {
             val js = TunnelRuleLoader.loadScriptletsJs(context)
             engine.setScriptletsRuntime(js)
             Timber.d("Scriptlets runtime updated for engine: %d bytes", js.length)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to load scriptlets JS for engine")
-        }
+        }.onFailure { Timber.e(it, "Failed to load scriptlets JS for engine") }
 
-        try {
+        runCatching {
+            val manifest = TunnelRuleLoader.loadRuleManifest(context)
+            engine.setRuleManifestJSON(manifest)
+            Timber.d("Rule manifest updated for engine: %d bytes", manifest.length)
+        }.onFailure { Timber.e(it, "Failed to load rule manifest for engine") }
+
+        runCatching {
             val sp = filterRepo.getScriptletsPath()
             if (sp != null && java.io.File(sp).exists()) engine.setScriptletRulesFromFile(sp) else engine.setScriptletRules("")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to load scriptlet rules for engine")
+        }.onFailure {
+            Timber.e(it, "Failed to load scriptlet rules for engine")
             engine.setScriptletRules("")
         }
 
-        try {
+        runCatching {
             val patterns = TunnelRuleLoader.loadAdPathPatterns(context)
             engine.setAdPathPatterns(patterns)
             if (patterns.isNotEmpty()) Timber.d("Ad path patterns loaded: ${patterns.lines().size} patterns")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to load ad path patterns for engine")
+        }.onFailure {
+            Timber.e(it, "Failed to load ad path patterns for engine")
             engine.setAdPathPatterns("")
         }
     }
@@ -481,9 +486,7 @@ class GoTunnelAdapter(
         count
     }.onFailure { Timber.e(it, "Failed to set ruleset config") }.getOrDefault(0L)
 
-    fun clearRulesetConfig() {
-        engine.clearRulesetConfig()
-    }
+    fun clearRulesetConfig() = engine.clearRulesetConfig()
 
     companion object {
         private fun dnsQueryTypeToString(type: Int): String = when (type) {

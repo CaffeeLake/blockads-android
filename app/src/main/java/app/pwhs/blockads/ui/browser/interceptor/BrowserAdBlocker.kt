@@ -5,7 +5,6 @@ import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import app.pwhs.blockads.ui.browser.rules.BrowserRuleDefaults
 import app.pwhs.blockads.ui.browser.rules.BrowserRulePackage
 import java.io.ByteArrayInputStream
 import java.util.Locale
@@ -20,13 +19,13 @@ object BrowserAdBlocker {
     private val scriptCache = ConcurrentHashMap<String, String>()
 
     @Volatile
-    private var activeHostSuffixes: Set<String> = BrowserRuleDefaults.AD_HOST_SUFFIXES.toSet()
+    private var activeHostSuffixes: Set<String> = emptySet()
 
     @Volatile
-    private var activeGamblingKeywords: List<String> = BrowserRuleDefaults.GAMBLING_POPUNDER_KEYWORDS
+    private var activeGamblingKeywords: List<String> = emptyList()
 
     @Volatile
-    private var activeAdPathPatterns: List<String> = BrowserRuleDefaults.AD_PATH_PATTERNS
+    private var activeAdPathPatterns: List<String> = emptyList()
 
     @Volatile
     private var activeCosmeticCss: String? = null

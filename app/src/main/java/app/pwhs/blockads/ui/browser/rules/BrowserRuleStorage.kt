@@ -62,20 +62,38 @@ class BrowserRuleStorage(private val context: Context) {
     }
 
     /**
-     * Constructs the baseline package from bundled assets and defaults.
+     * Constructs the baseline package directly from bundled browser_rules.json asset.
      */
     fun loadDefaultPackage(): BrowserRulePackage {
-        val cosmeticCss = loadAssetString("browser/adblock_cosmetic.css")
-        val scriptletsJs = loadAssetString("browser/adguard_scriptlets.js")
+        val basePkg = try {
+            val content = loadAssetString("browser/browser_rules.json").ifBlank {
+                loadAssetString("browser_rules.json")
+            }
+            if (content.isNotBlank()) {
+                json.decodeFromString<BrowserRulePackage>(content)
+            } else {
+                BrowserRulePackage()
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to decode default BrowserRulePackage from assets")
+            BrowserRulePackage()
+        }
 
-        return BrowserRulePackage(
-            version = BrowserRuleDefaults.INITIAL_VERSION,
-            updatedAt = System.currentTimeMillis(),
-            adDomains = BrowserRuleDefaults.AD_HOST_SUFFIXES,
-            gamblingKeywords = BrowserRuleDefaults.GAMBLING_POPUNDER_KEYWORDS,
-            adPathPatterns = BrowserRuleDefaults.AD_PATH_PATTERNS,
+        val cosmeticCss = if (basePkg.cosmeticCss.isNullOrBlank()) {
+            loadAssetString("browser/adblock_cosmetic.css")
+        } else {
+            basePkg.cosmeticCss
+        }
+
+        val scriptletsJs = if (basePkg.scriptletsJs.isNullOrBlank()) {
+            loadAssetString("browser/adguard_scriptlets.js")
+        } else {
+            basePkg.scriptletsJs
+        }
+
+        return basePkg.copy(
             cosmeticCss = cosmeticCss,
-            scriptletsJs = scriptletsJs,
+            scriptletsJs = scriptletsJs
         )
     }
 

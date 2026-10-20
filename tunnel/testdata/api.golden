@@ -112,6 +112,7 @@ type Engine struct
 	method Engine.SetPreferredIPType(ipType string)
 	method Engine.SetProxyNodeConfig(protocol string, configJSON string) error
 	method Engine.SetQuanXConfig(content string) (int, error)
+	method Engine.SetRuleManifestJSON(jsonStr string) error
 	method Engine.SetRulesetConfig(content string) (int, error)
 	method Engine.SetSafeSearch(enabled bool)
 	method Engine.SetScriptletRules(content string)
@@ -274,6 +275,7 @@ type ScriptletRule = internal/scriptlet.Rule
 	field ScriptletRule.Args []string
 var ServeLocalAsset func(req *net/http.Request) *net/http.Response
 var SetCosmeticCSS func(css string)
+var SetRuleManifestJSON func(jsonStr string) error
 var SetScriptletStore func(s *internal/scriptlet.Store)
 var SetScriptletsRuntime func(js string)
 type ShadowsocksClient = internal/shadowsocks.Client

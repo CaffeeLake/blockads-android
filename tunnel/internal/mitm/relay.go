@@ -149,9 +149,21 @@ func mitmHTTPFlow(
 // relayHTTPFlow reads HTTP requests from the client connection, forwards to
 // the server, decompresses and injects into HTML responses, and supports
 // local.pwhs.app sub-requests inside the same session.
+func buildFlowPipeline(hostname string, filter *MitmFilter, blocker adBlockChecker) *InterceptorPipeline {
+	return NewInterceptorPipeline(
+		NewLocalAssetInterceptor(),
+		NewManifestInterceptor(defaultManifest),
+		NewYouTubeInterceptor(),
+		NewBlocklistInterceptor(hostname, blocker, filter),
+	)
+}
+
+// relayHTTPFlow reads HTTP requests from the client connection, runs the
+// interceptor pipeline, forwards to upstream, decompresses and injects into HTML responses.
 func relayHTTPFlow(clientConn, serverConn net.Conn, hostname string, filter *MitmFilter, blocker adBlockChecker) {
 	cr := bufio.NewReader(clientConn)
 	sr := bufio.NewReader(serverConn)
+	pipeline := buildFlowPipeline(hostname, filter, blocker)
 
 	for {
 		req, err := http.ReadRequest(cr)
@@ -162,66 +174,15 @@ func relayHTTPFlow(clientConn, serverConn net.Conn, hostname string, filter *Mit
 			req.Host = hostname
 		}
 
-		reqHost := req.Host
-		if i := strings.IndexByte(reqHost, ':'); i >= 0 {
-			reqHost = reqHost[:i]
-		}
+		reqHost := normalizeHost(req.Host)
 
-		if IsLocalAssetHost(reqHost) {
-			resp := ServeLocalAsset(req)
-			resp.Write(clientConn)
-			continue
-		}
-
-		// YouTube AdBlock & Protocol interception (sgmodule equivalent)
-		if IsYouTubeHost(reqHost) {
-			if handled, ytResp := HandleYouTubeRequest(req); handled && ytResp != nil {
-				ytResp.Write(clientConn)
-				continue
+		if handled, resp := pipeline.ExecuteRequest(reqHost, req); handled && resp != nil {
+			if err := resp.Write(clientConn); err != nil {
+				return
 			}
-		}
-
-		if blocker != nil && reqHost != hostname && blocker.IsDomainBlocked(reqHost) {
-			blockedResp := &http.Response{
-				StatusCode:    403,
-				ProtoMajor:    1,
-				ProtoMinor:    1,
-				ContentLength: 19,
-				Header:        make(http.Header),
-				Body:          io.NopCloser(strings.NewReader("Blocked by BlockAds")),
+			if resp.Close || req.Close {
+				return
 			}
-			blockedResp.Header.Set("Connection", "keep-alive")
-			blockedResp.Header.Set("Content-Length", "19")
-			blockedResp.Write(clientConn)
-			continue
-		}
-
-		// Block ad path patterns (e.g. /pagead, /ads.js). Return 204 instead
-		// of 403 so browsers don't show broken-image or error indicators.
-		// For JSON endpoints (e.g. /ad_break, /get_midroll_info), return 200 with "{}"
-		// so JSON clients don't fail with JSON syntax errors or stall on black screen.
-		if filter != nil && filter.IsAdPathBlocked(req.URL.Path) {
-			if strings.Contains(req.URL.Path, "/ad_break") || strings.Contains(req.URL.Path, "/get_midroll_info") || strings.HasSuffix(req.URL.Path, ".json") {
-				jsonResp := &http.Response{
-					StatusCode: 200,
-					ProtoMajor: 1, ProtoMinor: 1,
-					Header:     make(http.Header),
-					Body:       io.NopCloser(strings.NewReader("{}")),
-				}
-				jsonResp.Header.Set("Content-Type", "application/json; charset=utf-8")
-				jsonResp.Header.Set("Content-Length", "2")
-				jsonResp.Header.Set("Connection", "keep-alive")
-				jsonResp.Write(clientConn)
-				continue
-			}
-			noContentResp := &http.Response{
-				StatusCode: 204,
-				ProtoMajor: 1, ProtoMinor: 1,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader("")),
-			}
-			noContentResp.Header.Set("Connection", "keep-alive")
-			noContentResp.Write(clientConn)
 			continue
 		}
 
@@ -242,9 +203,7 @@ func relayHTTPFlow(clientConn, serverConn net.Conn, hostname string, filter *Mit
 			return
 		}
 
-		if IsYouTubeHost(reqHost) {
-			FilterYouTubeResponse(req, resp)
-		}
+		pipeline.ExecuteResponse(reqHost, req, resp)
 
 		if ShouldInjectHTML(resp.Header.Get("Content-Type")) {
 			wrapResponseForInjection(resp)

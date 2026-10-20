@@ -39,26 +39,21 @@ object TunnelRuleLoader {
         return try {
             val storage = BrowserRuleStorage(context)
             val pkg = storage.getActivePackage()
-            val patterns = pkg.adPathPatterns.ifEmpty {
-                app.pwhs.blockads.ui.browser.rules.BrowserRuleDefaults.AD_PATH_PATTERNS
-            }
-            patterns.joinToString("\n")
+            pkg.adPathPatterns.joinToString("\n")
         } catch (e: Exception) {
             Timber.w(e, "Failed to load ad path patterns from storage")
-            app.pwhs.blockads.ui.browser.rules.BrowserRuleDefaults.AD_PATH_PATTERNS.joinToString("\n")
+            ""
         }
     }
 
     /**
      * Loads scriptlets JS from the active browser rule package (adguard_scriptlets.js / remote updates).
+     * Global scriptlets only contain universal runtimes; domain-specific scripts (e.g. YouTube)
+     * are isolated to RuleManifest modules.
      */
     fun loadScriptletsJs(context: Context): String {
         val swKiller = runCatching {
             context.assets.open("browser/service_worker_killer.js").bufferedReader().use { it.readText() }
-        }.getOrDefault("")
-
-        val ytSanitizer = runCatching {
-            context.assets.open("browser/youtube_sanitizer.js").bufferedReader().use { it.readText() }
         }.getOrDefault("")
 
         val baseScriptlets = try {
@@ -77,9 +72,39 @@ object TunnelRuleLoader {
             }.getOrDefault("")
         }
 
-        return listOf(swKiller, baseScriptlets, ytSanitizer)
+        return listOf(swKiller, baseScriptlets)
             .filter { it.isNotBlank() }
             .joinToString("\n\n")
+    }
+
+    /**
+     * Loads dynamic Rule Manifest JSON for Go tunnel engine (TrafficInterceptor & ManifestRegistry).
+     * Domain-specific scripts like YouTube sanitizer are scoped into the appropriate module.
+     */
+    fun loadRuleManifest(context: Context): String {
+        return try {
+            val storage = BrowserRuleStorage(context)
+            val pkg = storage.getActivePackage()
+            val ytSanitizer = runCatching {
+                context.assets.open("browser/youtube_sanitizer.js").bufferedReader().use { it.readText() }
+            }.getOrDefault("")
+
+            val modules = pkg.modules.map { mod ->
+                if (mod.id == "youtube" && mod.scripts.isEmpty() && ytSanitizer.isNotBlank()) {
+                    mod.copy(scripts = listOf(ytSanitizer))
+                } else {
+                    mod
+                }
+            }
+            val manifestPkg = pkg.copy(modules = modules)
+            kotlinx.serialization.json.Json.encodeToString(
+                app.pwhs.blockads.ui.browser.rules.BrowserRulePackage.serializer(),
+                manifestPkg
+            )
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to serialize rule manifest")
+            "{}"
+        }
     }
 
     fun loadPresetBrowsers(context: Context): Set<String> = runCatching {

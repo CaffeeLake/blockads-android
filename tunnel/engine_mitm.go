@@ -312,6 +312,11 @@ func (e *Engine) SetCosmeticCSS(css string) {
 	SetCosmeticCSS(css)
 }
 
+// SetRuleManifestJSON sets the dynamic per-domain modules and interception rules from JSON.
+func (e *Engine) SetRuleManifestJSON(jsonStr string) error {
+	return SetRuleManifestJSON(jsonStr)
+}
+
 // SetScriptletsRuntime sets the custom scriptlets JS (from browser_rules.json)
 // to be served at https://local.pwhs.app/scriptlets.js alongside Go's built-in runtime.
 func (e *Engine) SetScriptletsRuntime(js string) {
