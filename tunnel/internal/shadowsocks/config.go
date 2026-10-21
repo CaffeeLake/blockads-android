@@ -37,6 +37,9 @@ func FromJSON(data string) (*Config, error) {
 	if c.Method == "" || c.Password == "" || c.Server == "" || c.Port <= 0 {
 		return nil, fmt.Errorf("invalid shadowsocks config: missing required fields")
 	}
+	if c.Security == "" && (c.SNI != "" || c.Port == 443) {
+		c.Security = "tls"
+	}
 	return &c, nil
 }
 
@@ -61,6 +64,11 @@ func ParseURI(rawURI string) (*Config, error) {
 		}
 	}
 
+	q := u.Query()
+	security := strings.ToLower(q.Get("security"))
+	sni := q.Get("sni")
+	allowInsecure := q.Get("allowInsecure") == "1" || strings.EqualFold(q.Get("allowInsecure"), "true")
+
 	// 1. Try SIP002 format with userinfo: ss://[userinfo]@[host]:[port]#tag
 	var userInfoStr string
 	if u.User != nil {
@@ -78,11 +86,14 @@ func ParseURI(rawURI string) (*Config, error) {
 			port, _ := strconv.Atoi(portStr)
 			if port > 0 {
 				return &Config{
-					Method:   strings.ToLower(method),
-					Password: password,
-					Server:   host,
-					Port:     port,
-					Tag:      tag,
+					Method:        strings.ToLower(method),
+					Password:      password,
+					Server:        host,
+					Port:          port,
+					Tag:           tag,
+					Security:      security,
+					SNI:           sni,
+					AllowInsecure: allowInsecure,
 				}, nil
 			}
 		}
@@ -111,11 +122,14 @@ func ParseURI(rawURI string) (*Config, error) {
 					port, _ := strconv.Atoi(portStr)
 					if port > 0 {
 						return &Config{
-							Method:   strings.ToLower(parts[0]),
-							Password: parts[1],
-							Server:   host,
-							Port:     port,
-							Tag:      tag,
+							Method:        strings.ToLower(parts[0]),
+							Password:      parts[1],
+							Server:        host,
+							Port:          port,
+							Tag:           tag,
+							Security:      security,
+							SNI:           sni,
+							AllowInsecure: allowInsecure,
 						}, nil
 					}
 				}
@@ -127,13 +141,19 @@ func ParseURI(rawURI string) (*Config, error) {
 }
 
 func decodeUserInfo(userInfo string) (method, password string, err error) {
-	decoded, err := decodeBase64Flexible(userInfo)
-	if err != nil {
-		// Might be unencoded method:password
-		decoded = []byte(userInfo)
+	if unescaped, err := url.PathUnescape(userInfo); err == nil {
+		userInfo = unescaped
+	}
+	var plain string
+	if strings.Contains(userInfo, ":") {
+		plain = userInfo
+	} else if decoded, err := decodeBase64Flexible(userInfo); err == nil {
+		plain = string(decoded)
+	} else {
+		plain = userInfo
 	}
 
-	parts := strings.SplitN(string(decoded), ":", 2)
+	parts := strings.SplitN(plain, ":", 2)
 	if len(parts) != 2 {
 		return "", "", fmt.Errorf("invalid userinfo format")
 	}

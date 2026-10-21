@@ -237,8 +237,13 @@ object ProxyLinkParser {
 
         val rawUserInfo = uri.rawUserInfo
         if (!rawUserInfo.isNullOrEmpty()) {
-            val decodedUserInfo = decodeBase64Safe(rawUserInfo)
-            val parts = if (decodedUserInfo.contains(":")) decodedUserInfo else URLDecoder.decode(rawUserInfo, StandardCharsets.UTF_8.name())
+            val safeUserInfo = rawUserInfo.replace("+", "%2B")
+            val urlDecoded = runCatching { URLDecoder.decode(safeUserInfo, StandardCharsets.UTF_8.name()) }.getOrDefault(rawUserInfo)
+            val parts = if (urlDecoded.contains(':')) {
+                urlDecoded
+            } else {
+                decodeBase64Safe(rawUserInfo)
+            }
             val colon = parts.indexOf(':')
             if (colon != -1) {
                 method = parts.substring(0, colon)
@@ -266,6 +271,12 @@ object ProxyLinkParser {
             }
         }
 
+        val query = parseQuery(uri.rawQuery)
+        val security = query["security"].orEmpty()
+        val sni = query["sni"].orEmpty()
+        val allowInsecure = query["insecure"] == "1" || query["insecure"].equals("true", ignoreCase = true)
+        val network = query["type"].orEmpty().ifEmpty { query["network"].orEmpty() }.ifEmpty { "tcp" }
+
         return ProxyProfile(
             name = tag.ifEmpty { "$server:$port" },
             protocol = ProxyProtocol.SHADOWSOCKS,
@@ -273,6 +284,10 @@ object ProxyLinkParser {
             port = port,
             method = method,
             password = password,
+            sni = sni,
+            allowInsecure = allowInsecure,
+            security = if (security.isNotEmpty()) security else "none",
+            network = network,
             tag = tag,
             rawUri = trimmed
         )

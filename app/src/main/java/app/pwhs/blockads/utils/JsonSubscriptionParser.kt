@@ -364,10 +364,17 @@ object JsonSubscriptionParser {
         val address = settings?.get("address")?.jsonPrimitive?.content.orEmpty()
         val port = settings?.get("port")?.jsonPrimitive?.intOrNull ?: 443
         val uuid = settings?.get("id")?.jsonPrimitive?.content.orEmpty()
+        val security = streamSettings?.get("security")?.jsonPrimitive?.content.orEmpty()
+        val network = streamSettings?.get("network")?.jsonPrimitive?.content ?: "tcp"
 
         val tlsSettings = streamSettings?.get("tlsSettings")?.jsonObject
         val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content.orEmpty().ifEmpty { address }
         val alpn = tlsSettings?.get("alpn")?.jsonArray?.joinToString(",") { it.jsonPrimitive.content }.orEmpty()
+        val allowInsecure = tlsSettings?.get("allowInsecure")?.jsonPrimitive?.booleanOrNull ?: false
+
+        val wsSettings = streamSettings?.get("wsSettings")?.jsonObject
+        val wsPath = wsSettings?.get("path")?.jsonPrimitive?.content.orEmpty()
+        val wsHost = wsSettings?.get("headers")?.jsonObject?.get("Host")?.jsonPrimitive?.content.orEmpty()
 
         return ProxyProfile(
             name = remarks.ifEmpty { "VMess" },
@@ -376,6 +383,11 @@ object JsonSubscriptionParser {
             port = port,
             uuid = uuid,
             sni = sni,
+            security = if (security.isNotEmpty()) security else "tls",
+            network = network,
+            wsPath = wsPath,
+            wsHost = wsHost,
+            allowInsecure = allowInsecure,
             alpn = alpn,
             tag = remarks
         )
@@ -395,9 +407,12 @@ object JsonSubscriptionParser {
         val method = firstServer?.get("method")?.jsonPrimitive?.content.orEmpty()
         val password = firstServer?.get("password")?.jsonPrimitive?.content.orEmpty()
 
+        val security = streamSettings?.get("security")?.jsonPrimitive?.content.orEmpty()
+        val network = streamSettings?.get("network")?.jsonPrimitive?.content ?: "tcp"
         val tlsSettings = streamSettings?.get("tlsSettings")?.jsonObject
         val sni = tlsSettings?.get("serverName")?.jsonPrimitive?.content.orEmpty()
         val alpn = tlsSettings?.get("alpn")?.jsonArray?.joinToString(",") { it.jsonPrimitive.content }.orEmpty()
+        val allowInsecure = tlsSettings?.get("allowInsecure")?.jsonPrimitive?.booleanOrNull ?: false
 
         return ProxyProfile(
             name = remarks.ifEmpty { "Shadowsocks" },
@@ -407,6 +422,9 @@ object JsonSubscriptionParser {
             method = method,
             password = password,
             sni = sni,
+            security = if (security.isNotEmpty()) security else "none",
+            network = network,
+            allowInsecure = allowInsecure,
             alpn = alpn,
             tag = remarks
         )

@@ -132,8 +132,8 @@ func testProxyNodeDelayWithProtect(protocol string, configJSON string, timeoutMs
 	}
 	endpoints := []delayEndpoint{
 		{ip: net.ParseIP("104.16.132.229"), host: "cp.cloudflare.com"},
+		{ip: net.ParseIP("1.1.1.1"), host: "cp.cloudflare.com"},
 		{ip: net.ParseIP("104.16.133.229"), host: "cp.cloudflare.com"},
-		{ip: net.ParseIP("142.250.190.46"), host: "www.google.com"},
 	}
 
 	deadline := time.Now().Add(timeout)
@@ -144,8 +144,8 @@ func testProxyNodeDelayWithProtect(protocol string, configJSON string, timeoutMs
 			break
 		}
 		perAttemptTimeout := time.Until(deadline)
-		if perAttemptTimeout > 2500*time.Millisecond && len(endpoints) > 1 {
-			perAttemptTimeout = 2500 * time.Millisecond
+		if perAttemptTimeout > 4*time.Second && len(endpoints) > 1 {
+			perAttemptTimeout = 4 * time.Second
 		}
 
 		start := time.Now()

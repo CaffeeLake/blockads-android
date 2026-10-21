@@ -31,12 +31,54 @@ func (c *Config) ToJSON() string {
 
 // FromJSON parses a JSON string into a Config.
 func FromJSON(data string) (*Config, error) {
-	var c Config
-	if err := json.Unmarshal([]byte(data), &c); err != nil {
+	type rawConfig struct {
+		Server        string          `json:"server"`
+		Port          int             `json:"port"`
+		Password      string          `json:"password"`
+		SNI           string          `json:"sni,omitempty"`
+		AllowInsecure bool            `json:"allowInsecure,omitempty"`
+		Network       string          `json:"network,omitempty"`
+		WSPath        string          `json:"wsPath,omitempty"`
+		WSHost        string          `json:"wsHost,omitempty"`
+		ALPN          json.RawMessage `json:"alpn,omitempty"`
+		Tag           string          `json:"tag,omitempty"`
+	}
+	var raw rawConfig
+	if err := json.Unmarshal([]byte(data), &raw); err != nil {
 		return nil, err
 	}
-	if c.Server == "" || c.Port <= 0 || c.Password == "" {
+	if raw.Server == "" || raw.Port <= 0 || raw.Password == "" {
 		return nil, fmt.Errorf("invalid trojan config: missing required fields")
+	}
+
+	var alpn []string
+	if len(raw.ALPN) > 0 {
+		var alpnList []string
+		if err := json.Unmarshal(raw.ALPN, &alpnList); err == nil {
+			alpn = alpnList
+		} else {
+			var alpnStr string
+			if err := json.Unmarshal(raw.ALPN, &alpnStr); err == nil && alpnStr != "" {
+				for _, part := range strings.Split(alpnStr, ",") {
+					if p := strings.TrimSpace(part); p != "" {
+						alpn = append(alpn, p)
+					}
+				}
+			}
+		}
+	}
+
+	c := &Config{
+		Server:        raw.Server,
+		Port:          raw.Port,
+		Password:      raw.Password,
+		SNI:           raw.SNI,
+		AllowInsecure: raw.AllowInsecure,
+		Network:       raw.Network,
+		WSPath:        raw.WSPath,
+		WSHost:        raw.WSHost,
+		ALPN:          alpn,
+		Tag:           raw.Tag,
 	}
 	if c.Network == "" {
 		c.Network = "tcp"
@@ -44,7 +86,7 @@ func FromJSON(data string) (*Config, error) {
 	if c.SNI == "" {
 		c.SNI = c.Server
 	}
-	return &c, nil
+	return c, nil
 }
 
 // ParseURI parses standard trojan:// URIs:

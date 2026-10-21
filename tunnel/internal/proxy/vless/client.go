@@ -188,26 +188,30 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 		return nil, fmt.Errorf("write vless header failed: %w", err)
 	}
 
-	// Read VLESS response header:
-	// [1 byte version: 0x00]
-	// [1 byte addon length: M]
-	// [M bytes addon payload]
-	respHeader := make([]byte, 2)
-	if _, err := io.ReadFull(sessionConn, respHeader); err != nil {
-		sessionConn.Close()
-		return nil, fmt.Errorf("read vless response header failed: %w", err)
-	}
+	return &vlessConn{Conn: sessionConn}, nil
+}
 
-	addonLen := int(respHeader[1])
-	if addonLen > 0 {
-		addonBuf := make([]byte, addonLen)
-		if _, err := io.ReadFull(sessionConn, addonBuf); err != nil {
-			sessionConn.Close()
-			return nil, fmt.Errorf("read vless addon payload failed: %w", err)
+type vlessConn struct {
+	net.Conn
+	headerRead bool
+}
+
+func (c *vlessConn) Read(b []byte) (int, error) {
+	if !c.headerRead {
+		c.headerRead = true
+		respHeader := make([]byte, 2)
+		if _, err := io.ReadFull(c.Conn, respHeader); err != nil {
+			return 0, fmt.Errorf("read vless response header: %w", err)
+		}
+		addonLen := int(respHeader[1])
+		if addonLen > 0 {
+			addonBuf := make([]byte, addonLen)
+			if _, err := io.ReadFull(c.Conn, addonBuf); err != nil {
+				return 0, fmt.Errorf("read vless addon payload: %w", err)
+			}
 		}
 	}
-
-	return sessionConn, nil
+	return c.Conn.Read(b)
 }
 
 func (c *Client) handshakeReality(rawConn net.Conn) (net.Conn, error) {

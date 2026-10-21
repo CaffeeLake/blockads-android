@@ -112,12 +112,38 @@ data class ProxyProfile(
         return true
     }
 
-    fun toEngineJson(): String = jsonInstance.encodeToString(serializer(), this)
+    fun sanitizeOrRepair(): ProxyProfile {
+        var profile = this
+        if (protocol == ProxyProtocol.SHADOWSOCKS && rawUri.isNotEmpty()) {
+            val isCorrupted = method.any { it.code !in 32..126 }
+            if (isCorrupted) {
+                val parsed = app.pwhs.blockads.utils.ProxyLinkParser.parse(rawUri).getOrNull()
+                if (parsed != null) {
+                    profile = parsed.copy(
+                        id = this.id,
+                        subscriptionId = this.subscriptionId,
+                        subscriptionUrl = this.subscriptionUrl
+                    )
+                }
+            }
+        }
+        if (profile.security.isEmpty() || profile.security == "none") {
+            if (profile.sni.isNotEmpty() || profile.rawUri.contains("security=tls", ignoreCase = true) || profile.rawUri.contains("\"tls\":\"tls\"", ignoreCase = true)) {
+                profile = profile.copy(security = "tls")
+            }
+        }
+        return profile
+    }
+
+    fun toEngineJson(): String = jsonInstance.encodeToString(serializer(), sanitizeOrRepair())
 
     fun toShareLink(): String = rawUri.ifEmpty { app.pwhs.blockads.utils.ProxyLinkBuilder.buildLink(this) }
 
     companion object {
-        private val jsonInstance = Json { ignoreUnknownKeys = true }
+        private val jsonInstance = Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
 
         fun fromJson(jsonStr: String): ProxyProfile =
             jsonInstance.decodeFromString(serializer(), jsonStr)

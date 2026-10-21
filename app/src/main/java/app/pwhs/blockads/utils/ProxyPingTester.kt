@@ -22,7 +22,7 @@ sealed interface NodePingResult {
 
 object ProxyPingTester {
 
-    private const val DEFAULT_TIMEOUT_MS = 5000
+    private const val DEFAULT_TIMEOUT_MS = 8000
     private const val MAX_CONCURRENT_PINGS = 5
 
     /**
@@ -31,17 +31,19 @@ object ProxyPingTester {
      */
     suspend fun pingNode(profile: ProxyProfile, timeoutMs: Int = DEFAULT_TIMEOUT_MS): NodePingResult =
         withContext(Dispatchers.IO) {
-            timber.log.Timber.d("pingNode: testing ${profile.displayName} [${profile.protocol}] (${profile.server}:${profile.port})")
+            val repaired = profile.sanitizeOrRepair()
+            timber.log.Timber.d("pingNode: testing ${repaired.displayName} [${repaired.protocol}] (${repaired.server}:${repaired.port})")
+            timber.log.Timber.d("pingNode: json=${repaired.toEngineJson()}")
             val protector = app.pwhs.blockads.service.AdBlockVpnService.tunnelSocketProtector
             try {
                 val delayMs = tunnel.Tunnel.testProxyNodeDelayProtected(
-                    profile.protocol.value,
-                    profile.toEngineJson(),
+                    repaired.protocol.value,
+                    repaired.toEngineJson(),
                     timeoutMs.toLong(),
                     protector
                 )
                 if (delayMs >= 0) {
-                    timber.log.Timber.d("pingNode: success for ${profile.displayName} latency=${delayMs}ms")
+                    timber.log.Timber.d("pingNode: success for ${repaired.displayName} latency=${delayMs}ms")
                     NodePingResult.Success(delayMs)
                 } else {
                     timber.log.Timber.w("pingNode: negative delay returned for ${profile.displayName}")

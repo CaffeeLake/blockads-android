@@ -21,7 +21,8 @@ type Config struct {
 	SNI      string `json:"sni,omitempty"`
 	WSPath   string `json:"wsPath,omitempty"`
 	WSHost   string `json:"wsHost,omitempty"`
-	Tag      string `json:"tag,omitempty"`
+	Tag           string `json:"tag,omitempty"`
+	AllowInsecure bool   `json:"allowInsecure,omitempty"`
 }
 
 // ToJSON serializes the config to a JSON string.
@@ -39,6 +40,10 @@ func FromJSON(data string) (*Config, error) {
 	if c.Server == "" || c.Port <= 0 || c.UUID == "" {
 		return nil, fmt.Errorf("invalid vmess config: missing required fields")
 	}
+	if strings.EqualFold(c.Security, "tls") {
+		c.TLS = "tls"
+		c.Security = "auto"
+	}
 	if c.Security == "" {
 		c.Security = "auto"
 	}
@@ -46,7 +51,7 @@ func FromJSON(data string) (*Config, error) {
 		c.Network = "tcp"
 	}
 	if c.TLS == "" {
-		if c.Port == 443 {
+		if c.Port == 443 || c.SNI != "" {
 			c.TLS = "tls"
 		} else {
 			c.TLS = "none"

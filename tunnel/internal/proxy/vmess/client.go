@@ -100,8 +100,13 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 
 	var tlsConfig *tls.Config
 	if c.config.TLS == "tls" {
+		sni := c.config.SNI
+		if sni == "" {
+			sni = c.config.Server
+		}
 		tlsConfig = &tls.Config{
-			ServerName: c.config.SNI,
+			ServerName:         sni,
+			InsecureSkipVerify: c.config.AllowInsecure,
 		}
 		tlsConn := tls.Client(rawConn, tlsConfig)
 		if err := tlsConn.Handshake(); err != nil {
