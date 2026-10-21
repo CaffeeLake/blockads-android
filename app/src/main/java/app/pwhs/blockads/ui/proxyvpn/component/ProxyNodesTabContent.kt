@@ -47,11 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.automirrored.filled.Sort
-import androidx.compose.material.icons.filled.AutoFixHigh
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.RssFeed
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ProxySortOption
@@ -127,7 +124,7 @@ fun ProxyNodesTabContent(
             var filterObfuscatedOnly by remember { mutableStateOf(false) }
 
             var sortOption by remember { mutableStateOf(ProxySortOption.DEFAULT) }
-            var showSortMenu by remember { mutableStateOf(false) }
+            var showToolsMenu by remember { mutableStateOf(false) }
 
             val obfuscatedCount = remember(profiles) { profiles.count { it.isObfuscated } }
 
@@ -167,165 +164,98 @@ fun ProxyNodesTabContent(
             }
 
             Column(modifier = Modifier.fillMaxSize()) {
-                // Compact Filter Chips + Ping All Row
-                Row(
+                // 1. Full-width Filter Chips Row
+                LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 2.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    androidx.compose.foundation.lazy.LazyRow(
-                        modifier = Modifier.weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
+                    item {
+                        FilterChip(
+                            selected = selectedProtocol == null && !filterObfuscatedOnly,
+                            onClick = {
+                                selectedProtocol = null
+                                filterObfuscatedOnly = false
+                            },
+                            label = {
+                                Text(
+                                    "${stringResource(R.string.proxy_filter_all)} (${profiles.size})",
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            },
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                    }
+                    if (obfuscatedCount > 0) {
                         item {
-                            androidx.compose.material3.FilterChip(
-                                selected = selectedProtocol == null && !filterObfuscatedOnly,
+                            FilterChip(
+                                selected = filterObfuscatedOnly,
                                 onClick = {
-                                    selectedProtocol = null
-                                    filterObfuscatedOnly = false
+                                    filterObfuscatedOnly = !filterObfuscatedOnly
+                                    if (filterObfuscatedOnly) selectedProtocol = null
                                 },
                                 label = {
                                     Text(
-                                        "${stringResource(R.string.proxy_filter_all)} (${profiles.size})",
+                                        "${stringResource(R.string.proxy_filter_obfuscated)} ($obfuscatedCount)",
                                         style = MaterialTheme.typography.labelSmall
                                     )
                                 },
                                 shape = RoundedCornerShape(8.dp)
                             )
                         }
-                        if (obfuscatedCount > 0) {
-                            item {
-                                androidx.compose.material3.FilterChip(
-                                    selected = filterObfuscatedOnly,
-                                    onClick = {
-                                        filterObfuscatedOnly = !filterObfuscatedOnly
-                                        if (filterObfuscatedOnly) selectedProtocol = null
-                                    },
-                                    label = {
-                                        Text(
-                                            "${stringResource(R.string.proxy_filter_obfuscated)} ($obfuscatedCount)",
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    },
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                            }
-                        }
-                        if (availableProtocols.size > 1) {
-                            items(availableProtocols) { protocol ->
-                                val count = profiles.count { it.protocol == protocol }
-                                androidx.compose.material3.FilterChip(
-                                    selected = selectedProtocol == protocol && !filterObfuscatedOnly,
-                                    onClick = {
-                                        filterObfuscatedOnly = false
-                                        selectedProtocol = if (selectedProtocol == protocol) null else protocol
-                                    },
-                                    label = {
-                                        Text(
-                                            "${protocol.displayName} ($count)",
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    },
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                            }
+                    }
+                    if (availableProtocols.size > 1) {
+                        items(availableProtocols) { protocol ->
+                            val count = profiles.count { it.protocol == protocol }
+                            FilterChip(
+                                selected = selectedProtocol == protocol && !filterObfuscatedOnly,
+                                onClick = {
+                                    filterObfuscatedOnly = false
+                                    selectedProtocol = if (selectedProtocol == protocol) null else protocol
+                                },
+                                label = {
+                                    Text(
+                                        "${protocol.displayName} ($count)",
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp)
+                            )
                         }
                     }
+                }
 
-                    Spacer(modifier = Modifier.width(6.dp))
+                // 2. Sub-header: Node count & Quick actions (Ping All, More Actions Menu)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 12.dp, top = 2.dp, bottom = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val countText = if (filteredProfiles.size != profiles.size) {
+                        "${filteredProfiles.size} / ${profiles.size} nodes"
+                    } else {
+                        "${profiles.size} nodes"
+                    }
+                    Text(
+                        text = countText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        fontWeight = FontWeight.Medium
+                    )
 
-                    IconButton(
-                        onClick = onPingAll,
-                        enabled = !isPingingAll,
-                        modifier = Modifier.size(34.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        if (isPingingAll) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(14.dp),
-                                strokeWidth = 2.dp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.Refresh,
-                                contentDescription = stringResource(R.string.proxy_ping_test_all),
-                                modifier = Modifier.size(18.dp),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Box {
                         IconButton(
-                            onClick = { showSortMenu = true },
+                            onClick = onPingAll,
+                            enabled = !isPingingAll,
                             modifier = Modifier.size(34.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.Sort,
-                                contentDescription = stringResource(R.string.proxy_sort),
-                                modifier = Modifier.size(18.dp),
-                                tint = if (sortOption != ProxySortOption.DEFAULT) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                                }
-                            )
-                        }
-
-                        DropdownMenu(
-                            expanded = showSortMenu,
-                            onDismissRequest = { showSortMenu = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        stringResource(R.string.proxy_sort_default),
-                                        fontWeight = if (sortOption == ProxySortOption.DEFAULT) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                },
-                                onClick = {
-                                    sortOption = ProxySortOption.DEFAULT
-                                    showSortMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        stringResource(R.string.proxy_sort_latency),
-                                        fontWeight = if (sortOption == ProxySortOption.LATENCY) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                },
-                                onClick = {
-                                    sortOption = ProxySortOption.LATENCY
-                                    showSortMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        stringResource(R.string.proxy_sort_name),
-                                        fontWeight = if (sortOption == ProxySortOption.NAME) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                },
-                                onClick = {
-                                    sortOption = ProxySortOption.NAME
-                                    showSortMenu = false
-                                }
-                            )
-                        }
-                    }
-
-                    if (hasSubscription) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        IconButton(
-                            onClick = onUpdateSubscription,
-                            enabled = !isUpdatingSubscription,
-                            modifier = Modifier.size(34.dp)
-                        ) {
-                            if (isUpdatingSubscription) {
+                            if (isPingingAll) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(14.dp),
                                     strokeWidth = 2.dp,
@@ -333,39 +263,43 @@ fun ProxyNodesTabContent(
                                 )
                             } else {
                                 Icon(
-                                    imageVector = Icons.Default.Sync,
-                                    contentDescription = "Update Subscription",
+                                    imageVector = Icons.Default.Refresh,
+                                    contentDescription = stringResource(R.string.proxy_ping_test_all),
                                     modifier = Modifier.size(18.dp),
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
-                    }
 
-                    Spacer(modifier = Modifier.width(4.dp))
-                    IconButton(
-                        onClick = onOpenSubscriptions,
-                        modifier = Modifier.size(34.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.RssFeed,
-                            contentDescription = "Manage Subscriptions",
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                        Box {
+                            IconButton(
+                                onClick = { showToolsMenu = true },
+                                modifier = Modifier.size(34.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = "More actions",
+                                    modifier = Modifier.size(18.dp),
+                                    tint = if (sortOption != ProxySortOption.DEFAULT) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    }
+                                )
+                            }
 
-                    Spacer(modifier = Modifier.width(4.dp))
-                    IconButton(
-                        onClick = onRemoveDuplicates,
-                        modifier = Modifier.size(34.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.AutoFixHigh,
-                            contentDescription = "Remove Duplicates",
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                            ProxyNodeToolsMenu(
+                                expanded = showToolsMenu,
+                                onDismissRequest = { showToolsMenu = false },
+                                sortOption = sortOption,
+                                onSortOptionChange = { sortOption = it },
+                                hasSubscription = hasSubscription,
+                                isUpdatingSubscription = isUpdatingSubscription,
+                                onUpdateSubscription = onUpdateSubscription,
+                                onOpenSubscriptions = onOpenSubscriptions,
+                                onRemoveDuplicates = onRemoveDuplicates
+                            )
+                        }
                     }
                 }
 
