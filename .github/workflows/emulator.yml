@@ -3,8 +3,6 @@ name: Emulator tests
 # Instrumented tests (browser, navigation, VPN smoke, CA storage, Room migrations) on real emulators.
 # Too slow for every push: nightly, on demand, and on PRs carrying the run-emulator label.
 on:
-  schedule:
-    - cron: '17 3 * * *'
   workflow_dispatch:
   pull_request:
     branches: [main]
