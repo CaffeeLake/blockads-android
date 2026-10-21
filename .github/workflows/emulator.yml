@@ -115,7 +115,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Build app and test APKs
-        run: ./gradlew -Ptunnel.source=prebuilt :app:assembleDebug :app:assembleDebugAndroidTest
+        run: ./gradlew -Ptunnel.source=prebuilt :app:assembleFdroidDebug :app:assembleFdroidDebugAndroidTest
 
       # The tests grant VPN consent themselves (appops ACTIVATE_VPN allow) and resolve DNS from the shell UID.
       - name: Run instrumented tests
@@ -128,7 +128,7 @@ jobs:
           # runner's unlock keyevent then fails the job before any test runs.
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew -Ptunnel.source=prebuilt :app:connectedDebugAndroidTest
+          script: ./gradlew -Ptunnel.source=prebuilt :app:connectedFdroidDebugAndroidTest
 
       - name: Upload test reports
         if: always()

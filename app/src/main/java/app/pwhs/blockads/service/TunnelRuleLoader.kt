@@ -90,10 +90,19 @@ object TunnelRuleLoader {
             }.getOrDefault("")
 
             val modules = pkg.modules.map { mod ->
-                if (mod.id == "youtube" && mod.scripts.isEmpty() && ytSanitizer.isNotBlank()) {
-                    mod.copy(scripts = listOf(ytSanitizer))
+                val resolvedScripts = mod.scripts.map { scriptRef ->
+                    if (scriptRef.endsWith(".js")) {
+                        runCatching {
+                            context.assets.open("browser/$scriptRef").bufferedReader().use { it.readText() }
+                        }.getOrDefault(scriptRef)
+                    } else {
+                        scriptRef
+                    }
+                }
+                if (mod.id == "youtube" && resolvedScripts.none { it.contains("__blockads_yt_sanitizer_injected") } && ytSanitizer.isNotBlank()) {
+                    mod.copy(scripts = listOf(ytSanitizer) + resolvedScripts)
                 } else {
-                    mod
+                    mod.copy(scripts = resolvedScripts)
                 }
             }
             val manifestPkg = pkg.copy(modules = modules)

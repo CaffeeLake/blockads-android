@@ -48,6 +48,16 @@ func newTestPKI(t *testing.T) *testPKI {
 func (p *testPKI) leaf(t *testing.T, host string, policies ...asn1.ObjectIdentifier) tls.Certificate {
 	t.Helper()
 	key, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	var oids []x509.OID
+	for _, pol := range policies {
+		uints := make([]uint64, len(pol))
+		for i, v := range pol {
+			uints[i] = uint64(v)
+		}
+		if oid, err := x509.OIDFromInts(uints); err == nil {
+			oids = append(oids, oid)
+		}
+	}
 	tmpl := &x509.Certificate{
 		SerialNumber:      big.NewInt(time.Now().UnixNano()),
 		Subject:           pkix.Name{CommonName: host},
@@ -57,6 +67,7 @@ func (p *testPKI) leaf(t *testing.T, host string, policies ...asn1.ObjectIdentif
 		KeyUsage:          x509.KeyUsageDigitalSignature,
 		ExtKeyUsage:       []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 		PolicyIdentifiers: policies,
+		Policies:          oids,
 	}
 	der, err := x509.CreateCertificate(rand.Reader, tmpl, p.cert, &key.PublicKey, p.key)
 	if err != nil {

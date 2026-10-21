@@ -75,10 +75,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Unit tests
-        run: ./gradlew :app:testReleaseUnitTest
+        run: ./gradlew :app:testFdroidReleaseUnitTest :app:testStoreReleaseUnitTest
 
       - name: Lint
-        run: ./gradlew :app:lintRelease
+        run: ./gradlew :app:lintFdroidRelease :app:lintStoreRelease
 
       - name: Build APK
         run: bundle exec fastlane build_release

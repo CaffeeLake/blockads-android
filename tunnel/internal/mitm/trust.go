@@ -169,5 +169,12 @@ func isExtendedValidation(cert *x509.Certificate) bool {
 			}
 		}
 	}
+	for _, p := range cert.Policies {
+		for _, ev := range evPolicyOIDs {
+			if p.EqualASN1OID(ev) {
+				return true
+			}
+		}
+	}
 	return false
 }

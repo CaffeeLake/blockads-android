@@ -103,6 +103,43 @@ class BrowserRuleStorage(private val context: Context) {
             BrowserRulePackage()
         }
 
+        val modules = if (basePkg.modules.isEmpty()) {
+            try {
+                val modContent = loadAssetString("browser/modules.json").ifBlank {
+                    loadAssetString("modules.json")
+                }
+                if (modContent.isNotBlank()) {
+                    val pkg = json.decodeFromString<app.pwhs.blockads.data.models.ModulesPackage>(modContent)
+                    pkg.modules.map { webMod ->
+                        BrowserRuleModule(
+                            id = webMod.id,
+                            domains = webMod.domains,
+                            intercepts = webMod.mockPaths.map {
+                                PathInterceptRule(
+                                    pathPattern = it.pattern,
+                                    mockStatus = it.status,
+                                    contentType = it.contentType ?: "",
+                                    mockBody = it.body ?: ""
+                                )
+                            } + webMod.blockPaths.map {
+                                PathInterceptRule(
+                                    pathPattern = it,
+                                    action = "reject"
+                                )
+                            },
+                            cssRules = webMod.cosmeticCss,
+                            scripts = webMod.scripts
+                        )
+                    }
+                } else emptyList()
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to decode default modules from assets")
+                emptyList()
+            }
+        } else {
+            basePkg.modules
+        }
+
         val cosmeticCss = if (basePkg.cosmeticCss.isNullOrBlank()) {
             loadAssetString("browser/adblock_cosmetic.css")
         } else {
@@ -117,7 +154,8 @@ class BrowserRuleStorage(private val context: Context) {
 
         return basePkg.copy(
             cosmeticCss = cosmeticCss,
-            scriptletsJs = scriptletsJs
+            scriptletsJs = scriptletsJs,
+            modules = modules
         )
     }
 

@@ -158,6 +158,10 @@ object DnsStampParser {
         val normalized = input.replace('-', '+').replace('_', '/')
         val padLen = (4 - (normalized.length % 4)) % 4
         val padded = normalized + "=".repeat(padLen)
-        return java.util.Base64.getDecoder().decode(padded)
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            java.util.Base64.getDecoder().decode(padded)
+        } else {
+            android.util.Base64.decode(padded, android.util.Base64.DEFAULT)
+        }
     }
 }

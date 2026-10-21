@@ -43,6 +43,9 @@ class BrowserViewModelTest {
             checks++
             return updateResult
         }
+        override suspend fun checkAndUpdateModules(customUrl: String?): Result<Boolean> {
+            return updateResult
+        }
         override suspend fun resetToDefaults() = Unit
     }
     private val suggestionQueries = mutableListOf<String>()

@@ -77,6 +77,7 @@ class FilterListRepositoryTest {
 
     @Test
     fun `sync inserts new built-ins and keeps them disabled by default`() = runTest {
+        if (app.pwhs.blockads.BuildConfig.IS_STORE) return@runTest
         catalog = "[${remote("EasyList", "https://easylist.to/easylist/easylist.txt")}]"
 
         repository().fetchAndSyncRemoteFilterLists()

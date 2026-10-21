@@ -69,12 +69,23 @@ func TestUpstreamRootPoolIncludesBundled(t *testing.T) {
 func TestIsExtendedValidation(t *testing.T) {
 	mk := func(policies []asn1.ObjectIdentifier) *x509.Certificate {
 		key, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+		var oids []x509.OID
+		for _, pol := range policies {
+			uints := make([]uint64, len(pol))
+			for i, v := range pol {
+				uints[i] = uint64(v)
+			}
+			if oid, err := x509.OIDFromInts(uints); err == nil {
+				oids = append(oids, oid)
+			}
+		}
 		tmpl := &x509.Certificate{
 			SerialNumber:      big.NewInt(1),
 			Subject:           pkix.Name{CommonName: "example.com"},
 			NotBefore:         time.Now().Add(-time.Hour),
 			NotAfter:          time.Now().Add(time.Hour),
 			PolicyIdentifiers: policies,
+			Policies:          oids,
 		}
 		der, err := x509.CreateCertificate(rand.Reader, tmpl, tmpl, &key.PublicKey, key)
 		if err != nil {

@@ -2,6 +2,7 @@ package app.pwhs.blockads.ui.filter
 
 import android.app.Application
 import app.cash.turbine.test
+import app.pwhs.blockads.BuildConfig
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.datastore.prefs.FilterPreferences
@@ -69,13 +70,15 @@ class FilterSetupViewModelTest {
     @Test
     fun `search matches name or description case-insensitively`() = runTest {
         keepHot(vm.filteredFilterLists)
-        assertEquals(2, vm.filteredFilterLists.value.size)
+        val expectedInitial = if (BuildConfig.IS_STORE) 1 else 2
+        assertEquals(expectedInitial, vm.filteredFilterLists.value.size)
         vm.setSearchQuery("TRACKERS")
         assertEquals(listOf(2L), vm.filteredFilterLists.value.map { it.id })
         vm.setSearchQuery("easy")
-        assertEquals(listOf(1L), vm.filteredFilterLists.value.map { it.id })
+        val expectedEasy = if (BuildConfig.IS_STORE) emptyList() else listOf(1L)
+        assertEquals(expectedEasy, vm.filteredFilterLists.value.map { it.id })
         vm.setSearchQuery("  ")
-        assertEquals(2, vm.filteredFilterLists.value.size)
+        assertEquals(expectedInitial, vm.filteredFilterLists.value.size)
     }
 
     @Test
