@@ -13,14 +13,14 @@
     <string name="vpn_revoked_title">広告ブロックが停止しました</string>
     <string name="vpn_revoked_text">別のVPNアプリが接続を引き継ぎました。タップしてBlockAdsを再有効化してください。</string>
     <string name="vpn_stopped_title">BlockAdsは一時停止中です</string>
-    <string name="vpn_stopped_text">広告ブロックが無効です。有効にするをタップして再開してください。</string>
+    <string name="vpn_stopped_text">広告ブロックが無効です。「有効にする」をタップして再開してください。</string>
     <string name="vpn_stopped_action_enable">有効にする</string>
     <string name="status_protected">保護中</string>
     <string name="status_connecting">接続中</string>
     <string name="status_unprotected">保護されていません</string>
     <string name="widget_description">広告ブロックのオン/オフを切り替えて統計情報を確認</string>
     <string name="widget_toggle_description">広告ブロックの切り替え</string>
-    <string name="widget_blocked_today">Blocked today</string>
+    <string name="widget_blocked_today">本日のブロック数</string>
     <string name="accessibility_toggle_vpn">VPN保護の切り替え</string>
     <string name="accessibility_vpn_active">VPN保護が有効です</string>
     <string name="accessibility_vpn_inactive">VPN保護が無効です</string>

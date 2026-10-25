@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="onboarding_title_1">スマートに広告をブロック</string>
-    <string name="onboarding_desc_1">ワンタップですべてのアプリとブラウザの広告をブロックします。DNSフィルタリング技術を使用 — root不要。\n\n🔒 プライバシーの約束: 閲覧データを収集、保存、送信することは一切ありません。すべての処理はデバイス上でのみ行われます。</string>
+    <string name="onboarding_desc_1">ワンタップですべてのアプリとブラウザの広告をブロックします。DNSフィルタリング技術を使用 — root権限は不要です。\n\n🔒 プライバシーの約束: 閲覧データを収集、保存、送信することは一切ありません。すべての処理はデバイス上でのみ行われます。</string>
     <string name="onboarding_skip">スキップ</string>
     <string name="onboarding_next">次へ</string>
     <string name="onboarding_get_started">始める</string>
