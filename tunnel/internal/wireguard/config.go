@@ -33,9 +33,16 @@ type WgInterface struct {
 	H2                  *int64  `json:"h2,omitempty"`
 	H3                  *int64  `json:"h3,omitempty"`
 	H4                  *int64  `json:"h4,omitempty"`
-	HeaderProtectionKey *string `json:"headerProtectionKey,omitempty"`
-	RandomTrailers      *bool   `json:"randomTrailers,omitempty"`
-	I1                  *string `json:"i1,omitempty"`
+	HeaderProtectionKey    *string `json:"headerProtectionKey,omitempty"`
+	RandomTrailers         *bool   `json:"randomTrailers,omitempty"`
+	DisableCookies         *bool   `json:"disableCookies,omitempty"`
+	ContentPaddingAddition *string `json:"contentPaddingAddition,omitempty"`
+	RekeyAfterTime         *string `json:"rekeyAfterTime,omitempty"`
+	RekeyTimeout           *string `json:"rekeyTimeout,omitempty"`
+	RejectAfterTime        *string `json:"rejectAfterTime,omitempty"`
+	KeepaliveTimeout       *string `json:"keepaliveTimeout,omitempty"`
+	MaxHandshakeAttempts   *string `json:"maxHandshakeAttempts,omitempty"`
+	I1                     *string `json:"i1,omitempty"`
 	I2                  *string `json:"i2,omitempty"`
 	I3                  *string `json:"i3,omitempty"`
 	I4                  *string `json:"i4,omitempty"`
@@ -129,6 +136,27 @@ func BuildIpcConfig(cfg *WgConfig) (string, error) {
 			return "", fmt.Errorf("interface header_protection_key: %w", err)
 		}
 		sb.WriteString(fmt.Sprintf("header_protection_key=%s\n", hpkHex))
+	}
+	if cfg.Interface.ContentPaddingAddition != nil && *cfg.Interface.ContentPaddingAddition != "" {
+		sb.WriteString(fmt.Sprintf("content_padding_addition=%s\n", *cfg.Interface.ContentPaddingAddition))
+	}
+	if cfg.Interface.RekeyAfterTime != nil && *cfg.Interface.RekeyAfterTime != "" {
+		sb.WriteString(fmt.Sprintf("rekey_after_time=%s\n", *cfg.Interface.RekeyAfterTime))
+	}
+	if cfg.Interface.RekeyTimeout != nil && *cfg.Interface.RekeyTimeout != "" {
+		sb.WriteString(fmt.Sprintf("rekey_timeout=%s\n", *cfg.Interface.RekeyTimeout))
+	}
+	if cfg.Interface.RejectAfterTime != nil && *cfg.Interface.RejectAfterTime != "" {
+		sb.WriteString(fmt.Sprintf("reject_after_time=%s\n", *cfg.Interface.RejectAfterTime))
+	}
+	if cfg.Interface.KeepaliveTimeout != nil && *cfg.Interface.KeepaliveTimeout != "" {
+		sb.WriteString(fmt.Sprintf("keepalive_timeout=%s\n", *cfg.Interface.KeepaliveTimeout))
+	}
+	if cfg.Interface.MaxHandshakeAttempts != nil && *cfg.Interface.MaxHandshakeAttempts != "" {
+		sb.WriteString(fmt.Sprintf("max_handshake_attempts=%s\n", *cfg.Interface.MaxHandshakeAttempts))
+	}
+	if cfg.Interface.DisableCookies != nil {
+		sb.WriteString(fmt.Sprintf("disable_cookies=%t\n", *cfg.Interface.DisableCookies))
 	}
 	if cfg.Interface.RandomTrailers != nil {
 		sb.WriteString(fmt.Sprintf("random_trailers=%t\n", *cfg.Interface.RandomTrailers))

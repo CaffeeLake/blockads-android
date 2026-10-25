@@ -50,6 +50,13 @@ object WireGuardConfigParser {
         var h4: Long? = null
         var headerProtectionKey: String? = null
         var randomTrailers: Boolean? = null
+        var disableCookies: Boolean? = null
+        var contentPaddingAddition: String? = null
+        var rekeyAfterTime: String? = null
+        var rekeyTimeout: String? = null
+        var rejectAfterTime: String? = null
+        var keepaliveTimeout: String? = null
+        var maxHandshakeAttempts: String? = null
         var i1: String? = null
         var i2: String? = null
         var i3: String? = null
@@ -126,7 +133,14 @@ object WireGuardConfigParser {
                         "h3" -> h3 = value.toLongOrNull()
                         "h4" -> h4 = value.toLongOrNull()
                         "headerprotectionkey", "header_protection_key" -> headerProtectionKey = value
-                        "randomtrailers", "random_trailers" -> randomTrailers = value.toBooleanStrictOrNull() ?: (value == "1")
+                        "randomtrailers", "random_trailers" -> randomTrailers = parseAmneziaBool(value)
+                        "disablecookies", "disable_cookies" -> disableCookies = parseAmneziaBool(value)
+                        "contentpaddingaddition", "content_padding_addition" -> contentPaddingAddition = value
+                        "rekeyaftertime", "rekey_after_time" -> rekeyAfterTime = value
+                        "rekeytimeout", "rekey_timeout" -> rekeyTimeout = value
+                        "rejectaftertime", "reject_after_time" -> rejectAfterTime = value
+                        "keepalivetimeout", "keepalive_timeout" -> keepaliveTimeout = value
+                        "maxhandshakeattempts", "max_handshake_attempts" -> maxHandshakeAttempts = value
                         "i1" -> i1 = value
                         "i2" -> i2 = value
                         "i3" -> i3 = value
@@ -187,6 +201,13 @@ object WireGuardConfigParser {
                 h4 = h4,
                 headerProtectionKey = headerProtectionKey,
                 randomTrailers = randomTrailers,
+                disableCookies = disableCookies,
+                contentPaddingAddition = contentPaddingAddition,
+                rekeyAfterTime = rekeyAfterTime,
+                rekeyTimeout = rekeyTimeout,
+                rejectAfterTime = rejectAfterTime,
+                keepaliveTimeout = keepaliveTimeout,
+                maxHandshakeAttempts = maxHandshakeAttempts,
                 i1 = i1,
                 i2 = i2,
                 i3 = i3,
@@ -314,4 +335,11 @@ object WireGuardConfigParser {
         }
         return String(bytes, StandardCharsets.UTF_8)
     }
+
+    private fun parseAmneziaBool(v: String): Boolean =
+        v.equals("on", ignoreCase = true) ||
+        v.equals("true", ignoreCase = true) ||
+        v.equals("yes", ignoreCase = true) ||
+        v.equals("1") ||
+        v.equals("enabled", ignoreCase = true)
 }

@@ -344,6 +344,13 @@ type WgInterface = internal/wireguard.WgInterface
 	field WgInterface.H4 *int64
 	field WgInterface.HeaderProtectionKey *string
 	field WgInterface.RandomTrailers *bool
+	field WgInterface.DisableCookies *bool
+	field WgInterface.ContentPaddingAddition *string
+	field WgInterface.RekeyAfterTime *string
+	field WgInterface.RekeyTimeout *string
+	field WgInterface.RejectAfterTime *string
+	field WgInterface.KeepaliveTimeout *string
+	field WgInterface.MaxHandshakeAttempts *string
 	field WgInterface.I1 *string
 	field WgInterface.I2 *string
 	field WgInterface.I3 *string
