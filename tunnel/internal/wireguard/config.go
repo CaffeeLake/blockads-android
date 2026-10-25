@@ -22,17 +22,24 @@ type WgInterface struct {
 	ListenPort *int     `json:"listenPort,omitempty"`
 	DNS        []string `json:"dns"`
 	// AmneziaWG obfuscation parameters
-	Jc   *int   `json:"jc,omitempty"`
-	Jmin *int   `json:"jmin,omitempty"`
-	Jmax *int   `json:"jmax,omitempty"`
-	S1   *int   `json:"s1,omitempty"`
-	S2   *int   `json:"s2,omitempty"`
-	S3   *int   `json:"s3,omitempty"`
-	S4   *int   `json:"s4,omitempty"`
-	H1   *int64 `json:"h1,omitempty"`
-	H2   *int64 `json:"h2,omitempty"`
-	H3   *int64 `json:"h3,omitempty"`
-	H4   *int64 `json:"h4,omitempty"`
+	Jc                  *int    `json:"jc,omitempty"`
+	Jmin                *int    `json:"jmin,omitempty"`
+	Jmax                *int    `json:"jmax,omitempty"`
+	S1                  *int    `json:"s1,omitempty"`
+	S2                  *int    `json:"s2,omitempty"`
+	S3                  *int    `json:"s3,omitempty"`
+	S4                  *int    `json:"s4,omitempty"`
+	H1                  *int64  `json:"h1,omitempty"`
+	H2                  *int64  `json:"h2,omitempty"`
+	H3                  *int64  `json:"h3,omitempty"`
+	H4                  *int64  `json:"h4,omitempty"`
+	HeaderProtectionKey *string `json:"headerProtectionKey,omitempty"`
+	RandomTrailers      *bool   `json:"randomTrailers,omitempty"`
+	I1                  *string `json:"i1,omitempty"`
+	I2                  *string `json:"i2,omitempty"`
+	I3                  *string `json:"i3,omitempty"`
+	I4                  *string `json:"i4,omitempty"`
+	I5                  *string `json:"i5,omitempty"`
 }
 
 // WgPeer is a [Peer] section.
@@ -83,6 +90,12 @@ func BuildIpcConfig(cfg *WgConfig) (string, error) {
 	if cfg.Interface.S2 != nil && *cfg.Interface.S2 >= 0 {
 		sb.WriteString(fmt.Sprintf("s2=%d\n", *cfg.Interface.S2))
 	}
+	if cfg.Interface.S3 != nil && *cfg.Interface.S3 >= 0 {
+		sb.WriteString(fmt.Sprintf("s3=%d\n", *cfg.Interface.S3))
+	}
+	if cfg.Interface.S4 != nil && *cfg.Interface.S4 >= 0 {
+		sb.WriteString(fmt.Sprintf("s4=%d\n", *cfg.Interface.S4))
+	}
 	if cfg.Interface.H1 != nil {
 		sb.WriteString(fmt.Sprintf("h1=%d\n", *cfg.Interface.H1))
 	}
@@ -94,6 +107,33 @@ func BuildIpcConfig(cfg *WgConfig) (string, error) {
 	}
 	if cfg.Interface.H4 != nil {
 		sb.WriteString(fmt.Sprintf("h4=%d\n", *cfg.Interface.H4))
+	}
+	if cfg.Interface.I1 != nil && *cfg.Interface.I1 != "" {
+		sb.WriteString(fmt.Sprintf("i1=%s\n", *cfg.Interface.I1))
+	}
+	if cfg.Interface.I2 != nil && *cfg.Interface.I2 != "" {
+		sb.WriteString(fmt.Sprintf("i2=%s\n", *cfg.Interface.I2))
+	}
+	if cfg.Interface.I3 != nil && *cfg.Interface.I3 != "" {
+		sb.WriteString(fmt.Sprintf("i3=%s\n", *cfg.Interface.I3))
+	}
+	if cfg.Interface.I4 != nil && *cfg.Interface.I4 != "" {
+		sb.WriteString(fmt.Sprintf("i4=%s\n", *cfg.Interface.I4))
+	}
+	if cfg.Interface.I5 != nil && *cfg.Interface.I5 != "" {
+		sb.WriteString(fmt.Sprintf("i5=%s\n", *cfg.Interface.I5))
+	}
+	if cfg.Interface.HeaderProtectionKey != nil && *cfg.Interface.HeaderProtectionKey != "" {
+		hpkHex, err := base64ToHex(*cfg.Interface.HeaderProtectionKey)
+		if err != nil {
+			return "", fmt.Errorf("interface header_protection_key: %w", err)
+		}
+		sb.WriteString(fmt.Sprintf("header_protection_key=%s\n", hpkHex))
+	}
+	if cfg.Interface.RandomTrailers != nil {
+		sb.WriteString(fmt.Sprintf("random_trailers=%t\n", *cfg.Interface.RandomTrailers))
+	} else if cfg.Interface.HeaderProtectionKey != nil && *cfg.Interface.HeaderProtectionKey != "" {
+		sb.WriteString("random_trailers=true\n")
 	}
 
 	for _, peer := range cfg.Peers {

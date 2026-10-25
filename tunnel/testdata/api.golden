@@ -168,7 +168,7 @@ var NewResolver func(protectFn func(fd int) bool) *internal/dns.Resolver
 func NewRouter() *Router
 var NewSafeSearch func() *internal/safesearch.SafeSearch
 func NewTcpIpStack() *TcpIpStack
-var NewWgOutbound func(tunDev github.com/amnezia-vpn/amneziawg-go/tun.Device, ipcConfig string, protectFn func(fd int) bool) (*internal/wireguard.WgOutbound, error)
+var NewWgOutbound func(tunDev github.com/amnezia-vpn/amneziawg-go/v3/tun.Device, ipcConfig string, protectFn func(fd int) bool) (*internal/wireguard.WgOutbound, error)
 type OutboundAdapter interface
 	method OutboundAdapter.HandlePacket(packet []byte, length int)
 	method OutboundAdapter.Name() string
@@ -342,6 +342,13 @@ type WgInterface = internal/wireguard.WgInterface
 	field WgInterface.H2 *int64
 	field WgInterface.H3 *int64
 	field WgInterface.H4 *int64
+	field WgInterface.HeaderProtectionKey *string
+	field WgInterface.RandomTrailers *bool
+	field WgInterface.I1 *string
+	field WgInterface.I2 *string
+	field WgInterface.I3 *string
+	field WgInterface.I4 *string
+	field WgInterface.I5 *string
 type WgOutbound = internal/wireguard.WgOutbound
 	method WgOutbound.HandlePacket(packet []byte, length int)
 	method WgOutbound.IsRunning() bool

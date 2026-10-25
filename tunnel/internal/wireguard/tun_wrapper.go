@@ -4,7 +4,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/amnezia-vpn/amneziawg-go/tun"
+	"github.com/amnezia-vpn/amneziawg-go/v3/tun"
 )
 
 const defaultMTU = 1280
@@ -84,6 +84,11 @@ func (t *ChannelTUN) Events() <-chan tun.Event {
 	return t.events
 }
 
+// BatchSize returns the preferred batch size for TUN packet reading.
+func (t *ChannelTUN) BatchSize() int {
+	return 1
+}
+
 // File returns nil.
 func (t *ChannelTUN) File() *os.File {
 	return nil
@@ -96,9 +101,4 @@ func (t *ChannelTUN) Close() error {
 		close(t.events)
 	})
 	return nil
-}
-
-// BatchSize returns 1.
-func (t *ChannelTUN) BatchSize() int {
-	return 1
 }

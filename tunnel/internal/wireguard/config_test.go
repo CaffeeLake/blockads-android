@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/amnezia-vpn/amneziawg-go/conn"
-	"github.com/amnezia-vpn/amneziawg-go/device"
+	"github.com/amnezia-vpn/amneziawg-go/v3/conn"
+	"github.com/amnezia-vpn/amneziawg-go/v3/device"
 )
 
 func key(b byte) string    { return base64.StdEncoding.EncodeToString(bytes.Repeat([]byte{b}, 32)) }

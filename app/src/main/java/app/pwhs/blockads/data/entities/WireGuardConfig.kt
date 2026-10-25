@@ -68,10 +68,17 @@ data class WireGuardInterface(
     val h1: Long? = null,
     val h2: Long? = null,
     val h3: Long? = null,
-    val h4: Long? = null
+    val h4: Long? = null,
+    val headerProtectionKey: String? = null,
+    val randomTrailers: Boolean? = null,
+    val i1: String? = null,
+    val i2: String? = null,
+    val i3: String? = null,
+    val i4: String? = null,
+    val i5: String? = null
 ) {
     val isAmnezia: Boolean
-        get() = jc != null || s1 != null || h1 != null
+        get() = jc != null || s1 != null || h1 != null || headerProtectionKey != null || i1 != null
 }
 
 /**

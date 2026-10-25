@@ -6,6 +6,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
@@ -14,20 +15,24 @@ import java.net.SocketTimeoutException
 
 object WireGuardPingTester {
 
-    private const val DEFAULT_TIMEOUT_MS = 5000
-    private const val MAX_CONCURRENT_PINGS = 5
+    private const val DEFAULT_TIMEOUT_MS = 8000
+    private const val MAX_CONCURRENT_PINGS = 1
+    private val wgMutex = kotlinx.coroutines.sync.Mutex()
 
     /**
      * Measures round-trip handshake delay to the first peer of a WireGuard profile.
      * Uses Go tunnel engine's testWireGuardDelayProtected with VPN socket protection.
+     * Tested sequentially to prevent UDP socket collisions when profiles share private keys.
      * Falls back to raw connection check in JVM test environments.
      */
     suspend fun pingProfile(
         profile: WireGuardProfile,
         timeoutMs: Int = DEFAULT_TIMEOUT_MS
-    ): NodePingResult = withContext(Dispatchers.IO) {
+    ): NodePingResult = wgMutex.withLock {
+        withContext(Dispatchers.IO) {
         val peer = profile.config.peers.firstOrNull { !it.endpoint.isNullOrBlank() }
         if (peer == null) {
+            timber.log.Timber.w("pingProfile: [${profile.name}] id=${profile.id} has no endpoint")
             return@withContext NodePingResult.Error("No endpoint")
         }
 
@@ -35,21 +40,24 @@ object WireGuardPingTester {
         try {
             val resolvedConfig = profile.config.resolveEndpoints()
             val targetEndpoint = resolvedConfig.peers.firstOrNull()?.endpoint
-            timber.log.Timber.d("pingProfile: testing ${profile.name} at resolved endpoint $targetEndpoint")
+            val isAwg = profile.config.isAmnezia
+            timber.log.Timber.d("pingProfile: testing [${profile.name}] id=${profile.id} isAmnezia=$isAwg originalEndpoint=${peer.endpoint} -> resolvedEndpoint=$targetEndpoint (protector=${protector != null})")
+            val configJson = resolvedConfig.toJson()
+            timber.log.Timber.d("pingProfile: [${profile.name}] sending configJson: $configJson")
             val delayMs = tunnel.Tunnel.testWireGuardDelayProtected(
-                resolvedConfig.toJson(),
+                configJson,
                 timeoutMs.toLong(),
                 protector
             )
             if (delayMs >= 0) {
-                timber.log.Timber.d("pingProfile: success for ${profile.name} latency=${delayMs}ms")
+                timber.log.Timber.i("pingProfile: SUCCESS for [${profile.name}] latency=${delayMs}ms")
                 NodePingResult.Success(delayMs)
             } else {
-                timber.log.Timber.w("pingProfile: negative delay returned for ${profile.name}")
+                timber.log.Timber.w("pingProfile: NEGATIVE delay returned for [${profile.name}]: $delayMs")
                 NodePingResult.Error("Test failed")
             }
         } catch (t: Throwable) {
-            timber.log.Timber.w(t, "pingProfile: failed for ${profile.name}: ${t.message}")
+            timber.log.Timber.w(t, "pingProfile: FAILED for [${profile.name}]: ${t.message}")
             val msg = t.message.orEmpty()
             if (t is LinkageError) {
                 fallbackPing(peer.endpoint, timeoutMs)
@@ -60,6 +68,7 @@ object WireGuardPingTester {
             }
         }
     }
+}
 
     private suspend fun fallbackPing(endpoint: String?, timeoutMs: Int): NodePingResult {
         if (endpoint.isNullOrBlank()) return NodePingResult.Error("Invalid endpoint")

@@ -48,6 +48,13 @@ object WireGuardConfigParser {
         var h2: Long? = null
         var h3: Long? = null
         var h4: Long? = null
+        var headerProtectionKey: String? = null
+        var randomTrailers: Boolean? = null
+        var i1: String? = null
+        var i2: String? = null
+        var i3: String? = null
+        var i4: String? = null
+        var i5: String? = null
 
         // Peer accumulator
         data class PeerBuilder(
@@ -118,6 +125,13 @@ object WireGuardConfigParser {
                         "h2" -> h2 = value.toLongOrNull()
                         "h3" -> h3 = value.toLongOrNull()
                         "h4" -> h4 = value.toLongOrNull()
+                        "headerprotectionkey", "header_protection_key" -> headerProtectionKey = value
+                        "randomtrailers", "random_trailers" -> randomTrailers = value.toBooleanStrictOrNull() ?: (value == "1")
+                        "i1" -> i1 = value
+                        "i2" -> i2 = value
+                        "i3" -> i3 = value
+                        "i4" -> i4 = value
+                        "i5" -> i5 = value
                     }
                 }
                 Section.PEER -> {
@@ -170,7 +184,14 @@ object WireGuardConfigParser {
                 h1 = h1,
                 h2 = h2,
                 h3 = h3,
-                h4 = h4
+                h4 = h4,
+                headerProtectionKey = headerProtectionKey,
+                randomTrailers = randomTrailers,
+                i1 = i1,
+                i2 = i2,
+                i3 = i3,
+                i4 = i4,
+                i5 = i5
             ),
             peers = parsedPeers
         )

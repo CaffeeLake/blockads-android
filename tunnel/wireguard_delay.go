@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"encoding/base64"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
-	"github.com/amnezia-vpn/amneziawg-go/conn"
-	"github.com/amnezia-vpn/amneziawg-go/device"
+	"github.com/amnezia-vpn/amneziawg-go/v3/conn"
+	"github.com/amnezia-vpn/amneziawg-go/v3/device"
 	"github.com/nqmgaming/blockads-tunnel/internal/wireguard"
 )
 
@@ -79,9 +80,11 @@ func testWireGuardDelayWithProtect(configJSON string, timeoutMs int, protectFn f
 		bind = conn.NewDefaultBind()
 	}
 
-	logger := device.NewLogger(device.LogLevelSilent, "")
+	logger := device.NewLogger(device.LogLevelVerbose, "[BlockAds/WG] ")
 	dev := device.NewDevice(tunDev, bind, logger)
 	defer dev.Close()
+
+	fmt.Fprintf(os.Stderr, "[BlockAds/Go] testWireGuardDelay: endpoint=%s, pubKey=%s, timeout=%dms, protectFn!=nil:%v\n", *targetPeer.Endpoint, targetPeer.PublicKey, timeoutMs, protectFn != nil)
 
 	if err := dev.IpcSet(ipcConf); err != nil {
 		return -1, fmt.Errorf("ipc set: %w", err)
@@ -106,16 +109,41 @@ func testWireGuardDelayWithProtect(configJSON string, timeoutMs int, protectFn f
 		return -1, fmt.Errorf("send handshake initiation: %w", err)
 	}
 
+	retransmitInterval := 1200 * time.Millisecond
+	nextRetransmit := time.Now().Add(retransmitInterval)
+
 	for time.Now().Before(deadline) {
-		time.Sleep(15 * time.Millisecond)
+		time.Sleep(20 * time.Millisecond)
 		ipc, err := dev.IpcGet()
 		if err == nil && parseLastHandshake(ipc) > 0 {
 			latency := time.Since(start).Milliseconds()
+			fmt.Fprintf(os.Stderr, "[BlockAds/Go] testWireGuardDelay: handshake OK in %d ms for %s\n", latency, *targetPeer.Endpoint)
 			return latency, nil
+		}
+		if time.Now().After(nextRetransmit) {
+			_ = peer.SendHandshakeInitiation(false)
+			nextRetransmit = time.Now().Add(retransmitInterval)
 		}
 	}
 
+	ipc, _ := dev.IpcGet()
+	fmt.Fprintf(os.Stderr, "[BlockAds/Go] testWireGuardDelay: handshake timed out after %d ms for %s. Last IPC: %s\n", timeoutMs, *targetPeer.Endpoint, summarizeIpc(ipc))
 	return -1, fmt.Errorf("handshake timed out")
+}
+
+func summarizeIpc(ipc string) string {
+	var lines []string
+	scanner := bufio.NewScanner(strings.NewReader(ipc))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "endpoint=") ||
+			strings.HasPrefix(line, "last_handshake_time_sec=") ||
+			strings.HasPrefix(line, "tx_bytes=") ||
+			strings.HasPrefix(line, "rx_bytes=") {
+			lines = append(lines, line)
+		}
+	}
+	return strings.Join(lines, ", ")
 }
 
 func parseLastHandshake(ipc string) int64 {
