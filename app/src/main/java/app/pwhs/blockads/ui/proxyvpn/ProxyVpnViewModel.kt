@@ -30,7 +30,8 @@ import kotlinx.coroutines.flow.launchIn
 import app.pwhs.blockads.utils.NodePingResult
 import app.pwhs.blockads.utils.ProxyPingTester
 import app.pwhs.blockads.data.entities.ProxySubscription
-import app.pwhs.blockads.utils.SubscriptionManager
+import app.pwhs.blockads.ui.proxyvpn.delegate.ProxySubscriptionDelegate
+import app.pwhs.blockads.utils.WireGuardPingTester
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -47,7 +48,15 @@ class ProxyVpnViewModel(
 
     private val appPrefs: AppPreferences by inject()
     private val httpClient: HttpClient by inject()
-    private val subscriptionManager = SubscriptionManager(appPrefs, httpClient)
+
+    private val subscriptionDelegate = ProxySubscriptionDelegate(
+        appPrefs = appPrefs,
+        httpClient = httpClient,
+        scope = viewModelScope,
+        emitEvent = { _events.emit(it) },
+        onError = { _error.value = it },
+        onRequestRestart = { ServiceController.requestRestart(getApplication()) }
+    )
 
     val preferredIPType: StateFlow<String> = appPrefs.preferredIPType.stateIn(
         scope = viewModelScope,
@@ -97,51 +106,49 @@ class ProxyVpnViewModel(
     private val _proxyProfiles = MutableStateFlow<List<ProxyProfile>>(emptyList())
     val proxyProfiles: StateFlow<List<ProxyProfile>> = _proxyProfiles.asStateFlow()
 
-    val proxySubscriptions: StateFlow<List<ProxySubscription>> = appPrefs.proxySubscriptions
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val proxySubscriptions: StateFlow<List<ProxySubscription>> = subscriptionDelegate.proxySubscriptions
+    val lastSubscriptionUrl: StateFlow<String?> = subscriptionDelegate.lastSubscriptionUrl
+    val isUpdatingSubscription: StateFlow<Boolean> = subscriptionDelegate.isUpdatingSubscription
 
-    val lastSubscriptionUrl: StateFlow<String?> = appPrefs.lastSubscriptionUrl
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    fun updateSubscription(subscription: ProxySubscription? = null) = subscriptionDelegate.updateSubscription(subscription)
+    fun updateAllSubscriptions() = subscriptionDelegate.updateAllSubscriptions()
+    fun deleteSubscription(id: String, deleteNodes: Boolean = true) = subscriptionDelegate.deleteSubscription(id, deleteNodes)
+    fun removeDuplicates() = subscriptionDelegate.removeDuplicates()
 
-    private val _isUpdatingSubscription = MutableStateFlow(false)
-    val isUpdatingSubscription: StateFlow<Boolean> = _isUpdatingSubscription.asStateFlow()
+    // WireGuard ping state
+    private val _wgPingResults = MutableStateFlow<Map<String, NodePingResult>>(emptyMap())
+    val wgPingResults: StateFlow<Map<String, NodePingResult>> = _wgPingResults.asStateFlow()
 
-    fun updateSubscription(subscription: ProxySubscription? = null) {
+    private val _isPingingAllWg = MutableStateFlow(false)
+    val isPingingAllWg: StateFlow<Boolean> = _isPingingAllWg.asStateFlow()
+
+    fun pingWireGuardProfile(profileId: String) {
+        val target = _wgProfiles.value.firstOrNull { it.id == profileId } ?: return
         viewModelScope.launch {
-            _isUpdatingSubscription.value = true
-            val res = if (subscription != null) {
-                subscriptionManager.updateSubscription(subscription).map { it.totalParsed }
-            } else {
-                subscriptionManager.updateAllSubscriptions()
+            _wgPingResults.update { it + (profileId to NodePingResult.Testing) }
+            val res = WireGuardPingTester.pingProfile(target)
+            _wgPingResults.update { it + (profileId to res) }
+        }
+    }
+
+    fun pingAllWireGuardProfiles() {
+        val profiles = _wgProfiles.value
+        if (profiles.isEmpty() || _isPingingAllWg.value) return
+        viewModelScope.launch {
+            _isPingingAllWg.value = true
+            _wgPingResults.update { current ->
+                current + profiles.associate { it.id to NodePingResult.Testing }
             }
-            _isUpdatingSubscription.value = false
-            res.fold(
-                onSuccess = { count ->
-                    _events.emit(ProxyVpnUiEvent.SubscriptionUpdated(count))
-                    ServiceController.requestRestart(getApplication())
-                },
-                onFailure = { err ->
-                    _error.value = err.message ?: "Failed to update subscription"
-                }
-            )
+            WireGuardPingTester.pingAll(profiles) { id, res ->
+                _wgPingResults.update { it + (id to res) }
+            }
+            _isPingingAllWg.value = false
         }
     }
 
-    fun updateAllSubscriptions() {
-        updateSubscription(null)
-    }
-
-    fun deleteSubscription(id: String, deleteNodes: Boolean = true) {
-        viewModelScope.launch {
-            subscriptionManager.deleteSubscription(id, deleteNodes)
-        }
-    }
-
-    fun removeDuplicates() {
-        viewModelScope.launch {
-            val count = subscriptionManager.removeDuplicates()
-            _events.emit(ProxyVpnUiEvent.DuplicatesRemoved(count))
-        }
+    fun pingAll() {
+        pingAllWireGuardProfiles()
+        pingAllProxyNodes()
     }
 
     private val _activeProxyProfileId = MutableStateFlow<String?>(null)
@@ -360,7 +367,7 @@ class ProxyVpnViewModel(
 
         // 1. Subscription URL (http/https)
         if (trimmed.startsWith("http://", ignoreCase = true) || trimmed.startsWith("https://", ignoreCase = true)) {
-            val importResult = subscriptionManager.importOrUpdateSubscription(trimmed)
+            val importResult = subscriptionDelegate.subscriptionManager.importOrUpdateSubscription(trimmed)
             return importResult.fold(
                 onSuccess = { (sub, res) ->
                     _events.emit(ProxyVpnUiEvent.ProfileImported("${res.totalParsed} profiles (${sub.name})"))
@@ -471,19 +478,14 @@ class ProxyVpnViewModel(
         return res.getString(R.string.wireguard_issue_fix_first, profile.name, issue.describe(res))
     }
 
-    private fun deriveNameFromUri(uri: Uri): String? {
-        val ctx = getApplication<Application>()
-        return try {
-            ctx.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                val nameIdx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-                if (nameIdx >= 0 && cursor.moveToFirst()) {
-                    cursor.getString(nameIdx)?.removeSuffix(".conf")?.takeIf { it.isNotBlank() }
-                } else null
-            }
-        } catch (_: Exception) {
-            null
+    private fun deriveNameFromUri(uri: Uri): String? = runCatching {
+        getApplication<Application>().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val idx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+            if (idx >= 0 && cursor.moveToFirst()) {
+                cursor.getString(idx)?.removeSuffix(".conf")?.takeIf { it.isNotBlank() }
+            } else null
         }
-    }
+    }.getOrNull()
 
     private fun defaultUniqueName(): String {
         val existing = _wgProfiles.value.map { it.name }.toSet()

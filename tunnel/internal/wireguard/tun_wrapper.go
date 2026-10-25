@@ -54,6 +54,9 @@ func (t *ChannelTUN) Read(bufs [][]byte, sizes []int, offset int) (int, error) {
 
 // Write is called by wireguard-go to inject decrypted packets back into the real TUN.
 func (t *ChannelTUN) Write(bufs [][]byte, offset int) (int, error) {
+	if t.realTUN == nil {
+		return len(bufs), nil
+	}
 	for i, buf := range bufs {
 		packet := buf[offset:]
 		if len(packet) == 0 {

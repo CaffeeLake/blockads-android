@@ -423,6 +423,7 @@ fun HomeScreen(
         if (showRoutingModeSheet) {
             val isRootAvailable by viewModel.isRootAvailable.collectAsStateWithLifecycle()
             val activeWgProfile by viewModel.activeWgProfile.collectAsStateWithLifecycle()
+            val activeProxyProfile by viewModel.activeProxyProfile.collectAsStateWithLifecycle()
             val activeSsProfile by viewModel.activeSsProfile.collectAsStateWithLifecycle()
             val activeProxyType by viewModel.activeProxyType.collectAsStateWithLifecycle()
 
@@ -430,6 +431,7 @@ fun HomeScreen(
                 currentMode = routingMode,
                 isRootAvailable = isRootAvailable,
                 activeWgProfile = activeWgProfile,
+                activeProxyProfile = activeProxyProfile,
                 activeSsProfile = activeSsProfile,
                 activeProxyType = activeProxyType,
                 onSelectMode = { mode ->

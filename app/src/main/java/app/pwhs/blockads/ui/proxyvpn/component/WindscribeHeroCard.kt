@@ -181,32 +181,34 @@ fun WindscribeHeroCard(
                         }
 
                         // Protocol & Port Pill
-                        Surface(
-                            shape = RoundedCornerShape(6.dp),
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                            border = BorderStroke(
-                                1.dp,
-                                if (isConnected) MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
-                                else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
-                            )
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        if (protocol.isNotBlank()) {
+                            Surface(
+                                shape = RoundedCornerShape(6.dp),
+                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                                border = BorderStroke(
+                                    1.dp,
+                                    if (isConnected) MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+                                    else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+                                )
                             ) {
-                                Text(
-                                    text = if (port != null && port > 0) "$protocol $port" else protocol,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Spacer(modifier = Modifier.width(2.dp))
-                                Icon(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.size(13.dp)
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                ) {
+                                    Text(
+                                        text = if (port != null && port > 0) "$protocol $port" else protocol,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Icon(
+                                        imageVector = Icons.Default.ChevronRight,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(13.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -273,39 +275,45 @@ fun WindscribeHeroCard(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     // Subtitle: Host + Ping
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Language,
-                            contentDescription = null,
-                            tint = iconTint,
-                            modifier = Modifier.size(13.dp)
-                        )
-                        Text(
-                            text = serverHost ?: "vpn.pwhs.app",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = bodyTextColor,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f, fill = false)
-                        )
-                        if (latencyMs != null && latencyMs > 0) {
-                            val pingColor = if (latencyMs < 150) Color(0xFF10B981) else Color(0xFFF59E0B)
-                            Text(
-                                text = "• $latencyMs ms",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = pingColor,
-                                fontWeight = FontWeight.Bold
-                            )
-                        } else if (isConnected) {
-                            Text(
-                                text = "• ${stringResource(R.string.proxy_hero_connected_desc)}",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = if (isConnected) MaterialTheme.colorScheme.primary else Color(0xFF10B981),
-                                fontWeight = FontWeight.SemiBold
-                            )
+                    val hasHost = !serverHost.isNullOrBlank()
+                    val hasLatency = latencyMs != null && latencyMs > 0
+                    if (hasHost || hasLatency || isConnected) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            if (hasHost) {
+                                Icon(
+                                    imageVector = Icons.Default.Language,
+                                    contentDescription = null,
+                                    tint = iconTint,
+                                    modifier = Modifier.size(13.dp)
+                                )
+                                Text(
+                                    text = serverHost.orEmpty(),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = bodyTextColor,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.weight(1f, fill = false)
+                                )
+                            }
+                            if (hasLatency) {
+                                val pingColor = if (latencyMs < 150) Color(0xFF10B981) else Color(0xFFF59E0B)
+                                Text(
+                                    text = if (hasHost) "• $latencyMs ms" else "$latencyMs ms",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = pingColor,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            } else if (isConnected) {
+                                Text(
+                                    text = if (hasHost) "• ${stringResource(R.string.proxy_hero_connected_desc)}" else stringResource(R.string.proxy_hero_connected_desc),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (isConnected) MaterialTheme.colorScheme.primary else Color(0xFF10B981),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         }
                     }
 

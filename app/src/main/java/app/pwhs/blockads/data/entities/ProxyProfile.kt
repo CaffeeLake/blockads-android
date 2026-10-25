@@ -112,6 +112,19 @@ data class ProxyProfile(
         return true
     }
 
+    suspend fun resolveServer(): ProxyProfile {
+        val resolved = app.pwhs.blockads.utils.DnsResolverUtils.resolveHost(server)
+        return if (resolved != null) {
+            copy(
+                server = resolved,
+                sni = sni.ifEmpty { server },
+                wsHost = if (network == "ws" && wsHost.isEmpty()) server else wsHost
+            )
+        } else {
+            this
+        }
+    }
+
     fun sanitizeOrRepair(): ProxyProfile {
         var profile = this
         if (protocol == ProxyProtocol.SHADOWSOCKS && rawUri.isNotEmpty()) {

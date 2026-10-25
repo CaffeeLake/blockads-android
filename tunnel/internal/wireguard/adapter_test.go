@@ -56,7 +56,7 @@ func (p *protectRecorder) count() int {
 func TestProtectedBindProtectsSockets(t *testing.T) {
 	for _, ret := range []bool{true, false} { // false only logs
 		rec := &protectRecorder{ret: ret}
-		b := newProtectedBind(rec.protect)
+		b := NewProtectedBind(rec.protect)
 		fns, port, err := b.Open(0)
 		if err != nil {
 			t.Fatalf("Open: %v", err)

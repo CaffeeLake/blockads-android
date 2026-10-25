@@ -15,7 +15,8 @@ type protectedBind struct {
 	protect func(fd int) bool
 }
 
-func newProtectedBind(protect func(fd int) bool) conn.Bind {
+// NewProtectedBind creates a conn.Bind that protects inner sockets using the given protect callback.
+func NewProtectedBind(protect func(fd int) bool) conn.Bind {
 	return &protectedBind{
 		Bind:    conn.NewDefaultBind(),
 		protect: protect,

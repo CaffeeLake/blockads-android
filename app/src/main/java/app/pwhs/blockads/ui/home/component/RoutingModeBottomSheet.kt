@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.data.geoip.GeoIpLookup
@@ -61,6 +62,7 @@ fun RoutingModeBottomSheet(
     currentMode: String,
     isRootAvailable: Boolean,
     activeWgProfile: WireGuardProfile?,
+    activeProxyProfile: ProxyProfile?,
     activeSsProfile: ShadowsocksProfile?,
     activeProxyType: String,
     onSelectMode: (String) -> Unit,
@@ -141,13 +143,18 @@ fun RoutingModeBottomSheet(
                 currentMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
 
             val isWg = activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD || currentMode == AppPreferences.ROUTING_MODE_WIREGUARD
-            val hasActiveProfile = if (isWg) activeWgProfile != null else activeSsProfile != null
+            val hasActiveProfile = if (isWg) activeWgProfile != null else (activeProxyProfile != null || activeSsProfile != null)
 
             val proxyStatusText = if (isWg && activeWgProfile != null) {
                 val endpoint = activeWgProfile.config.peers.firstOrNull()?.endpoint.orEmpty()
                 val cc = WireGuardGeoIpHelper.getCountryCodeFast(endpoint, activeWgProfile.name)
                 val flag = cc?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
                 if (flag.isNotEmpty()) "$flag ${activeWgProfile.name} (WireGuard)" else "${activeWgProfile.name} (WireGuard)"
+            } else if (!isWg && activeProxyProfile != null) {
+                val cc = WireGuardGeoIpHelper.getCountryCodeFast(activeProxyProfile.server, activeProxyProfile.displayName)
+                val flag = cc?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()
+                val protoLabel = activeProxyProfile.protocol.name.lowercase().replaceFirstChar { it.uppercase() }
+                if (flag.isNotEmpty()) "$flag ${activeProxyProfile.displayName} ($protoLabel)" else "${activeProxyProfile.displayName} ($protoLabel)"
             } else if (!isWg && activeSsProfile != null) {
                 val cc = WireGuardGeoIpHelper.getCountryCodeFast(activeSsProfile.server, activeSsProfile.tag)
                 val flag = cc?.let { GeoIpLookup.countryCodeToEmoji(it) }.orEmpty()

@@ -27,7 +27,7 @@ func NewWgOutbound(tunDev tun.Device, ipcConfig string, protectFn func(fd int) b
 
 	var bind conn.Bind
 	if protectFn != nil {
-		bind = newProtectedBind(protectFn)
+		bind = NewProtectedBind(protectFn)
 	} else {
 		bind = conn.NewDefaultBind()
 	}

@@ -31,8 +31,8 @@ object ProxyPingTester {
      */
     suspend fun pingNode(profile: ProxyProfile, timeoutMs: Int = DEFAULT_TIMEOUT_MS): NodePingResult =
         withContext(Dispatchers.IO) {
-            val repaired = profile.sanitizeOrRepair()
-            timber.log.Timber.d("pingNode: testing ${repaired.displayName} [${repaired.protocol}] (${repaired.server}:${repaired.port})")
+            val repaired = profile.sanitizeOrRepair().resolveServer()
+            timber.log.Timber.d("pingNode: testing ${repaired.displayName} [${repaired.protocol}] (${repaired.server}:${repaired.port}) sni=${repaired.sni}")
             timber.log.Timber.d("pingNode: json=${repaired.toEngineJson()}")
             val protector = app.pwhs.blockads.service.AdBlockVpnService.tunnelSocketProtector
             try {
@@ -46,19 +46,16 @@ object ProxyPingTester {
                     timber.log.Timber.d("pingNode: success for ${repaired.displayName} latency=${delayMs}ms")
                     NodePingResult.Success(delayMs)
                 } else {
-                    timber.log.Timber.w("pingNode: negative delay returned for ${profile.displayName}")
-                    NodePingResult.Error("Test failed")
+                    timber.log.Timber.w("pingNode: negative delay returned for ${repaired.displayName}, falling back to TCP ping")
+                    fallbackPing(repaired, timeoutMs)
                 }
             } catch (t: Throwable) {
-                timber.log.Timber.w(t, "pingNode: proxy delay failed for ${profile.displayName}: ${t.message}")
+                timber.log.Timber.w(t, "pingNode: proxy delay failed for ${repaired.displayName}: ${t.message}")
                 val msg = t.message.orEmpty()
-                if (t is UnsatisfiedLinkError || t is NoClassDefFoundError) {
-                    // Running in JVM test environment without native Go library
-                    fallbackPing(profile, timeoutMs)
-                } else if (msg.contains("timeout", ignoreCase = true) || msg.contains("deadline", ignoreCase = true)) {
+                if (msg.contains("timeout", ignoreCase = true) || msg.contains("deadline", ignoreCase = true)) {
                     NodePingResult.Timeout
                 } else {
-                    NodePingResult.Error(msg.ifEmpty { "Failed" })
+                    fallbackPing(repaired, timeoutMs)
                 }
             }
         }

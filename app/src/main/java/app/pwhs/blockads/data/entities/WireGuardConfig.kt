@@ -21,6 +21,25 @@ data class WireGuardConfig(
 
     fun toJson(): String = json.encodeToString(this)
 
+    suspend fun resolveEndpoints(): WireGuardConfig {
+        val resolvedPeers = peers.map { peer ->
+            val endpoint = peer.endpoint ?: return@map peer
+            val lastColon = endpoint.lastIndexOf(':')
+            if (lastColon <= 0) return@map peer
+
+            val host = endpoint.substring(0, lastColon).trim().removeSurrounding("[", "]")
+            val port = endpoint.substring(lastColon + 1).trim()
+
+            val resolved = app.pwhs.blockads.utils.DnsResolverUtils.resolveHost(host)
+            if (resolved != null) {
+                peer.copy(endpoint = "$resolved:$port")
+            } else {
+                peer
+            }
+        }
+        return copy(peers = resolvedPeers)
+    }
+
     companion object {
         private val json = Json { ignoreUnknownKeys = true }
 

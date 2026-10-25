@@ -23,12 +23,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileOpen
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -47,6 +49,7 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.ui.wireguard.component.EmptyState
 import app.pwhs.blockads.ui.wireguard.component.ProfileRow
+import app.pwhs.blockads.utils.NodePingResult
 
 @Composable
 fun WireGuardTabContent(
@@ -54,6 +57,10 @@ fun WireGuardTabContent(
     activeId: String?,
     isProxyActive: Boolean,
     isLoading: Boolean,
+    pingResults: Map<String, NodePingResult> = emptyMap(),
+    isPingingAll: Boolean = false,
+    onPingProfile: (String) -> Unit = {},
+    onPingAll: () -> Unit = {},
     onSelectProfile: (String) -> Unit,
     onEditProfile: (String) -> Unit,
     onRenameProfile: (String, String) -> Unit,
@@ -97,20 +104,66 @@ fun WireGuardTabContent(
         if (filteredProfiles.isEmpty() && !isLoading) {
             EmptyState(modifier = Modifier.fillMaxSize())
         } else if (filteredProfiles.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                items(filteredProfiles, key = { it.id }) { profile ->
-                    ProfileRow(
-                        profile = profile,
-                        isActive = isProxyActive && profile.id == activeId,
-                        onClick = { onSelectProfile(profile.id) },
-                        onEdit = { onEditProfile(profile.id) },
-                        onRename = { renameTarget = profile },
-                        onDelete = { deleteTarget = profile },
+            Column(modifier = Modifier.fillMaxSize()) {
+                // Sub-header: Profile count & Quick actions (Ping All)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 12.dp, top = 2.dp, bottom = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val countText = if (filteredProfiles.size != profiles.size) {
+                        "${filteredProfiles.size} / ${profiles.size} profiles"
+                    } else {
+                        "${profiles.size} profiles"
+                    }
+                    Text(
+                        text = countText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        fontWeight = FontWeight.Medium
                     )
+
+                    IconButton(
+                        onClick = onPingAll,
+                        enabled = !isPingingAll,
+                        modifier = Modifier.size(34.dp)
+                    ) {
+                        if (isPingingAll) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(14.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,
+                                contentDescription = stringResource(R.string.proxy_ping_test_all),
+                                modifier = Modifier.size(18.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    items(filteredProfiles, key = { it.id }) { profile ->
+                        ProfileRow(
+                            profile = profile,
+                            isActive = isProxyActive && profile.id == activeId,
+                            pingResult = pingResults[profile.id],
+                            onPing = { onPingProfile(profile.id) },
+                            onClick = { onSelectProfile(profile.id) },
+                            onEdit = { onEditProfile(profile.id) },
+                            onRename = { renameTarget = profile },
+                            onDelete = { deleteTarget = profile },
+                        )
+                    }
                 }
             }
         }

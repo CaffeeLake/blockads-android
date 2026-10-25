@@ -132,6 +132,7 @@ type Engine struct
 	method Engine.Stop()
 	method Engine.StopStackMitm()
 	method Engine.TestProxyDelay(protocol string, configJSON string, timeoutMs int) (int64, error)
+	method Engine.TestWireGuardDelay(configJSON string, timeoutMs int) (int64, error)
 type FirewallChecker interface
 	method FirewallChecker.ShouldBlock(appName string) bool
 type GeoIPDatabase = internal/geoip.Database
@@ -316,6 +317,8 @@ type TcpIpStack struct
 	method TcpIpStack.UdpFlowCount() int64
 func TestProxyNodeDelay(protocol string, configJSON string, timeoutMs int) (int64, error)
 func TestProxyNodeDelayProtected(protocol string, configJSON string, timeoutMs int, protector SocketProtector) (int64, error)
+func TestWireGuardDelay(configJSON string, timeoutMs int) (int64, error)
+func TestWireGuardDelayProtected(configJSON string, timeoutMs int, protector SocketProtector) (int64, error)
 type UIDResolver interface
 	method UIDResolver.ResolveUID(protocol int, localIP string, localPort int, remoteIP string, remotePort int) int
 const UIDUnknown untyped int = -1

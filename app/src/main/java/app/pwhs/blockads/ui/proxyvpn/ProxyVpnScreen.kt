@@ -44,8 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -64,11 +62,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.ui.proxyvpn.component.AddProxyNodeDialog
 import app.pwhs.blockads.ui.proxyvpn.component.CountryFlagRegistry
-import app.pwhs.blockads.ui.proxyvpn.component.ProxyNodesTabContent
+import app.pwhs.blockads.ui.proxyvpn.component.UnifiedProxyNodesContent
 import app.pwhs.blockads.ui.proxyvpn.component.WindscribeHeroCard
-import app.pwhs.blockads.ui.proxyvpn.component.WireGuardTabContent
 import app.pwhs.blockads.utils.NodePingResult
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 import org.koin.androidx.compose.koinViewModel
@@ -85,13 +83,14 @@ fun ProxyVpnScreen(
     modifier: Modifier = Modifier,
     viewModel: ProxyVpnViewModel = koinViewModel()
 ) {
-    val selectedTab by viewModel.selectedTab.collectAsStateWithLifecycle()
     val isProxyActive by viewModel.isProxyActive.collectAsStateWithLifecycle()
     val activeProxyType by viewModel.activeProxyType.collectAsStateWithLifecycle()
 
     val wgProfiles by viewModel.wgProfiles.collectAsStateWithLifecycle()
     val activeWgId by viewModel.activeWgProfileId.collectAsStateWithLifecycle()
     val isLoadingWg by viewModel.isLoadingWg.collectAsStateWithLifecycle()
+    val wgPingResults by viewModel.wgPingResults.collectAsStateWithLifecycle()
+    val isPingingAllWg by viewModel.isPingingAllWg.collectAsStateWithLifecycle()
 
     val proxyProfiles by viewModel.proxyProfiles.collectAsStateWithLifecycle()
     val activeProxyId by viewModel.activeProxyProfileId.collectAsStateWithLifecycle()
@@ -167,40 +166,41 @@ fun ProxyVpnScreen(
     }
 
     val isWgActive = activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD
-    val showWg = if (isProxyActive) isWgActive else (selectedTab == 0)
+    val hasActiveNode = if (isWgActive) activeWg != null else activeProxy != null
+    val isCardConnected = isProxyActive && hasActiveNode
 
-    val isCardConnected = isProxyActive && (if (isWgActive) activeWg != null else activeProxy != null)
-
-    val heroServerName = if (showWg) {
-        activeWg?.name.orEmpty()
+    val heroServerName = if (isWgActive && activeWg != null) {
+        activeWg.name
     } else {
-        activeProxy?.displayName.orEmpty()
+        activeProxy?.displayName ?: activeWg?.name.orEmpty()
     }
 
-    val heroCountryCode: String? = remember(showWg, activeWg, activeProxy) {
-        if (showWg) {
-            activeWg?.name?.let { WireGuardGeoIpHelper.getCountryCodeFast(it, it) }
+    val heroCountryCode: String? = remember(isWgActive, activeWg, activeProxy) {
+        if (isWgActive && activeWg != null) {
+            WireGuardGeoIpHelper.getCountryCodeFast(activeWg.name, activeWg.name)
         } else {
             activeProxy?.let { WireGuardGeoIpHelper.getCountryCodeFast(it.server, it.tag) }
+                ?: activeWg?.let { WireGuardGeoIpHelper.getCountryCodeFast(it.name, it.name) }
         }
     }
 
-    val heroProtocolText = if (showWg) {
+    val heroProtocolText = if (isWgActive && activeWg != null) {
         "WireGuard"
     } else {
-        activeProxy?.protocolBadgeText ?: "Proxy"
+        activeProxy?.protocolBadgeText ?: if (activeWg != null) "WireGuard" else ""
     }
 
-    val heroPort = if (showWg) {
-        activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringAfterLast(":", "")?.toIntOrNull() ?: 51820
+    val heroPort = if (isWgActive && activeWg != null) {
+        activeWg.config.peers.firstOrNull()?.endpoint?.substringAfterLast(":", "")?.toIntOrNull()
     } else {
-        activeProxy?.port ?: 443
+        activeProxy?.port ?: activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringAfterLast(":", "")?.toIntOrNull()
     }
 
-    val heroLatency = if (showWg) {
-        null
+    val heroLatency = if (isWgActive && activeWg != null) {
+        (wgPingResults[activeWg.id] as? NodePingResult.Success)?.latencyMs
     } else {
         (activeProxy?.let { pingResults[it.id] } as? NodePingResult.Success)?.latencyMs
+            ?: (activeWg?.let { wgPingResults[it.id] } as? NodePingResult.Success)?.latencyMs
     }
 
     Scaffold(
@@ -300,10 +300,10 @@ fun ProxyVpnScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            val heroHost = if (showWg) {
-                activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringBeforeLast(":") ?: "wireguard.vpn"
+            val heroHost = if (isWgActive && activeWg != null) {
+                activeWg.config.peers.firstOrNull()?.endpoint?.substringBeforeLast(":")
             } else {
-                activeProxy?.server ?: "vpn.pwhs.app"
+                activeProxy?.server ?: activeWg?.config?.peers?.firstOrNull()?.endpoint?.substringBeforeLast(":")
             }
 
             // Windscribe-style Cyber Dark Cockpit Hero Card
@@ -323,114 +323,41 @@ fun ProxyVpnScreen(
                 onRefreshIp = { viewModel.refreshNetworkAndIp() }
             )
 
-            // Modern Segmented Pill Tabs
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 6.dp),
-                shape = RoundedCornerShape(14.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    // Tab 1: WireGuard
-                    Surface(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable { viewModel.selectTab(0) },
-                        shape = RoundedCornerShape(10.dp),
-                        color = if (selectedTab == 0) MaterialTheme.colorScheme.surface else Color.Transparent,
-                        shadowElevation = if (selectedTab == 0) 2.dp else 0.dp
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(vertical = 9.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val countText = if (wgProfiles.isNotEmpty()) " (${wgProfiles.size})" else ""
-                            Text(
-                                text = "${stringResource(R.string.proxy_vpn_tab_wireguard)}$countText",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Medium,
-                                color = if (selectedTab == 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-
-                    // Tab 2: Proxy Nodes
-                    Surface(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable { viewModel.selectTab(1) },
-                        shape = RoundedCornerShape(10.dp),
-                        color = if (selectedTab == 1) MaterialTheme.colorScheme.surface else Color.Transparent,
-                        shadowElevation = if (selectedTab == 1) 2.dp else 0.dp
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(vertical = 9.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val countText = if (proxyProfiles.isNotEmpty()) " (${proxyProfiles.size})" else ""
-                            Text(
-                                text = "${stringResource(R.string.proxy_vpn_tab_proxies)}$countText",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Medium,
-                                color = if (selectedTab == 1) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-            }
-
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Tab Content
-            Box(modifier = Modifier.weight(1f)) {
-                when (selectedTab) {
-                    0 -> WireGuardTabContent(
-                        profiles = wgProfiles,
-                        activeId = activeWgId,
-                        isProxyActive = isProxyActive && activeProxyType == AppPreferences.PROXY_TYPE_WIREGUARD,
-                        isLoading = isLoadingWg,
-                        searchQuery = searchQuery,
-                        onSelectProfile = { viewModel.setActiveWireGuardProfile(it) },
-                        onEditProfile = onEditProfile,
-                        onRenameProfile = { id, name -> viewModel.renameWireGuardProfile(id, name) },
-                        onDeleteProfile = { viewModel.deleteWireGuardProfile(it) },
-                        onImportUri = { viewModel.importWireGuardFromUri(it) }
-                    )
-
-                    1 -> ProxyNodesTabContent(
-                        profiles = proxyProfiles,
-                        activeId = activeProxyId,
-                        isProxyActive = isProxyActive && (activeProxyType == AppPreferences.PROXY_TYPE_SHADOWSOCKS || activeProxyType == AppPreferences.PROXY_TYPE_NODE),
-                        pingResults = pingResults,
-                        isPingingAll = isPingingAll,
-                        searchQuery = searchQuery,
-                        onPingNode = { viewModel.pingProxyNode(it) },
-                        onPingAll = { viewModel.pingAllProxyNodes() },
-                        onSelectProfile = { viewModel.setActiveProxyProfile(it.id) },
-                        onEditProfile = { onEditProxyProfile(it.id) },
-                        onAddNodeClick = { showAddChoiceSheet = true },
-                        onRenameProfile = { id, name -> viewModel.renameProxyProfile(id, name) },
-                        onDeleteProfile = { viewModel.deleteProxyProfile(it) },
-                        onClearSearch = { searchQuery = "" },
-                        hasSubscription = proxySubscriptions.isNotEmpty() || !lastSubUrl.isNullOrBlank(),
-                        isUpdatingSubscription = isUpdatingSub,
-                        onUpdateSubscription = { viewModel.updateSubscription() },
-                        onOpenSubscriptions = { showSubscriptionsSheet = true },
-                        onRemoveDuplicates = { viewModel.removeDuplicates() }
-                    )
-                }
-            }
+            UnifiedProxyNodesContent(
+                wgProfiles = wgProfiles,
+                proxyProfiles = proxyProfiles,
+                activeWgId = activeWgId,
+                activeProxyId = activeProxyId,
+                activeProxyType = activeProxyType,
+                isProxyActive = isProxyActive,
+                isLoadingWg = isLoadingWg,
+                wgPingResults = wgPingResults,
+                proxyPingResults = pingResults,
+                isPingingAll = isPingingAll || isPingingAllWg,
+                searchQuery = searchQuery,
+                onPingWireGuard = { viewModel.pingWireGuardProfile(it.id) },
+                onPingProxy = { viewModel.pingProxyNode(it) },
+                onPingAll = { viewModel.pingAll() },
+                onSelectWireGuard = { viewModel.setActiveWireGuardProfile(it.id) },
+                onSelectProxy = { viewModel.setActiveProxyProfile(it.id) },
+                onEditWireGuard = onEditProfile,
+                onEditProxy = { onEditProxyProfile(it.id) },
+                onRenameWireGuard = { id, name -> viewModel.renameWireGuardProfile(id, name) },
+                onRenameProxy = { id, name -> viewModel.renameProxyProfile(id, name) },
+                onDeleteWireGuard = { viewModel.deleteWireGuardProfile(it) },
+                onDeleteProxy = { viewModel.deleteProxyProfile(it) },
+                onImportUri = { viewModel.importWireGuardFromUri(it) },
+                onAddClick = { showAddChoiceSheet = true },
+                onClearSearch = { searchQuery = "" },
+                hasSubscription = proxySubscriptions.isNotEmpty() || !lastSubUrl.isNullOrBlank(),
+                isUpdatingSubscription = isUpdatingSub,
+                onUpdateSubscription = { viewModel.updateSubscription() },
+                onOpenSubscriptions = { showSubscriptionsSheet = true },
+                onRemoveDuplicates = { viewModel.removeDuplicates() },
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 

@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.VpnLock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,6 +50,8 @@ import androidx.compose.ui.unit.sp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.WireGuardProfile
 import app.pwhs.blockads.data.geoip.GeoIpLookup
+import app.pwhs.blockads.ui.proxyvpn.component.NodeLatencyBadge
+import app.pwhs.blockads.utils.NodePingResult
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 import app.pwhs.blockads.utils.configIssue
 import app.pwhs.blockads.utils.describe
@@ -57,6 +60,8 @@ import app.pwhs.blockads.utils.describe
 fun ProfileRow(
     profile: WireGuardProfile,
     isActive: Boolean,
+    pingResult: NodePingResult? = null,
+    onPing: () -> Unit = {},
     onClick: () -> Unit,
     onEdit: () -> Unit,
     onRename: () -> Unit,
@@ -192,13 +197,25 @@ fun ProfileRow(
                     )
                 }
             }
-            ProfileMenu(onEdit = onEdit, onRename = onRename, onDelete = onDelete)
+            Spacer(Modifier.width(8.dp))
+            NodeLatencyBadge(
+                result = pingResult,
+                onClick = onPing,
+            )
+            Spacer(Modifier.width(4.dp))
+            ProfileMenu(
+                onPing = onPing,
+                onEdit = onEdit,
+                onRename = onRename,
+                onDelete = onDelete,
+            )
         }
     }
 }
 
 @Composable
 private fun ProfileMenu(
+    onPing: () -> Unit,
     onEdit: () -> Unit,
     onRename: () -> Unit,
     onDelete: () -> Unit,
@@ -215,6 +232,14 @@ private fun ProfileMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.proxy_ping_single)) },
+                leadingIcon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    onPing()
+                },
+            )
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.wireguard_action_edit)) },
                 leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null) },

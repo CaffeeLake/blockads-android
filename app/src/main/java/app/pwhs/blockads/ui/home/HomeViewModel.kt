@@ -15,6 +15,7 @@ import app.pwhs.blockads.data.entities.DailyStat
 import app.pwhs.blockads.data.entities.DnsLogEntry
 import app.pwhs.blockads.data.entities.FilterList
 import app.pwhs.blockads.data.entities.HourlyStat
+import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.entities.ShadowsocksProfile
 import app.pwhs.blockads.data.entities.TopBlockedDomain
 import app.pwhs.blockads.data.entities.WhitelistDomain
@@ -82,6 +83,9 @@ class HomeViewModel(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val activeSsProfile: StateFlow<ShadowsocksProfile?> = appPrefs.ssProfile
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val activeProxyProfile: StateFlow<ProxyProfile?> = appPrefs.activeProxyProfile
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val activeProxyType: StateFlow<String> = appPrefs.activeProxyType
@@ -408,7 +412,7 @@ class HomeViewModel(
                         _events.toast(R.string.wireguard_https_filtering_disabled)
                     }
                 } else {
-                    val active = appPrefs.getSsProfileSnapshot()
+                    val active = appPrefs.getActiveProxyProfileSnapshot() ?: appPrefs.getSsProfileSnapshot()
                     if (active == null) {
                         _events.toast(R.string.routing_mode_no_proxy_profile)
                         return@launch

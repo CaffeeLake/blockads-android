@@ -191,7 +191,7 @@ class VpnEngineCoordinator(
         }
         val activeProxy = if (isSs) appPrefs.getActiveProxyProfileSnapshot() else null
         val proxyProtocol = activeProxy?.protocol?.value ?: ""
-        val proxyConfigJson = activeProxy?.toEngineJson() ?: ""
+        val proxyConfigJson = activeProxy?.resolveServer()?.toEngineJson() ?: ""
         val ssConfigJson = if (isSs && activeProxy == null) {
             appPrefs.getSsProfileSnapshot()?.toJson() ?: ""
         } else {
