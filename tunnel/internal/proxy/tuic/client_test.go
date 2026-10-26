@@ -90,4 +90,20 @@ func TestTUICHeaderConstruction(t *testing.T) {
 	if port != 443 {
 		t.Errorf("expected port 443, got %d", port)
 	}
+
+	// 3. Connect Header IPv6: VER(1)=0x05, TYPE(1)=0x01, ADDR_TYPE(1)=0x02, ADDR(16), PORT(2)
+	ip6 := net.ParseIP("2001:db8::1").To16()
+	header6 := make([]byte, 2+1+16+2)
+	header6[0] = 0x05
+	header6[1] = 0x01
+	header6[2] = 0x02 // TUIC v5 AtypIPv6 is 0x02
+	copy(header6[3:19], ip6)
+	binary.BigEndian.PutUint16(header6[19:21], 8443)
+
+	if len(header6) != 21 {
+		t.Fatalf("ipv6 connect header length should be 21, got %d", len(header6))
+	}
+	if header6[2] != 0x02 {
+		t.Errorf("expected TUIC v5 IPv6 ADDR_TYPE 0x02, got %#x", header6[2])
+	}
 }

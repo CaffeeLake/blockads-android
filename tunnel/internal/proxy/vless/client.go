@@ -18,6 +18,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -188,6 +189,9 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 		return nil, fmt.Errorf("write vless header failed: %w", err)
 	}
 
+	if strings.HasPrefix(c.config.Flow, "xtls-rprx-vision") {
+		return newVisionConn(sessionConn, c.rawUUID), nil
+	}
 	return &vlessConn{Conn: sessionConn}, nil
 }
 
@@ -212,6 +216,30 @@ func (c *vlessConn) Read(b []byte) (int, error) {
 		}
 	}
 	return c.Conn.Read(b)
+}
+
+func (c *vlessConn) CloseWrite() error {
+	if cw, ok := c.Conn.(interface{ CloseWrite() error }); ok {
+		return cw.CloseWrite()
+	}
+	return nil
+}
+
+func getClientHelloID(fp string) utls.ClientHelloID {
+	switch strings.ToLower(strings.TrimSpace(fp)) {
+	case "firefox":
+		return utls.HelloFirefox_Auto
+	case "safari", "ios":
+		return utls.HelloIOS_Auto
+	case "edge":
+		return utls.HelloEdge_Auto
+	case "android":
+		return utls.HelloAndroid_11_OkHttp
+	case "chrome":
+		return utls.HelloChrome_Auto
+	default:
+		return utls.HelloChrome_Auto
+	}
 }
 
 func (c *Client) handshakeReality(rawConn net.Conn) (net.Conn, error) {
@@ -242,7 +270,7 @@ func (c *Client) handshakeReality(rawConn net.Conn) (net.Conn, error) {
 		},
 	}
 
-	uConn := utls.UClient(rawConn, utlsConfig, utls.HelloChrome_Auto)
+	uConn := utls.UClient(rawConn, utlsConfig, getClientHelloID(c.config.Fingerprint))
 	if err := uConn.BuildHandshakeState(); err != nil {
 		return nil, fmt.Errorf("reality build handshake state: %w", err)
 	}
@@ -250,9 +278,9 @@ func (c *Client) handshakeReality(rawConn net.Conn) (net.Conn, error) {
 	hello := uConn.HandshakeState.Hello
 	hello.SessionId = make([]byte, 32)
 	copy(hello.Raw[39:], hello.SessionId)
-	hello.SessionId[0] = 1
-	hello.SessionId[1] = 8
-	hello.SessionId[2] = 0
+	hello.SessionId[0] = 26
+	hello.SessionId[1] = 10
+	hello.SessionId[2] = 21
 	hello.SessionId[3] = 0
 	binary.BigEndian.PutUint32(hello.SessionId[4:], uint32(time.Now().Unix()))
 

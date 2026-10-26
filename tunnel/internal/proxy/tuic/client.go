@@ -130,7 +130,7 @@ func (c *Client) getOrInitConnection(ctx context.Context) (*quic.Conn, error) {
 	}
 
 	tlsState := qconn.ConnectionState().TLS
-	token, err := tlsState.ExportKeyingMaterial(c.config.UUID, []byte(c.config.Password), 32)
+	token, err := tlsState.ExportKeyingMaterial(string(parsedUUID.Bytes()), []byte(c.config.Password), 32)
 	if err != nil {
 		qconn.CloseWithError(0, "ekm error")
 		return nil, fmt.Errorf("tuic export keying material failed: %w", err)
@@ -173,6 +173,16 @@ func (c *Client) Close() error {
 
 // DialTCP establishes a TUIC TCP tunnel to targetIP:targetPort.
 func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
+	conn, err := c.dialTCPInternal(targetIP, targetPort)
+	if err != nil {
+		// Stale/idle connection closed by remote; reconnect once
+		c.Close()
+		return c.dialTCPInternal(targetIP, targetPort)
+	}
+	return conn, nil
+}
+
+func (c *Client) dialTCPInternal(targetIP net.IP, targetPort int) (net.Conn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -199,7 +209,7 @@ func (c *Client) DialTCP(targetIP net.IP, targetPort int) (net.Conn, error) {
 		header = make([]byte, 2+1+16+2)
 		header[0] = 0x05 // VER
 		header[1] = 0x01 // TYPE: Connect
-		header[2] = 0x04 // ADDR_TYPE: IPv6
+		header[2] = 0x02 // ADDR_TYPE: IPv6 (TUIC v5 specifies 0=Domain, 1=IPv4, 2=IPv6)
 		copy(header[3:19], v6)
 		binary.BigEndian.PutUint16(header[19:21], uint16(targetPort))
 	} else {
@@ -235,7 +245,12 @@ func (s *streamConn) RemoteAddr() net.Addr {
 	return s.remoteAddr
 }
 
-func (s *streamConn) Close() error {
-	s.Stream.CancelRead(0)
+func (s *streamConn) CloseWrite() error {
 	return s.Stream.Close()
+}
+
+func (s *streamConn) Close() error {
+	s.Stream.CancelWrite(0)
+	s.Stream.CancelRead(0)
+	return nil
 }
