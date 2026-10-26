@@ -110,8 +110,21 @@ func (e *Engine) startWireGuard(tunFile *os.File, wgConfigJSON string) error {
 	e.router.SetAdapter(wgAdapter)
 	logf("WireGuard adapter fully initialized and active")
 
-	if len(wgCfg.Interface.DNS) > 0 && e.splitZones != "" {
-		e.applySplitDNS(wgCfg.Interface.DNS[0])
+	if len(wgCfg.Interface.DNS) > 0 {
+		if e.splitZones != "" {
+			e.applySplitDNS(wgCfg.Interface.DNS[0])
+		}
+		e.mu.Lock()
+		if e.resolver != nil {
+			primary := wgCfg.Interface.DNS[0]
+			fallback := ""
+			if len(wgCfg.Interface.DNS) > 1 {
+				fallback = wgCfg.Interface.DNS[1]
+			}
+			e.resolver.Configure(ParseProtocol(e.protocol), primary, fallback, e.dohURL)
+			logf("WireGuard upstream DNS configured: primary=%s, fallback=%s", primary, fallback)
+		}
+		e.mu.Unlock()
 	}
 	return nil
 }

@@ -133,11 +133,18 @@ class VpnTunnelBuilder(
                 // Full tunnel only: excludeRoute overrides a matching addRoute, so in split mode it would untunnel a listed LAN range.
                 if (routing.isFullTunnel && excludeLan && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     try {
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
+                        val wgAddrs = wgConfig.interfaceConfig.address.map { it.split("/")[0] }
+                        if (wgAddrs.none { it.startsWith("10.") }) {
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("10.0.0.0"), 8))
+                        }
+                        if (wgAddrs.none { addr -> (16..31).any { addr.startsWith("172.$it.") } }) {
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("172.16.0.0"), 12))
+                        }
+                        if (wgAddrs.none { it.startsWith("192.168.") }) {
+                            b.excludeRoute(IpPrefix(InetAddress.getByName("192.168.0.0"), 16))
+                        }
                         b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
-                        b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
+                        // Do NOT exclude fc00::/7 because fd00::1 (our synthetic DNS) is within fc00::/7
                         b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
                         Timber.d("LAN excluded from WireGuard VPN routes")
                     } catch (e: Exception) {
@@ -186,7 +193,7 @@ class VpnTunnelBuilder(
                             b.excludeRoute(IpPrefix(InetAddress.getByName("169.254.0.0"), 16))
                         }
                         if (allowIpv6) {
-                            b.excludeRoute(IpPrefix(InetAddress.getByName("fc00::"), 7))
+                            // Do NOT exclude fc00::/7 because fd00::1 (our synthetic DNS) is within fc00::/7
                             b.excludeRoute(IpPrefix(InetAddress.getByName("fe80::"), 10))
                         }
                         Timber.d("LAN excluded from direct mode VPN routes")

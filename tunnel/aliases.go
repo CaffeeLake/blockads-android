@@ -120,8 +120,10 @@ var (
 	BuildForwardedResponse = packet.BuildForwardedResponse
 	buildIPv4UDPPacket     = packet.BuildIPv4UDPPacket
 	buildIPv6UDPPacket     = packet.BuildIPv6UDPPacket
-	newPacketPipe          = packet.NewPacketPipe
-	isKnownPublicDoHIP     = mitm.IsKnownPublicDoHIP
+	newPacketPipe      = packet.NewPacketPipe
+	buildTCPReset      = packet.BuildTCPReset
+	isNullOrLoopbackIP = packet.IsNullOrLoopbackIP
+	isKnownPublicDoHIP = mitm.IsKnownPublicDoHIP
 )
 
 type ShadowsocksClient = shadowsocks.Client
