@@ -53,6 +53,9 @@ class AppPreferences internal constructor(
         const val PROTECTION_STANDARD = FilterPreferences.PROTECTION_STANDARD
         const val PROTECTION_STRICT = FilterPreferences.PROTECTION_STRICT
 
+        const val BUILD_MODE_ONLINE = FilterPreferences.BUILD_MODE_ONLINE
+        const val BUILD_MODE_LOCAL = FilterPreferences.BUILD_MODE_LOCAL
+
         const val THEME_SYSTEM = AppearancePreferences.THEME_SYSTEM
         const val THEME_DARK = AppearancePreferences.THEME_DARK
         const val THEME_LIGHT = AppearancePreferences.THEME_LIGHT
@@ -169,6 +172,7 @@ class AppPreferences internal constructor(
     val youtubeRestrictedMode: Flow<Boolean> get() = filter.youtubeRestrictedMode
     val geoIpCustomUrl: Flow<String> get() = filter.geoIpCustomUrl
     val geoIpAutoUpdate: Flow<Boolean> get() = filter.geoIpAutoUpdate
+    val filterBuildMode: Flow<String> get() = filter.filterBuildMode
 
     // ── WireGuard Flows ──────────────────────────────────────────────────
     val routingMode: Flow<String> get() = wireguard.routingMode
@@ -253,6 +257,8 @@ class AppPreferences internal constructor(
     suspend fun setYoutubeRestrictedMode(enabled: Boolean) = filter.setYoutubeRestrictedMode(enabled)
     suspend fun setGeoIpCustomUrl(url: String) = filter.setGeoIpCustomUrl(url)
     suspend fun setGeoIpAutoUpdate(enabled: Boolean) = filter.setGeoIpAutoUpdate(enabled)
+    suspend fun setFilterBuildMode(mode: String) = filter.setFilterBuildMode(mode)
+    suspend fun getFilterBuildModeSnapshot(): String = filter.getFilterBuildModeSnapshot()
 
     suspend fun setRoutingMode(mode: String) {
         wireguard.setRoutingMode(mode)

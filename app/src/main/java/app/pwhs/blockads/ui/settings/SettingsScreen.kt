@@ -62,6 +62,7 @@ fun SettingsScreen(
     val autoUpdateFrequency by viewModel.autoUpdateFrequency.collectAsStateWithLifecycle()
     val autoUpdateWifiOnly by viewModel.autoUpdateWifiOnly.collectAsStateWithLifecycle()
     val autoUpdateNotification by viewModel.autoUpdateNotification.collectAsStateWithLifecycle()
+    val filterBuildMode by viewModel.filterBuildMode.collectAsStateWithLifecycle()
     val crashReportingEnabled by viewModel.crashReportingEnabled.collectAsStateWithLifecycle()
     val hideFromRecents by viewModel.hideFromRecents.collectAsStateWithLifecycle()
     val routingMode by viewModel.routingMode.collectAsStateWithLifecycle()
@@ -147,6 +148,8 @@ fun SettingsScreen(
                 autoUpdateFrequency = autoUpdateFrequency,
                 autoUpdateWifiOnly = autoUpdateWifiOnly,
                 autoUpdateEnabled = autoUpdateEnabled,
+                filterBuildMode = filterBuildMode,
+                onSetFilterBuildMode = { viewModel.setFilterBuildMode(it) },
                 onSetAutoUpdateWifiOnly = { viewModel.setAutoUpdateWifiOnly(it) },
                 onSetAutoUpdateFrequency = { viewModel.setAutoUpdateFrequency(it) },
                 onSetAutoUpdateNotification = { viewModel.setAutoUpdateNotification(it) },

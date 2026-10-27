@@ -87,6 +87,13 @@ class SettingsViewModel(
             AppPreferences.NOTIFICATION_NORMAL
         )
 
+    val filterBuildMode: StateFlow<String> = appPrefs.filterBuildMode
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            AppPreferences.BUILD_MODE_ONLINE
+        )
+
     val dnsResponseType: StateFlow<String> = appPrefs.dnsResponseType
         .stateIn(
             viewModelScope,
@@ -233,6 +240,12 @@ class SettingsViewModel(
     fun setAutoUpdateNotification(notificationType: String) {
         viewModelScope.launch {
             appPrefs.setAutoUpdateNotification(notificationType)
+        }
+    }
+
+    fun setFilterBuildMode(mode: String) {
+        viewModelScope.launch {
+            appPrefs.setFilterBuildMode(mode)
         }
     }
 

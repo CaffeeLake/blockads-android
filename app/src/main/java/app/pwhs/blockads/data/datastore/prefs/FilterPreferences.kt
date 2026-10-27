@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class FilterPreferences(private val dataStore: DataStore<Preferences>) {
@@ -23,9 +24,13 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_STARRED_FILTER_URLS = stringSetPreferencesKey("starred_filter_urls")
         val KEY_GEOIP_CUSTOM_URL = stringPreferencesKey("geoip_custom_url")
         val KEY_GEOIP_AUTO_UPDATE = booleanPreferencesKey("geoip_auto_update")
+        val KEY_FILTER_BUILD_MODE = stringPreferencesKey("filter_build_mode")
 
         const val DEFAULT_FILTER_URL =
             "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+
+        const val BUILD_MODE_ONLINE = "online"
+        const val BUILD_MODE_LOCAL = "local"
 
         const val UPDATE_FREQUENCY_6H = "6h"
         const val UPDATE_FREQUENCY_12H = "12h"
@@ -73,6 +78,19 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
     val youtubeRestrictedMode: Flow<Boolean> = dataStore.data.map { prefs ->
         prefs[KEY_YOUTUBE_RESTRICTED_MODE] ?: false
     }
+
+    val filterBuildMode: Flow<String> = dataStore.data.map { prefs ->
+        prefs[KEY_FILTER_BUILD_MODE] ?: BUILD_MODE_ONLINE
+    }
+
+    suspend fun setFilterBuildMode(mode: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_FILTER_BUILD_MODE] = mode
+        }
+    }
+
+    suspend fun getFilterBuildModeSnapshot(): String =
+        dataStore.data.map { it[KEY_FILTER_BUILD_MODE] ?: BUILD_MODE_ONLINE }.first()
 
     suspend fun setFilterUrl(url: String) {
         dataStore.edit { prefs ->

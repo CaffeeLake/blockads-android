@@ -234,4 +234,11 @@ class SettingsViewModelTest {
         assertEquals(AppPreferences.ROUTING_MODE_WIREGUARD, vm.routingMode.value)
         assertNull(shadowOf(app).nextStartedService)
     }
+
+    @Test
+    fun `setFilterBuildMode updates preference`() = runTest {
+        val vm = newVm()
+        vm.setFilterBuildMode(AppPreferences.BUILD_MODE_LOCAL)
+        coVerify { appPrefs.setFilterBuildMode(AppPreferences.BUILD_MODE_LOCAL) }
+    }
 }

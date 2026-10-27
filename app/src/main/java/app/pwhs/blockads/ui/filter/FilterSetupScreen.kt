@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.BuildConfig
 import app.pwhs.blockads.R
+import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.data.entities.FilterList as FilterListEntity
 import app.pwhs.blockads.ui.event.UiEventEffect
 import app.pwhs.blockads.ui.filter.component.AddFilterBottomSheet
@@ -64,6 +65,7 @@ fun FilterSetupScreen(
     val updateProgress by viewModel.updateProgress.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val starredUrls by viewModel.starredFilterUrls.collectAsStateWithLifecycle()
+    val filterBuildMode by viewModel.filterBuildMode.collectAsStateWithLifecycle()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var filterToEdit by remember { mutableStateOf<FilterListEntity?>(null) }
@@ -239,7 +241,8 @@ fun FilterSetupScreen(
                 },
                 existingUrls = filterLists.map { it.url },
                 isValidating = isAddingCustomFilter,
-                progress = addFilterProgress
+                progress = addFilterProgress,
+                defaultBuildLocally = filterBuildMode == AppPreferences.BUILD_MODE_LOCAL
             )
         }
     }

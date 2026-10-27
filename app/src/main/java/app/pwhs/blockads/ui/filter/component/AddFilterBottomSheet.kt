@@ -87,7 +87,8 @@ fun AddFilterBottomSheet(
     onEdit: ((filter: FilterList, name: String, url: String, buildLocally: Boolean) -> Unit)? = null,
     existingUrls: List<String> = emptyList(),
     isValidating: Boolean = false,
-    progress: Int? = null
+    progress: Int? = null,
+    defaultBuildLocally: Boolean = false
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -104,8 +105,8 @@ fun AddFilterBottomSheet(
             } ?: emptyList()
         )
     }
-    var buildLocally by remember(filterToEdit) {
-        mutableStateOf(filterToEdit?.trieUrl?.startsWith("local://") == true)
+    var buildLocally by remember(filterToEdit, defaultBuildLocally) {
+        mutableStateOf(filterToEdit?.let { it.trieUrl.startsWith("local://") } ?: defaultBuildLocally)
     }
     var showFormatsHelp by remember { mutableStateOf(false) }
 

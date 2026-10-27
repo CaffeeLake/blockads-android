@@ -26,6 +26,8 @@ fun FilterSetupSection(
     autoUpdateFrequency: String,
     autoUpdateWifiOnly: Boolean,
     autoUpdateEnabled: Boolean,
+    filterBuildMode: String = AppPreferences.BUILD_MODE_ONLINE,
+    onSetFilterBuildMode: (String) -> Unit = {},
     onSetAutoUpdateWifiOnly: (Boolean) -> Unit = {},
     onSetAutoUpdateFrequency: (String) -> Unit = {},
     onSetAutoUpdateNotification: (String) -> Unit = {},
@@ -34,6 +36,7 @@ fun FilterSetupSection(
 ) {
     var showFrequencyDialog by remember { mutableStateOf(false) }
     var showNotificationDialog by remember { mutableStateOf(false) }
+    var showBuildModeDialog by remember { mutableStateOf(false) }
     val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f)
 
     Column(modifier = modifier) {
@@ -107,6 +110,21 @@ fun FilterSetupSection(
 
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
 
+                // Filter Build Mode (Server vs Local)
+                val buildModeDesc = when (filterBuildMode) {
+                    AppPreferences.BUILD_MODE_LOCAL -> stringResource(R.string.filter_build_mode_local)
+                    else -> stringResource(R.string.filter_build_mode_server)
+                }
+                SettingItem(
+                    iconPainter = painterResource(R.drawable.ic_settings_filter_lists),
+                    iconTint = Color(0xFFD97706),
+                    title = stringResource(R.string.filter_build_mode),
+                    desc = buildModeDesc,
+                    onClick = { showBuildModeDialog = true }
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
+
                 // GeoIP Database Management
                 SettingItem(
                     iconPainter = painterResource(R.drawable.ic_settings_network_delay),
@@ -138,6 +156,17 @@ fun FilterSetupSection(
                 showNotificationDialog = false
             },
             onDismiss = { showNotificationDialog = false }
+        )
+    }
+
+    if (showBuildModeDialog) {
+        BuildModeDialog(
+            currentMode = filterBuildMode,
+            onModeSelected = { mode ->
+                onSetFilterBuildMode(mode)
+                showBuildModeDialog = false
+            },
+            onDismiss = { showBuildModeDialog = false }
         )
     }
 }

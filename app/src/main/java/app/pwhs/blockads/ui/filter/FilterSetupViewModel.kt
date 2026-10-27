@@ -51,6 +51,10 @@ class FilterSetupViewModel(
         ?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
         ?: MutableStateFlow<Set<String>>(emptySet()).asStateFlow()
 
+    val filterBuildMode: StateFlow<String> = appPreferences?.filterBuildMode
+        ?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppPreferences.BUILD_MODE_ONLINE)
+        ?: MutableStateFlow(AppPreferences.BUILD_MODE_ONLINE).asStateFlow()
+
     val filteredFilterLists: StateFlow<List<FilterList>> = combine(
         filterLists, _searchQuery
     ) { lists, query ->

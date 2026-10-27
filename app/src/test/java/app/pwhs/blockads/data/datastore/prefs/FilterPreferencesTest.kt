@@ -24,6 +24,7 @@ class FilterPreferencesTest {
         assertTrue(prefs.autoUpdateWifiOnly.first())
         assertEquals(FilterPreferences.NOTIFICATION_SILENT, prefs.autoUpdateNotification.first())
         assertEquals(FilterPreferences.PROTECTION_STANDARD, prefs.protectionLevel.first())
+        assertEquals(FilterPreferences.BUILD_MODE_ONLINE, prefs.filterBuildMode.first())
         assertFalse(prefs.safeSearchEnabled.first())
         assertFalse(prefs.youtubeRestrictedMode.first())
     }
@@ -36,6 +37,7 @@ class FilterPreferencesTest {
         prefs.setAutoUpdateWifiOnly(false)
         prefs.setAutoUpdateNotification(FilterPreferences.NOTIFICATION_NONE)
         prefs.setProtectionLevel(FilterPreferences.PROTECTION_STRICT)
+        prefs.setFilterBuildMode(FilterPreferences.BUILD_MODE_LOCAL)
         prefs.setSafeSearchEnabled(true)
         prefs.setYoutubeRestrictedMode(true)
 
@@ -45,6 +47,7 @@ class FilterPreferencesTest {
         assertFalse(prefs.autoUpdateWifiOnly.first())
         assertEquals(FilterPreferences.NOTIFICATION_NONE, prefs.autoUpdateNotification.first())
         assertEquals(FilterPreferences.PROTECTION_STRICT, prefs.protectionLevel.first())
+        assertEquals(FilterPreferences.BUILD_MODE_LOCAL, prefs.filterBuildMode.first())
         assertTrue(prefs.safeSearchEnabled.first())
         assertTrue(prefs.youtubeRestrictedMode.first())
     }
