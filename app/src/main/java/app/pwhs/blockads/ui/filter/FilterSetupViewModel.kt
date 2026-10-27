@@ -83,6 +83,17 @@ class FilterSetupViewModel(
     private val _events = MutableSharedFlow<UiEvent>(extraBufferCapacity = 1)
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
 
+    private val _supportErrorInfo = MutableStateFlow<app.pwhs.blockads.ui.common.SupportErrorInfo?>(null)
+    val supportErrorInfo: StateFlow<app.pwhs.blockads.ui.common.SupportErrorInfo?> = _supportErrorInfo.asStateFlow()
+
+    fun dismissSupportError() {
+        _supportErrorInfo.value = null
+    }
+
+    fun showSupportError(info: app.pwhs.blockads.ui.common.SupportErrorInfo) {
+        _supportErrorInfo.value = info
+    }
+
     init {
         viewModelScope.launch {
             filterRepo.seedDefaultsIfNeeded()
@@ -149,8 +160,15 @@ class FilterSetupViewModel(
                         filterRepo.loadAllEnabledFilters()
                         ServiceController.requestRestart(application.applicationContext)
                     },
-                    onFailure = { _ ->
+                    onFailure = { error ->
                         _events.toast(R.string.filter_update_failed)
+                        val rawError = error.message.orEmpty()
+                        _supportErrorInfo.value = app.pwhs.blockads.ui.common.SupportErrorInfo(
+                            title = application.getString(R.string.support_error_filter_title),
+                            message = application.getString(R.string.support_error_filter_desc),
+                            details = "Filter: $name\nURLs: $combinedUrl\nError: $rawError",
+                            errorType = "CUSTOM_FILTER_ADD"
+                        )
                     }
                 )
             }
@@ -215,8 +233,15 @@ class FilterSetupViewModel(
                         filterRepo.loadAllEnabledFilters()
                         ServiceController.requestRestart(application.applicationContext)
                     },
-                    onFailure = {
+                    onFailure = { error ->
                         _events.toast(R.string.filter_update_failed)
+                        val rawError = error.message.orEmpty()
+                        _supportErrorInfo.value = app.pwhs.blockads.ui.common.SupportErrorInfo(
+                            title = application.getString(R.string.support_error_filter_title),
+                            message = application.getString(R.string.support_error_filter_desc),
+                            details = "Filter: $nameTrimmed\nURLs: $urlTrimmed\nError: $rawError",
+                            errorType = "CUSTOM_FILTER_EDIT"
+                        )
                     }
                 )
             }

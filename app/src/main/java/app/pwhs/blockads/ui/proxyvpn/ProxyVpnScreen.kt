@@ -114,6 +114,7 @@ fun ProxyVpnScreen(
     var showSubscriptionsSheet by remember { mutableStateOf(false) }
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    var supportError by remember { mutableStateOf<app.pwhs.blockads.ui.common.SupportErrorInfo?>(null) }
 
     BackHandler(enabled = isSearchActive) {
         isSearchActive = false
@@ -151,9 +152,23 @@ fun ProxyVpnScreen(
         }
     }
 
+    val supportNeedHelpLabel = stringResource(R.string.support_need_help)
+    val supportSubTitle = stringResource(R.string.support_error_subscription_title)
     LaunchedEffect(error) {
-        error?.let {
-            snackbarHostState.showSnackbar(it)
+        error?.let { errText ->
+            val result = snackbarHostState.showSnackbar(
+                message = errText,
+                actionLabel = supportNeedHelpLabel,
+                duration = androidx.compose.material3.SnackbarDuration.Long
+            )
+            if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                supportError = app.pwhs.blockads.ui.common.SupportErrorInfo(
+                    title = supportSubTitle,
+                    message = errText,
+                    details = "Error: $errText",
+                    errorType = "PROXY_SUBSCRIPTION"
+                )
+            }
             viewModel.clearError()
         }
     }
@@ -393,6 +408,13 @@ fun ProxyVpnScreen(
                 }
             },
             onRemoveDuplicates = { viewModel.removeDuplicates() }
+        )
+    }
+
+    supportError?.let { errInfo ->
+        app.pwhs.blockads.ui.component.ErrorSupportBottomSheet(
+            errorInfo = errInfo,
+            onDismiss = { supportError = null }
         )
     }
 }

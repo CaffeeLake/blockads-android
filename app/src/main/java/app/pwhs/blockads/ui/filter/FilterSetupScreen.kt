@@ -66,6 +66,7 @@ fun FilterSetupScreen(
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val starredUrls by viewModel.starredFilterUrls.collectAsStateWithLifecycle()
     val filterBuildMode by viewModel.filterBuildMode.collectAsStateWithLifecycle()
+    val supportErrorInfo by viewModel.supportErrorInfo.collectAsStateWithLifecycle()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var filterToEdit by remember { mutableStateOf<FilterListEntity?>(null) }
@@ -243,6 +244,13 @@ fun FilterSetupScreen(
                 isValidating = isAddingCustomFilter,
                 progress = addFilterProgress,
                 defaultBuildLocally = filterBuildMode == AppPreferences.BUILD_MODE_LOCAL
+            )
+        }
+
+        supportErrorInfo?.let { errorInfo ->
+            app.pwhs.blockads.ui.component.ErrorSupportBottomSheet(
+                errorInfo = errorInfo,
+                onDismiss = viewModel::dismissSupportError
             )
         }
     }
