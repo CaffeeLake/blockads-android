@@ -60,6 +60,9 @@ class SubscriptionManager(
         appPrefs.removeDuplicateProfiles()
         appPrefs.removeDuplicateWgProfiles()
 
+        if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+            appPrefs.setHttpsFilteringEnabled(false)
+        }
         appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
         appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
 

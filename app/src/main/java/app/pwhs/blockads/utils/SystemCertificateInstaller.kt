@@ -172,8 +172,7 @@ object SystemCertificateInstaller {
 
             val commands = mutableListOf<String>()
 
-            // 1. Prepare Magisk / KernelSU module structure (clean out old certs first)
-            commands.add("rm -f $MODULE_DIR/system/etc/security/cacerts/* $MODULE_DIR/system/apex/com.android.conscrypt/cacerts/*")
+            // 1. Prepare Magisk / KernelSU module structure (overwrite in place to preserve Magisk bind-mount inodes)
             commands.add("mkdir -p $MODULE_DIR/system/etc/security/cacerts")
             commands.add("mkdir -p $MODULE_DIR/system/apex/com.android.conscrypt/cacerts")
 
@@ -249,7 +248,7 @@ object SystemCertificateInstaller {
     }
 
     /**
-     * Checks if the given CA certificate is present in the Magisk / KernelSU module on disk.
+     * Checks if the given CA certificate is present and byte-for-byte matches in the Magisk / KernelSU module on disk.
      */
     fun isModuleInstalled(caPem: String): Boolean {
         if (!isRootAvailable()) return false
@@ -260,8 +259,13 @@ object SystemCertificateInstaller {
             ) as X509Certificate
             val hashOld = computeSubjectHashOld(cert)
             val certPath = "$MODULE_DIR/system/etc/security/cacerts/$hashOld.0"
-            val res = shell.exec("[ -f $certPath ] && echo 1 || echo 0")
-            res.isSuccess && res.out.any { it.trim() == "1" }
+            val res = shell.exec("cat $certPath 2>/dev/null")
+            if (!res.isSuccess || res.out.isEmpty()) return false
+            val installedPem = res.out.joinToString("\n")
+            val installedCert = certFactory.generateCertificate(
+                ByteArrayInputStream(installedPem.toByteArray())
+            ) as X509Certificate
+            installedCert.encoded.contentEquals(cert.encoded)
         } catch (e: Exception) {
             Timber.w(e, "Failed to check if module is installed")
             false

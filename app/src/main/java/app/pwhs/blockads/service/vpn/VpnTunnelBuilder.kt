@@ -161,9 +161,13 @@ class VpnTunnelBuilder(
                 b
             } else {
                 val excludeLan = runBlocking { appPrefs.excludeLan.first() }
-                val preferredIp = runBlocking { appPrefs.preferredIPType.first() }
+                val preferredIp = if (isProxyOutbound) {
+                    runBlocking { appPrefs.preferredIPType.first() }
+                } else {
+                    AppPreferences.PREFERRED_IP_AUTO
+                }
                 val allowIpv6 = preferredIp != AppPreferences.PREFERRED_IP_IPV4
-                val allowIpv4 = preferredIp != AppPreferences.PREFERRED_IP_IPV6
+                val allowIpv4 = true
                 Timber.d("Establishing VPN in direct mode (fullTunnel=true, excludeLan=$excludeLan, preferredIp=$preferredIp)")
                 val appName = vpnService.getString(R.string.app_name)
                 val b = vpnService.Builder()

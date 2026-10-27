@@ -234,7 +234,7 @@ func BuildServfailResponse(queryInfo *DNSQueryInfo) []byte {
 	return buildIPUDPPacket(queryInfo, dnsResp)
 }
 
-// BuildRedirectResponse builds a DNS response that redirects to a specific IPv4 address.
+// BuildRedirectResponse builds a DNS response that redirects to a specific IPv4 or IPv6 address.
 func BuildRedirectResponse(queryInfo *DNSQueryInfo, ip net.IP) []byte {
 	var msg dns.Msg
 	msg.Unpack(queryInfo.RawDNSPayload)
@@ -245,10 +245,15 @@ func BuildRedirectResponse(queryInfo *DNSQueryInfo, ip net.IP) []byte {
 
 	if len(msg.Question) > 0 {
 		q := msg.Question[0]
-		if q.Qtype == dns.TypeA {
+		if q.Qtype == dns.TypeA && ip.To4() != nil {
 			resp.Answer = append(resp.Answer, &dns.A{
 				Hdr: dns.RR_Header{Name: q.Name, Rrtype: dns.TypeA, Class: dns.ClassINET, Ttl: 300},
 				A:   ip.To4(),
+			})
+		} else if q.Qtype == dns.TypeAAAA && ip.To4() == nil && ip.To16() != nil {
+			resp.Answer = append(resp.Answer, &dns.AAAA{
+				Hdr:  dns.RR_Header{Name: q.Name, Rrtype: dns.TypeAAAA, Class: dns.ClassINET, Ttl: 300},
+				AAAA: ip.To16(),
 			})
 		}
 	}

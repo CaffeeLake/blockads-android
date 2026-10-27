@@ -118,8 +118,19 @@ class VpnEngineCoordinator(
         val splitDnsZones = appPrefs.splitDnsZones.first()
         goTunnelAdapter.setSplitDNSZones(splitDnsZones)
 
-        val preferredIPType = appPrefs.preferredIPType.first()
+        val routingMode = appPrefs.getRoutingModeSnapshot()
+        val isProxyVpn = routingMode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+            routingMode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+            routingMode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
+        val preferredIPType = if (isProxyVpn) {
+            appPrefs.preferredIPType.first()
+        } else {
+            AppPreferences.PREFERRED_IP_AUTO
+        }
         goTunnelAdapter.setPreferredIPType(preferredIPType)
+
+        val appLang = appPrefs.appLanguage.first()
+        app.pwhs.blockads.utils.LocaleHelper.syncLocalAssetLanguage(context, appLang)
     }
 
     suspend fun isTrustedNetworkWithSystemDns(): Boolean {
@@ -248,6 +259,11 @@ class VpnEngineCoordinator(
             filterRepo.domainCountFlow.drop(1).collectLatest { count ->
                 Timber.d("Filter count changed to $count. Dynamically updating Native Go Tries.")
                 goTunnelAdapter.updateTries()
+            }
+        }
+        scope.launch {
+            appPrefs.appLanguage.collectLatest { lang ->
+                app.pwhs.blockads.utils.LocaleHelper.syncLocalAssetLanguage(context, lang)
             }
         }
     }

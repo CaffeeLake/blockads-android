@@ -396,9 +396,20 @@ class HomeViewModel(
             }
 
             if (mode == AppPreferences.ROUTING_MODE_PROXY_VPN || mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
-                val activeType = appPrefs.getActiveProxyTypeSnapshot()
+                var activeType = appPrefs.getActiveProxyTypeSnapshot()
+                val activeWg = appPrefs.getActiveWgProfileSnapshot()
+                val activeProxy = appPrefs.getActiveProxyProfileSnapshot() ?: appPrefs.getSsProfileSnapshot()
+
+                if (activeType == AppPreferences.PROXY_TYPE_WIREGUARD && activeWg == null && activeProxy != null) {
+                    activeType = AppPreferences.PROXY_TYPE_SHADOWSOCKS
+                    appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
+                } else if (activeType != AppPreferences.PROXY_TYPE_WIREGUARD && activeProxy == null && activeWg != null) {
+                    activeType = AppPreferences.PROXY_TYPE_WIREGUARD
+                    appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_WIREGUARD)
+                }
+
                 if (activeType == AppPreferences.PROXY_TYPE_WIREGUARD || mode == AppPreferences.ROUTING_MODE_WIREGUARD) {
-                    val active = appPrefs.getActiveWgProfileSnapshot()
+                    val active = activeWg
                     if (active == null) {
                         _events.toast(R.string.routing_mode_no_proxy_profile)
                         return@launch
@@ -407,16 +418,15 @@ class HomeViewModel(
                         _events.toast(R.string.wireguard_issue_fix_first, listOf(active.name, issue))
                         return@launch
                     }
-                    if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
-                        appPrefs.setHttpsFilteringEnabled(false)
-                        _events.toast(R.string.wireguard_https_filtering_disabled)
-                    }
                 } else {
-                    val active = appPrefs.getActiveProxyProfileSnapshot() ?: appPrefs.getSsProfileSnapshot()
-                    if (active == null) {
+                    if (activeProxy == null) {
                         _events.toast(R.string.routing_mode_no_proxy_profile)
                         return@launch
                     }
+                }
+                if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+                    appPrefs.setHttpsFilteringEnabled(false)
+                    _events.toast(R.string.wireguard_https_filtering_disabled)
                 }
             }
 
@@ -425,6 +435,10 @@ class HomeViewModel(
                 if (active == null) {
                     _events.toast(R.string.routing_mode_no_ss_profile)
                     return@launch
+                }
+                if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+                    appPrefs.setHttpsFilteringEnabled(false)
+                    _events.toast(R.string.wireguard_https_filtering_disabled)
                 }
             }
 
@@ -467,6 +481,10 @@ class HomeViewModel(
             val json = tunnel.Tunnel.parseShadowsocksURI(uri)
             val profile = ShadowsocksProfile.fromJson(json).copy(rawUri = uri)
             viewModelScope.launch(Dispatchers.IO) {
+                if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+                    appPrefs.setHttpsFilteringEnabled(false)
+                    _events.toast(R.string.wireguard_https_filtering_disabled)
+                }
                 appPrefs.setSsProfile(profile)
                 appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_SHADOWSOCKS)
                 ServiceController.requestRestart(context)

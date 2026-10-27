@@ -64,6 +64,7 @@ fun HttpsFilteringScreen(
 ) {
     val isEnabled by viewModel.isEnabled.collectAsStateWithLifecycle()
     val isProxyRunning by viewModel.isProxyRunning.collectAsStateWithLifecycle()
+    val isProxyVpnActive by viewModel.isProxyVpnActive.collectAsStateWithLifecycle()
     val browsers by viewModel.browsers.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val certExported by viewModel.certExported.collectAsStateWithLifecycle()
@@ -74,6 +75,7 @@ fun HttpsFilteringScreen(
     val resources = LocalResources.current
 
     val wgDisabledMsg = stringResource(R.string.https_filtering_wireguard_disabled)
+    val proxyVpnConflictMsg = stringResource(R.string.https_filtering_proxy_vpn_conflict)
     val certSavedLegacyMsg = stringResource(R.string.https_filtering_cert_saved_legacy)
     val proxyStartedMsg = stringResource(R.string.https_filtering_started)
     val proxyStoppedMsg = stringResource(R.string.https_filtering_stopped)
@@ -127,6 +129,10 @@ fun HttpsFilteringScreen(
                 is HttpsFilteringEvent.WireGuardDisabledForHttps -> {
                     snackbarHostState.showSnackbar(wgDisabledMsg)
                 }
+
+                is HttpsFilteringEvent.ProxyVpnActiveConflict -> {
+                    snackbarHostState.showSnackbar(proxyVpnConflictMsg)
+                }
             }
         }
     }
@@ -174,7 +180,9 @@ fun HttpsFilteringScreen(
                     MasterToggleCard(
                         isEnabled = isEnabled,
                         isProxyRunning = isProxyRunning,
-                        onToggle = { viewModel.toggleEnabled(it) }
+                        onToggle = { viewModel.toggleEnabled(it) },
+                        isToggleEnabled = !isProxyVpnActive,
+                        disabledMessage = proxyVpnConflictMsg
                     )
                 }
 

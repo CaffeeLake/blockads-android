@@ -28,8 +28,20 @@ func (e *Engine) handleDNSQuery(queryInfo *DNSQueryInfo) {
 	// the flow and serves cosmetic.css from memory based on SNI. This
 	// replaces the legacy CONNECT-via-setHttpProxy path.
 	if domain == LocalAssetHost {
-		response := BuildRedirectResponse(queryInfo, localAssetSynthIP)
+		synthIP := localAssetSynthIP
+		if queryInfo.QueryType == dns.TypeAAAA {
+			synthIP = localAssetSynthIPv6
+		}
+		response := BuildRedirectResponse(queryInfo, synthIP)
 		e.writeToTUN(response)
+		e.totalQueries.Add(1)
+		return
+	}
+
+	pref := e.getPreferredIPType()
+	if pref == "ipv4" && queryInfo.QueryType == dns.TypeAAAA {
+		emptyResp := BuildRedirectResponse(queryInfo, nil)
+		e.writeToTUN(emptyResp)
 		e.totalQueries.Add(1)
 		return
 	}
@@ -187,6 +199,13 @@ func (e *Engine) handleDNSQuery(queryInfo *DNSQueryInfo) {
 
 	if len(matchedIDs) > 0 {
 		e.handleBlockedDomain(queryInfo, strings.Join(matchedIDs, ","), appName, startTime)
+		return
+	}
+
+	if pref == "ipv6" && queryInfo.QueryType == dns.TypeA && e.domainHasAAAA(domain) {
+		emptyResp := BuildRedirectResponse(queryInfo, nil)
+		e.writeToTUN(emptyResp)
+		e.totalQueries.Add(1)
 		return
 	}
 

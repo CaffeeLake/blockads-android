@@ -122,11 +122,11 @@ fun HomeStatusHeader(
                 ) {
                     Text(
                         text = when (routingMode) {
-                            AppPreferences.ROUTING_MODE_ROOT -> "Root Proxy Mode"
+                            AppPreferences.ROUTING_MODE_ROOT -> stringResource(R.string.routing_mode_root_proxy_title)
                             AppPreferences.ROUTING_MODE_PROXY_VPN,
                             AppPreferences.ROUTING_MODE_WIREGUARD,
-                            AppPreferences.ROUTING_MODE_SHADOWSOCKS -> "Proxy & VPN"
-                            else -> "Local VPN Mode"
+                            AppPreferences.ROUTING_MODE_SHADOWSOCKS -> stringResource(R.string.routing_mode_proxy_vpn_title)
+                            else -> stringResource(R.string.routing_mode_local_vpn_title)
                         },
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,

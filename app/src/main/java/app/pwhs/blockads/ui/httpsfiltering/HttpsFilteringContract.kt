@@ -36,4 +36,6 @@ sealed class HttpsFilteringEvent {
     data object ProxyStopped : HttpsFilteringEvent()
     /** WireGuard routing was turned off because HTTPS filtering was enabled. */
     data object WireGuardDisabledForHttps : HttpsFilteringEvent()
+    /** Cannot enable HTTPS filtering while Proxy & VPN mode is active. */
+    data object ProxyVpnActiveConflict : HttpsFilteringEvent()
 }

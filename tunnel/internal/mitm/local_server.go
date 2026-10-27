@@ -42,6 +42,8 @@ func ServeLocalAsset(req *http.Request) *http.Response {
 	switch {
 	case path == "/" || path == "/index.html":
 		return serveIndex(req)
+	case path == "/logo.svg" || path == "/favicon.svg":
+		return serveLogo(req)
 	case path == "/cert.crt" || path == "/cert.pem" || path == "/ca.crt":
 		return serveCACert(req)
 	case path == "/cosmetic.css":
@@ -279,47 +281,79 @@ func serveCACert(req *http.Request) *http.Response {
 	return resp
 }
 
-// serveIndex returns a local dashboard page showing protection status and CA certificate link.
+// serveLogo returns the official BlockAds SVG launcher icon.
+func serveLogo(req *http.Request) *http.Response {
+	return buildTextResponse(req, 200, "image/svg+xml; charset=utf-8", blockAdsLogoSVG)
+}
+
+// serveIndex returns a local dashboard page showing protection status, official app logo, and CA certificate link.
 func serveIndex(req *http.Request) *http.Response {
-	html := `<!DOCTYPE html>
-<html lang="vi">
+	lang := resolveLocalAssetLang(req)
+	tr, ok := localTranslations[lang]
+	if !ok {
+		tr = localTranslations["en"]
+	}
+
+	html := fmt.Sprintf(`<!DOCTYPE html>
+<html lang="%s" dir="%s">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlockAds Local Protection</title>
+<title>BlockAds Local Proxy</title>
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
 <style>
-:root { --bg: #0b0f19; --card: #151d30; --primary: #3b82f6; --text: #f3f4f6; --text-muted: #9ca3af; --green: #10b981; }
+:root { --bg: #080b12; --card: #111726; --brand: #00e676; --brand-dark: #00c853; --text: #f3f4f6; --text-muted: #9ca3af; }
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-body { background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1.5rem; }
-.card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.5rem; max-width: 480px; width: 100%; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center; }
-.shield { width: 64px; height: 64px; background: rgba(16, 185, 129, 0.15); color: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
-.shield svg { width: 36px; height: 36px; fill: currentColor; }
-h1 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
-p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; }
-.badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.12); color: var(--green); padding: 0.4rem 1rem; border-radius: 2rem; font-weight: 600; font-size: 0.85rem; margin-bottom: 1.5rem; }
-.badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; background: var(--primary); color: #fff; text-decoration: none; padding: 0.85rem 1.25rem; border-radius: 0.85rem; font-weight: 600; font-size: 1rem; transition: filter 0.2s; }
-.btn:hover { filter: brightness(1.15); }
-.info { text-align: left; background: rgba(255,255,255,0.03); border-radius: 0.85rem; padding: 1rem; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted); border-left: 3px solid var(--primary); }
+body { background: radial-gradient(circle at 50%% 0%%, rgba(0,230,118,0.12), transparent 60%%), var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1.5rem; }
+.card { background: var(--card); border: 1px solid rgba(0,230,118,0.18); border-radius: 1.75rem; max-width: 480px; width: 100%%; padding: 2.25rem 1.85rem; box-shadow: 0 24px 48px rgba(0,0,0,0.65); text-align: center; position: relative; }
+.app-logo { width: 84px; height: 84px; margin: 0 auto 1rem; border-radius: 20px; box-shadow: 0 10px 28px rgba(0,230,118,0.22); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.brand-row { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand); margin-bottom: 0.4rem; }
+.verified { width: 15px; height: 15px; fill: var(--brand); }
+h1 { font-size: 1.55rem; margin-bottom: 0.25rem; font-weight: 800; letter-spacing: -0.01em; }
+.subtitle { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 1rem; }
+.badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.28); color: var(--brand); padding: 0.4rem 1rem; border-radius: 2rem; font-weight: 600; font-size: 0.85rem; margin-bottom: 1.25rem; }
+.badge-dot { width: 8px; height: 8px; border-radius: 50%%; background: var(--brand); box-shadow: 0 0 8px var(--brand); }
+p { color: var(--text-muted); font-size: 0.94rem; line-height: 1.55; margin-bottom: 1.5rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%%; background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: #051b0e; text-decoration: none; padding: 0.9rem 1.25rem; border-radius: 0.9rem; font-weight: 700; font-size: 0.96rem; box-shadow: 0 8px 20px rgba(0,230,118,0.25); transition: transform 0.15s, filter 0.2s; }
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.info { text-align: start; background: rgba(255,255,255,0.03); border-radius: 0.9rem; padding: 1rem 1.15rem; margin-top: 1.5rem; font-size: 0.85rem; line-height: 1.55; color: var(--text-muted); border-inline-start: 3px solid var(--brand); }
+.info strong { color: var(--text); display: block; margin-bottom: 0.3rem; }
+.footer { margin-top: 1.35rem; font-size: 0.76rem; color: rgba(156,163,175,0.75); font-weight: 500; }
 </style>
 </head>
 <body>
 <div class="card">
-<div class="shield">
-<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+<div class="app-logo">%s</div>
+<div class="brand-row">
+<span>BlockAds Official</span>
+<svg class="verified" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
 </div>
-<div class="badge"><span class="badge-dot"></span> Đang hoạt động</div>
 <h1>BlockAds Local Proxy</h1>
-<p>HTTPS Filtering & DNS Shield đang chạy cục bộ trên máy. 100% dữ liệu được lọc nội bộ, không telemetry, không gửi dữ liệu ra bên ngoài.</p>
-<a href="/cert.crt" class="btn">Tải Chứng Chỉ Root CA (BlockAds-CA.crt)</a>
+<div class="subtitle">%s</div>
+<div class="badge"><span class="badge-dot"></span> %s</div>
+<p>%s</p>
+<a href="/cert.crt" class="btn">%s</a>
 <div class="info">
-<strong>Hướng dẫn cài đặt:</strong><br>
-1. Tải chứng chỉ về máy.<br>
-2. Vào Cài đặt → Bảo mật & quyền riêng tư → Thông tin xác thực → Cài đặt chứng chỉ CA.
+<strong>%s</strong>
+%s<br>
+%s
 </div>
+<div class="footer">%s</div>
 </div>
 </body>
-</html>`
+</html>`,
+		tr.Lang,
+		tr.Dir,
+		blockAdsLogoSVG,
+		tr.Subtitle,
+		tr.BadgeActive,
+		tr.Description,
+		tr.DownloadBtn,
+		tr.GuideTitle,
+		tr.Step1,
+		tr.Step2,
+		tr.FooterNote,
+	)
 	return buildTextResponse(req, 200, "text/html; charset=utf-8", html)
 }
 

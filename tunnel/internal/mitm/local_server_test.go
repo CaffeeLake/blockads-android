@@ -23,6 +23,9 @@ func saveLocalServerGlobals(t *testing.T) {
 	certMu.RLock()
 	cm := certManagerInstance
 	certMu.RUnlock()
+	localLangMu.RLock()
+	lang := localLang
+	localLangMu.RUnlock()
 	t.Cleanup(func() {
 		cosmeticMu.Lock()
 		cosmeticCSS = css
@@ -31,6 +34,7 @@ func saveLocalServerGlobals(t *testing.T) {
 		scriptletsJS, scriptletDb = js, store
 		scriptletsMu.Unlock()
 		SetLocalAssetCertManager(cm)
+		SetLocalAssetLanguage(lang)
 	})
 }
 
@@ -59,13 +63,16 @@ func TestServeLocalAssetRoutes(t *testing.T) {
 	SetScriptletStore(nil)
 	SetScriptletsRuntime("window.__ba={};")
 	SetLocalAssetCertManager(nil)
+	SetLocalAssetLanguage("")
 
 	for _, tc := range []struct {
 		path, ctype, body string
 		status            int
 	}{
-		{"/", "text/html", "BlockAds Local Proxy", 200},
+		{"/", "text/html", "Active Protection", 200},
 		{"/index.html", "text/html", "/cert.crt", 200},
+		{"/?lang=vi", "text/html", "Đang hoạt động", 200},
+		{"/logo.svg", "image/svg+xml", "<svg", 200},
 		{"/cosmetic.css", "text/css", "no cosmetic rules loaded", 200},
 		{"/scriptlets.js", "application/javascript", "window.__ba={};", 200},
 		{"/sl-www.example.com.js", "application/javascript", "no scriptlets for www.example.com", 200},

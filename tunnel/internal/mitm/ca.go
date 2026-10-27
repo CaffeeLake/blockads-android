@@ -40,10 +40,11 @@ const (
 
 // CertManager handles Root CA lifecycle and per-host certificate generation.
 type CertManager struct {
-	mu      sync.RWMutex
-	caCert  *x509.Certificate
-	caKey   *ecdsa.PrivateKey
-	caPEM   []byte // PEM-encoded CA cert for export to Android
+	mu       sync.RWMutex
+	certDir  string
+	caCert   *x509.Certificate
+	caKey    *ecdsa.PrivateKey
+	caPEM    []byte // PEM-encoded CA cert for export to Android
 	caKeyPEM []byte
 
 	// Per-host cert cache (host → *cachedCert)
@@ -64,7 +65,7 @@ type cachedCert struct {
 //   - If ca.crt and ca.key exist in certDir, they are loaded.
 //   - Otherwise a fresh Root CA is generated once and saved to certDir.
 func NewCertManager(certDir string) (*CertManager, error) {
-	cm := &CertManager{}
+	cm := &CertManager{certDir: certDir}
 	if err := cm.initCA(certDir); err != nil {
 		return nil, err
 	}

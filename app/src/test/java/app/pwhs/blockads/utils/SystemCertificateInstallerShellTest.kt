@@ -110,14 +110,14 @@ class SystemCertificateInstallerShellTest {
     }
 
     @Test
-    fun `isModuleInstalled reports true when module cert exists`() {
-        shell.respond = { FakeResult(isSuccess = true, out = listOf("1")) }
+    fun `isModuleInstalled reports true when module cert matches`() {
+        shell.respond = { FakeResult(isSuccess = true, out = pem.lines()) }
         assertTrue(SystemCertificateInstaller.isModuleInstalled(pem))
     }
 
     @Test
     fun `isModuleInstalled reports false when module cert does not exist`() {
-        shell.respond = { FakeResult(isSuccess = true, out = listOf("0")) }
+        shell.respond = { FakeResult(isSuccess = false, out = emptyList()) }
         assertFalse(SystemCertificateInstaller.isModuleInstalled(pem))
     }
 }

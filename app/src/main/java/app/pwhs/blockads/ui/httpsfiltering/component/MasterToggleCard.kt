@@ -34,10 +34,13 @@ import app.pwhs.blockads.ui.settings.component.SettingsCard
 fun MasterToggleCard(
     isEnabled: Boolean,
     isProxyRunning: Boolean,
-    onToggle: (Boolean) -> Unit
+    onToggle: (Boolean) -> Unit,
+    isToggleEnabled: Boolean = true,
+    disabledMessage: String? = null
 ) {
+    val active = isEnabled && isProxyRunning && isToggleEnabled
     val statusColor by animateColorAsState(
-        targetValue = if (isProxyRunning) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+        targetValue = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
         label = "statusColor"
     )
 
@@ -64,17 +67,17 @@ fun MasterToggleCard(
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = if (isProxyRunning) Icons.Default.CheckCircle else Icons.Default.Error,
+                        imageVector = if (active) Icons.Default.CheckCircle else Icons.Default.Error,
                         contentDescription = null,
                         tint = statusColor,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = if (isProxyRunning) {
-                            stringResource(R.string.https_filtering_status_active)
-                        } else {
-                            stringResource(R.string.https_filtering_status_inactive)
+                        text = when {
+                            !isToggleEnabled && disabledMessage != null -> disabledMessage
+                            active -> stringResource(R.string.https_filtering_status_active)
+                            else -> stringResource(R.string.https_filtering_status_inactive)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = statusColor
@@ -83,8 +86,9 @@ fun MasterToggleCard(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Switch(
-                checked = isEnabled,
+                checked = isEnabled && isToggleEnabled,
                 onCheckedChange = onToggle,
+                enabled = isToggleEnabled,
                 colors = SwitchDefaults.colors(
                     checkedTrackColor = MaterialTheme.colorScheme.primary,
                     checkedThumbColor = MaterialTheme.colorScheme.onPrimary

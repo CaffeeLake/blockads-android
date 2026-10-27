@@ -130,6 +130,7 @@ class AppPreferences internal constructor(
     val useSystemDnsOnTrustedEnabled: Flow<Boolean> get() = vpnSecurity.useSystemDnsOnTrustedEnabled
     val pausedByTrusted: Flow<Boolean> get() = vpnSecurity.pausedByTrusted
     val pausedTrustedSsid: Flow<String> get() = vpnSecurity.pausedTrustedSsid
+    val httpsFilteringEnabled: Flow<Boolean> get() = vpnSecurity.httpsFilteringEnabled
     val filterHttp3: Flow<Boolean> get() = vpnSecurity.filterHttp3
     val vpnRevokedByAnotherApp: Flow<Boolean> get() = vpnSecurity.vpnRevokedByAnotherApp
     val stabilityTipDismissed: Flow<Boolean> get() = vpnSecurity.stabilityTipDismissed

@@ -12,7 +12,10 @@ import (
 
 const defaultTunMTU = 1500
 
-var localAssetSynthIP = net.IPv4(198, 51, 100, 1)
+var (
+	localAssetSynthIP   = net.IPv4(198, 51, 100, 1)
+	localAssetSynthIPv6 = net.ParseIP("2001:db8::1")
+)
 
 func fileExists(path string) bool {
 	_, err := os.Stat(path)

@@ -19,9 +19,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -73,27 +78,36 @@ class HttpsFilteringViewModel(
     private val _events = MutableSharedFlow<HttpsFilteringEvent>()
     val events: SharedFlow<HttpsFilteringEvent> = _events.asSharedFlow()
 
+    val isProxyVpnActive: StateFlow<Boolean> = appPrefs.routingMode.map { mode ->
+        isProxyVpnRoutingMode(mode)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     init {
         loadState()
+        appPrefs.httpsFilteringEnabled.onEach { enabled ->
+            _isEnabled.value = enabled
+            if (!enabled) _isProxyRunning.value = false
+        }.launchIn(viewModelScope)
     }
+
+    private fun isProxyVpnRoutingMode(mode: String): Boolean =
+        mode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+            mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+            mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
 
     // ── Public API ───────────────────────────────────────────────────────
 
     /** Toggle HTTPS filtering on or off. */
     fun toggleEnabled(enabled: Boolean) {
         viewModelScope.launch {
+            if (enabled && isProxyVpnRoutingMode(appPrefs.getRoutingModeSnapshot())) {
+                _events.emit(HttpsFilteringEvent.ProxyVpnActiveConflict)
+                return@launch
+            }
             _isEnabled.value = enabled
             appPrefs.setHttpsFilteringEnabled(enabled)
 
             if (enabled) {
-                // HTTPS filtering and WireGuard routing are mutually
-                // exclusive: TcpIpStack terminates flows and dials the
-                // destination directly, bypassing the WG tunnel. Turn
-                // WG off so the user gets a single, working mode.
-                if (appPrefs.getRoutingModeSnapshot() == AppPreferences.ROUTING_MODE_WIREGUARD) {
-                    appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
-                    _events.emit(HttpsFilteringEvent.WireGuardDisabledForHttps)
-                }
                 startProxy()
             } else {
                 stopProxy()
@@ -211,6 +225,16 @@ class HttpsFilteringViewModel(
         }
     }
 
+    private fun ensureCaCertPem(): String? {
+        var pem = _caCertPem.value
+        if (pem.isNullOrEmpty()) {
+            val certDir = getApplication<Application>().filesDir.absolutePath
+            pem = engine.startStackMitm(certDir)
+            if (pem.isNotEmpty()) _caCertPem.value = pem
+        }
+        return pem?.takeIf { it.isNotEmpty() }
+    }
+
     /**
      * Export the CA certificate.
      *
@@ -219,15 +243,8 @@ class HttpsFilteringViewModel(
      */
     fun exportCaCert() {
         viewModelScope.launch {
-            var pem = _caCertPem.value
-            if (pem.isNullOrEmpty()) {
-                val certDir = getApplication<Application>().filesDir.absolutePath
-                pem = engine.startStackMitm(certDir)
-                if (pem.isNotEmpty()) {
-                    _caCertPem.value = pem
-                }
-            }
-            if (pem.isNullOrEmpty()) {
+            val pem = ensureCaCertPem()
+            if (pem == null) {
                 _events.emit(HttpsFilteringEvent.Error("Could not generate CA certificate."))
                 return@launch
             }
@@ -286,20 +303,12 @@ class HttpsFilteringViewModel(
      */
     fun installToUserStoreViaRoot() {
         viewModelScope.launch {
-            var pem = _caCertPem.value
-            if (pem.isNullOrEmpty()) {
-                val certDir = getApplication<Application>().filesDir.absolutePath
-                pem = engine.startStackMitm(certDir)
-                if (pem.isNotEmpty()) {
-                    _caCertPem.value = pem
-                }
-            }
-            if (pem.isNullOrEmpty()) {
+            val pem = ensureCaCertPem() ?: run {
                 _events.emit(HttpsFilteringEvent.Error("CA certificate is not ready."))
                 return@launch
             }
             val result = withContext(Dispatchers.IO) {
-                app.pwhs.blockads.utils.SystemCertificateInstaller.installToUserStoreViaRoot(pem)
+                SystemCertificateInstaller.installToUserStoreViaRoot(pem)
             }
             if (result.isSuccess) {
                 _certStatus.value = CertStatus.INSTALLED
@@ -316,20 +325,12 @@ class HttpsFilteringViewModel(
      */
     fun installToSystemStore() {
         viewModelScope.launch {
-            var pem = _caCertPem.value
-            if (pem.isNullOrEmpty()) {
-                val certDir = getApplication<Application>().filesDir.absolutePath
-                pem = engine.startStackMitm(certDir)
-                if (pem.isNotEmpty()) {
-                    _caCertPem.value = pem
-                }
-            }
-            if (pem.isNullOrEmpty()) {
+            val pem = ensureCaCertPem() ?: run {
                 _events.emit(HttpsFilteringEvent.Error("CA certificate is not ready."))
                 return@launch
             }
             val result = withContext(Dispatchers.IO) {
-                app.pwhs.blockads.utils.SystemCertificateInstaller.installToSystemStore(pem)
+                SystemCertificateInstaller.installToSystemStore(pem)
             }
             if (result.isSuccess) {
                 _certStatus.value = CertStatus.INSTALLED
@@ -374,7 +375,7 @@ class HttpsFilteringViewModel(
             val certDir = getApplication<Application>().filesDir.absolutePath
             val caCert = engine.getMitmCACert(certDir)
             if (!caCert.isNullOrEmpty()) {
-                _isProxyRunning.value = true
+                _isProxyRunning.value = enabled
                 _caCertPem.value = caCert
             }
 

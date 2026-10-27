@@ -266,7 +266,11 @@ class GoTunnelAdapter(
             Timber.e(e, "Failed to configure proxy node in Go engine")
         }
 
-        val mitmMode = httpsFilteringEnabled && certDir.isNotEmpty() && wgConfigJson.isEmpty()
+        val mitmMode = httpsFilteringEnabled &&
+            certDir.isNotEmpty() &&
+            wgConfigJson.isEmpty() &&
+            proxyConfigJson.isEmpty() &&
+            ssConfigJson.isEmpty()
         engine.setUseTcpStack(mitmMode)
 
         if (mitmMode) {

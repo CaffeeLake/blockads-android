@@ -174,40 +174,32 @@ class ProxyVpnViewModel(
     val events: SharedFlow<ProxyVpnUiEvent> = _events.asSharedFlow()
 
     init {
-        // Collect WireGuard profiles
-        combine(appPrefs.wgProfiles, appPrefs.wgActiveProfileId) { list, active ->
-            list to active
-        }.onEach { (list, active) ->
-            _wgProfiles.value = list
-            _activeWgProfileId.value = active ?: list.firstOrNull { it.configIssue == null }?.id
-        }.launchIn(viewModelScope)
+        combine(appPrefs.wgProfiles, appPrefs.wgActiveProfileId) { l, a -> l to a }
+            .onEach { (list, active) ->
+                _wgProfiles.value = list
+                _activeWgProfileId.value = active ?: list.firstOrNull { it.configIssue == null }?.id
+            }.launchIn(viewModelScope)
 
-        // Collect Proxy profiles
-        combine(appPrefs.proxyProfiles, appPrefs.activeProxyProfileId) { list, active ->
-            list to active
-        }.onEach { (list, active) ->
-            _proxyProfiles.value = list
-            _activeProxyProfileId.value = active ?: list.firstOrNull()?.id
-        }.launchIn(viewModelScope)
+        combine(appPrefs.proxyProfiles, appPrefs.activeProxyProfileId) { l, a -> l to a }
+            .onEach { (list, active) ->
+                _proxyProfiles.value = list
+                _activeProxyProfileId.value = active ?: list.firstOrNull()?.id
+            }.launchIn(viewModelScope)
 
-        // Collect Shadowsocks profiles (legacy compatibility)
-        combine(appPrefs.ssProfiles, appPrefs.activeSsProfileId) { list, active ->
-            list to active
-        }.onEach { (list, active) ->
-            _ssProfiles.value = list
-            _activeSsProfileId.value = active ?: list.firstOrNull()?.id
-        }.launchIn(viewModelScope)
+        combine(appPrefs.ssProfiles, appPrefs.activeSsProfileId) { l, a -> l to a }
+            .onEach { (list, active) ->
+                _ssProfiles.value = list
+                _activeSsProfileId.value = active ?: list.firstOrNull()?.id
+            }.launchIn(viewModelScope)
 
-        // Stream routing mode & active proxy type
-        combine(appPrefs.routingMode, appPrefs.activeProxyType) { mode, type ->
-            mode to type
-        }.onEach { (mode, type) ->
-            _isProxyActive.value = mode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
-                mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
-                mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
-            _activeProxyType.value = type
-            networkInfoDelegate.refreshAfterVpnToggle()
-        }.launchIn(viewModelScope)
+        combine(appPrefs.routingMode, appPrefs.activeProxyType) { m, t -> m to t }
+            .onEach { (mode, type) ->
+                _isProxyActive.value = mode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+                    mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+                    mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
+                _activeProxyType.value = type
+                networkInfoDelegate.refreshAfterVpnToggle()
+            }.launchIn(viewModelScope)
 
         viewModelScope.launch {
             _splitDnsZones.value = appPrefs.splitDnsZones.first()
@@ -216,16 +208,15 @@ class ProxyVpnViewModel(
         }
     }
 
-    fun refreshNetworkAndIp() {
-        networkInfoDelegate.refreshPublicIp()
-    }
+    fun refreshNetworkAndIp() = networkInfoDelegate.refreshPublicIp()
+    fun selectTab(index: Int) { _selectedTab.value = index }
+    fun clearError() { _error.value = null }
 
-    fun selectTab(index: Int) {
-        _selectedTab.value = index
-    }
-
-    fun clearError() {
-        _error.value = null
+    private suspend fun disableHttpsFilteringIfNeeded() {
+        if (appPrefs.getHttpsFilteringEnabledSnapshot()) {
+            appPrefs.setHttpsFilteringEnabled(false)
+            _events.emit(ProxyVpnUiEvent.HttpsFilteringDisabled)
+        }
     }
 
     fun toggleProxyVpn() {
@@ -235,6 +226,7 @@ class ProxyVpnViewModel(
                 appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT)
                 _events.emit(ProxyVpnUiEvent.ProxyVpnToggled(false))
             } else {
+                disableHttpsFilteringIfNeeded()
                 val targetType = if (_selectedTab.value == 1) AppPreferences.PROXY_TYPE_SHADOWSOCKS else AppPreferences.PROXY_TYPE_WIREGUARD
                 appPrefs.setActiveProxyType(targetType)
                 appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
@@ -259,6 +251,7 @@ class ProxyVpnViewModel(
                 _error.value = fixFirstMessage(profile, issue)
                 return@launch
             }
+            disableHttpsFilteringIfNeeded()
             appPrefs.setActiveWgProfile(id)
             appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_WIREGUARD)
             appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
@@ -353,6 +346,7 @@ class ProxyVpnViewModel(
     fun setActiveProxyProfile(id: String) {
         viewModelScope.launch {
             val profile = _proxyProfiles.value.firstOrNull { it.id == id } ?: return@launch
+            disableHttpsFilteringIfNeeded()
             appPrefs.setActiveProxyProfileId(id)
             appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)
             appPrefs.setRoutingMode(AppPreferences.ROUTING_MODE_PROXY_VPN)
@@ -370,6 +364,7 @@ class ProxyVpnViewModel(
             val importResult = subscriptionDelegate.subscriptionManager.importOrUpdateSubscription(trimmed)
             return importResult.fold(
                 onSuccess = { (sub, res) ->
+                    disableHttpsFilteringIfNeeded()
                     _events.emit(ProxyVpnUiEvent.ProfileImported("${res.totalParsed} profiles (${sub.name})"))
                     ServiceController.requestRestart(getApplication())
                     true
@@ -409,6 +404,7 @@ class ProxyVpnViewModel(
         val parseResult = ProxyLinkParser.parse(trimmed)
         return parseResult.fold(
             onSuccess = { profile ->
+                disableHttpsFilteringIfNeeded()
                 appPrefs.addProxyProfile(profile)
                 appPrefs.removeDuplicateProfiles()
                 appPrefs.setActiveProxyType(AppPreferences.PROXY_TYPE_SHADOWSOCKS)

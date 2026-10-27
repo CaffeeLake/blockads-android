@@ -261,9 +261,15 @@ class CertInstallationWizardViewModel(
 
     private fun finishWizard() {
         viewModelScope.launch {
-            // Enable HTTPS filtering & restart VPN
-            appPrefs.setHttpsFilteringEnabled(true)
-            ServiceController.requestRestart(getApplication())
+            val mode = appPrefs.getRoutingModeSnapshot()
+            val isProxyVpn = mode == AppPreferences.ROUTING_MODE_PROXY_VPN ||
+                mode == AppPreferences.ROUTING_MODE_WIREGUARD ||
+                mode == AppPreferences.ROUTING_MODE_SHADOWSOCKS
+            if (!isProxyVpn) {
+                // Enable HTTPS filtering & restart VPN
+                appPrefs.setHttpsFilteringEnabled(true)
+                ServiceController.requestRestart(getApplication())
+            }
             _uiEffect.emit(CertInstallationWizardUiEffect.FinishAndNavigateBack)
         }
     }

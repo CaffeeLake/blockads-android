@@ -29,23 +29,10 @@ func (e *Engine) serveDNS(w dns.ResponseWriter, r *dns.Msg, appOverride string) 
 	domain = strings.TrimSuffix(domain, ".")
 	queryType := r.Question[0].Qtype
 
-	// Preferred IP Type filtering:
-	// - "auto" (default): do nothing, resolve both IPv4 (A) and IPv6 (AAAA).
-	// - "ipv4": suppress AAAA queries so clients fall back to IPv4 (A records).
-	// - "ipv6": suppress A queries so clients fall back to IPv6 (AAAA records).
-	pref := e.getPreferredIPType()
-	if (pref == "ipv4" && queryType == dns.TypeAAAA) || (pref == "ipv6" && queryType == dns.TypeA) {
-		m := new(dns.Msg)
-		m.SetReply(r)
-		m.Rcode = dns.RcodeSuccess
-		_ = w.WriteMsg(m)
-		e.totalQueries.Add(1)
-		return
-	}
-
 	// Local asset host: synthesize a response with a routable IP from
-	// the RFC 5737 documentation range so the browser can SYN to it
-	// and have the packet enter our TUN.
+	// the RFC 5737 / RFC 3849 documentation range so the browser can SYN
+	// to it and have the packet enter our TUN (must run before Preferred
+	// IP Type filtering so local.pwhs.app always resolves).
 	if domain == LocalAssetHost {
 		m := new(dns.Msg)
 		m.SetReply(r)
@@ -53,8 +40,24 @@ func (e *Engine) serveDNS(w dns.ResponseWriter, r *dns.Msg, appOverride string) 
 			rr, _ := dns.NewRR(fmt.Sprintf("%s 300 IN A %s", r.Question[0].Name, localAssetSynthIP.String()))
 			m.Answer = append(m.Answer, rr)
 		} else if queryType == dns.TypeAAAA {
-			// No IPv6 for local asset host; return empty NOERROR
+			rr, _ := dns.NewRR(fmt.Sprintf("%s 300 IN AAAA %s", r.Question[0].Name, localAssetSynthIPv6.String()))
+			m.Answer = append(m.Answer, rr)
 		}
+		_ = w.WriteMsg(m)
+		e.totalQueries.Add(1)
+		return
+	}
+
+	// Preferred IP Type filtering:
+	// - "auto" (default): do nothing, resolve both IPv4 (A) and IPv6 (AAAA).
+	// - "ipv4": suppress AAAA queries so clients fall back to IPv4 (A records).
+	// - "ipv6": suppress A queries ONLY when the domain actually has an AAAA record,
+	//           so IPv4-only domains (e.g. vnexpress.net) still resolve via IPv4.
+	pref := e.getPreferredIPType()
+	if pref == "ipv4" && queryType == dns.TypeAAAA {
+		m := new(dns.Msg)
+		m.SetReply(r)
+		m.Rcode = dns.RcodeSuccess
 		_ = w.WriteMsg(m)
 		e.totalQueries.Add(1)
 		return
@@ -248,8 +251,56 @@ func (e *Engine) serveDNS(w dns.ResponseWriter, r *dns.Msg, appOverride string) 
 		return
 	}
 
-	// 5. Forward to Upstream
+	// 5. If IPv6 is preferred and this is an A query for an allowed domain,
+	// suppress A only if the domain actually has an AAAA record.
+	if pref == "ipv6" && queryType == dns.TypeA && e.domainHasAAAA(domain) {
+		m := new(dns.Msg)
+		m.SetReply(r)
+		m.Rcode = dns.RcodeSuccess
+		_ = w.WriteMsg(m)
+		e.totalQueries.Add(1)
+		return
+	}
+
+	// 6. Forward to Upstream
 	e.standaloneForward(w, r, appName, startTime)
+}
+
+// domainHasAAAA checks whether the given domain has at least one non-zero AAAA
+// record via the engine's internal resolver.
+func (e *Engine) domainHasAAAA(domain string) bool {
+	e.mu.Lock()
+	resolver := e.resolver
+	e.mu.Unlock()
+	if resolver == nil {
+		return false
+	}
+
+	msg := new(dns.Msg)
+	msg.SetQuestion(dns.Fqdn(domain), dns.TypeAAAA)
+	msg.RecursionDesired = true
+
+	rawQuery, err := msg.Pack()
+	if err != nil {
+		return false
+	}
+
+	resp, err := resolver.Resolve(rawQuery)
+	if err != nil || isUpstreamBlocked(resp) {
+		return false
+	}
+
+	var respMsg dns.Msg
+	if err := respMsg.Unpack(resp); err != nil {
+		return false
+	}
+
+	for _, rr := range respMsg.Answer {
+		if aaaa, ok := rr.(*dns.AAAA); ok && !aaaa.AAAA.Equal(net.IPv6zero) {
+			return true
+		}
+	}
+	return false
 }
 
 // lookupIP resolves a domain to an IP address using the Engine's internal resolver.
