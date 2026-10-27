@@ -31,6 +31,7 @@ import app.pwhs.blockads.BuildConfig
 import app.pwhs.blockads.R
 import app.pwhs.blockads.ui.event.UiEventEffect
 import app.pwhs.blockads.ui.logs.dialog.ConfirmClearLogDialog
+import app.pwhs.blockads.ui.settings.component.AdvancedSection
 import app.pwhs.blockads.ui.settings.component.ApplicationsSection
 import app.pwhs.blockads.ui.settings.component.CommunitySection
 import app.pwhs.blockads.ui.settings.component.DataSection
@@ -56,6 +57,9 @@ fun SettingsScreen(
     onNavigateToHttpsFiltering: () -> Unit = { },
     onNavigateToDNSProvider: () -> Unit = { },
     onNavigateToGeoIp: () -> Unit = { },
+    onNavigateToFilterSetup: () -> Unit = { },
+    hasVpnInBottomBar: Boolean = false,
+    hasFilterInBottomBar: Boolean = false,
 ) {
     val autoReconnect by viewModel.autoReconnect.collectAsStateWithLifecycle()
     val autoUpdateEnabled by viewModel.autoUpdateEnabled.collectAsStateWithLifecycle()
@@ -114,19 +118,26 @@ fun SettingsScreen(
             // ── Protection & Connection ──────────────────────────
             ProtectionSection(
                 autoReconnect = autoReconnect,
-                routingMode = routingMode,
                 safeSearchEnabled = safeSearchEnabled,
                 youtubeRestrictedMode = youtubeRestrictedMode,
                 dnsResponseType = dnsResponseType,
                 upstreamDNS = upstreamDNS,
                 onSetAutoReconnect = { viewModel.setAutoReconnect(it) },
-                onSetRoutingMode = { viewModel.setRoutingModeEnabled(it) },
                 onSetSafeSearchEnabled = { viewModel.setSafeSearchEnabled(it) },
                 onSetYoutubeRestrictedMode = { viewModel.setYoutubeRestrictedMode(it) },
                 onShowDnsResponseTypeDialog = { showDnsResponseTypeDialog = true },
-                onNavigateToDNSProvider = onNavigateToDNSProvider,
+                onNavigateToDNSProvider = onNavigateToDNSProvider
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // ── Advanced & Proxy ──────────────────────────────────
+            AdvancedSection(
+                routingMode = routingMode,
+                onSetRoutingMode = { viewModel.setRoutingModeEnabled(it) },
+                onNavigateToHttpsFiltering = onNavigateToHttpsFiltering,
                 onNavigateToWireGuardImport = onNavigateToWireGuardImport,
-                onNavigateToHttpsFiltering = onNavigateToHttpsFiltering
+                showVpnSetting = !hasVpnInBottomBar
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -149,6 +160,8 @@ fun SettingsScreen(
                 autoUpdateWifiOnly = autoUpdateWifiOnly,
                 autoUpdateEnabled = autoUpdateEnabled,
                 filterBuildMode = filterBuildMode,
+                showFilterListSetting = !hasFilterInBottomBar,
+                onNavigateToFilterSetup = onNavigateToFilterSetup,
                 onSetFilterBuildMode = { viewModel.setFilterBuildMode(it) },
                 onSetAutoUpdateWifiOnly = { viewModel.setAutoUpdateWifiOnly(it) },
                 onSetAutoUpdateFrequency = { viewModel.setAutoUpdateFrequency(it) },

@@ -47,6 +47,8 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
             booleanPreferencesKey("stability_tip_last_always_on")
         val KEY_DISMISSED_FEATURE_TIPS = stringSetPreferencesKey("dismissed_feature_tips")
         val KEY_PREFERRED_IP_TYPE = stringPreferencesKey("preferred_ip_type")
+        val KEY_HAS_RATED_APP = booleanPreferencesKey("has_rated_app")
+        val KEY_RATE_PROMPT_LAST_DISMISSED = longPreferencesKey("rate_prompt_last_dismissed")
 
         const val PREFERRED_IP_AUTO = "auto"
         const val PREFERRED_IP_IPV4 = "ipv4"
@@ -348,5 +350,21 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             prefs[KEY_PREFERRED_IP_TYPE] = type
         }
+    }
+
+    val hasRatedApp: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_HAS_RATED_APP] ?: false
+    }
+
+    val ratePromptLastDismissed: Flow<Long> = dataStore.data.map { prefs ->
+        prefs[KEY_RATE_PROMPT_LAST_DISMISSED] ?: 0L
+    }
+
+    suspend fun setHasRatedApp(rated: Boolean) {
+        dataStore.edit { prefs -> prefs[KEY_HAS_RATED_APP] = rated }
+    }
+
+    suspend fun setRatePromptLastDismissed(timestamp: Long) {
+        dataStore.edit { prefs -> prefs[KEY_RATE_PROMPT_LAST_DISMISSED] = timestamp }
     }
 }

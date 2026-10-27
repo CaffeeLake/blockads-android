@@ -56,6 +56,10 @@ class AppPreferences internal constructor(
         const val BUILD_MODE_ONLINE = FilterPreferences.BUILD_MODE_ONLINE
         const val BUILD_MODE_LOCAL = FilterPreferences.BUILD_MODE_LOCAL
 
+        const val BOTTOM_NAV_TAB_AUTO = AppearancePreferences.BOTTOM_NAV_TAB_AUTO
+        const val BOTTOM_NAV_TAB_FILTER = AppearancePreferences.BOTTOM_NAV_TAB_FILTER
+        const val BOTTOM_NAV_TAB_VPN = AppearancePreferences.BOTTOM_NAV_TAB_VPN
+
         const val THEME_SYSTEM = AppearancePreferences.THEME_SYSTEM
         const val THEME_DARK = AppearancePreferences.THEME_DARK
         const val THEME_LIGHT = AppearancePreferences.THEME_LIGHT
@@ -160,6 +164,8 @@ class AppPreferences internal constructor(
     val appLanguage: Flow<String> get() = appearance.appLanguage
     val accentColor: Flow<String> get() = appearance.accentColor
     val showBottomNavLabels: Flow<Boolean> get() = appearance.showBottomNavLabels
+    val bottomNavSecondaryTab: Flow<String> get() = appearance.bottomNavSecondaryTab
+    suspend fun setBottomNavSecondaryTab(tab: String) = appearance.setBottomNavSecondaryTab(tab)
 
     // ── Filter Flows ─────────────────────────────────────────────────────
     val filterUrl: Flow<String> get() = filter.filterUrl
@@ -317,4 +323,10 @@ class AppPreferences internal constructor(
     suspend fun setSsProfile(profile: ShadowsocksProfile) = shadowsocks.addProfile(profile)
     suspend fun deleteSsProfile(id: String) = shadowsocks.deleteProfile(id)
     suspend fun renameSsProfile(id: String, newName: String) = shadowsocks.renameProfile(id, newName)
+
+    val hasRatedApp: Flow<Boolean> get() = vpnSecurity.hasRatedApp
+    suspend fun setHasRatedApp(rated: Boolean) = vpnSecurity.setHasRatedApp(rated)
+
+    val ratePromptLastDismissed: Flow<Long> get() = vpnSecurity.ratePromptLastDismissed
+    suspend fun setRatePromptLastDismissed(timestamp: Long) = vpnSecurity.setRatePromptLastDismissed(timestamp)
 }

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -195,51 +196,73 @@ fun AboutScreen(
             // Links in a single Grouped Card
             SettingsCard(modifier = Modifier.fillMaxWidth()) {
                 Column {
-                    val linkItems = listOf(
-                        LinkConfig(
-                            icon = Icons.Filled.Code,
-                            tint = Color(0xFF2563EB),
-                            title = stringResource(R.string.about_github),
-                            onClick = {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/pass-with-high-score/blockads-android".toUri()))
-                            }
-                        ),
-                        LinkConfig(
-                            icon = Icons.Filled.Language,
-                            tint = Color(0xFF059669),
-                            title = stringResource(R.string.about_website),
-                            onClick = {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, "https://blockads.pwhs.app/".toUri()))
-                            }
-                        ),
-                        LinkConfig(
-                            icon = Icons.Filled.PrivacyTip,
-                            tint = Color(0xFF7C3AED),
-                            title = stringResource(R.string.about_privacy_policy),
-                            onClick = {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, "https://blockads.pwhs.app/privacy".toUri()))
-                            }
-                        ),
-                        LinkConfig(
-                            icon = Icons.Filled.Email,
-                            tint = Color(0xFFEA580C),
-                            title = stringResource(R.string.about_contact),
-                            onClick = {
-                                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                    data = "mailto:support@pwhs.app".toUri()
+                    val linkItems = buildList {
+                        if (app.pwhs.blockads.BuildConfig.IS_STORE) {
+                            add(
+                                LinkConfig(
+                                    icon = Icons.Filled.Star,
+                                    tint = Color(0xFFEAB308),
+                                    title = stringResource(R.string.about_rate_app),
+                                    onClick = {
+                                        app.pwhs.blockads.utils.SupportIntentHelper.openPlayStore(context)
+                                    }
+                                )
+                            )
+                        }
+                        add(
+                            LinkConfig(
+                                icon = Icons.Filled.Code,
+                                tint = Color(0xFF2563EB),
+                                title = stringResource(R.string.about_github),
+                                onClick = {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/pass-with-high-score/blockads-android".toUri()))
                                 }
-                                context.startActivity(intent)
-                            }
-                        ),
-                        LinkConfig(
-                            icon = Icons.Filled.Gavel,
-                            tint = Color(0xFF64748B),
-                            title = stringResource(R.string.about_licenses),
-                            onClick = {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/pass-with-high-score/blockads-android?tab=GPL-3.0-1-ov-file".toUri()))
-                            }
-                        ),
-                    )
+                            )
+                        )
+                        add(
+                            LinkConfig(
+                                icon = Icons.Filled.Language,
+                                tint = Color(0xFF059669),
+                                title = stringResource(R.string.about_website),
+                                onClick = {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, "https://blockads.pwhs.app/".toUri()))
+                                }
+                            )
+                        )
+                        add(
+                            LinkConfig(
+                                icon = Icons.Filled.PrivacyTip,
+                                tint = Color(0xFF7C3AED),
+                                title = stringResource(R.string.about_privacy_policy),
+                                onClick = {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, "https://blockads.pwhs.app/privacy".toUri()))
+                                }
+                            )
+                        )
+                        add(
+                            LinkConfig(
+                                icon = Icons.Filled.Email,
+                                tint = Color(0xFFEA580C),
+                                title = stringResource(R.string.about_contact),
+                                onClick = {
+                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                        data = "mailto:support@pwhs.app".toUri()
+                                    }
+                                    context.startActivity(intent)
+                                }
+                            )
+                        )
+                        add(
+                            LinkConfig(
+                                icon = Icons.Filled.Gavel,
+                                tint = Color(0xFF64748B),
+                                title = stringResource(R.string.about_licenses),
+                                onClick = {
+                                    context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/pass-with-high-score/blockads-android?tab=GPL-3.0-1-ov-file".toUri()))
+                                }
+                            )
+                        )
+                    }
 
                     linkItems.forEachIndexed { index, item ->
                         Row(

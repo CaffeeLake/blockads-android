@@ -27,6 +27,8 @@ fun FilterSetupSection(
     autoUpdateWifiOnly: Boolean,
     autoUpdateEnabled: Boolean,
     filterBuildMode: String = AppPreferences.BUILD_MODE_ONLINE,
+    showFilterListSetting: Boolean = true,
+    onNavigateToFilterSetup: () -> Unit = {},
     onSetFilterBuildMode: (String) -> Unit = {},
     onSetAutoUpdateWifiOnly: (Boolean) -> Unit = {},
     onSetAutoUpdateFrequency: (String) -> Unit = {},
@@ -48,6 +50,18 @@ fun FilterSetupSection(
 
         SettingsCard {
             Column {
+                // 0. Filter Setup item (shown when Filter tab is not on bottom navigation)
+                if (showFilterListSetting) {
+                    SettingItem(
+                        iconPainter = painterResource(R.drawable.ic_shield),
+                        iconTint = Color(0xFF7C3AED),
+                        title = if (app.pwhs.blockads.BuildConfig.IS_STORE) stringResource(R.string.settings_category_filters) else stringResource(R.string.filter_setup_title),
+                        desc = stringResource(R.string.settings_category_filters_desc),
+                        onClick = onNavigateToFilterSetup
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
+                }
+
                 // 1. Auto-update toggle
                 SettingsToggleItem(
                     iconPainter = painterResource(R.drawable.ic_settings_auto_update),

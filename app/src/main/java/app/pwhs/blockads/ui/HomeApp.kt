@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -102,6 +103,9 @@ fun HomeApp(
     val firewallEnabled by appPrefs.firewallEnabled.collectAsStateWithLifecycle(
         initialValue = false,
     )
+    val secondaryTab by appPrefs.bottomNavSecondaryTab.collectAsStateWithLifecycle(
+        initialValue = AppPreferences.BOTTOM_NAV_TAB_AUTO,
+    )
     val homeStack = rememberNavBackStack(HomeKey)
     val filterStack = rememberNavBackStack(FilterKey)
     val wireguardStack = rememberNavBackStack(ProxyVpnKey)
@@ -119,22 +123,8 @@ fun HomeApp(
         BottomBarScreen.Settings -> settingsStack
     }
 
-    val bottomBarScreens = if (BuildConfig.IS_STORE) {
-        listOf(
-            BottomBarScreen.Home,
-            BottomBarScreen.Proxy,
-            BottomBarScreen.Firewall,
-            BottomBarScreen.DomainRule,
-            BottomBarScreen.Settings
-        )
-    } else {
-        listOf(
-            BottomBarScreen.Home,
-            BottomBarScreen.FilterSetup,
-            BottomBarScreen.Firewall,
-            BottomBarScreen.DomainRule,
-            BottomBarScreen.Settings
-        )
+    val bottomBarScreens = remember(secondaryTab) {
+        BottomBarScreen.resolveBottomBarScreens(secondaryTab, BuildConfig.IS_STORE)
     }
     var showBottomBar by rememberSaveable { mutableStateOf(true) }
     fun safePop(stack: MutableList<*>) {
@@ -295,12 +285,14 @@ fun HomeApp(
                         },
                         onNavigateToWireGuardImport = {
                             showBottomBar = false
-                            if (BuildConfig.IS_STORE) {
-                                settingsStack.add(FilterKey)
-                            } else {
-                                settingsStack.add(WireGuardImportKey)
-                            }
+                            settingsStack.add(WireGuardImportKey)
                         },
+                        onNavigateToFilterSetup = {
+                            showBottomBar = false
+                            settingsStack.add(FilterKey)
+                        },
+                        hasVpnInBottomBar = bottomBarScreens.contains(BottomBarScreen.Proxy),
+                        hasFilterInBottomBar = bottomBarScreens.contains(BottomBarScreen.FilterSetup),
                         onNavigateToHttpsFiltering = {
                             showBottomBar = false
                             settingsStack.add(HttpsFilteringKey)

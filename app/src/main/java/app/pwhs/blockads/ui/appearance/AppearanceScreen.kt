@@ -54,6 +54,7 @@ fun AppearanceScreen(
     val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
     val accentColor by viewModel.accentColor.collectAsStateWithLifecycle()
     val showBottomNavLabels by viewModel.showBottomNavLabels.collectAsStateWithLifecycle()
+    val bottomNavSecondaryTab by viewModel.bottomNavSecondaryTab.collectAsStateWithLifecycle()
 
     var showColorPicker by remember { mutableStateOf(false) }
 
@@ -122,7 +123,9 @@ fun AppearanceScreen(
             )
             NavigationCard(
                 showBottomNavLabels = showBottomNavLabels,
-                onToggleShowBottomNavLabels = { viewModel.setShowBottomNavLabels(it) }
+                onToggleShowBottomNavLabels = { viewModel.setShowBottomNavLabels(it) },
+                bottomNavSecondaryTab = bottomNavSecondaryTab,
+                onSelectBottomNavSecondaryTab = { viewModel.setBottomNavSecondaryTab(it) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))

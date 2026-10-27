@@ -445,6 +445,8 @@ fun HomeScreen(
                 onDismiss = { showRoutingModeSheet = false }
             )
         }
-        }
+
+        app.pwhs.blockads.ui.home.component.HomeRateAppPrompt(blockedCount = blockedCount)
     }
+}
 }

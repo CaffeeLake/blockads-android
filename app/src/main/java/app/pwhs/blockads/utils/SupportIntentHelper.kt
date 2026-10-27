@@ -91,6 +91,21 @@ object SupportIntentHelper {
         Toast.makeText(context, context.getString(R.string.support_copied), Toast.LENGTH_SHORT).show()
     }
 
+    fun openPlayStore(context: Context) {
+        val packageName = context.packageName
+        val marketIntent = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        try {
+            context.startActivity(marketIntent)
+        } catch (_: Exception) {
+            val webIntent = Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=$packageName".toUri()).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            tryStartActivity(context, webIntent)
+        }
+    }
+
     private fun tryStartActivity(context: Context, intent: Intent) {
         try {
             context.startActivity(intent)

@@ -15,6 +15,8 @@
     <string name="settings_title">Settings</string>
     <string name="settings_category_protection">Protection</string>
     <string name="settings_category_protection_desc">DNS server, protocol, auto-reconnect</string>
+    <string name="settings_category_advanced">Advanced &amp; Proxy</string>
+    <string name="settings_category_advanced_desc">HTTPS filtering, Proxy &amp; VPN, Root mode</string>
     <string name="settings_category_interface">Interface</string>
     <string name="settings_category_interface_desc">Theme, language</string>
     <string name="settings_category_apps">Applications</string>
@@ -314,7 +316,7 @@
 
     <!-- Proxy & VPN -->
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
-    <string name="proxy_vpn_subtitle">Manage WireGuard &amp; Outline / Shadowsocks servers</string>
+    <string name="proxy_vpn_subtitle">Manage Proxy &amp; VPN servers</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Route traffic through a remote Proxy or VPN server.</string>
     <string name="routing_mode_no_proxy_profile">No server selected</string>
@@ -410,5 +412,21 @@
     <string name="proxy_err_uuid_required">UUID is required</string>
     <string name="proxy_err_password_required">Password is required</string>
     <string name="proxy_err_json_invalid">Invalid JSON format</string>
+
+    <!-- Bottom Navigation Customization -->
+    <string name="settings_bottom_nav_secondary_tab">Secondary Navigation Tab</string>
+    <string name="settings_bottom_nav_secondary_tab_desc">Choose whether to show Filter or VPN in the navigation bar</string>
+    <string name="settings_bottom_nav_tab_auto">Auto (Default)</string>
+    <string name="settings_bottom_nav_tab_filter">Filter Setup</string>
+    <string name="settings_bottom_nav_tab_vpn">VPN &amp; Proxy</string>
+
+    <!-- Rating & Review -->
+    <string name="rate_app_title">Enjoying BlockAds?</string>
+    <string name="rate_app_desc">BlockAds has blocked over %1$d ads for you. If you find the app helpful, please take a moment to rate us 5 stars on Google Play!</string>
+    <string name="rate_app_action_rate">Rate 5 Stars</string>
+    <string name="rate_app_action_feedback">Send Feedback</string>
+    <string name="rate_app_action_later">Maybe Later</string>
+    <string name="about_rate_app">Rate on Google Play</string>
+    <string name="about_rate_app_desc">Support us with a 5-star review</string>
 </resources>
 

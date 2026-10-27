@@ -15,6 +15,11 @@ class AppearancePreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_APP_LANGUAGE = stringPreferencesKey("app_language")
         val KEY_ACCENT_COLOR = stringPreferencesKey("accent_color")
         val KEY_SHOW_BOTTOM_NAV_LABELS = booleanPreferencesKey("show_bottom_nav_labels")
+        val KEY_BOTTOM_NAV_SECONDARY_TAB = stringPreferencesKey("bottom_nav_secondary_tab")
+
+        const val BOTTOM_NAV_TAB_AUTO = "auto"
+        const val BOTTOM_NAV_TAB_FILTER = "filter"
+        const val BOTTOM_NAV_TAB_VPN = "vpn"
 
         const val THEME_SYSTEM = "system"
         const val THEME_DARK = "dark"
@@ -69,6 +74,10 @@ class AppearancePreferences(private val dataStore: DataStore<Preferences>) {
         prefs[KEY_SHOW_BOTTOM_NAV_LABELS] ?: true
     }
 
+    val bottomNavSecondaryTab: Flow<String> = dataStore.data.map { prefs ->
+        prefs[KEY_BOTTOM_NAV_SECONDARY_TAB] ?: BOTTOM_NAV_TAB_AUTO
+    }
+
     suspend fun setThemeMode(mode: String) {
         dataStore.edit { prefs ->
             prefs[KEY_THEME_MODE] = mode
@@ -90,6 +99,12 @@ class AppearancePreferences(private val dataStore: DataStore<Preferences>) {
     suspend fun setShowBottomNavLabels(show: Boolean) {
         dataStore.edit { prefs ->
             prefs[KEY_SHOW_BOTTOM_NAV_LABELS] = show
+        }
+    }
+
+    suspend fun setBottomNavSecondaryTab(tab: String) {
+        dataStore.edit { prefs ->
+            prefs[KEY_BOTTOM_NAV_SECONDARY_TAB] = tab
         }
     }
 }
