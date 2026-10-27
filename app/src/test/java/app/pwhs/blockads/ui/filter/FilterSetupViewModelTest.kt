@@ -25,6 +25,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -235,12 +236,25 @@ class FilterSetupViewModelTest {
     @Test
     fun `toggleStarredFilter calls appPreferences filter toggleStarredFilter`() = runTest {
         val filterPrefs: FilterPreferences = mockk(relaxed = true)
-        val appPrefs: AppPreferences = mockk {
+        val appPrefs: AppPreferences = mockk(relaxed = true) {
             every { filter } returns filterPrefs
+            every { filterBuildMode } returns flowOf(AppPreferences.BUILD_MODE_ONLINE)
         }
         val testVm = FilterSetupViewModel(repo, dao, customFilters, mockk<Application>(relaxed = true), appPrefs)
         val filter = FilterList(id = 1, name = "Test", url = "https://example.com/filter.txt")
         testVm.toggleStarredFilter(filter)
         coVerify(exactly = 1) { filterPrefs.toggleStarredFilter("https://example.com/filter.txt") }
+    }
+
+    @Test
+    fun `filterBuildMode exposes preference value`() = runTest {
+        val filterPrefs: FilterPreferences = mockk(relaxed = true)
+        val appPrefs: AppPreferences = mockk(relaxed = true) {
+            every { filter } returns filterPrefs
+            every { filterBuildMode } returns flowOf(AppPreferences.BUILD_MODE_LOCAL)
+        }
+        val testVm = FilterSetupViewModel(repo, dao, customFilters, mockk<Application>(relaxed = true), appPrefs)
+        keepHot(testVm.filterBuildMode)
+        assertEquals(AppPreferences.BUILD_MODE_LOCAL, testVm.filterBuildMode.value)
     }
 }
