@@ -74,6 +74,7 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
             echo "publish=true" >> "$GITHUB_OUTPUT"
           fi
+          echo "current_pin=$CURRENT" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Set up Go
@@ -151,6 +152,24 @@ jobs:
           Consumed as \`app.pwhs:tunnel:$VERSION\`; see docs/TUNNEL.md." \
             "dist/tunnel-$VERSION.aar" \
             "dist/tunnel-$VERSION-sources.jar"
+
+      - name: Prune obsolete tunnel releases
+        if: steps.version.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT_PIN: ${{ steps.version.outputs.current_pin }}
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Keep only the currently pinned release in libs.versions.toml and the new release.
+          # Delete any older tunnel-* releases and their tags to avoid cluttering the repository releases.
+          echo "Pruning obsolete tunnel releases (keeping tunnel-$CURRENT_PIN and tunnel-$NEW_VERSION)..."
+          gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq '.[].tag_name' \
+            | grep -E '^tunnel-[0-9]{4}\.[0-9]{2}\.[0-9]{2}\.' | while read -r tag; do
+            if [ "$tag" != "tunnel-$CURRENT_PIN" ] && [ "$tag" != "tunnel-$NEW_VERSION" ]; then
+              echo "Pruning obsolete tunnel release: $tag"
+              gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+            fi
+          done
 
       - name: Create Pull Request
         if: steps.version.outputs.skip == 'false'
