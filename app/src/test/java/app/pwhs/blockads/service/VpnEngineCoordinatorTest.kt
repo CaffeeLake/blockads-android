@@ -27,6 +27,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Test
+import java.io.File
 import java.net.InetAddress
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -49,6 +50,7 @@ class VpnEngineCoordinatorTest {
         every { odohRelayUrl } returns flowOf("")
         every { splitDnsZones } returns flowOf("lan")
         every { preferredIPType } returns flowOf("auto")
+        every { appLanguage } returns flowOf(AppPreferences.LANGUAGE_EN)
         every { getSelectedBrowsersSnapshot() } returns setOf("com.android.chrome")
         coEvery { getWhitelistedAppsSnapshot() } returns setOf("com.bank")
         coEvery { getRoutingModeSnapshot() } answers { this@VpnEngineCoordinatorTest.routingMode }
@@ -73,7 +75,11 @@ class VpnEngineCoordinatorTest {
         every { activeNetwork } returns network
         every { getLinkProperties(network) } answers { linkProps(systemDns) }
     }
-    private val context: Context = mockk { every { getSystemService(Context.CONNECTIVITY_SERVICE) } returns cm }
+    private val testDir = java.nio.file.Files.createTempDirectory("vpn_coord_test").toFile().apply { deleteOnExit() }
+    private val context: Context = mockk {
+        every { getSystemService(Context.CONNECTIVITY_SERVICE) } returns cm
+        every { filesDir } returns testDir
+    }
     private val adapter: GoTunnelAdapter = mockk(relaxed = true)
     private val tun: ParcelFileDescriptor = mockk()
     private val coordinator = VpnEngineCoordinator(context, prefs, filterRepo, firewallDao)

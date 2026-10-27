@@ -72,6 +72,8 @@ class AdBlockVpnServiceShellTest {
         every { excludeLan } returns flowOf(false)
         every { allowAppBypass } returns flowOf(false)
         every { preferredIPType } returns flowOf("auto")
+        every { routingMode } returns flowOf(AppPreferences.ROUTING_MODE_DIRECT)
+        every { appLanguage } returns flowOf(AppPreferences.LANGUAGE_EN)
         every { lastMilestoneBlocked } returns flowOf(0L)
         every { getSelectedBrowsersSnapshot() } returns emptySet()
         coEvery { getWhitelistedAppsSnapshot() } returns emptySet()

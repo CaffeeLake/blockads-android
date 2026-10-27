@@ -13,6 +13,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import kotlinx.coroutines.flow.flowOf
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.robolectric.Shadows.shadowOf
@@ -41,6 +42,8 @@ class HttpsTestFixtures(
         coEvery { prefs.getHttpsFilteringEnabledSnapshot() } returns httpsEnabled
         coEvery { prefs.getFilterHttp3Snapshot() } returns filterHttp3
         coEvery { prefs.getRoutingModeSnapshot() } returns routingMode
+        every { prefs.routingMode } returns flowOf(routingMode)
+        every { prefs.httpsFilteringEnabled } returns flowOf(httpsEnabled)
         every { prefs.getSelectedBrowsersSnapshot() } answers { savedBrowsers }
         coEvery { prefs.setSelectedBrowsers(any()) } answers { savedBrowsers = firstArg() }
         startKoin { modules(module { single { prefs } }) }

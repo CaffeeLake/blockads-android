@@ -1,5 +1,6 @@
 package app.pwhs.blockads.utils
 
+import android.annotation.SuppressLint
 import app.pwhs.blockads.data.entities.DnsProtocol
 import timber.log.Timber
 import java.nio.ByteBuffer
@@ -154,13 +155,14 @@ object DnsStampParser {
         }
     }
 
+    @SuppressLint("NewApi")
     private fun decodeBase64(input: String): ByteArray {
         val normalized = input.replace('-', '+').replace('_', '/')
         val padLen = (4 - (normalized.length % 4)) % 4
         val padded = normalized + "=".repeat(padLen)
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        return try {
             java.util.Base64.getDecoder().decode(padded)
-        } else {
+        } catch (_: Throwable) {
             android.util.Base64.decode(padded, android.util.Base64.DEFAULT)
         }
     }

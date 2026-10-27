@@ -154,7 +154,9 @@ class VpnTunnelBuilderTest {
         wgJson = wgConfig.toJson()
         excludeLan = true
         establish()
-        assertEquals(6, routes.count { it.startsWith("-") })
+        // 4 routes: 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16, fe80::/10.
+        // 10.0.0.0/8 is kept tunneled because wg interface has 10.8.0.2; fc00::/7 is kept for fd00::1 synthetic DNS.
+        assertEquals(4, routes.count { it.startsWith("-") })
     }
 
     @Test

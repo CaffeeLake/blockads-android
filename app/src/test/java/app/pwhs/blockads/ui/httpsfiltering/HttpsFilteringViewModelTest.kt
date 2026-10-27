@@ -128,26 +128,21 @@ class HttpsFilteringViewModelTest {
     }
 
     @Test
-    fun `enabling from WireGuard switches routing to direct and starts the MITM stack`() {
+    fun `enabling from WireGuard emits ProxyVpnActiveConflict without starting proxy`() {
         val f = HttpsTestFixtures(routingMode = AppPreferences.ROUTING_MODE_WIREGUARD)
         f.installBrowser("com.android.chrome", "Chrome", 10_100)
         f.installBrowser("org.mozilla.firefox", "Firefox", 10_300)
-        every { f.engine.startStackMitm(any()) } returns TEST_PEM
         val vm = HttpsFilteringViewModel(f.app)
         vm.awaitLoaded()
         val events = vm.recordEvents()
 
         vm.toggleEnabled(true)
-        awaitTrue(message = "ProxyStarted") { HttpsFilteringEvent.ProxyStarted in events }
+        awaitTrue(message = "ProxyVpnActiveConflict") { HttpsFilteringEvent.ProxyVpnActiveConflict in events }
 
-        assertEquals(HttpsFilteringEvent.WireGuardDisabledForHttps, events.first())
-        coVerify { f.prefs.setHttpsFilteringEnabled(true) }
-        coVerify { f.prefs.setRoutingMode(AppPreferences.ROUTING_MODE_DIRECT) }
-        verify { f.engine.setUseTcpStack(true) }
-        verify { f.engine.setMitmAllowedUIDs("10100,10300") }
-        verify { f.engine.setExtraPassthroughSuffixes(any()) }
-        assertTrue(vm.isProxyRunning.value)
-        assertEquals(TEST_PEM, vm.caCertPem.value)
+        coVerify(exactly = 0) { f.prefs.setHttpsFilteringEnabled(true) }
+        coVerify(exactly = 0) { f.prefs.setRoutingMode(any()) }
+        verify(exactly = 0) { f.engine.startStackMitm(any()) }
+        assertFalse(vm.isProxyRunning.value)
     }
 
     @Test
