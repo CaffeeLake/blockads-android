@@ -35,7 +35,7 @@
     <string name="block_reason_upstream_dns">アップストリームDNS</string>
     <string name="block_reason_custom_rule">カスタムブロックルール</string>
     <string name="block_reason_filter_list">フィルターリスト</string>
-    <string name="block_reason_security">Dangerous Website</string>
+    <string name="block_reason_security">危険なサイト</string>
     <string name="firewall_title">ファイアウォール</string>
     <string name="firewall_count">%d個のアプリをブロック</string>
     <string name="firewall_search">アプリを検索…</string>
@@ -73,7 +73,7 @@
     <string name="https_filtering_ca_desc">以下の手順にHTTPSコスメティックフィルタリングを設定してください：</string>
     <string name="https_filtering_export_ca">ステップ 1: 証明書をダウンロードに保存</string>
     <string name="https_filtering_cert_saved">証明書をダウンロードに保存しました！</string>
-    <string name="https_filtering_install_steps">ステップ 2: 証明書を手動でインストールします:\n\n1. 設定 → セキュリティ → 暗号化 &amp; 認証情報 に移動します\n2. \&quot;証明書のインストール\&quot; → \&quot;CA 証明書\&quot; をタップします\n3. ダウンロードから \&quot;BlockAds-RootCA.crt\&quot; を選択します\n4. インストールを確定します</string>
+    <string name="https_filtering_install_steps">1. 設定 → セキュリティ → 暗号化 &amp; 認証情報 に移動します\n2. \&quot;証明書のインストール\&quot; → \&quot;CA証明書\&quot; をタップします\n3. ダウンロードから \&quot;BlockAds-RootCA.crt\&quot; を選択します\n4. インストールを確定します</string>
     <string name="https_filtering_open_settings">セキュリティ設定を開く</string>
     <string name="https_filtering_step1_title">ステップ 1: 証明書を保存</string>
     <string name="https_filtering_step1_desc">ルート CA 証明書をデバイスにダウンロードします</string>

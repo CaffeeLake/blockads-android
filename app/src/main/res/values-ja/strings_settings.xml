@@ -6,7 +6,7 @@
     <string name="about_title">アプリについて</string>
     <string name="about_description">無料のオープンソース広告ブロッカー。\nデータ収集なし。トラッキングなし。</string>
     <string name="about_github">ソースコード (GitHub)</string>
-    <string name="about_website">Website</string>
+    <string name="about_website">ウェブサイト</string>
     <string name="about_privacy_policy">プライバシーポリシー</string>
     <string name="about_contact">お問い合わせ</string>
     <string name="about_licenses">オープンソースライセンス</string>
@@ -136,7 +136,7 @@
     <string name="settings_export_logs_chooser_title">ログを共有</string>
     <string name="custom_color_title">カスタムカラー</string>
     <string name="split_dns_title">Split DNSゾーン</string>
-    <string name="split_dns_description">WireGuard DNSで解決するカンマ区切りのドメインゾーン（上流の代わり）（例: internal,local,lan）</string>
+    <string name="split_dns_description">上流の代わりに WireGuard DNS で解決するドメインゾーン（カンマ区切り、例: internal,local,lan）</string>
     <string name="exclude_lan_title">LANトラフィックを除外</string>
     <string name="exclude_lan_description">WireGuard有効時にローカルネットワークデバイス（プリンター、NAS、ローカルサーバー）へのアクセスを許可</string>
     <string name="settings_hide_from_recents_title">最近のアプリから非表示</string>
@@ -213,7 +213,7 @@
     <string name="rule_docs_action_tooltip">ルールガイド</string>
     <string name="rule_docs_category_all">すべて</string>
     <string name="rule_docs_category_domain">ドメイン</string>
-    <string name="rule_docs_category_ip">IP &amp; Geo</string>
+    <string name="rule_docs_category_ip">IP と地域</string>
     <string name="rule_docs_category_other">その他</string>
     <string name="rule_docs_category_policy">ポリシー</string>
     <string name="rule_docs_example_label">例:</string>
@@ -308,7 +308,7 @@
     <string name="proxy_add_custom_title">カスタム設定を追加</string>
     <string name="proxy_add_choice_title">プロキシを追加</string>
     <string name="proxy_add_choice_import">リンク / クリップボードからインポート</string>
-    <string name="proxy_add_choice_import_desc">vless://、vmess://、ss://、trojan:// または購読URLを貼り付け</string>
+    <string name="proxy_add_choice_import_desc">vless://、vmess://、ss://、trojan:// またはサブスクリプションURLを貼り付け</string>
     <string name="proxy_add_choice_custom">手動カスタム設定</string>
     <string name="proxy_add_choice_custom_desc">VLESS、VMess、Shadowsocks、Trojan、Hysteria 2、TUIC を設定</string>
     <string name="proxy_field_remark">備考 / プロファイル名</string>
@@ -327,7 +327,7 @@
     <string name="proxy_field_sni">SNI (サーバー名通知)</string>
     <string name="proxy_field_allow_insecure">安全でないTLSを許可</string>
     <string name="proxy_field_public_key">公開鍵 (pbk)</string>
-    <string name="proxy_field_short_id">Short ID (sid)</string>
+    <string name="proxy_field_short_id">ショートID (sid)</string>
     <string name="proxy_field_spider_x">SpiderX (spx)</string>
     <string name="proxy_field_fingerprint">フィンガープリント (uTLS)</string>
     <string name="proxy_field_obfs">難読化 (obfs)</string>
