@@ -25,7 +25,7 @@
     <string name="onboarding_vpn_title">إذن VPN مطلوب</string>
     <string name="onboarding_battery_unsupported">غير مدعوم</string>
     <string name="onboarding_crash_report_title">ساعد في تحسين BlockAds</string>
-    <string name="onboarding_crash_report_desc">تطبيق BlockAds يضع الخصوصية أولاً. نود الحصول على إذنك لجمع تقارير الأعطال المجهولة لمساعدتنا في إصلاح الأخطاء على الفور.\n\nهذا اختياري تمامًا، ولا يحتوي على معلومات تعريف شخصية (PII)، ويمكن تعطيله في أي وقت من الإعدادات.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">تطبيق BlockAds يضع الخصوصية أولاً. نود الحصول على إذنك لجمع تقارير الأعطال المجهولة لمساعدتنا في إصلاح الأخطاء على الفور.\n\nهذا اختياري تمامًا، ولا يحتوي على معلومات تعريف شخصية (PII)، ويمكن تعطيله في أي وقت من الإعدادات.</string>
     <string name="onboarding_crash_report_btn_yes">نعم، سأساعد في تحسين BlockAds</string>
     <string name="onboarding_crash_report_btn_no">لا، شكرًا</string>
 </resources>

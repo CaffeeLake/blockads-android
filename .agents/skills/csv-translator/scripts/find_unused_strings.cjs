@@ -28,7 +28,7 @@ function walk(dir, files = []) {
         if (e.isDirectory()) {
             if (e.name === 'build' || e.name === '.git' || e.name === 'node_modules' || e.name === '.gradle') continue;
             walk(full, files);
-        } else if (CODE_EXT.has(path.extname(e.name))) {
+        } else if (CODE_EXT.has(path.extname(e.name)) && e.name !== 'lint-baseline.xml') {
             files.push(full);
         }
     }

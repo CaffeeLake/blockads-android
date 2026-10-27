@@ -60,13 +60,13 @@ import app.pwhs.blockads.utils.describe
 fun ProfileRow(
     profile: WireGuardProfile,
     isActive: Boolean,
-    pingResult: NodePingResult? = null,
-    onPing: () -> Unit = {},
     onClick: () -> Unit,
     onEdit: () -> Unit,
     onRename: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    pingResult: NodePingResult? = null,
+    onPing: () -> Unit = {},
 ) {
     val firstPeer = profile.config.peers.firstOrNull()
     val endpoint = firstPeer?.endpoint ?: stringResource(R.string.wireguard_no_peer)

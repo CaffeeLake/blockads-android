@@ -247,7 +247,7 @@
     <string name="routing_mode_sheet_title">وضع التوجيه</string>
     <string name="routing_mode_sheet_desc">اختر كيفية اعتراض BlockAds لحركة المرور وتوجيهها على جهازك.</string>
     <string name="routing_mode_local_vpn_title">وضع VPN المحلي</string>
-    <string name="routing_mode_local_vpn_desc">يقوم بتصفية حركة المرور مباشرة على الجهاز باستخدام خدمة Android VPN. لا يلزم صلاحيات الروت، وهو خاص بنسبة 100%.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">يقوم بتصفية حركة المرور مباشرة على الجهاز باستخدام خدمة Android VPN. لا يلزم صلاحيات الروت، وهو خاص بنسبة 100%.</string>
     <string name="routing_mode_root_proxy_title">وضع Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">يعيد توجيه DNS عبر iptables دون إنشاء اتصال VPN. يوفر البطارية ويترك فتحة VPN شاغرة.</string>
     <string name="routing_mode_recommended">موصى به</string>
@@ -261,8 +261,6 @@
     <string name="outline_dialog_invalid_key">مفتاح Outline / Shadowsocks غير صالح</string>
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">إدارة خوادم WireGuard وOutline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">عقد الوكيل</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">يوجه جميع حركة المرور عبر خادم وكيل WireGuard أو Outline بعيد مع حظر الإعلانات محلياً.</string>
     <string name="routing_mode_no_proxy_profile">لم يتم تكوين خادم</string>
@@ -304,7 +302,6 @@
     <string name="proxy_hero_network_disconnected">غير متصل</string>
     <string name="proxy_refresh_ip">تحديث IP</string>
     <string name="proxy_refreshing_ip">جاري التحديث…</string>
-    <string name="proxy_sort">ترتيب</string>
     <string name="proxy_sort_default">الترتيب الافتراضي</string>
     <string name="proxy_sort_latency">حسب زمن الاستجابة (الأسرع)</string>
     <string name="proxy_sort_name">حسب الاسم</string>
@@ -338,7 +335,6 @@
     <string name="proxy_field_obfs_password">كلمة مرور التمويه</string>
     <string name="proxy_field_congestion_control">التحكم في الازدحام</string>
     <string name="proxy_field_udp_relay_mode">وضع ترحيل UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">إنشاء UUID</string>
     <string name="proxy_section_basic">المعلومات الأساسية</string>
     <string name="proxy_section_credentials">بيانات الاعتماد</string>
@@ -354,4 +350,19 @@
     <string name="proxy_err_uuid_required">UUID مطلوب</string>
     <string name="proxy_err_password_required">كلمة المرور مطلوبة</string>
     <string name="proxy_err_json_invalid">تنسيق JSON غير صالح</string>
+    <string name="dns_tab_builtin">مدمج</string>
+    <string name="dns_tab_custom">مخصص</string>
+    <string name="dns_active_hero_title">خادم DNS النشط</string>
+    <string name="dns_protocol_label">البروتوكول</string>
+    <string name="dns_fallback_label">DNS الاحتياطي</string>
+    <string name="dns_category_all">الكل</string>
+    <string name="dns_custom_configure_btn">تكوين DNS مخصص</string>
+    <string name="dns_custom_sheet_title">DNS مخصص والبروتوكولات</string>
+    <string name="dns_custom_sheet_desc">اختر بروتوكولًا وقم بتكوين خادم DNS المخصص الخاص بك.</string>
+    <string name="dns_custom_target_url">رابط الهدف (Target URL)</string>
+    <string name="dns_custom_relay_url">رابط المرحّل (اختياري)</string>
+    <string name="dns_custom_relay_hint">وكيل HTTP مجهول يعيد توجيه الاستعلامات المشفرة إلى المحلل</string>
+    <string name="dns_custom_server_ip">عنوان الخادم</string>
+    <string name="dns_custom_presets">إعدادات سريعة</string>
+    <string name="dns_custom_active_badge">يستخدم DNS مخصص</string>
 </resources>

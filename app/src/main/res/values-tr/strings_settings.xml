@@ -247,7 +247,7 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="routing_mode_sheet_title">Yönlendirme Modu</string>
     <string name="routing_mode_sheet_desc">BlockAds\'in cihazınızdaki trafiği nasıl yakalayacağını ve yönlendireceğini seçin.</string>
     <string name="routing_mode_local_vpn_title">Yerel VPN Modu</string>
-    <string name="routing_mode_local_vpn_desc">Android VPN Hizmetini kullanarak trafiği doğrudan cihazda filtreler. Root gerekmez, %100 gizlidir.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Android VPN Hizmetini kullanarak trafiği doğrudan cihazda filtreler. Root gerekmez, %100 gizlidir.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy Modu</string>
     <string name="routing_mode_root_proxy_desc">Bir VPN bağlantısı oluşturmadan DNS\'i iptables aracılığıyla yönlendirir. Pil tasarrufu sağlar ve VPN yuvasını boş tutar.</string>
     <string name="routing_mode_recommended">Önerilen</string>
@@ -261,8 +261,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="outline_dialog_invalid_key">Geçersiz Outline / Shadowsocks anahtarı</string>
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">WireGuard ve Outline / Shadowsocks sunucularını yönetin</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Proxy Düğümleri</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Reklamları yerel olarak engellerken tüm trafiği uzak bir WireGuard veya Outline proxy sunucusu üzerinden yönlendirir.</string>
     <string name="routing_mode_no_proxy_profile">Yapılandırılmış sunucu yok</string>
@@ -304,7 +302,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="proxy_hero_network_disconnected">Çevrimdışı</string>
     <string name="proxy_refresh_ip">IP\'yi Yenile</string>
     <string name="proxy_refreshing_ip">Yenileniyor…</string>
-    <string name="proxy_sort">Sırala</string>
     <string name="proxy_sort_default">Varsayılan sıra</string>
     <string name="proxy_sort_latency">Gecikmeye göre (en hızlı)</string>
     <string name="proxy_sort_name">Ada göre</string>
@@ -338,7 +335,6 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="proxy_field_obfs_password">Obfs Şifresi</string>
     <string name="proxy_field_congestion_control">Tıkanıklık Kontrolü</string>
     <string name="proxy_field_udp_relay_mode">UDP Geçiş Modu</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">UUID Oluştur</string>
     <string name="proxy_section_basic">Temel Bilgiler</string>
     <string name="proxy_section_credentials">Kimlik Bilgileri</string>
@@ -354,4 +350,19 @@ Veri toplama yok. İzleme yok.&quot;</string>
     <string name="proxy_err_uuid_required">UUID gereklidir</string>
     <string name="proxy_err_password_required">Şifre gereklidir</string>
     <string name="proxy_err_json_invalid">Geçersiz JSON biçimi</string>
+    <string name="dns_tab_builtin">Yerleşik</string>
+    <string name="dns_tab_custom">Özel</string>
+    <string name="dns_active_hero_title">Etkin DNS Sunucusu</string>
+    <string name="dns_protocol_label">Protokol</string>
+    <string name="dns_fallback_label">Yedek DNS</string>
+    <string name="dns_category_all">Tümü</string>
+    <string name="dns_custom_configure_btn">Özel DNS Yapılandır</string>
+    <string name="dns_custom_sheet_title">Özel DNS ve Protokoller</string>
+    <string name="dns_custom_sheet_desc">Bir protokol seçin ve özel üst DNS sunucunuzu yapılandırın.</string>
+    <string name="dns_custom_target_url">Hedef URL</string>
+    <string name="dns_custom_relay_url">Aktarım (Relay) URL (İsteğe bağlı)</string>
+    <string name="dns_custom_relay_hint">Şifrelenmiş sorguları çözümleyiciye ileten Oblivious HTTP proxy\'si</string>
+    <string name="dns_custom_server_ip">Sunucu Adresi</string>
+    <string name="dns_custom_presets">Hızlı Ön Ayarlar</string>
+    <string name="dns_custom_active_badge">Özel DNS Kullanılıyor</string>
 </resources>

@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">TLD 와일드카드</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (스팸 TLD 목록)</string>
-    <string name="filter_build_mode_local_desc">Go 엔진을 통해 기기에서 컴파일됨 (DNS 규칙 전용, 100% 오프라인)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Go 엔진을 통해 기기에서 컴파일됨 (DNS 규칙 전용, 100% 오프라인)</string>
     <string name="filter_build_mode_server_desc">CSS 요소 숨김 및 스크립틀릿을 지원하는 클라우드 가속 빌드</string>
     <string name="filter_paste_clipboard">클립보드에서 붙여넣기</string>
     <string name="filter_merge_badge">%1$d개의 필터 목록을 하나로 병합 중</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">저장</string>
     <string name="filter_edit_title">필터 목록 편집</string>
     <string name="filter_edit_url_dialog_title">필터 URL 편집</string>
+    <string name="https_filtering_proxy_vpn_conflict">프록시 &amp; VPN 모드가 활성화된 동안에는 HTTPS 필터링을 활성화할 수 없습니다</string>
 </resources>

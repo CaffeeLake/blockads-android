@@ -25,7 +25,7 @@
     <string name="onboarding_complete_stats">&quot;Korumayı etkinleştirmek için \&quot;Başla\&quot;ya dokunun.&quot;</string>
     <string name="onboarding_battery_unsupported">Desteklenmiyor</string>
     <string name="onboarding_crash_report_title">BlockAds\'i Geliştirmeye Yardım Et</string>
-    <string name="onboarding_crash_report_desc">BlockAds tamamen gizlilik odaklıdır. Hataları hızlı bir şekilde düzeltmemize yardımcı olmak için anonim çökme raporları toplama izninizi rica ediyoruz.\n\nBu kesinlikle İSTEĞE BAĞLIDIR, kişisel olarak tanımlanabilir hiçbir bilgi (PII) İÇERMEZ ve Ayarlar\'dan istendiği zaman devre dışı bırakılabilir.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds tamamen gizlilik odaklıdır. Hataları hızlı bir şekilde düzeltmemize yardımcı olmak için anonim çökme raporları toplama izninizi rica ediyoruz.\n\nBu kesinlikle İSTEĞE BAĞLIDIR, kişisel olarak tanımlanabilir hiçbir bilgi (PII) İÇERMEZ ve Ayarlar\'dan istendiği zaman devre dışı bırakılabilir.</string>
     <string name="onboarding_crash_report_btn_yes">Evet, BlockAds\'i geliştirmeye yardım et</string>
     <string name="onboarding_crash_report_btn_no">Hayır, teşekkürler</string>
 </resources>

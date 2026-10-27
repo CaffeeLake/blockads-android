@@ -27,7 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
@@ -44,7 +44,7 @@ fun AddProxyNodeDialog(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val invalidMsg = stringResource(R.string.proxy_node_dialog_invalid)
 
     AlertDialog(
@@ -99,7 +99,8 @@ fun AddProxyNodeDialog(
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(
                         onClick = {
-                            val clip = clipboardManager.getText()?.text?.trim().orEmpty()
+                            val clip = clipboard.nativeClipboard.primaryClip
+                                ?.getItemAt(0)?.text?.toString()?.trim().orEmpty()
                             if (clip.isNotEmpty()) {
                                 uriText = clip
                                 errorMessage = null

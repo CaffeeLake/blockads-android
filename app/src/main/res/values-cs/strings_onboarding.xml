@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Gratulujeme! BlockAds je nakonfigurováno a připraveno chránit vaše zařízení před reklamami a sledovači.</string>
     <string name="onboarding_complete_stats">Klepnutím na „Začít“ aktivujete ochranu</string>
     <string name="onboarding_crash_report_title">Pomozte vylepšit BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds klade soukromí na první místo. Rádi bychom vás požádali o svolení shromažďovat anonymní zprávy o chybách, které nám pomohou rychle řešit problémy.\n\nTato volba je přísně DOBROVOLNÁ, neobsahuje ŽÁDNÉ osobní identifikační údaje (PII) a lze ji kdykoli vypnout v Nastavení.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds klade soukromí na první místo. Rádi bychom vás požádali o svolení shromažďovat anonymní zprávy o chybách, které nám pomohou rychle řešit problémy.\n\nTato volba je přísně DOBROVOLNÁ, neobsahuje ŽÁDNÉ osobní identifikační údaje (PII) a lze ji kdykoli vypnout v Nastavení.</string>
     <string name="onboarding_crash_report_btn_yes">Ano, chci pomoci vylepšit BlockAds</string>
     <string name="onboarding_crash_report_btn_no">Ne, děkuji</string>
 </resources>

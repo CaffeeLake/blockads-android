@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">מצב ניתוב</string>
     <string name="routing_mode_sheet_desc">בחר כיצד BlockAds מיירט ומנתב תעבורה במכשיר שלך.</string>
     <string name="routing_mode_local_vpn_title">מצב VPN מקומי</string>
-    <string name="routing_mode_local_vpn_desc">מסנן תעבורה ישירות במכשיר באמצעות שירות Android VPN. אין צורך ב-root, 100% פרטי.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">מסנן תעבורה ישירות במכשיר באמצעות שירות Android VPN. אין צורך ב-root, 100% פרטי.</string>
     <string name="routing_mode_root_proxy_title">מצב Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">מנתב מחדש DNS באמצעות iptables מבלי ליצור חיבור VPN. חוסך בסוללה ומשאיר את חריץ ה-VPN פנוי.</string>
     <string name="routing_mode_recommended">מומלץ</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">מפתח Outline / Shadowsocks לא תקין</string>
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">נהל שרתי WireGuard ו-Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">צמתי פרוקסי</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">מנתב את כל התעבורה דרך שרת פרוקסי מרוחק של WireGuard או Outline תוך חסימת פרסומות באופן מקומי.</string>
     <string name="routing_mode_no_proxy_profile">לא הוגדר שרת</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">לא מחובר</string>
     <string name="proxy_refresh_ip">רענן IP</string>
     <string name="proxy_refreshing_ip">מרענן…</string>
-    <string name="proxy_sort">מיון</string>
     <string name="proxy_sort_default">סדר ברירת מחדל</string>
     <string name="proxy_sort_latency">לפי השהיה (המהיר ביותר)</string>
     <string name="proxy_sort_name">לפי שם</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">סיסמת טשטוש</string>
     <string name="proxy_field_congestion_control">בקרת עומס</string>
     <string name="proxy_field_udp_relay_mode">מצב ממסר UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">צור UUID</string>
     <string name="proxy_section_basic">מידע בסיסי</string>
     <string name="proxy_section_credentials">אישורים</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">נדרש UUID</string>
     <string name="proxy_err_password_required">נדרשת סיסמה</string>
     <string name="proxy_err_json_invalid">פורמט JSON לא חוקי</string>
+    <string name="dns_tab_builtin">מובנה</string>
+    <string name="dns_tab_custom">מותאם אישית</string>
+    <string name="dns_active_hero_title">שרת DNS פעיל</string>
+    <string name="dns_protocol_label">פרוטוקול</string>
+    <string name="dns_fallback_label">DNS לגיבוי</string>
+    <string name="dns_category_all">הכל</string>
+    <string name="dns_custom_configure_btn">הגדר DNS מותאם אישית</string>
+    <string name="dns_custom_sheet_title">DNS מותאם אישית ופרוטוקולים</string>
+    <string name="dns_custom_sheet_desc">בחר פרוטוקול והגדר את שרת ה-DNS המותאם אישית שלך.</string>
+    <string name="dns_custom_target_url">כתובת URL של יעד</string>
+    <string name="dns_custom_relay_url">כתובת URL של ממסר (אופציונלי)</string>
+    <string name="dns_custom_relay_hint">פרוקסי HTTP אנונימי המעביר שאילתות מוצפנות אל הפותר</string>
+    <string name="dns_custom_server_ip">כתובת שרת</string>
+    <string name="dns_custom_presets">הגדרות מהירות</string>
+    <string name="dns_custom_active_badge">משתמש ב-DNS מותאם אישית</string>
 </resources>

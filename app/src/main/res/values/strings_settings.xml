@@ -223,21 +223,21 @@
     <string name="dns_block_webrtc_leak_notice">Note: Blocking WebRTC STUN prevents IP leaks on leak-test and tracking sites, but may affect browser-based real-time video/voice calls (e.g. web Discord, Google Meet).</string>
 
     <!-- DNS Screen Refactor & ODoH Preparation -->
-    <string name="dns_tab_builtin" translatable="false">Built-in</string>
-    <string name="dns_tab_custom" translatable="false">Custom</string>
-    <string name="dns_active_hero_title" translatable="false">Active DNS Server</string>
-    <string name="dns_protocol_label" translatable="false">Protocol</string>
-    <string name="dns_fallback_label" translatable="false">Fallback DNS</string>
-    <string name="dns_category_all" translatable="false">All</string>
-    <string name="dns_custom_configure_btn" translatable="false">Configure Custom DNS</string>
-    <string name="dns_custom_sheet_title" translatable="false">Custom DNS &amp; Protocols</string>
-    <string name="dns_custom_sheet_desc" translatable="false">Select a protocol and configure your custom upstream DNS server.</string>
-    <string name="dns_custom_target_url" translatable="false">Target URL</string>
-    <string name="dns_custom_relay_url" translatable="false">Relay URL (Optional)</string>
-    <string name="dns_custom_relay_hint" translatable="false">Oblivious HTTP proxy forwarding encrypted queries to the resolver</string>
-    <string name="dns_custom_server_ip" translatable="false">Server Address</string>
-    <string name="dns_custom_presets" translatable="false">Quick Presets</string>
-    <string name="dns_custom_active_badge" translatable="false">Using Custom DNS</string>
+    <string name="dns_tab_builtin">Built-in</string>
+    <string name="dns_tab_custom">Custom</string>
+    <string name="dns_active_hero_title">Active DNS Server</string>
+    <string name="dns_protocol_label">Protocol</string>
+    <string name="dns_fallback_label">Fallback DNS</string>
+    <string name="dns_category_all">All</string>
+    <string name="dns_custom_configure_btn">Configure Custom DNS</string>
+    <string name="dns_custom_sheet_title">Custom DNS &amp; Protocols</string>
+    <string name="dns_custom_sheet_desc">Select a protocol and configure your custom upstream DNS server.</string>
+    <string name="dns_custom_target_url">Target URL</string>
+    <string name="dns_custom_relay_url">Relay URL (Optional)</string>
+    <string name="dns_custom_relay_hint">Oblivious HTTP proxy forwarding encrypted queries to the resolver</string>
+    <string name="dns_custom_server_ip">Server Address</string>
+    <string name="dns_custom_presets">Quick Presets</string>
+    <string name="dns_custom_active_badge">Using Custom DNS</string>
 
     <!-- Profile Rule Creation -->
     <string name="filter_rule_title">Filter Rule</string>
@@ -298,7 +298,7 @@
     <string name="routing_mode_sheet_title">Routing Mode</string>
     <string name="routing_mode_sheet_desc">Choose how traffic is routed and filtered on your device.</string>
     <string name="routing_mode_local_vpn_title">Local VPN</string>
-    <string name="routing_mode_local_vpn_desc">Filter ads directly on-device. No root required, 100% private.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Filter ads directly on-device. No root required, 100% private.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">Redirect DNS via iptables without creating a VPN connection.</string>
     <string name="routing_mode_recommended">Recommended</string>
@@ -315,8 +315,6 @@
     <!-- Proxy & VPN -->
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">Manage WireGuard &amp; Outline / Shadowsocks servers</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Route traffic through a remote Proxy or VPN server.</string>
     <string name="routing_mode_no_proxy_profile">No server selected</string>
@@ -335,7 +333,6 @@
     <string name="proxy_ping_timeout">Timeout</string>
     <string name="proxy_ping_error">Error</string>
     <string name="proxy_ping_ms">%1$d ms</string>
-    <string name="proxy_sort">Sort</string>
     <string name="proxy_sort_default">Default order</string>
     <string name="proxy_sort_latency">By latency (fastest)</string>
     <string name="proxy_sort_name">By name</string>
@@ -398,7 +395,6 @@
     <string name="proxy_field_obfs_password">Obfs Password</string>
     <string name="proxy_field_congestion_control">Congestion Control</string>
     <string name="proxy_field_udp_relay_mode">UDP Relay Mode</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Generate UUID</string>
     <string name="proxy_section_basic">Basic Information</string>
     <string name="proxy_section_credentials">Credentials</string>

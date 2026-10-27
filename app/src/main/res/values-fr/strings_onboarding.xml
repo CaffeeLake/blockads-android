@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Félicitations ! BlockAds est désormais configuré et prêt à protéger votre appareil contre les publicités et les traceurs.</string>
     <string name="onboarding_complete_stats">Appuyez sur « Commencer » pour activer la protection</string>
     <string name="onboarding_crash_report_title">Aidez à améliorer BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds respecte votre vie privée. Nous souhaitons obtenir votre autorisation pour collecter des rapports de plantage anonymes afin de nous aider à corriger les bugs rapidement.\n\nCeci est strictement FACULTATIF, ne contient AUCUNE information personnelle identifiable (PII), et peut être désactivé à tout moment dans les Paramètres.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds respecte votre vie privée. Nous souhaitons obtenir votre autorisation pour collecter des rapports de plantage anonymes afin de nous aider à corriger les bugs rapidement.\n\nCeci est strictement FACULTATIF, ne contient AUCUNE information personnelle identifiable (PII), et peut être désactivé à tout moment dans les Paramètres.</string>
     <string name="onboarding_crash_report_btn_yes">Oui, aider à améliorer BlockAds</string>
     <string name="onboarding_crash_report_btn_no">Non, merci</string>
 </resources>

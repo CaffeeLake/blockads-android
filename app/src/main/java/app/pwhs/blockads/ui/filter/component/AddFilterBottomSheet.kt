@@ -66,7 +66,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -91,7 +91,7 @@ fun AddFilterBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
 
     val isEditMode = filterToEdit != null
     var name by remember(filterToEdit) { mutableStateOf(filterToEdit?.name ?: "") }
@@ -299,7 +299,8 @@ fun AddFilterBottomSheet(
                         } else if (urlInput.isEmpty() && !isValidating) {
                             IconButton(
                                 onClick = {
-                                    clipboardManager.getText()?.text?.let { text ->
+                                    clipboard.nativeClipboard.primaryClip
+                                        ?.getItemAt(0)?.text?.toString()?.let { text ->
                                         if (text.contains("\n")) {
                                             addUrlFromInput(text)
                                         } else {
@@ -425,7 +426,7 @@ fun AddFilterBottomSheet(
                     onClick = {
                         if (isValid && !isValidating) {
                             val targetUrls = effectiveUrls.joinToString("\n")
-                            if (isEditMode && filterToEdit != null) {
+                            if (filterToEdit != null) {
                                 onEdit?.invoke(filterToEdit, nameTrimmed, targetUrls, buildLocally)
                             } else {
                                 onAdd(nameTrimmed, targetUrls, buildLocally)

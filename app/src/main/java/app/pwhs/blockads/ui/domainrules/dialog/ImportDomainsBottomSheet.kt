@@ -51,7 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,7 +71,7 @@ fun ImportDomainsBottomSheet(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     var isAllow by remember { mutableStateOf(initialIsAllow) }
@@ -229,7 +229,8 @@ fun ImportDomainsBottomSheet(
 
                 OutlinedButton(
                     onClick = {
-                        val text = clipboardManager.getText()?.text
+                        val text = clipboard.nativeClipboard.primaryClip
+                            ?.getItemAt(0)?.text?.toString()
                         if (!text.isNullOrBlank()) {
                             rawContent = if (rawContent.isBlank()) text else "$rawContent\n$text"
                         }

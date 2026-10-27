@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Mode Perutean</string>
     <string name="routing_mode_sheet_desc">Pilih cara BlockAds mencegat dan merutekan lalu lintas di perangkat Anda.</string>
     <string name="routing_mode_local_vpn_title">Mode VPN Lokal</string>
-    <string name="routing_mode_local_vpn_desc">Memfilter lalu lintas langsung di perangkat menggunakan Android VPN Service. Tanpa root, 100% pribadi.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Memfilter lalu lintas langsung di perangkat menggunakan Android VPN Service. Tanpa root, 100% pribadi.</string>
     <string name="routing_mode_root_proxy_title">Mode Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">Mengalihkan DNS melalui iptables tanpa membuat koneksi VPN. Menghemat baterai dan menjaga slot VPN tetap bebas.</string>
     <string name="routing_mode_recommended">Disarankan</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Kunci Outline / Shadowsocks tidak valid</string>
     <string name="proxy_vpn_title">Proksi &amp; VPN</string>
     <string name="proxy_vpn_subtitle">Kelola server WireGuard &amp; Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Node Proksi</string>
     <string name="routing_mode_proxy_vpn_title">Proksi &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Merutekan semua lalu lintas melalui server proksi WireGuard atau Outline jarak jauh sambil memblokir iklan secara lokal.</string>
     <string name="routing_mode_no_proxy_profile">Tidak ada server yang dikonfigurasi</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Offline</string>
     <string name="proxy_refresh_ip">Segarkan IP</string>
     <string name="proxy_refreshing_ip">Menyegarkan…</string>
-    <string name="proxy_sort">Urutkan</string>
     <string name="proxy_sort_default">Urutan default</string>
     <string name="proxy_sort_latency">Berdasarkan latensi (tercepat)</string>
     <string name="proxy_sort_name">Berdasarkan nama</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Kata Sandi Obfs</string>
     <string name="proxy_field_congestion_control">Kontrol Kemacetan</string>
     <string name="proxy_field_udp_relay_mode">Mode Relai UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Buat UUID</string>
     <string name="proxy_section_basic">Informasi Dasar</string>
     <string name="proxy_section_credentials">Kredensial</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID wajib diisi</string>
     <string name="proxy_err_password_required">Kata sandi wajib diisi</string>
     <string name="proxy_err_json_invalid">Format JSON tidak valid</string>
+    <string name="dns_tab_builtin">Bawaan</string>
+    <string name="dns_tab_custom">Kustom</string>
+    <string name="dns_active_hero_title">Server DNS Aktif</string>
+    <string name="dns_protocol_label">Protokol</string>
+    <string name="dns_fallback_label">DNS Cadangan</string>
+    <string name="dns_category_all">Semua</string>
+    <string name="dns_custom_configure_btn">Konfigurasi DNS Kustom</string>
+    <string name="dns_custom_sheet_title">DNS Kustom &amp; Protokol</string>
+    <string name="dns_custom_sheet_desc">Pilih protokol dan konfigurasikan server DNS upstream kustom Anda.</string>
+    <string name="dns_custom_target_url">URL Target</string>
+    <string name="dns_custom_relay_url">URL Relay (Opsional)</string>
+    <string name="dns_custom_relay_hint">Proksi HTTP Oblivious yang meneruskan kueri terenkripsi ke resolver</string>
+    <string name="dns_custom_server_ip">Alamat Server</string>
+    <string name="dns_custom_presets">Preset Cepat</string>
+    <string name="dns_custom_active_badge">Menggunakan DNS Kustom</string>
 </resources>

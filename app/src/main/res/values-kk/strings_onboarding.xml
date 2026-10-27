@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Құттықтаймыз! BlockAds теңшелді және құрылғыңызды жарнама мен трекерлерден қорғауға дайын.</string>
     <string name="onboarding_complete_stats">«Бастау» түймесін түртіп, қорғанысты қосыңыз</string>
     <string name="onboarding_crash_report_title">BlockAds-ты жақсартуға көмектесіңіз</string>
-    <string name="onboarding_crash_report_desc">BlockAds толығымен құпиялылыққа негізделген. Қателерді жедел түзетуге көмектесу үшін анонимді құлау есептерін жинауға рұқсатыңызды сұраймыз.\n\nБұл толығымен ЕРІКТІ, жеке басты анықтайтын ешбір ақпаратты (PII) қамтымайды және «Параметрлер» бөлімінде кез келген уақытта өшірілуі мүмкін.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds толығымен құпиялылыққа негізделген. Қателерді жедел түзетуге көмектесу үшін анонимді құлау есептерін жинауға рұқсатыңызды сұраймыз.\n\nБұл толығымен ЕРІКТІ, жеке басты анықтайтын ешбір ақпаратты (PII) қамтымайды және «Параметрлер» бөлімінде кез келген уақытта өшірілуі мүмкін.</string>
     <string name="onboarding_crash_report_btn_yes">Иә, BlockAds-ты жақсартуға көмектесемін</string>
     <string name="onboarding_crash_report_btn_no">Жоқ, рахмет</string>
 </resources>

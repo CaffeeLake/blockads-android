@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">路由模式</string>
     <string name="routing_mode_sheet_desc">选择BlockAds在您的设备上拦截和路由流量的方式。</string>
     <string name="routing_mode_local_vpn_title">本地VPN模式</string>
-    <string name="routing_mode_local_vpn_desc">使用Android VPN Service直接在设备上过滤流量。无需Root，100%私密。</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">使用Android VPN Service直接在设备上过滤流量。无需Root，100%私密。</string>
     <string name="routing_mode_root_proxy_title">Root Proxy模式</string>
     <string name="routing_mode_root_proxy_desc">通过iptables重定向DNS，无需创建VPN连接。省电且保留VPN插槽。</string>
     <string name="routing_mode_recommended">推荐</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">无效的Outline / Shadowsocks密钥</string>
     <string name="proxy_vpn_title">代理与VPN</string>
     <string name="proxy_vpn_subtitle">管理WireGuard和Outline / Shadowsocks服务器</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">代理节点</string>
     <string name="routing_mode_proxy_vpn_title">代理与VPN</string>
     <string name="routing_mode_proxy_vpn_desc">将所有流量通过远程WireGuard或Outline代理服务器路由，同时在本地拦截广告。</string>
     <string name="routing_mode_no_proxy_profile">未配置服务器</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">离线</string>
     <string name="proxy_refresh_ip">刷新IP</string>
     <string name="proxy_refreshing_ip">正在刷新…</string>
-    <string name="proxy_sort">排序</string>
     <string name="proxy_sort_default">默认顺序</string>
     <string name="proxy_sort_latency">按延迟 (最快)</string>
     <string name="proxy_sort_name">按名称</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">混淆密码</string>
     <string name="proxy_field_congestion_control">拥塞控制</string>
     <string name="proxy_field_udp_relay_mode">UDP 转发模式</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">生成 UUID</string>
     <string name="proxy_section_basic">基本信息</string>
     <string name="proxy_section_credentials">凭据</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">请输入 UUID</string>
     <string name="proxy_err_password_required">请输入密码</string>
     <string name="proxy_err_json_invalid">JSON 格式无效</string>
+    <string name="dns_tab_builtin">内置</string>
+    <string name="dns_tab_custom">自定义</string>
+    <string name="dns_active_hero_title">当前 DNS 服务器</string>
+    <string name="dns_protocol_label">协议</string>
+    <string name="dns_fallback_label">备用 DNS</string>
+    <string name="dns_category_all">全部</string>
+    <string name="dns_custom_configure_btn">配置自定义 DNS</string>
+    <string name="dns_custom_sheet_title">自定义 DNS 与协议</string>
+    <string name="dns_custom_sheet_desc">选择协议并配置您的自定义上游 DNS 服务器。</string>
+    <string name="dns_custom_target_url">目标 URL</string>
+    <string name="dns_custom_relay_url">中继 URL（可选）</string>
+    <string name="dns_custom_relay_hint">将加密查询转发至解析器的 Oblivious HTTP 代理</string>
+    <string name="dns_custom_server_ip">服务器地址</string>
+    <string name="dns_custom_presets">快速预设</string>
+    <string name="dns_custom_active_badge">正在使用自定义 DNS</string>
 </resources>

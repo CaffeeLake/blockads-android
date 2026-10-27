@@ -23,7 +23,7 @@
     <string name="onboarding_complete_stats">点击&quot;开始使用&quot;以启用保护</string>
     <string name="onboarding_battery_unsupported">暂不支持</string>
     <string name="onboarding_crash_report_title">帮助改进 BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds 完全以隐私为先。我们希望获得您的许可来收集匿名崩溃报告，以帮助我们及时修复错误。\n\n这完全是自愿的，不包含任何个人身份信息 (PII)，并且可以随时在设置中禁用。</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds 完全以隐私为先。我们希望获得您的许可来收集匿名崩溃报告，以帮助我们及时修复错误。\n\n这完全是自愿的，不包含任何个人身份信息 (PII)，并且可以随时在设置中禁用。</string>
     <string name="onboarding_crash_report_btn_yes">是的，帮助改进 BlockAds</string>
     <string name="onboarding_crash_report_btn_no">不，谢谢</string>
 </resources>

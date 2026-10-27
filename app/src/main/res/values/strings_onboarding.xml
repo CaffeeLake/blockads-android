@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Congratulations! BlockAds is configured and ready to protect your device from ads and trackers.</string>
     <string name="onboarding_complete_stats">Tap \&quot;Get Started\&quot; to enable protection</string>
     <string name="onboarding_crash_report_title">Help Improve BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds is completely privacy-first. We would like your permission to collect anonymous crash reports to help us fix bugs promptly.\n\nThis is strictly OPT-IN, contains NO personal identifiable information (PII), and can be disabled anytime in Settings.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds is completely privacy-first. We would like your permission to collect anonymous crash reports to help us fix bugs promptly.\n\nThis is strictly OPT-IN, contains NO personal identifiable information (PII), and can be disabled anytime in Settings.</string>
     <string name="onboarding_crash_report_btn_yes">Yes, help improve BlockAds</string>
     <string name="onboarding_crash_report_btn_no">No, thanks</string>
 </resources>

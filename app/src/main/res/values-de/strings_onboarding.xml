@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Glückwunsch! BlockAds ist konfiguriert und bereit, Ihr Gerät vor Werbung und Trackern zu schützen.</string>
     <string name="onboarding_complete_stats">Tippen Sie auf \&quot;Loslegen\&quot;, um den Schutz zu aktivieren</string>
     <string name="onboarding_crash_report_title">Hilf mit, BlockAds zu verbessern</string>
-    <string name="onboarding_crash_report_desc">BlockAds ist zu 100% datenschutzorientiert. Wir bitten um deine Erlaubnis, anonyme Absturzberichte zu sammeln, um Fehler schnell beheben zu können.\n\nDies ist streng OPTIONAL (Opt-in), enthält KEINE personenbezogenen Daten (PII) und kann jederzeit in den Einstellungen deaktiviert werden.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds ist zu 100% datenschutzorientiert. Wir bitten um deine Erlaubnis, anonyme Absturzberichte zu sammeln, um Fehler schnell beheben zu können.\n\nDies ist streng OPTIONAL (Opt-in), enthält KEINE personenbezogenen Daten (PII) und kann jederzeit in den Einstellungen deaktiviert werden.</string>
     <string name="onboarding_crash_report_btn_yes">Ja, BlockAds verbessern</string>
     <string name="onboarding_crash_report_btn_no">Nein, danke</string>
 </resources>

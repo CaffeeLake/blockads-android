@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Routing-Modus</string>
     <string name="routing_mode_sheet_desc">Wählen Sie, wie BlockAds den Datenverkehr auf Ihrem Gerät abfängt und weiterleitet.</string>
     <string name="routing_mode_local_vpn_title">Lokaler VPN-Modus</string>
-    <string name="routing_mode_local_vpn_desc">Filtert den Datenverkehr direkt auf dem Gerät über den Android VPN-Dienst. Kein Root erforderlich, 100 % privat.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Filtert den Datenverkehr direkt auf dem Gerät über den Android VPN-Dienst. Kein Root erforderlich, 100 % privat.</string>
     <string name="routing_mode_root_proxy_title">Root-Proxy-Modus</string>
     <string name="routing_mode_root_proxy_desc">Leitet DNS über iptables um, ohne eine VPN-Verbindung herzustellen. Spart Akku und hält den VPN-Slot frei.</string>
     <string name="routing_mode_recommended">Empfohlen</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Ungültiger Outline- / Shadowsocks-Schlüssel</string>
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">WireGuard- &amp; Outline- / Shadowsocks-Server verwalten</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Proxy-Knoten</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Leitet den gesamten Datenverkehr über einen entfernten WireGuard- oder Outline-Proxyserver weiter, während Werbung lokal blockiert wird.</string>
     <string name="routing_mode_no_proxy_profile">Kein Server konfiguriert</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Offline</string>
     <string name="proxy_refresh_ip">IP aktualisieren</string>
     <string name="proxy_refreshing_ip">Wird aktualisiert…</string>
-    <string name="proxy_sort">Sortieren</string>
     <string name="proxy_sort_default">Standardreihenfolge</string>
     <string name="proxy_sort_latency">Nach Latenz (am schnellsten)</string>
     <string name="proxy_sort_name">Nach Name</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Obfs-Passwort</string>
     <string name="proxy_field_congestion_control">Überlastungssteuerung</string>
     <string name="proxy_field_udp_relay_mode">UDP-Relay-Modus</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">UUID generieren</string>
     <string name="proxy_section_basic">Basisinformationen</string>
     <string name="proxy_section_credentials">Anmeldedaten</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID ist erforderlich</string>
     <string name="proxy_err_password_required">Passwort ist erforderlich</string>
     <string name="proxy_err_json_invalid">Ungültiges JSON-Format</string>
+    <string name="dns_tab_builtin">Integriert</string>
+    <string name="dns_tab_custom">Benutzerdefiniert</string>
+    <string name="dns_active_hero_title">Aktiver DNS-Server</string>
+    <string name="dns_protocol_label">Protokoll</string>
+    <string name="dns_fallback_label">Fallback-DNS</string>
+    <string name="dns_category_all">Alle</string>
+    <string name="dns_custom_configure_btn">Eigenen DNS konfigurieren</string>
+    <string name="dns_custom_sheet_title">Eigener DNS &amp; Protokolle</string>
+    <string name="dns_custom_sheet_desc">Wähle ein Protokoll und konfiguriere deinen eigenen Upstream-DNS-Server.</string>
+    <string name="dns_custom_target_url">Ziel-URL</string>
+    <string name="dns_custom_relay_url">Relay-URL (optional)</string>
+    <string name="dns_custom_relay_hint">Oblivious-HTTP-Proxy zum Weiterleiten verschlüsselter Anfragen an den Resolver</string>
+    <string name="dns_custom_server_ip">Serveradresse</string>
+    <string name="dns_custom_presets">Schnellvorlagen</string>
+    <string name="dns_custom_active_badge">Eigener DNS aktiv</string>
 </resources>

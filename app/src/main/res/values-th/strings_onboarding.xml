@@ -23,7 +23,7 @@
     <string name="onboarding_complete_stats">แตะ \&quot;เริ่มต้น\&quot; เพื่อเปิดใช้งานการปกป้อง</string>
     <string name="onboarding_battery_unsupported">ไม่รองรับ</string>
     <string name="onboarding_crash_report_title">ช่วยปรับปรุง BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds ให้ความสำคัญกับความเป็นส่วนตัวเป็นอันดับแรก เราขออนุญาตเก็บรวบรวมรายงานข้อขัดข้องแบบไม่ระบุตัวตนเพื่อช่วยให้เราแก้ไขข้อบกพร่องได้อย่างรวดเร็ว\n\nการดำเนินการนี้เป็นไปตามความสมัครใจ (OPT-IN) จะไม่มีข้อมูลที่สามารถระบุตัวบุคคลได้ (PII) และสามารถปิดใช้งานได้ตลอดเวลาในการตั้งค่า</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds ให้ความสำคัญกับความเป็นส่วนตัวเป็นอันดับแรก เราขออนุญาตเก็บรวบรวมรายงานข้อขัดข้องแบบไม่ระบุตัวตนเพื่อช่วยให้เราแก้ไขข้อบกพร่องได้อย่างรวดเร็ว\n\nการดำเนินการนี้เป็นไปตามความสมัครใจ (OPT-IN) จะไม่มีข้อมูลที่สามารถระบุตัวบุคคลได้ (PII) และสามารถปิดใช้งานได้ตลอดเวลาในการตั้งค่า</string>
     <string name="onboarding_crash_report_btn_yes">ใช่ ฉันต้องการช่วยปรับปรุง</string>
     <string name="onboarding_crash_report_btn_no">ไม่ล่ะ ขอบคุณ</string>
 </resources>

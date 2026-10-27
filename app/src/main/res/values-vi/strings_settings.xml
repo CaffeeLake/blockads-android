@@ -270,7 +270,7 @@
     <string name="routing_mode_sheet_title">Chế độ kết nối</string>
     <string name="routing_mode_sheet_desc">Chọn phương thức định tuyến và lọc quảng cáo trên thiết bị.</string>
     <string name="routing_mode_local_vpn_title">VPN cục bộ</string>
-    <string name="routing_mode_local_vpn_desc">Lọc quảng cáo trực tiếp trên thiết bị, bảo vệ riêng tư 100%.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Lọc quảng cáo trực tiếp trên thiết bị, bảo vệ riêng tư 100%.</string>
     <string name="routing_mode_root_proxy_title">Chế độ Root</string>
     <string name="routing_mode_root_proxy_desc">Chuyển hướng DNS bằng iptables, không chiếm slot VPN.</string>
     <string name="routing_mode_recommended">Khuyên dùng</string>
@@ -286,8 +286,6 @@
     <!-- Proxy & VPN -->
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">Quản lý máy chủ WireGuard &amp; Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Proxy Nodes</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Đổi IP và mã hóa lưu lượng qua máy chủ Proxy / VPN từ xa.</string>
     <string name="routing_mode_no_proxy_profile">Chưa chọn máy chủ</string>
@@ -306,7 +304,6 @@
     <string name="proxy_ping_timeout">Hết giờ</string>
     <string name="proxy_ping_error">Lỗi</string>
     <string name="proxy_ping_ms">%1$d ms</string>
-    <string name="proxy_sort">Sắp xếp</string>
     <string name="proxy_sort_default">Thứ tự mặc định</string>
     <string name="proxy_sort_latency">Theo độ trễ (nhanh nhất)</string>
     <string name="proxy_sort_name">Theo tên</string>
@@ -369,7 +366,6 @@
     <string name="proxy_field_obfs_password">Mật khẩu Obfs</string>
     <string name="proxy_field_congestion_control">Kiểm soát tắc nghẽn (Congestion)</string>
     <string name="proxy_field_udp_relay_mode">Chế độ chuyển tiếp UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Tạo UUID ngẫu nhiên</string>
     <string name="proxy_section_basic">Thông tin cơ bản</string>
     <string name="proxy_section_credentials">Thông tin xác thực</string>

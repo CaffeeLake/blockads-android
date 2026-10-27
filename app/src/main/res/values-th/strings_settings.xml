@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">โหมดการกำหนดเส้นทาง</string>
     <string name="routing_mode_sheet_desc">เลือกวิธีที่ BlockAds สกัดกั้นและกำหนดเส้นทางการรับส่งข้อมูลบนอุปกรณ์ของคุณ</string>
     <string name="routing_mode_local_vpn_title">โหมด VPN ภายในเครื่อง</string>
-    <string name="routing_mode_local_vpn_desc">กรองการรับส่งข้อมูลโดยตรงบนอุปกรณ์โดยใช้ Android VPN Service ไม่ต้องรูท เป็นส่วนตัว 100%</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">กรองการรับส่งข้อมูลโดยตรงบนอุปกรณ์โดยใช้ Android VPN Service ไม่ต้องรูท เป็นส่วนตัว 100%</string>
     <string name="routing_mode_root_proxy_title">โหมด Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">เปลี่ยนเส้นทาง DNS ผ่าน iptables โดยไม่ต้องสร้างการเชื่อมต่อ VPN ประหยัดแบตเตอรี่และเปิดช่อง VPN ให้ว่าง</string>
     <string name="routing_mode_recommended">แนะนำ</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">คีย์ Outline / Shadowsocks ไม่ถูกต้อง</string>
     <string name="proxy_vpn_title">พร็อกซี &amp; VPN</string>
     <string name="proxy_vpn_subtitle">จัดการเซิร์ฟเวอร์ WireGuard และ Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">โหนดพร็อกซี</string>
     <string name="routing_mode_proxy_vpn_title">พร็อกซี &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">กำหนดเส้นทางการรับส่งข้อมูลทั้งหมดผ่านเซิร์ฟเวอร์พร็อกซี WireGuard หรือ Outline ระยะไกลพร้อมบล็อกโฆษณาในเครื่อง</string>
     <string name="routing_mode_no_proxy_profile">ไม่ได้กำหนดค่าเซิร์ฟเวอร์</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">ออฟไลน์</string>
     <string name="proxy_refresh_ip">รีเฟรช IP</string>
     <string name="proxy_refreshing_ip">กำลังรีเฟรช…</string>
-    <string name="proxy_sort">จัดเรียง</string>
     <string name="proxy_sort_default">ลำดับเริ่มต้น</string>
     <string name="proxy_sort_latency">ตามเวลาแฝง (เร็วที่สุด)</string>
     <string name="proxy_sort_name">ตามชื่อ</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">รหัสผ่าน Obfs</string>
     <string name="proxy_field_congestion_control">การควบคุมความแออัด</string>
     <string name="proxy_field_udp_relay_mode">โหมดรีเลย์ UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">สร้าง UUID</string>
     <string name="proxy_section_basic">ข้อมูลพื้นฐาน</string>
     <string name="proxy_section_credentials">ข้อมูลรับรอง</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">ต้องระบุ UUID</string>
     <string name="proxy_err_password_required">ต้องระบุรหัสผ่าน</string>
     <string name="proxy_err_json_invalid">รูปแบบ JSON ไม่ถูกต้อง</string>
+    <string name="dns_tab_builtin">ในตัว</string>
+    <string name="dns_tab_custom">กำหนดเอง</string>
+    <string name="dns_active_hero_title">เซิร์ฟเวอร์ DNS ที่ใช้งานอยู่</string>
+    <string name="dns_protocol_label">โปรโตคอล</string>
+    <string name="dns_fallback_label">DNS สำรอง</string>
+    <string name="dns_category_all">ทั้งหมด</string>
+    <string name="dns_custom_configure_btn">กำหนดค่า DNS ที่กำหนดเอง</string>
+    <string name="dns_custom_sheet_title">DNS ที่กำหนดเองและโปรโตคอล</string>
+    <string name="dns_custom_sheet_desc">เลือกโปรโตคอลและกำหนดค่าเซิร์ฟเวอร์ DNS ต้นทางของคุณเอง</string>
+    <string name="dns_custom_target_url">URL เป้าหมาย</string>
+    <string name="dns_custom_relay_url">URL รีเลย์ (ไม่บังคับ)</string>
+    <string name="dns_custom_relay_hint">พร็อกซี Oblivious HTTP ที่ส่งต่อคำค้นหาที่เข้ารหัสไปยังตัวแปลงชื่อ</string>
+    <string name="dns_custom_server_ip">ที่อยู่เซิร์ฟเวอร์</string>
+    <string name="dns_custom_presets">ค่าที่ตั้งไว้ล่วงหน้าด่วน</string>
+    <string name="dns_custom_active_badge">กำลังใช้ DNS ที่กำหนดเอง</string>
 </resources>

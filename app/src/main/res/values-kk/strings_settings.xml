@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Бағыттау режимі</string>
     <string name="routing_mode_sheet_desc">BlockAds құрылғыңыздағы трафикті қалай ұстап, бағыттайтынын таңдаңыз.</string>
     <string name="routing_mode_local_vpn_title">Жергілікті VPN режимі</string>
-    <string name="routing_mode_local_vpn_desc">Android VPN қызметін пайдаланып трафикті тікелей құрылғыда сүзеді. Root қажет емес, 100% құпия.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Android VPN қызметін пайдаланып трафикті тікелей құрылғыда сүзеді. Root қажет емес, 100% құпия.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy режимі</string>
     <string name="routing_mode_root_proxy_desc">VPN қосылымын жасамай-ақ DNS-ті iptables арқылы қайта бағыттайды. Батареяны үнемдейді және VPN ұяшығын бос қалдырады.</string>
     <string name="routing_mode_recommended">Ұсынылады</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Жарамсыз Outline / Shadowsocks кілті</string>
     <string name="proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="proxy_vpn_subtitle">WireGuard және Outline / Shadowsocks серверлерін басқару</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Прокси түйіндері</string>
     <string name="routing_mode_proxy_vpn_title">Proxy &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Жарнамаларды жергілікті түрде бұғаттай отырып, барлық трафикті қашықтағы WireGuard немесе Outline прокси сервері арқылы бағыттайды.</string>
     <string name="routing_mode_no_proxy_profile">Сервер бапталмаған</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Офлайн</string>
     <string name="proxy_refresh_ip">IP жаңарту</string>
     <string name="proxy_refreshing_ip">Жаңартылуда…</string>
-    <string name="proxy_sort">Сұрыптау</string>
     <string name="proxy_sort_default">Әдепкі рет</string>
     <string name="proxy_sort_latency">Кідіріс бойынша (ең жылдам)</string>
     <string name="proxy_sort_name">Атауы бойынша</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Маскировка құпия сөзі</string>
     <string name="proxy_field_congestion_control">Кептелісті басқару</string>
     <string name="proxy_field_udp_relay_mode">UDP реле режимі</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">UUID жасау</string>
     <string name="proxy_section_basic">Негізгі ақпарат</string>
     <string name="proxy_section_credentials">Тіркелгі деректері</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID қажет</string>
     <string name="proxy_err_password_required">Құпия сөз қажет</string>
     <string name="proxy_err_json_invalid">Жарамсыз JSON пішімі</string>
+    <string name="dns_tab_builtin">Кірістірілген</string>
+    <string name="dns_tab_custom">Жеке</string>
+    <string name="dns_active_hero_title">Белсенді DNS сервері</string>
+    <string name="dns_protocol_label">Хаттама</string>
+    <string name="dns_fallback_label">Қосалқы DNS</string>
+    <string name="dns_category_all">Барлығы</string>
+    <string name="dns_custom_configure_btn">Жеке DNS баптау</string>
+    <string name="dns_custom_sheet_title">Жеке DNS және хаттамалар</string>
+    <string name="dns_custom_sheet_desc">Хаттаманы таңдап, жеке жоғары деңгейлі DNS серверін баптаңыз.</string>
+    <string name="dns_custom_target_url">Мақсатты URL</string>
+    <string name="dns_custom_relay_url">Ретранслятор URL (міндетті емес)</string>
+    <string name="dns_custom_relay_hint">Шифрланған сұрауларды шешушіге бағыттайтын Oblivious HTTP проксиі</string>
+    <string name="dns_custom_server_ip">Сервер мекенжайы</string>
+    <string name="dns_custom_presets">Жылдам үлгілер</string>
+    <string name="dns_custom_active_badge">Жеке DNS қолданылуда</string>
 </resources>

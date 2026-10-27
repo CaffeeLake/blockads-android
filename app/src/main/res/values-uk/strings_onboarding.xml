@@ -23,7 +23,7 @@
     <string name="onboarding_complete_stats">Натисніть \&quot;Почати\&quot;, щоб увімкнути захист</string>
     <string name="onboarding_battery_unsupported">Не підтримується</string>
     <string name="onboarding_crash_report_title">Допоможіть покращити BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds ставить конфіденційність на перше місце. Ми просимо вашого дозволу на збір анонімних звітів про помилки, щоб ми могли швидко їх виправляти.\n\nЦе строго ДОБРОВІЛЬНО, НЕ містить персональних даних (PII) і може бути вимкнено в будь-який час у Налаштуваннях.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds ставить конфіденційність на перше місце. Ми просимо вашого дозволу на збір анонімних звітів про помилки, щоб ми могли швидко їх виправляти.\n\nЦе строго ДОБРОВІЛЬНО, НЕ містить персональних даних (PII) і може бути вимкнено в будь-який час у Налаштуваннях.</string>
     <string name="onboarding_crash_report_btn_yes">Так, допомогти покращити BlockAds</string>
     <string name="onboarding_crash_report_btn_no">Ні, дякую</string>
 </resources>

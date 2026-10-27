@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Symbole wieloznaczne TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (listy spamowych TLD)</string>
-    <string name="filter_build_mode_local_desc">Kompilowane na urządzeniu za pomocą silnika Go (tylko reguły DNS, w 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Kompilowane na urządzeniu za pomocą silnika Go (tylko reguły DNS, w 100% offline)</string>
     <string name="filter_build_mode_server_desc">Przyspieszona w chmurze kompilacja z ukrywaniem elementów CSS i skryptletami</string>
     <string name="filter_paste_clipboard">Wklej ze schowka</string>
     <string name="filter_merge_badge">Łączenie %1$d list filtrów w jedną</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Zapisz</string>
     <string name="filter_edit_title">Edytuj listę filtrów</string>
     <string name="filter_edit_url_dialog_title">Edytuj adres URL filtra</string>
+    <string name="https_filtering_proxy_vpn_conflict">Nie można włączyć filtrowania HTTPS, gdy tryb Proxy i VPN jest aktywny</string>
 </resources>

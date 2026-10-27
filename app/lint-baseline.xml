@@ -925,16 +925,6 @@
             column="5"/>
     </issue>
 
-    <issue
-        id="ModifierParameter"
-        message="Modifier parameter should be the first optional parameter"
-        errorLine1="    modifier: Modifier = Modifier"
-        errorLine2="    ~~~~~~~~">
-        <location
-            file="src/main/java/app/pwhs/blockads/ui/proxyvpn/component/ProxyNodeRow.kt"
-            line="71"
-            column="5"/>
-    </issue>
 
     <issue
         id="ModifierParameter"
@@ -1002,588 +992,58 @@
             column="5"/>
     </issue>
 
-    <issue
-        id="StringFormatInvalid"
-        message="Incorrect formatting string `filter_build_mode_local_desc`; missing conversion character in &apos;`% h`&apos;?"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Compilé sur l appareil via le moteur Go (règles DNS uniquement, 100% hors ligne)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-fr/strings_filters.xml"
-            line="195"
-            column="5"/>
-    </issue>
 
-    <issue
-        id="StringFormatInvalid"
-        message="Incorrect formatting string `filter_build_mode_local_desc`; missing conversion character in &apos;`% s`&apos;?"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Compilado en el dispositivo mediante el motor Go (solo reglas de DNS, 100% sin conexión)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-es/strings_filters.xml"
-            line="195"
-            column="5"/>
-    </issue>
 
-    <issue
-        id="StringFormatInvalid"
-        message="Incorrect formatting string `routing_mode_local_vpn_desc`; missing conversion character in &apos;`% s`&apos;?"
-        errorLine1="    &lt;string name=&quot;routing_mode_local_vpn_desc&quot;>Filtruje provoz přímo v zařízení pomocí služby Android VPN. Nevyžaduje root, 100% soukromé.&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-cs/strings_settings.xml"
-            line="249"
-            column="5"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_sort&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_sort&quot;>Sort&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="338"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_sort_default&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_sort_default&quot;>Default order&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="339"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_sort_latency&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_sort_latency&quot;>By latency (fastest)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="340"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_sort_name&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_sort_name&quot;>By name&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="341"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_edit_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_edit_title&quot;>Edit Proxy Config&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="371"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_custom_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_custom_title&quot;>Add Custom Config&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="372"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_choice_title&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_choice_title&quot;>Add Proxy&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="373"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_choice_import&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_choice_import&quot;>Import from Link / Clipboard&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="374"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_choice_import_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_choice_import_desc&quot;>Paste vless://, vmess://, ss://, trojan://, or subscription URL&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="375"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_choice_custom&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_choice_custom&quot;>Manual Custom Configuration&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="376"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_add_choice_custom_desc&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_add_choice_custom_desc&quot;>Configure VLESS, VMess, Shadowsocks, Trojan, Hysteria 2, TUIC&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="377"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_remark&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_remark&quot;>Remarks / Profile Name&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="378"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_protocol&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_protocol&quot;>Protocol&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="379"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_server&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_server&quot;>Server Address&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="380"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_port&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_port&quot;>Server Port&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="381"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_uuid&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_uuid&quot;>User ID (UUID)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="382"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_password&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_password&quot;>Password&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="383"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_method&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_method&quot;>Cipher / Encryption Method&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="384"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_alter_id&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_alter_id&quot;>AlterId&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="385"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_security&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_security&quot;>Security&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="386"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_flow&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_flow&quot;>Flow&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="387"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_network&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_network&quot;>Network / Transport&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="388"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_ws_path&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_ws_path&quot;>WebSocket Path&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="389"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_ws_host&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_ws_host&quot;>WebSocket Host&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="390"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_sni&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_sni&quot;>SNI (Server Name Indication)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="391"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_allow_insecure&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_allow_insecure&quot;>Allow Insecure TLS&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="392"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_public_key&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_public_key&quot;>Public Key (pbk)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="393"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_short_id&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_short_id&quot;>Short ID (sid)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="394"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_spider_x&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_spider_x&quot;>SpiderX (spx)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="395"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_fingerprint&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_fingerprint&quot;>Fingerprint (uTLS)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="396"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_obfs&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_obfs&quot;>Obfuscation (obfs)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="397"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_obfs_password&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_obfs_password&quot;>Obfs Password&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="398"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_congestion_control&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_congestion_control&quot;>Congestion Control&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="399"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_udp_relay_mode&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_udp_relay_mode&quot;>UDP Relay Mode&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="400"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_alpn&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_alpn&quot;>ALPN&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="401"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_field_generate_uuid&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_field_generate_uuid&quot;>Generate UUID&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="402"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_section_basic&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_section_basic&quot;>Basic Information&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="403"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_section_credentials&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_section_credentials&quot;>Credentials&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="404"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_section_transport&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_section_transport&quot;>Stream Settings (Transport)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="405"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_section_tls&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_section_tls&quot;>TLS / Reality&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="406"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_section_advanced&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_section_advanced&quot;>Custom Configuration (JSON)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="407"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_raw_json_toggle&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_raw_json_toggle&quot;>Edit Raw Engine JSON&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="408"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_copy_link&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_copy_link&quot;>Copy Share Link&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="409"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_link_copied&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_link_copied&quot;>Link copied to clipboard&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="410"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_save_success&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_save_success&quot;>Saved \&apos;%1$s\&apos;&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="411"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_err_server_required&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_err_server_required&quot;>Server address is required&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="412"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_err_port_invalid&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_err_port_invalid&quot;>Invalid port (must be 1–65535)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="413"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_err_uuid_required&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_err_uuid_required&quot;>UUID is required&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="414"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_err_password_required&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_err_password_required&quot;>Password is required&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="415"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;proxy_err_json_invalid&quot; is not translated in &quot;kk&quot; (Kazakh), &quot;de&quot; (German), &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;it&quot; (Italian), &quot;fr&quot; (French), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;cs&quot; (Czech), &quot;ar&quot; (Arabic), &quot;th&quot; (Thai), &quot;uk&quot; (Ukrainian), &quot;ja&quot; (Japanese), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;proxy_err_json_invalid&quot;>Invalid JSON format&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="416"
-            column="13"/>
-    </issue>
 
     <issue
         id="Typos"
@@ -1596,170 +1056,20 @@
             column="66"/>
     </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_tab_builtin&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_tab_builtin&quot;>Có sẵn&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="179"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_tab_custom&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_tab_custom&quot;>Tùy chỉnh&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="180"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_active_hero_title&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_active_hero_title&quot;>Máy chủ DNS đang dùng&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="181"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_protocol_label&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_protocol_label&quot;>Giao thức&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="182"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_fallback_label&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_fallback_label&quot;>DNS dự phòng&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="183"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_category_all&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_category_all&quot;>Tất cả&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="184"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_configure_btn&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_configure_btn&quot;>Cấu hình DNS tùy chỉnh&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="185"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_sheet_title&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_sheet_title&quot;>Cấu hình DNS &amp;amp; Giao thức&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="186"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_sheet_desc&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_sheet_desc&quot;>Chọn giao thức và cấu hình máy chủ DNS upstream của bạn.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="187"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_target_url&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_target_url&quot;>Target URL (Resolver)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="188"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_relay_url&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_relay_url&quot;>Relay URL (Proxy ẩn danh - Tùy chọn)&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="189"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_relay_hint&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_relay_hint&quot;>Máy chủ proxy HTTP chuyển tiếp gói tin mã hóa giấu IP của bạn&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="190"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_server_ip&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_server_ip&quot;>Địa chỉ máy chủ&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="191"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_presets&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_presets&quot;>Mẫu cấu hình nhanh&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="192"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="Untranslatable"
-        message="The resource string &quot;dns_custom_active_badge&quot; has been marked as translatable=&quot;false&quot; elsewhere (usually in the `values` folder), but is translated to &quot;vi&quot; (Vietnamese) here"
-        errorLine1="    &lt;string name=&quot;dns_custom_active_badge&quot;>Đang dùng DNS tùy chỉnh&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_settings.xml"
-            line="193"
-            column="13"/>
-    </issue>
 
     <issue
         id="LogNotTimber"
@@ -1959,219 +1269,19 @@
             column="5"/>
     </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Biên dịch trực tiếp trên máy qua Go engine (chỉ chặn DNS, offline 100%)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-vi/strings_filters.xml"
-            line="144"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>يتم تجميعها على الجهاز عبر محرك Go (قواعد DNS فقط، دون اتصال 100%)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-ar/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>מהודר במכשיר באמצעות מנוע Go (חוקי DNS בלבד, 100% לא מקוון)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-iw/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Goエンジンを介してデバイス上でコンパイル (DNSルールのみ、100%オフライン)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-ja/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Go қозғалтқышы арқылы құрылғыда құрастырылған (тек DNS ережелері, 100% офлайн)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-kk/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Go 엔진을 통해 기기에서 컴파일됨 (DNS 규칙 전용, 100% 오프라인)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-ko/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Скомпилировано на устройстве через движок Go (только правила DNS, 100% оффлайн)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-ru/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>คอมไพล์บนอุปกรณ์ผ่านเครื่องมือ Go (กฎ DNS เท่านั้น ออฟไลน์ 100%)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-th/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Go motoru aracılığıyla cihazda derlendi (yalnızca DNS kuralları, %100 çevrimdışı)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-tr/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>Скомпільовано на пристрої через рушій Go (тільки правила DNS, 100% офлайн)&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-uk/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `filter_build_mode_local_desc`; found both 0 here and 1 in values/strings_filters.xml"
-        errorLine1="    &lt;string name=&quot;filter_build_mode_local_desc&quot;>通过 Go 引擎在设备端编译（仅限 DNS 规则，100% 离线）&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-zh/strings_filters.xml"
-            line="195"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_filters.xml"
-            line="152"
-            column="5"
-            message="Conflicting number of arguments (1) here"/>
-    </issue>
 
-    <issue
-        id="StringFormatCount"
-        message="Inconsistent number of arguments in formatting string `onboarding_crash_report_desc`; found both 1 here and 0 in values/strings_onboarding.xml"
-        errorLine1="    &lt;string name=&quot;onboarding_crash_report_desc&quot;>BlockAds ist zu 100% datenschutzorientiert. Wir bitten um deine Erlaubnis, anonyme Absturzberichte zu sammeln, um Fehler schnell beheben zu können.\n\nDies ist streng OPTIONAL (Opt-in), enthält KEINE personenbezogenen Daten (PII) und kann jederzeit in den Einstellungen deaktiviert werden.&lt;/string>"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values-de/strings_onboarding.xml"
-            line="26"
-            column="5"/>
-        <location
-            file="src/main/res/values/strings_onboarding.xml"
-            line="26"
-            column="5"
-            message="Conflicting number of arguments (0) here"/>
-    </issue>
 
-    <issue
-        id="UnusedTranslation"
-        message="The language `cs (Czech)` is present in this project, but not declared in the `localeConfig` resource"
-        errorLine1="        android:localeConfig=&quot;@xml/locales_config&quot;"
-        errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="30"
-            column="31"/>
-    </issue>
 
-    <issue
-        id="UnusedTranslation"
-        message="The language `tr (Turkish)` is present in this project, but not declared in the `localeConfig` resource"
-        errorLine1="        android:localeConfig=&quot;@xml/locales_config&quot;"
-        errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="30"
-            column="31"/>
-    </issue>
 
     <issue
         id="ExportedReceiver"
@@ -2404,27 +1514,7 @@
             column="1"/>
     </issue>
 
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.proxy_sort` appears to be unused"
-        errorLine1="    &lt;string name=&quot;proxy_sort&quot;>Sort&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="338"
-            column="13"/>
-    </issue>
 
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.proxy_field_alpn` appears to be unused"
-        errorLine1="    &lt;string name=&quot;proxy_field_alpn&quot;>ALPN&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings_settings.xml"
-            line="401"
-            column="13"/>
-    </issue>
 
     <issue
         id="TypographyEllipsis"

@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">TLD 通配符</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (垃圾顶级域名列表)</string>
-    <string name="filter_build_mode_local_desc">通过 Go 引擎在设备端编译（仅限 DNS 规则，100% 离线）</string>
+    <string name="filter_build_mode_local_desc" formatted="false">通过 Go 引擎在设备端编译（仅限 DNS 规则，100% 离线）</string>
     <string name="filter_build_mode_server_desc">支持 CSS 元素隐藏和小脚本的云端加速构建</string>
     <string name="filter_paste_clipboard">从剪贴板粘贴</string>
     <string name="filter_merge_badge">正在将 %1$d 个过滤列表合并为一个</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">保存</string>
     <string name="filter_edit_title">编辑过滤列表</string>
     <string name="filter_edit_url_dialog_title">编辑过滤规则 URL</string>
+    <string name="https_filtering_proxy_vpn_conflict">代理与VPN模式处于活动状态时无法启用 HTTPS 过滤</string>
 </resources>

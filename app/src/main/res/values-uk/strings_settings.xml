@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Режим маршрутизації</string>
     <string name="routing_mode_sheet_desc">Виберіть, як BlockAds перехоплює та маршрутизує трафік на вашому пристрої.</string>
     <string name="routing_mode_local_vpn_title">Режим локального VPN</string>
-    <string name="routing_mode_local_vpn_desc">Фільтрує трафік безпосередньо на пристрої за допомогою служби Android VPN. Не потребує root, 100% конфіденційно.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Фільтрує трафік безпосередньо на пристрої за допомогою служби Android VPN. Не потребує root, 100% конфіденційно.</string>
     <string name="routing_mode_root_proxy_title">Режим Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">Перенаправляє DNS через iptables без створення підключення VPN. Заощаджує заряд батареї та залишає слот VPN вільним.</string>
     <string name="routing_mode_recommended">Рекомендовано</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Недійсний ключ Outline / Shadowsocks</string>
     <string name="proxy_vpn_title">Проксі та VPN</string>
     <string name="proxy_vpn_subtitle">Керування серверами WireGuard та Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Проксі-вузли</string>
     <string name="routing_mode_proxy_vpn_title">Проксі та VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Маршрутизує весь трафік через віддалений сервер WireGuard або проксі-сервер Outline з локальним блокуванням реклами.</string>
     <string name="routing_mode_no_proxy_profile">Сервер не налаштовано</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Офлайн</string>
     <string name="proxy_refresh_ip">Оновити IP</string>
     <string name="proxy_refreshing_ip">Оновлення…</string>
-    <string name="proxy_sort">Сортування</string>
     <string name="proxy_sort_default">За замовчуванням</string>
     <string name="proxy_sort_latency">За затримкою (найшвидші)</string>
     <string name="proxy_sort_name">За назвою</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Пароль обфускації</string>
     <string name="proxy_field_congestion_control">Контроль перевантаження</string>
     <string name="proxy_field_udp_relay_mode">Режим ретрансляції UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Згенерувати UUID</string>
     <string name="proxy_section_basic">Основна інформація</string>
     <string name="proxy_section_credentials">Облікові дані</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">Потрібен UUID</string>
     <string name="proxy_err_password_required">Потрібен пароль</string>
     <string name="proxy_err_json_invalid">Недійсний формат JSON</string>
+    <string name="dns_tab_builtin">Вбудовані</string>
+    <string name="dns_tab_custom">Власний</string>
+    <string name="dns_active_hero_title">Активний DNS-сервер</string>
+    <string name="dns_protocol_label">Протокол</string>
+    <string name="dns_fallback_label">Резервний DNS</string>
+    <string name="dns_category_all">Усі</string>
+    <string name="dns_custom_configure_btn">Налаштувати власний DNS</string>
+    <string name="dns_custom_sheet_title">Власний DNS і протоколи</string>
+    <string name="dns_custom_sheet_desc">Виберіть протокол і налаштуйте власний вищестоящий DNS-сервер.</string>
+    <string name="dns_custom_target_url">Цільова URL-адреса</string>
+    <string name="dns_custom_relay_url">URL-адреса ретранслятора (необов\'язково)</string>
+    <string name="dns_custom_relay_hint">Проксі Oblivious HTTP для пересилання зашифрованих запитів резолверу</string>
+    <string name="dns_custom_server_ip">Адреса сервера</string>
+    <string name="dns_custom_presets">Швидкі шаблони</string>
+    <string name="dns_custom_active_badge">Використовується власний DNS</string>
 </resources>

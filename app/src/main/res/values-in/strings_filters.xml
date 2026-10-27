@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Wildcard TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Daftar TLD spam)</string>
-    <string name="filter_build_mode_local_desc">Dikompilasi di perangkat melalui Go engine (hanya aturan DNS, 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Dikompilasi di perangkat melalui Go engine (hanya aturan DNS, 100% offline)</string>
     <string name="filter_build_mode_server_desc">Kompilasi dengan akselerasi cloud dengan penyembunyian elemen CSS &amp; skriplet</string>
     <string name="filter_paste_clipboard">Tempel dari papan klip</string>
     <string name="filter_merge_badge">Menggabungkan %1$d daftar filter menjadi satu</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Simpan</string>
     <string name="filter_edit_title">Edit Daftar Filter</string>
     <string name="filter_edit_url_dialog_title">Edit URL Filter</string>
+    <string name="https_filtering_proxy_vpn_conflict">Tidak dapat mengaktifkan pemfilteran HTTPS saat mode Proksi &amp; VPN aktif</string>
 </resources>

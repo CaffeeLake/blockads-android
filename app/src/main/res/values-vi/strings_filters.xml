@@ -142,7 +142,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Chặn toàn bộ TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Danh sách spam TLD)</string>
-    <string name="filter_build_mode_local_desc">Biên dịch trực tiếp trên máy qua Go engine (chỉ chặn DNS, offline 100%)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Biên dịch trực tiếp trên máy qua Go engine (chỉ chặn DNS, offline 100%)</string>
     <string name="filter_build_mode_server_desc">Biên dịch qua server đám mây, hỗ trợ thêm CSS ẩn phần tử và scriptlet</string>
     <string name="filter_paste_clipboard">Dán từ bảng tạm</string>
     <string name="filter_merge_badge">Hợp nhất %1$d bộ lọc thành một</string>

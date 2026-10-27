@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">ברכות! BlockAds מוגדרת ומוכנה להגן על המכשיר שלך מפני פרסומות ועוקבים.</string>
     <string name="onboarding_complete_stats">הקש על \&quot;בואו נתחיל\&quot; כדי להפעיל את ההגנה</string>
     <string name="onboarding_crash_report_title">עזור לשפר את BlockAds</string>
-    <string name="onboarding_crash_report_desc">הפרטיות נמצאת בראש סדר העדיפויות של BlockAds. נשמח לקבל את רשותך לאסוף דוחות קריסה אנונימיים כדי לעזור לנו לתקן באגים במהירות.\n\nפעולה זו היא לבחירתך בלבד (OPT-IN), אינה מכילה מידע מזהה אישי (PII), וניתן לבטל אותה בכל עת בהגדרות.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">הפרטיות נמצאת בראש סדר העדיפויות של BlockAds. נשמח לקבל את רשותך לאסוף דוחות קריסה אנונימיים כדי לעזור לנו לתקן באגים במהירות.\n\nפעולה זו היא לבחירתך בלבד (OPT-IN), אינה מכילה מידע מזהה אישי (PII), וניתן לבטל אותה בכל עת בהגדרות.</string>
     <string name="onboarding_crash_report_btn_yes">כן, אשמח לעזור לשפר את BlockAds</string>
     <string name="onboarding_crash_report_btn_no">לא, תודה</string>
 </resources>

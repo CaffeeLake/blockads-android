@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Caratteri jolly TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (elenchi di TLD spam)</string>
-    <string name="filter_build_mode_local_desc">Compilato sul dispositivo tramite motore Go (solo regole DNS, 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Compilato sul dispositivo tramite motore Go (solo regole DNS, 100% offline)</string>
     <string name="filter_build_mode_server_desc">Compilazione accelerata nel cloud con occultamento degli elementi CSS e scriptlet</string>
     <string name="filter_paste_clipboard">Incolla dagli appunti</string>
     <string name="filter_merge_badge">Unione di %1$d liste di filtri in una</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Salva</string>
     <string name="filter_edit_title">Modifica Lista Filtri</string>
     <string name="filter_edit_url_dialog_title">Modifica URL del filtro</string>
+    <string name="https_filtering_proxy_vpn_conflict">Impossibile attivare il filtraggio HTTPS mentre la modalità Proxy e VPN è attiva</string>
 </resources>

@@ -23,7 +23,7 @@
     <string name="onboarding_complete_desc">Chúc mừng! BlockAds đã được cấu hình và sẵn sàng bảo vệ thiết bị của bạn khỏi quảng cáo và trình theo dõi.</string>
     <string name="onboarding_complete_stats">Nhấn \&quot;Bắt đầu\&quot; để bật bảo vệ</string>
     <string name="onboarding_crash_report_title">Giúp cải thiện BlockAds</string>
-    <string name="onboarding_crash_report_desc">BlockAds luôn đặt quyền riêng tư lên hàng đầu. Chúng tôi xin phép thu thập các báo cáo sự cố ẩn danh để giúp khắc phục lỗi nhanh chóng.\n\nĐiều này hoàn toàn TỰ NGUYỆN, KHÔNG chứa thông tin cá nhân (PII) và có thể tắt bất cứ lúc nào trong Cài đặt.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAds luôn đặt quyền riêng tư lên hàng đầu. Chúng tôi xin phép thu thập các báo cáo sự cố ẩn danh để giúp khắc phục lỗi nhanh chóng.\n\nĐiều này hoàn toàn TỰ NGUYỆN, KHÔNG chứa thông tin cá nhân (PII) và có thể tắt bất cứ lúc nào trong Cài đặt.</string>
     <string name="onboarding_crash_report_btn_yes">Đồng ý, giúp cải thiện BlockAds</string>
     <string name="onboarding_crash_report_btn_no">Không, cảm ơn</string>
 </resources>

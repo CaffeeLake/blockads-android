@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Modalità di routing</string>
     <string name="routing_mode_sheet_desc">Scegli in che modo BlockAds intercetta e instrada il traffico sul tuo dispositivo.</string>
     <string name="routing_mode_local_vpn_title">Modalità VPN locale</string>
-    <string name="routing_mode_local_vpn_desc">Filtra il traffico direttamente sul dispositivo utilizzando il servizio VPN di Android. Nessun root richiesto, 100% privato.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Filtra il traffico direttamente sul dispositivo utilizzando il servizio VPN di Android. Nessun root richiesto, 100% privato.</string>
     <string name="routing_mode_root_proxy_title">Modalità proxy con root</string>
     <string name="routing_mode_root_proxy_desc">Reindirizza il DNS tramite iptables senza creare una connessione VPN. Risparmia batteria e mantiene libero lo slot VPN.</string>
     <string name="routing_mode_recommended">Consigliato</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Chiave Outline / Shadowsocks non valida</string>
     <string name="proxy_vpn_title">Proxy e VPN</string>
     <string name="proxy_vpn_subtitle">Gestisci server WireGuard e Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Nodi proxy</string>
     <string name="routing_mode_proxy_vpn_title">Proxy e VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Instrada tutto il traffico attraverso un server proxy remoto WireGuard o Outline bloccando la pubblicità localmente.</string>
     <string name="routing_mode_no_proxy_profile">Nessun server configurato</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Disconnesso</string>
     <string name="proxy_refresh_ip">Aggiorna IP</string>
     <string name="proxy_refreshing_ip">Aggiornamento…</string>
-    <string name="proxy_sort">Ordina</string>
     <string name="proxy_sort_default">Ordine predefinito</string>
     <string name="proxy_sort_latency">Per latenza (più veloce)</string>
     <string name="proxy_sort_name">Per nome</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Password offuscamento</string>
     <string name="proxy_field_congestion_control">Controllo congestione</string>
     <string name="proxy_field_udp_relay_mode">Modalità inoltro UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Genera UUID</string>
     <string name="proxy_section_basic">Informazioni di base</string>
     <string name="proxy_section_credentials">Credenziali</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">L\'UUID è obbligatorio</string>
     <string name="proxy_err_password_required">La password è obbligatoria</string>
     <string name="proxy_err_json_invalid">Formato JSON non valido</string>
+    <string name="dns_tab_builtin">Integrato</string>
+    <string name="dns_tab_custom">Personalizzato</string>
+    <string name="dns_active_hero_title">Server DNS attivo</string>
+    <string name="dns_protocol_label">Protocollo</string>
+    <string name="dns_fallback_label">DNS di fallback</string>
+    <string name="dns_category_all">Tutti</string>
+    <string name="dns_custom_configure_btn">Configura DNS personalizzato</string>
+    <string name="dns_custom_sheet_title">DNS personalizzato e protocolli</string>
+    <string name="dns_custom_sheet_desc">Seleziona un protocollo e configura il tuo server DNS upstream personalizzato.</string>
+    <string name="dns_custom_target_url">URL di destinazione</string>
+    <string name="dns_custom_relay_url">URL relay (opzionale)</string>
+    <string name="dns_custom_relay_hint">Proxy HTTP Oblivious che inoltra query crittografate al resolver</string>
+    <string name="dns_custom_server_ip">Indirizzo server</string>
+    <string name="dns_custom_presets">Preset rapidi</string>
+    <string name="dns_custom_active_badge">DNS personalizzato in uso</string>
 </resources>

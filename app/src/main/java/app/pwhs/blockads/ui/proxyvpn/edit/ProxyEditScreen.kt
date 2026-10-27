@@ -27,11 +27,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import android.content.ClipData
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
@@ -48,7 +48,7 @@ fun ProxyEditScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val copiedMsg = stringResource(R.string.proxy_link_copied)
     val savedMsgFormat = stringResource(R.string.proxy_save_success)
 
@@ -94,7 +94,9 @@ fun ProxyEditScreen(
                     if (state.shareLink.isNotEmpty()) {
                         IconButton(
                             onClick = {
-                                clipboardManager.setText(AnnotatedString(state.shareLink))
+                                clipboard.nativeClipboard.setPrimaryClip(
+                                    ClipData.newPlainText("proxy_link", state.shareLink)
+                                )
                                 viewModel.onIntent(ProxyEditIntent.Load(state.profileId))
                             }
                         ) {

@@ -52,26 +52,26 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.ProxyProfile
 import app.pwhs.blockads.data.geoip.GeoIpLookup
 import app.pwhs.blockads.utils.NodePingResult
+import android.content.ClipData
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.platform.LocalClipboard
 import app.pwhs.blockads.utils.WireGuardGeoIpHelper
 
 @Composable
 fun ProxyNodeRow(
     profile: ProxyProfile,
     isActive: Boolean,
-    pingResult: NodePingResult? = null,
     onPing: () -> Unit,
     onClick: () -> Unit,
     onEdit: (ProxyProfile) -> Unit,
     onRename: (ProxyProfile) -> Unit,
     onDelete: (ProxyProfile) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pingResult: NodePingResult? = null
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
 
     var countryCode by remember(profile.server, profile.tag) {
         mutableStateOf(WireGuardGeoIpHelper.getCountryCodeFast(profile.server, profile.tag))
@@ -231,7 +231,9 @@ fun ProxyNodeRow(
                         },
                         onClick = {
                             menuExpanded = false
-                            clipboardManager.setText(AnnotatedString(profile.toShareLink()))
+                            clipboard.nativeClipboard.setPrimaryClip(
+                                ClipData.newPlainText("proxy_link", profile.toShareLink())
+                            )
                         }
                     )
                     DropdownMenuItem(

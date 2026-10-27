@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">תווים חופשיים של TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (רשימות TLD של ספאם)</string>
-    <string name="filter_build_mode_local_desc">מהודר במכשיר באמצעות מנוע Go (חוקי DNS בלבד, 100% לא מקוון)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">מהודר במכשיר באמצעות מנוע Go (חוקי DNS בלבד, 100% לא מקוון)</string>
     <string name="filter_build_mode_server_desc">בנייה מואצת בענן עם הסתרת רכיבי CSS וסקריפטלטים</string>
     <string name="filter_paste_clipboard">הדבק מהלוח</string>
     <string name="filter_merge_badge">ממזג %1$d רשימות סינון לאחת</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">שמור</string>
     <string name="filter_edit_title">ערוך רשימת סינון</string>
     <string name="filter_edit_url_dialog_title">ערוך כתובת URL של המסנן</string>
+    <string name="https_filtering_proxy_vpn_conflict">לא ניתן להפעיל סינון HTTPS כאשר מצב Proxy &amp; VPN פעיל</string>
 </resources>

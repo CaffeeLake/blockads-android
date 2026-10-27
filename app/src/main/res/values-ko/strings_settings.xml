@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">라우팅 모드</string>
     <string name="routing_mode_sheet_desc">BlockAds가 기기의 트래픽을 가로채고 라우팅하는 방식을 선택하세요.</string>
     <string name="routing_mode_local_vpn_title">로컬 VPN 모드</string>
-    <string name="routing_mode_local_vpn_desc">Android VPN Service를 사용하여 기기에서 직접 트래픽을 필터링합니다. 루팅 불필요, 100% 비공개 보호.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Android VPN Service를 사용하여 기기에서 직접 트래픽을 필터링합니다. 루팅 불필요, 100% 비공개 보호.</string>
     <string name="routing_mode_root_proxy_title">Root Proxy 모드</string>
     <string name="routing_mode_root_proxy_desc">VPN 연결을 생성하지 않고 iptables를 통해 DNS를 리디렉션합니다. 배터리를 절약하고 VPN 슬롯을 유지합니다.</string>
     <string name="routing_mode_recommended">추천</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">유효하지 않은 Outline / Shadowsocks 키입니다</string>
     <string name="proxy_vpn_title">프록시 &amp; VPN</string>
     <string name="proxy_vpn_subtitle">WireGuard 및 Outline / Shadowsocks 서버 관리</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">프록시 노드</string>
     <string name="routing_mode_proxy_vpn_title">프록시 &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">로컬에서 광고를 차단하면서 원격 WireGuard 또는 Outline 프록시 서버를 통해 모든 트래픽을 라우팅합니다.</string>
     <string name="routing_mode_no_proxy_profile">구성된 서버 없음</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">오프라인</string>
     <string name="proxy_refresh_ip">IP 새로고침</string>
     <string name="proxy_refreshing_ip">새로고침 중…</string>
-    <string name="proxy_sort">정렬</string>
     <string name="proxy_sort_default">기본 순서</string>
     <string name="proxy_sort_latency">지연 시간순 (가장 빠름)</string>
     <string name="proxy_sort_name">이름순</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">난독화 비밀번호</string>
     <string name="proxy_field_congestion_control">혼잡 제어</string>
     <string name="proxy_field_udp_relay_mode">UDP 릴레이 모드</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">UUID 생성</string>
     <string name="proxy_section_basic">기본 정보</string>
     <string name="proxy_section_credentials">자격 증명</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID를 입력해야 합니다</string>
     <string name="proxy_err_password_required">비밀번호를 입력해야 합니다</string>
     <string name="proxy_err_json_invalid">잘못된 JSON 형식입니다</string>
+    <string name="dns_tab_builtin">기본 제공</string>
+    <string name="dns_tab_custom">사용자 정의</string>
+    <string name="dns_active_hero_title">활성 DNS 서버</string>
+    <string name="dns_protocol_label">프로토콜</string>
+    <string name="dns_fallback_label">대체 DNS</string>
+    <string name="dns_category_all">전체</string>
+    <string name="dns_custom_configure_btn">사용자 정의 DNS 설정</string>
+    <string name="dns_custom_sheet_title">사용자 정의 DNS 및 프로토콜</string>
+    <string name="dns_custom_sheet_desc">프로토콜을 선택하고 사용자 정의 업스트림 DNS 서버를 구성하세요.</string>
+    <string name="dns_custom_target_url">대상 URL</string>
+    <string name="dns_custom_relay_url">릴레이 URL (선택 사항)</string>
+    <string name="dns_custom_relay_hint">암호화된 쿼리를 리졸버로 전달하는 Oblivious HTTP 프록시</string>
+    <string name="dns_custom_server_ip">서버 주소</string>
+    <string name="dns_custom_presets">빠른 프리셋</string>
+    <string name="dns_custom_active_badge">사용자 정의 DNS 사용 중</string>
 </resources>

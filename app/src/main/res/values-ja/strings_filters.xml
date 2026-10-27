@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">TLDワイルドカード</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (スパムTLDリスト)</string>
-    <string name="filter_build_mode_local_desc">Goエンジンを介してデバイス上でコンパイル (DNSルールのみ、100%オフライン)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Goエンジンを介してデバイス上でコンパイル (DNSルールのみ、100%オフライン)</string>
     <string name="filter_build_mode_server_desc">クラウド高速化ビルド (CSS要素の非表示とスクリプトレット対応)</string>
     <string name="filter_paste_clipboard">クリップボードから貼り付け</string>
     <string name="filter_merge_badge">%1$d個のフィルターリストを1つに統合中</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">保存</string>
     <string name="filter_edit_title">フィルターリストを編集</string>
     <string name="filter_edit_url_dialog_title">フィルターURLを編集</string>
+    <string name="https_filtering_proxy_vpn_conflict">プロキシ &amp; VPN モードが有効な間は HTTPS フィルタリングを有効にできません</string>
 </resources>

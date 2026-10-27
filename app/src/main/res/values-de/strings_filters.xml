@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">TLD-Wildcards</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Spam-TLD-Listen)</string>
-    <string name="filter_build_mode_local_desc">Kompiliert auf dem Gerät über die Go-Engine (nur DNS-Regeln, 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Kompiliert auf dem Gerät über die Go-Engine (nur DNS-Regeln, 100% offline)</string>
     <string name="filter_build_mode_server_desc">Cloud-beschleunigter Build mit CSS-Elementausblendung &amp; Scriptlets</string>
     <string name="filter_paste_clipboard">Aus Zwischenablage einfügen</string>
     <string name="filter_merge_badge">Führt %1$d Filterlisten zu einer zusammen</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Speichern</string>
     <string name="filter_edit_title">Filterliste bearbeiten</string>
     <string name="filter_edit_url_dialog_title">Filter-URL bearbeiten</string>
+    <string name="https_filtering_proxy_vpn_conflict">HTTPS-Filterung kann nicht aktiviert werden, solange der Modus Proxy &amp; VPN aktiv ist</string>
 </resources>

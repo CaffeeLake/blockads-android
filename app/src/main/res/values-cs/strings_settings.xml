@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">Režim směrování</string>
     <string name="routing_mode_sheet_desc">Vyberte, jak BlockAds zachycuje a směruje provoz na vašem zařízení.</string>
     <string name="routing_mode_local_vpn_title">Režim místní VPN</string>
-    <string name="routing_mode_local_vpn_desc">Filtruje provoz přímo v zařízení pomocí služby Android VPN. Nevyžaduje root, 100% soukromé.</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Filtruje provoz přímo v zařízení pomocí služby Android VPN. Nevyžaduje root, 100% soukromé.</string>
     <string name="routing_mode_root_proxy_title">Režim Root Proxy</string>
     <string name="routing_mode_root_proxy_desc">Přesměrovává DNS pomocí iptables bez vytváření připojení VPN. Šetří baterii a ponechává slot pro VPN volný.</string>
     <string name="routing_mode_recommended">Doporučeno</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">Neplatný klíč Outline / Shadowsocks</string>
     <string name="proxy_vpn_title">Proxy a VPN</string>
     <string name="proxy_vpn_subtitle">Správa serverů WireGuard a Outline / Shadowsocks</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">Uzly proxy</string>
     <string name="routing_mode_proxy_vpn_title">Proxy a VPN</string>
     <string name="routing_mode_proxy_vpn_desc">Směruje veškerý provoz přes vzdálený server WireGuard nebo proxy server Outline a zároveň lokálně blokuje reklamy.</string>
     <string name="routing_mode_no_proxy_profile">Není nakonfigurován žádný server</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">Offline</string>
     <string name="proxy_refresh_ip">Obnovit IP</string>
     <string name="proxy_refreshing_ip">Obnovování…</string>
-    <string name="proxy_sort">Seřadit</string>
     <string name="proxy_sort_default">Výchozí pořadí</string>
     <string name="proxy_sort_latency">Podle latence (nejrychlejší)</string>
     <string name="proxy_sort_name">Podle názvu</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">Heslo pro obfs</string>
     <string name="proxy_field_congestion_control">Řízení zahlcení</string>
     <string name="proxy_field_udp_relay_mode">Režim přenosu UDP</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">Generovat UUID</string>
     <string name="proxy_section_basic">Základní informace</string>
     <string name="proxy_section_credentials">Přihlašovací údaje</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID je povinné</string>
     <string name="proxy_err_password_required">Heslo je povinné</string>
     <string name="proxy_err_json_invalid">Neplatný formát JSON</string>
+    <string name="dns_tab_builtin">Vestavěné</string>
+    <string name="dns_tab_custom">Vlastní</string>
+    <string name="dns_active_hero_title">Aktivní DNS server</string>
+    <string name="dns_protocol_label">Protokol</string>
+    <string name="dns_fallback_label">Záložní DNS</string>
+    <string name="dns_category_all">Vše</string>
+    <string name="dns_custom_configure_btn">Nastavit vlastní DNS</string>
+    <string name="dns_custom_sheet_title">Vlastní DNS a protokoly</string>
+    <string name="dns_custom_sheet_desc">Vyberte protokol a nastavte svůj vlastní nadřazený DNS server.</string>
+    <string name="dns_custom_target_url">Cílová URL</string>
+    <string name="dns_custom_relay_url">Relay URL (volitelné)</string>
+    <string name="dns_custom_relay_hint">Anonymní HTTP proxy přeposílající šifrované dotazy na resolver</string>
+    <string name="dns_custom_server_ip">Adresa serveru</string>
+    <string name="dns_custom_presets">Rychlé předvolby</string>
+    <string name="dns_custom_active_badge">Používá se vlastní DNS</string>
 </resources>

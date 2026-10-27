@@ -23,7 +23,7 @@
     <string name="onboarding_complete_stats">Toque em \&quot;Começar\&quot; para ativar a proteção</string>
     <string name="onboarding_battery_unsupported">Não suportado</string>
     <string name="onboarding_crash_report_title">Ajude a melhorar o BlockAds</string>
-    <string name="onboarding_crash_report_desc">O BlockAds prioriza a privacidade. Gostaríamos da sua permissão para coletar relatórios anônimos de falhas e nos ajudar a corrigir bugs rapidamente.\n\nIsto é estritamente OPCIONAL, NÃO contém informações de identificação pessoal (PII) e pode ser desativado a qualquer momento nas Configurações.</string>
+    <string name="onboarding_crash_report_desc" formatted="false">O BlockAds prioriza a privacidade. Gostaríamos da sua permissão para coletar relatórios anônimos de falhas e nos ajudar a corrigir bugs rapidamente.\n\nIsto é estritamente OPCIONAL, NÃO contém informações de identificação pessoal (PII) e pode ser desativado a qualquer momento nas Configurações.</string>
     <string name="onboarding_crash_report_btn_yes">Sim, ajudar a melhorar</string>
     <string name="onboarding_crash_report_btn_no">Não, obrigado</string>
 </resources>

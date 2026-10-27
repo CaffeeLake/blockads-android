@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Zástupné znaky TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (seznamy spamových TLD)</string>
-    <string name="filter_build_mode_local_desc">Zkompilováno v zařízení pomocí Go engine (pouze pravidla DNS, 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Zkompilováno v zařízení pomocí Go engine (pouze pravidla DNS, 100% offline)</string>
     <string name="filter_build_mode_server_desc">Cloudem urychlené sestavení se skrýváním prvků CSS a scriptlety</string>
     <string name="filter_paste_clipboard">Vložit ze schránky</string>
     <string name="filter_merge_badge">Sloučení %1$d seznamů filtrů do jednoho</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Uložit</string>
     <string name="filter_edit_title">Upravit seznam filtrů</string>
     <string name="filter_edit_url_dialog_title">Upravit URL filtru</string>
+    <string name="https_filtering_proxy_vpn_conflict">Nelze zapnout filtrování HTTPS, když je aktivní režim Proxy a VPN</string>
 </resources>

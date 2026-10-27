@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">الرموز البديلة لـ TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (قوائم TLD غير المرغوب فيها)</string>
-    <string name="filter_build_mode_local_desc">يتم تجميعها على الجهاز عبر محرك Go (قواعد DNS فقط، دون اتصال 100%)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">يتم تجميعها على الجهاز عبر محرك Go (قواعد DNS فقط، دون اتصال 100%)</string>
     <string name="filter_build_mode_server_desc">تجميع بتسريع سحابي مع إخفاء عناصر CSS والبريمجات النصية</string>
     <string name="filter_paste_clipboard">لصق من الحافظة</string>
     <string name="filter_merge_badge">دمج %1$d قائمة تصفية في قائمة واحدة</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">حفظ</string>
     <string name="filter_edit_title">تعديل قائمة التصفية</string>
     <string name="filter_edit_url_dialog_title">تعديل رابط التصفية</string>
+    <string name="https_filtering_proxy_vpn_conflict">لا يمكن تفعيل تصفية HTTPS أثناء نشاط وضع Proxy &amp; VPN</string>
 </resources>

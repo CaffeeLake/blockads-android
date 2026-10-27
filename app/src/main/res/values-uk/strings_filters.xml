@@ -192,7 +192,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">Символи підстановки TLD</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (списки спам-TLD)</string>
-    <string name="filter_build_mode_local_desc">Скомпільовано на пристрої через рушій Go (тільки правила DNS, 100% офлайн)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Скомпільовано на пристрої через рушій Go (тільки правила DNS, 100% офлайн)</string>
     <string name="filter_build_mode_server_desc">Прискорена в хмарі збірка з приховуванням елементів CSS і скриптлетами</string>
     <string name="filter_paste_clipboard">Вставити з буфера обміну</string>
     <string name="filter_merge_badge">Об єднання %1$d списків фільтрів в один</string>
@@ -201,4 +201,5 @@
     <string name="filter_action_save">Зберегти</string>
     <string name="filter_edit_title">Змінити список фільтрів</string>
     <string name="filter_edit_url_dialog_title">Змінити URL фільтра</string>
+    <string name="https_filtering_proxy_vpn_conflict">Неможливо увімкнути фільтрацію HTTPS, поки активний режим Проксі та VPN</string>
 </resources>

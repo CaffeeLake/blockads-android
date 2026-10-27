@@ -246,7 +246,7 @@
     <string name="routing_mode_sheet_title">ルーティングモード</string>
     <string name="routing_mode_sheet_desc">BlockAdsがデバイス上のトラフィックを傍受・ルーティングする方法を選択します。</string>
     <string name="routing_mode_local_vpn_title">ローカルVPNモード</string>
-    <string name="routing_mode_local_vpn_desc">Android VPN Serviceを使用してデバイス上で直接トラフィックをフィルタリングします。Root権限不要、100%プライベート。</string>
+    <string name="routing_mode_local_vpn_desc" formatted="false">Android VPN Serviceを使用してデバイス上で直接トラフィックをフィルタリングします。Root権限不要、100%プライベート。</string>
     <string name="routing_mode_root_proxy_title">Root Proxyモード</string>
     <string name="routing_mode_root_proxy_desc">VPN接続を作成せずにiptables経由でDNSをリダイレクトします。バッテリーを節約し、VPNスロットを空けたままにできます。</string>
     <string name="routing_mode_recommended">おすすめ</string>
@@ -260,8 +260,6 @@
     <string name="outline_dialog_invalid_key">無効なOutline / Shadowsocksキーです</string>
     <string name="proxy_vpn_title">プロキシ &amp; VPN</string>
     <string name="proxy_vpn_subtitle">WireGuardおよびOutline / Shadowsocksサーバーの管理</string>
-    <string name="proxy_vpn_tab_wireguard">WireGuard</string>
-    <string name="proxy_vpn_tab_proxies">プロキシノード</string>
     <string name="routing_mode_proxy_vpn_title">プロキシ &amp; VPN</string>
     <string name="routing_mode_proxy_vpn_desc">ローカルで広告をブロックしながら、すべてのトラフィックをリモートのWireGuardまたはOutlineプロキシサーバー経由でルーティングします。</string>
     <string name="routing_mode_no_proxy_profile">サーバーが設定されていません</string>
@@ -303,7 +301,6 @@
     <string name="proxy_hero_network_disconnected">オフライン</string>
     <string name="proxy_refresh_ip">IPを更新</string>
     <string name="proxy_refreshing_ip">更新中…</string>
-    <string name="proxy_sort">並べ替え</string>
     <string name="proxy_sort_default">デフォルト順</string>
     <string name="proxy_sort_latency">遅延順 (最速)</string>
     <string name="proxy_sort_name">名前順</string>
@@ -337,7 +334,6 @@
     <string name="proxy_field_obfs_password">難読化パスワード</string>
     <string name="proxy_field_congestion_control">輻輳制御</string>
     <string name="proxy_field_udp_relay_mode">UDP リレーモード</string>
-    <string name="proxy_field_alpn">ALPN</string>
     <string name="proxy_field_generate_uuid">UUID を生成</string>
     <string name="proxy_section_basic">基本情報</string>
     <string name="proxy_section_credentials">認証情報</string>
@@ -353,4 +349,19 @@
     <string name="proxy_err_uuid_required">UUID は必須です</string>
     <string name="proxy_err_password_required">パスワードは必須です</string>
     <string name="proxy_err_json_invalid">無効な JSON 形式です</string>
+    <string name="dns_tab_builtin">内蔵</string>
+    <string name="dns_tab_custom">カスタム</string>
+    <string name="dns_active_hero_title">使用中の DNS サーバー</string>
+    <string name="dns_protocol_label">プロトコル</string>
+    <string name="dns_fallback_label">フォールバック DNS</string>
+    <string name="dns_category_all">すべて</string>
+    <string name="dns_custom_configure_btn">カスタム DNS を設定</string>
+    <string name="dns_custom_sheet_title">カスタム DNS とプロトコル</string>
+    <string name="dns_custom_sheet_desc">プロトコルを選択し、カスタム上流 DNS サーバーを設定します。</string>
+    <string name="dns_custom_target_url">ターゲット URL</string>
+    <string name="dns_custom_relay_url">リレー URL（任意）</string>
+    <string name="dns_custom_relay_hint">暗号化されたクエリをリゾルバーに転送する Oblivious HTTP プロキシ</string>
+    <string name="dns_custom_server_ip">サーバーアドレス</string>
+    <string name="dns_custom_presets">クイックプリセット</string>
+    <string name="dns_custom_active_badge">カスタム DNS を使用中</string>
 </resources>

@@ -23,7 +23,7 @@
     <string name="onboarding_complete_stats">「始める」をタップして保護を有効にしてください</string>
     <string name="onboarding_battery_unsupported">非対応</string>
     <string name="onboarding_crash_report_title">BlockAdsの改善にご協力ください</string>
-    <string name="onboarding_crash_report_desc">BlockAdsはプライバシーを第一に考えています。バグを迅速に修正するため、匿名のクラッシュレポートを収集する許可を頂けないでしょうか。\n\nこれは完全に任意（オプトイン）であり、個人を特定できる情報（PII）は一切含まれません。設定からいつでも無効にできます。</string>
+    <string name="onboarding_crash_report_desc" formatted="false">BlockAdsはプライバシーを第一に考えています。バグを迅速に修正するため、匿名のクラッシュレポートを収集する許可を頂けないでしょうか。\n\nこれは完全に任意（オプトイン）であり、個人を特定できる情報（PII）は一切含まれません。設定からいつでも無効にできます。</string>
     <string name="onboarding_crash_report_btn_yes">はい、改善に協力します</string>
     <string name="onboarding_crash_report_btn_no">いいえ、結構です</string>
 </resources>

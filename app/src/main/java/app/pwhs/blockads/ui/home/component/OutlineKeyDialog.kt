@@ -25,7 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
@@ -39,7 +39,7 @@ fun OutlineKeyDialog(
 ) {
     var keyText by remember { mutableStateOf(initialKey) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val invalidKeyMsg = stringResource(R.string.outline_dialog_invalid_key)
 
     AlertDialog(
@@ -94,7 +94,8 @@ fun OutlineKeyDialog(
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(
                         onClick = {
-                            val clip = clipboardManager.getText()?.text?.trim().orEmpty()
+                            val clip = clipboard.nativeClipboard.primaryClip
+                                ?.getItemAt(0)?.text?.toString()?.trim().orEmpty()
                             if (clip.isNotEmpty()) {
                                 keyText = clip
                                 errorMessage = null

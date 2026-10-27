@@ -150,7 +150,7 @@
     <string name="filter_format_dnsmasq_desc">server=/domain.com/, address=/domain.com/0.0.0.0</string>
     <string name="filter_format_tld_title">TLD Wildcards</string>
     <string name="filter_format_tld_desc">||*.actor^, ||*.top^ (Spam TLD lists)</string>
-    <string name="filter_build_mode_local_desc">Compiled on device via Go engine (DNS rules only, 100% offline)</string>
+    <string name="filter_build_mode_local_desc" formatted="false">Compiled on device via Go engine (DNS rules only, 100% offline)</string>
     <string name="filter_build_mode_server_desc">Cloud-accelerated build with CSS element hiding &amp; scriptlets</string>
     <string name="filter_paste_clipboard">Paste from clipboard</string>
     <string name="filter_merge_badge">Merging %1$d filter lists into one</string>
