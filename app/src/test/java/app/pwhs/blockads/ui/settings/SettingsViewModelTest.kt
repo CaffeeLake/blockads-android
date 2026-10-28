@@ -241,4 +241,18 @@ class SettingsViewModelTest {
         vm.setFilterBuildMode(AppPreferences.BUILD_MODE_LOCAL)
         coVerify { appPrefs.setFilterBuildMode(AppPreferences.BUILD_MODE_LOCAL) }
     }
+
+    @Test
+    fun `resetSettings resets preferences, reschedules workers, restarts vpn and confirms`() = runTest {
+        val vm = newVm()
+        vm.events.test {
+            vm.resetSettings()
+            assertEquals(UiEvent.ToastRes(R.string.settings_reset_success), awaitItem())
+        }
+        coVerify { appPrefs.resetSettings() }
+        verify { ServiceController.requestRestart(any()) }
+        coVerify { FilterUpdateScheduler.scheduleFilterUpdate(any(), appPrefs) }
+        verify { DailySummaryScheduler.scheduleDailySummary(any()) }
+        verify { CrashReportingManager.toggleSentry(any(), false) }
+    }
 }

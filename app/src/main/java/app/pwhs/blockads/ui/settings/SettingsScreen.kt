@@ -34,6 +34,7 @@ import app.pwhs.blockads.ui.logs.dialog.ConfirmClearLogDialog
 import app.pwhs.blockads.ui.settings.component.AdvancedSection
 import app.pwhs.blockads.ui.settings.component.ApplicationsSection
 import app.pwhs.blockads.ui.settings.component.CommunitySection
+import app.pwhs.blockads.ui.settings.component.ConfirmResetSettingsDialog
 import app.pwhs.blockads.ui.settings.component.DataSection
 import app.pwhs.blockads.ui.settings.component.DnsResponseTypeDialog
 import app.pwhs.blockads.ui.settings.component.FilterSetupSection
@@ -81,6 +82,7 @@ fun SettingsScreen(
 
     var showDnsResponseTypeDialog by remember { mutableStateOf(false) }
     var showClearConfirm by remember { mutableStateOf(false) }
+    var showResetConfirm by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
@@ -202,6 +204,7 @@ fun SettingsScreen(
                 onExport = { exportLauncher.launch("blockads_settings.json") },
                 onImport = { importLauncher.launch(arrayOf("application/json")) },
                 onClearLogs = { showClearConfirm = true },
+                onResetSettings = { showResetConfirm = true },
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -251,6 +254,16 @@ fun SettingsScreen(
                     showClearConfirm = false
                 },
                 onDismiss = { showClearConfirm = false }
+            )
+        }
+
+        if (showResetConfirm) {
+            ConfirmResetSettingsDialog(
+                onReset = {
+                    viewModel.resetSettings()
+                    showResetConfirm = false
+                },
+                onDismiss = { showResetConfirm = false }
             )
         }
     }

@@ -1,6 +1,7 @@
 package app.pwhs.blockads.data.datastore.prefs
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -53,6 +54,26 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
         const val PREFERRED_IP_AUTO = "auto"
         const val PREFERRED_IP_IPV4 = "ipv4"
         const val PREFERRED_IP_IPV6 = "ipv6"
+
+        fun reset(prefs: MutablePreferences) {
+            prefs.remove(KEY_AUTO_RECONNECT)
+            prefs.remove(KEY_WHITELISTED_APPS)
+            prefs.remove(KEY_DAILY_SUMMARY_ENABLED)
+            prefs.remove(KEY_MILESTONE_NOTIFICATIONS_ENABLED)
+            prefs.remove(KEY_RECORD_DNS_LOGS)
+            prefs.remove(KEY_FIREWALL_ENABLED)
+            prefs.remove(KEY_HTTPS_FILTERING_ENABLED)
+            prefs.remove(KEY_FILTER_HTTP3)
+            prefs.remove(KEY_SELECTED_BROWSERS)
+            prefs.remove(KEY_CRASH_REPORTING_ENABLED)
+            prefs.remove(KEY_HIDE_FROM_RECENTS)
+            prefs.remove(KEY_TRUSTED_SSIDS)
+            prefs.remove(KEY_PAUSE_ON_TRUSTED)
+            prefs.remove(KEY_USE_SYSTEM_DNS_ON_TRUSTED)
+            prefs.remove(KEY_PAUSED_BY_TRUSTED)
+            prefs.remove(KEY_PAUSED_TRUSTED_SSID)
+            prefs.remove(KEY_PREFERRED_IP_TYPE)
+        }
     }
 
     val stabilityTipDismissed: Flow<Boolean> = dataStore.data.map { prefs ->
@@ -366,5 +387,9 @@ class VpnSecurityPreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun setRatePromptLastDismissed(timestamp: Long) {
         dataStore.edit { prefs -> prefs[KEY_RATE_PROMPT_LAST_DISMISSED] = timestamp }
+    }
+
+    suspend fun reset() {
+        dataStore.edit { reset(it) }
     }
 }

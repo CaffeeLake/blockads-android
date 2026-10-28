@@ -3,6 +3,7 @@ package app.pwhs.blockads.data.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import app.pwhs.blockads.data.datastore.prefs.AppearancePreferences
 import app.pwhs.blockads.data.datastore.prefs.DnsPreferences
@@ -21,7 +22,7 @@ import kotlinx.coroutines.flow.first
 val Context.blockAdsDataStore: DataStore<Preferences> by preferencesDataStore(name = "blockads_prefs")
 
 class AppPreferences internal constructor(
-    dataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences>,
     private val directBootPrefs: DirectBootPreferences,
 ) {
 
@@ -332,4 +333,16 @@ class AppPreferences internal constructor(
 
     val ratePromptLastDismissed: Flow<Long> get() = vpnSecurity.ratePromptLastDismissed
     suspend fun setRatePromptLastDismissed(timestamp: Long) = vpnSecurity.setRatePromptLastDismissed(timestamp)
+
+    suspend fun resetSettings() {
+        dataStore.edit { prefs ->
+            DnsPreferences.reset(prefs)
+            AppearancePreferences.reset(prefs)
+            FilterPreferences.reset(prefs)
+            WireGuardPreferences.reset(prefs)
+            VpnSecurityPreferences.reset(prefs)
+        }
+        directBootPrefs.autoReconnect = true
+        directBootPrefs.routingMode = ROUTING_MODE_DIRECT
+    }
 }

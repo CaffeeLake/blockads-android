@@ -1,6 +1,7 @@
 package app.pwhs.blockads.data.datastore.prefs
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -28,6 +29,12 @@ class WireGuardPreferences(private val dataStore: DataStore<Preferences>) {
         const val ROUTING_MODE_ROOT = "root"
 
         private const val LEGACY_PROFILE_ID = "legacy-default"
+
+        fun reset(prefs: MutablePreferences) {
+            prefs.remove(KEY_ROUTING_MODE)
+            prefs.remove(KEY_EXCLUDE_LAN)
+            prefs.remove(KEY_ALLOW_APP_BYPASS)
+        }
     }
 
     val routingMode: Flow<String> = dataStore.data.map { prefs ->
@@ -215,5 +222,9 @@ class WireGuardPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             prefs[KEY_ALLOW_APP_BYPASS] = enabled
         }
+    }
+
+    suspend fun reset() {
+        dataStore.edit { reset(it) }
     }
 }

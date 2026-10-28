@@ -68,6 +68,9 @@
     <string name="dns_response_custom_ip">IP tùy chỉnh (0.0.0.0)</string>
     <string name="dns_response_custom_ip_desc">Trả về địa chỉ null route (mặc định)</string>
     <string name="settings_clear_logs">Xóa tất cả nhật ký</string>
+    <string name="settings_reset">Đặt lại cài đặt</string>
+    <string name="settings_reset_confirm_message">Bạn có chắc chắn muốn đặt lại tất cả cài đặt về mặc định không? Các cấu hình đã tùy chỉnh sẽ được khôi phục về trạng thái ban đầu.</string>
+    <string name="settings_reset_success">Đã đặt lại cài đặt về mặc định</string>
     <string name="settings_auto_update_enabled">Bật tự động cập nhật</string>
     <string name="settings_auto_update_enabled_desc">Tự động cập nhật danh sách bộ lọc ở chế độ nền</string>
     <string name="settings_auto_update_frequency">Tần suất cập nhật</string>

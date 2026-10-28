@@ -1,6 +1,7 @@
 package app.pwhs.blockads.data.datastore.prefs
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -48,6 +49,22 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
         const val PROTECTION_BASIC = "BASIC"
         const val PROTECTION_STANDARD = "STANDARD"
         const val PROTECTION_STRICT = "STRICT"
+
+        fun reset(prefs: MutablePreferences) {
+            prefs.remove(KEY_FILTER_URL)
+            prefs.remove(KEY_AUTO_UPDATE_ENABLED)
+            prefs.remove(KEY_AUTO_UPDATE_FREQUENCY)
+            prefs.remove(KEY_AUTO_UPDATE_WIFI_ONLY)
+            prefs.remove(KEY_AUTO_UPDATE_NOTIFICATION)
+            prefs.remove(KEY_PROTECTION_LEVEL)
+            prefs.remove(KEY_SAFE_SEARCH_ENABLED)
+            prefs.remove(KEY_YOUTUBE_RESTRICTED_MODE)
+            prefs.remove(KEY_STARRED_FILTER_URLS)
+            prefs.remove(KEY_GEOIP_CUSTOM_URL)
+            prefs.remove(KEY_GEOIP_AUTO_UPDATE)
+            prefs.remove(KEY_FILTER_BUILD_MODE)
+            prefs.remove(KEY_CUSTOM_FILTER_TAGS)
+        }
     }
 
     val filterUrl: Flow<String> = dataStore.data.map { prefs ->
@@ -196,5 +213,9 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
             val current = prefs[KEY_CUSTOM_FILTER_TAGS] ?: DEFAULT_CUSTOM_TAGS
             prefs[KEY_CUSTOM_FILTER_TAGS] = current - tag
         }
+    }
+
+    suspend fun reset() {
+        dataStore.edit { reset(it) }
     }
 }

@@ -299,6 +299,38 @@ class SettingsViewModel(
         }
     }
 
+    fun resetSettings() {
+        viewModelScope.launch {
+            val context = getApplication<Application>().applicationContext
+            val wasRoot = RootProxyService.isRunning
+
+            appPrefs.resetSettings()
+
+            if (wasRoot) {
+                RootProxyService.stop(context)
+                delay(800)
+                if (appPrefs.vpnEnabled.first()) {
+                    val startIntent = Intent(context, AdBlockVpnService::class.java).apply {
+                        action = AdBlockVpnService.ACTION_START
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(startIntent)
+                    } else {
+                        context.startService(startIntent)
+                    }
+                }
+            } else {
+                requestVpnRestart()
+            }
+
+            scheduleUpdates()
+            DailySummaryScheduler.scheduleDailySummary(context)
+            CrashReportingManager.toggleSentry(getApplication(), false)
+
+            _events.toast(R.string.settings_reset_success)
+        }
+    }
+
     // ── Export Settings ──────────────────────────────────────────────
     fun exportSettings(uri: Uri) {
         viewModelScope.launch {

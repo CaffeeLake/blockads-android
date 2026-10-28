@@ -19,6 +19,7 @@ fun DataSection(
     onExport: () -> Unit,
     onImport: () -> Unit,
     onClearLogs: () -> Unit,
+    onResetSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val dividerColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.08f)
@@ -58,6 +59,16 @@ fun DataSection(
                     iconTint = Color(0xFFE11D48),
                     title = stringResource(R.string.settings_clear_logs),
                     onClick = onClearLogs
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = dividerColor)
+
+                // 4. Reset settings
+                SettingItem(
+                    iconPainter = painterResource(R.drawable.ic_settings_reset),
+                    iconTint = Color(0xFFE11D48),
+                    title = stringResource(R.string.settings_reset),
+                    onClick = onResetSettings
                 )
             }
         }

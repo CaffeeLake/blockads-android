@@ -1,6 +1,7 @@
 package app.pwhs.blockads.data.datastore.prefs
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -56,6 +57,14 @@ class AppearancePreferences(private val dataStore: DataStore<Preferences>) {
         const val LANGUAGE_IW = "iw"
         const val LANGUAGE_FR = "fr"
         const val LANGUAGE_KK = "kk"
+
+        fun reset(prefs: MutablePreferences) {
+            prefs.remove(KEY_THEME_MODE)
+            prefs.remove(KEY_APP_LANGUAGE)
+            prefs.remove(KEY_ACCENT_COLOR)
+            prefs.remove(KEY_SHOW_BOTTOM_NAV_LABELS)
+            prefs.remove(KEY_BOTTOM_NAV_SECONDARY_TAB)
+        }
     }
 
     val themeMode: Flow<String> = dataStore.data.map { prefs ->
@@ -106,5 +115,9 @@ class AppearancePreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { prefs ->
             prefs[KEY_BOTTOM_NAV_SECONDARY_TAB] = tab
         }
+    }
+
+    suspend fun reset() {
+        dataStore.edit { reset(it) }
     }
 }

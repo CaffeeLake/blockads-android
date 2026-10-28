@@ -1,6 +1,7 @@
 package app.pwhs.blockads.data.datastore.prefs
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -33,6 +34,19 @@ class DnsPreferences(private val dataStore: DataStore<Preferences>) {
         const val DEFAULT_DNS_PROTOCOL = "PLAIN"
         const val DEFAULT_DOH_URL = "https://dns.quad9.net/dns-query"
         const val DEFAULT_ODOH_RELAY_URL = ""
+
+        fun reset(prefs: MutablePreferences) {
+            prefs.remove(KEY_UPSTREAM_DNS)
+            prefs.remove(KEY_FALLBACK_DNS)
+            prefs.remove(KEY_DNS_PROTOCOL)
+            prefs.remove(KEY_DOH_URL)
+            prefs.remove(KEY_DNS_PROVIDER_ID)
+            prefs.remove(KEY_DNS_RESPONSE_TYPE)
+            prefs.remove(KEY_SPLIT_DNS_ZONES)
+            prefs.remove(KEY_BLOCK_DOH_BYPASS)
+            prefs.remove(KEY_BLOCK_WEBRTC_LEAK)
+            prefs.remove(KEY_ODOH_RELAY_URL)
+        }
     }
 
     val upstreamDns: Flow<String> = dataStore.data.map { prefs ->
@@ -150,4 +164,8 @@ class DnsPreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun getBlockWebRtcLeakSnapshot(): Boolean =
         dataStore.data.map { it[KEY_BLOCK_WEBRTC_LEAK] ?: false }.first()
+
+    suspend fun reset() {
+        dataStore.edit { reset(it) }
+    }
 }

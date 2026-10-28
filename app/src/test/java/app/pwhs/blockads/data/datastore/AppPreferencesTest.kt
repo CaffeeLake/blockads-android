@@ -204,4 +204,34 @@ class AppPreferencesTest {
             assertTrue(getWgProfilesSnapshot().isEmpty())
         }
     }
+
+    @Test
+    fun `resetSettings restores default preferences while preserving onboarding and vpn state`() = runTest {
+        with(prefs) {
+            setOnboardingCompleted(true)
+            setVpnEnabled(true)
+            setUpstreamDns("1.1.1.1")
+            setThemeMode(AppPreferences.THEME_DARK)
+            setSafeSearchEnabled(true)
+            setAutoReconnect(false)
+            setRoutingMode(AppPreferences.ROUTING_MODE_ROOT)
+            setCrashReportingEnabled(true)
+
+            resetSettings()
+
+            // preserved
+            assertTrue(onboardingCompleted.first())
+            assertTrue(vpnEnabled.first())
+
+            // reset to defaults
+            assertEquals(AppPreferences.DEFAULT_UPSTREAM_DNS, upstreamDns.first())
+            assertEquals(AppPreferences.THEME_SYSTEM, themeMode.first())
+            assertFalse(safeSearchEnabled.first())
+            assertTrue(autoReconnect.first())
+            assertEquals(AppPreferences.ROUTING_MODE_DIRECT, routingMode.first())
+            assertFalse(crashReportingEnabled.first())
+            assertEquals(AppPreferences.ROUTING_MODE_DIRECT, directBoot.routingMode)
+            assertTrue(directBoot.autoReconnect)
+        }
+    }
 }

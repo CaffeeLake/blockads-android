@@ -109,6 +109,9 @@
     <string name="dns_response_custom_ip_desc">Return a null route address (default)</string>
     <string name="settings_clear_logs">Clear All Logs</string>
     <string name="clear_logs_confirm_message">Are you sure you want to clear all DNS logs? This action cannot be undone.</string>
+    <string name="settings_reset">Reset Settings</string>
+    <string name="settings_reset_confirm_message">Are you sure you want to reset all settings to default? Your customized preferences will be restored to their original defaults.</string>
+    <string name="settings_reset_success">Settings have been reset to default</string>
     <string name="settings_auto_update_enabled">Enable auto-update</string>
     <string name="settings_auto_update_enabled_desc">Automatically update filter lists in background</string>
     <string name="settings_auto_update_frequency">Update frequency</string>
