@@ -89,9 +89,9 @@
     <string name="filter_chip_all">All</string>
     <string name="https_filtering_wireguard_disabled">WireGuard disabled (incompatible with HTTPS filtering)</string>
     <string name="https_filtering_proxy_vpn_conflict">Cannot enable HTTPS filtering while Proxy &amp; VPN mode is active</string>
-    <string name="https_filtering_cert_saved_downloads">✅ Certificate saved to Downloads/%1$s</string>
     <string name="https_filtering_cert_required_desc">Install CA certificate to enable</string>
     <string name="https_filtering_cert_not_installed_error">CA certificate must be installed before enabling HTTPS filtering</string>
+    <string name="https_filtering_cert_saved_downloads">✅ Certificate saved to Downloads/%1$s</string>
     <string name="https_filtering_cert_saved_legacy">Certificate saved. Install from file manager.</string>
     <string name="https_filtering_started">HTTPS filtering started</string>
     <string name="https_filtering_stopped">HTTPS filtering stopped</string>
@@ -207,4 +207,16 @@
     <string name="https_wizard_copy_filename">Copy filename</string>
     <string name="https_wizard_filename_copied">Certificate filename copied to clipboard</string>
     <string name="https_wizard_verified_success">Certificate is verified and ready to use!</string>
+
+    <!-- Filter Tags -->
+    <string name="filter_tag_all">All</string>
+    <string name="filter_tag_create">Create Tag</string>
+    <string name="filter_tag_create_title">Create Classification Tag</string>
+    <string name="filter_tag_name_label">Tag Name</string>
+    <string name="filter_tag_name_placeholder">e.g. Ads, YouTube, Social…</string>
+    <string name="filter_tag_section_title">Classification / Tag</string>
+    <string name="filter_tag_delete">Delete Tag</string>
+    <string name="filter_tag_delete_confirm">Delete tag \"%1$s\"?</string>
+    <string name="filter_tag_empty">No filters with this tag yet</string>
+    <string name="filter_tag_quick_presets">Suggestions</string>
 </resources>

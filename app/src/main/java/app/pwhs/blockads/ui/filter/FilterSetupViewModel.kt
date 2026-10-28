@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.datastore.prefs.FilterPreferences
 import app.pwhs.blockads.data.entities.FilterList
 import app.pwhs.blockads.data.dao.FilterListDao
 import app.pwhs.blockads.data.repository.CustomFilterManager
@@ -54,6 +55,35 @@ class FilterSetupViewModel(
     val filterBuildMode: StateFlow<String> = appPreferences?.filterBuildMode
         ?.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppPreferences.BUILD_MODE_ONLINE)
         ?: MutableStateFlow(AppPreferences.BUILD_MODE_ONLINE).asStateFlow()
+
+    val customFilterTags: StateFlow<Set<String>> = (appPreferences?.customFilterTags
+        ?: MutableStateFlow(FilterPreferences.DEFAULT_CUSTOM_TAGS))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), FilterPreferences.DEFAULT_CUSTOM_TAGS)
+
+    private val _selectedTag = MutableStateFlow<String?>(null)
+    val selectedTag: StateFlow<String?> = _selectedTag.asStateFlow()
+
+    fun selectTag(tag: String?) {
+        _selectedTag.value = tag
+    }
+
+    fun createTag(tag: String) {
+        val trimmed = tag.trim()
+        if (trimmed.isBlank()) return
+        viewModelScope.launch {
+            appPreferences?.addCustomFilterTag(trimmed)
+            _selectedTag.value = trimmed
+        }
+    }
+
+    fun deleteTag(tag: String) {
+        viewModelScope.launch {
+            appPreferences?.removeCustomFilterTag(tag)
+            if (_selectedTag.value == tag) {
+                _selectedTag.value = null
+            }
+        }
+    }
 
     val filteredFilterLists: StateFlow<List<FilterList>> = combine(
         filterLists, _searchQuery
@@ -119,7 +149,12 @@ class FilterSetupViewModel(
         }
     }
 
-    fun addFilterList(name: String, url: String, buildLocally: Boolean = false) {
+    fun addFilterList(
+        name: String,
+        url: String,
+        category: String = FilterList.CATEGORY_AD,
+        buildLocally: Boolean = false
+    ) {
         viewModelScope.launch {
             val rawUrls = url.lines().map { it.trim() }.filter { it.isNotBlank() }
             if (rawUrls.isEmpty()) {
@@ -137,7 +172,7 @@ class FilterSetupViewModel(
 
             if (buildLocally) {
                 // Enqueue WorkManager job — returns immediately, compiles in background
-                customFilterManager.enqueueLocalCompile(combinedUrl, name.trim())
+                customFilterManager.enqueueLocalCompile(combinedUrl, name.trim(), category)
                 _events.toast(R.string.filter_compile_enqueued)
                 _filterAddedEvent.tryEmit(Unit)
             } else {
@@ -146,6 +181,7 @@ class FilterSetupViewModel(
                 val result = customFilterManager.addCustomFilter(
                     urls = rawUrls,
                     displayName = name.trim(),
+                    category = category,
                     onProgress = { p -> _addFilterProgress.value = p }
                 )
                 _isAddingCustomFilter.value = false
@@ -179,6 +215,7 @@ class FilterSetupViewModel(
         filter: FilterList,
         name: String,
         url: String,
+        category: String = filter.category,
         buildLocally: Boolean
     ) {
         viewModelScope.launch {
@@ -200,7 +237,8 @@ class FilterSetupViewModel(
                         filter.copy(
                             name = nameTrimmed,
                             url = urlTrimmed,
-                            originalUrl = urlTrimmed
+                            originalUrl = urlTrimmed,
+                            category = category
                         )
                     )
                     _events.toast(R.string.filter_compile_enqueued)
@@ -208,6 +246,7 @@ class FilterSetupViewModel(
                     filterListDao.update(
                         filter.copy(
                             name = nameTrimmed,
+                            category = category,
                             lastUpdated = System.currentTimeMillis()
                         )
                     )
@@ -221,6 +260,7 @@ class FilterSetupViewModel(
                     filter = filter,
                     newName = nameTrimmed,
                     newUrl = urlTrimmed,
+                    newCategory = category,
                     onProgress = { p -> _addFilterProgress.value = p }
                 )
                 _isAddingCustomFilter.value = false

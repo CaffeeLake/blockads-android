@@ -206,4 +206,16 @@
     <string name="https_wizard_copy_filename">Sao chép tên file</string>
     <string name="https_wizard_filename_copied">Đã sao chép tên file chứng chỉ vào bộ nhớ tạm</string>
     <string name="https_wizard_verified_success">Chứng chỉ đã được cài đặt và sẵn sàng hoạt động!</string>
+
+    <!-- Filter Tags -->
+    <string name="filter_tag_all">Tất cả</string>
+    <string name="filter_tag_create">Tạo tag phân loại</string>
+    <string name="filter_tag_create_title">Tạo tag phân loại mới</string>
+    <string name="filter_tag_name_label">Tên tag</string>
+    <string name="filter_tag_name_placeholder">Ví dụ: Quảng cáo, YouTube, Mạng xã hội…</string>
+    <string name="filter_tag_section_title">Phân loại / Tag</string>
+    <string name="filter_tag_delete">Xóa tag</string>
+    <string name="filter_tag_delete_confirm">Bạn có chắc chắn muốn xóa tag \"%1$s\" không?</string>
+    <string name="filter_tag_empty">Chưa có bộ lọc nào thuộc tag này</string>
+    <string name="filter_tag_quick_presets">Gợi ý</string>
 </resources>

@@ -14,11 +14,14 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,7 +45,10 @@ import app.pwhs.blockads.ui.filter.component.CustomTabContent
 import app.pwhs.blockads.ui.filter.component.filterListItems
 import app.pwhs.blockads.ui.filter.component.FilterSearchBar
 import app.pwhs.blockads.ui.filter.component.FilterTabRow
+import app.pwhs.blockads.ui.filter.component.FilterTagChipRow
 import app.pwhs.blockads.ui.filter.component.FilterTopBar
+import app.pwhs.blockads.ui.filter.component.TAG_STARRED
+import app.pwhs.blockads.ui.filter.dialog.CreateFilterTagDialog
 import app.pwhs.blockads.ui.filter.data.FilterCategoryTab
 import app.pwhs.blockads.ui.filter.data.matchesCategory
 import app.pwhs.blockads.ui.filter.data.resolvedCategory
@@ -67,9 +73,13 @@ fun FilterSetupScreen(
     val starredUrls by viewModel.starredFilterUrls.collectAsStateWithLifecycle()
     val filterBuildMode by viewModel.filterBuildMode.collectAsStateWithLifecycle()
     val supportErrorInfo by viewModel.supportErrorInfo.collectAsStateWithLifecycle()
+    val customFilterTags by viewModel.customFilterTags.collectAsStateWithLifecycle()
+    val selectedTag by viewModel.selectedTag.collectAsStateWithLifecycle()
 
     var showAddDialog by remember { mutableStateOf(false) }
     var filterToEdit by remember { mutableStateOf<FilterListEntity?>(null) }
+    var showCreateTagDialog by remember { mutableStateOf(false) }
+    var tagToDelete by remember { mutableStateOf<String?>(null) }
     var isSearchVisible by remember { mutableStateOf(false) }
 
     val isStore = BuildConfig.IS_STORE
@@ -114,6 +124,16 @@ fun FilterSetupScreen(
         counts
     }
 
+    val tagActiveCounts = remember(allLists, starredUrls, customFilterTags) {
+        val counts = mutableMapOf<String, Int>()
+        counts["__all__"] = allLists.count { it.isEnabled }
+        counts[TAG_STARRED] = allLists.count { it.isEnabled && starredUrls.contains(it.url) }
+        for (tag in customFilterTags) {
+            counts[tag] = allLists.count { it.isEnabled && it.category.equals(tag, ignoreCase = true) }
+        }
+        counts
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -143,7 +163,16 @@ fun FilterSetupScreen(
                 onSearchQueryChange = { viewModel.setSearchQuery(it) }
             )
 
-            if (!isStore) {
+            if (isStore) {
+                FilterTagChipRow(
+                    tags = customFilterTags,
+                    selectedTag = selectedTag,
+                    onSelectTag = { viewModel.selectTag(it) },
+                    onCreateTagClick = { showCreateTagDialog = true },
+                    activeCounts = tagActiveCounts,
+                    onDeleteTag = { tagToDelete = it }
+                )
+            } else {
                 FilterTabRow(
                     selectedTab = categories[pagerState.currentPage],
                     onTabSelected = { tab ->
@@ -165,18 +194,29 @@ fun FilterSetupScreen(
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 val currentTab = categories[page]
-                val displayFilters = remember(filterLists, currentTab, starredUrls) {
-                    val tabFilters = filterLists.filter { it.matchesCategory(currentTab, starredUrls) }
-                    if (currentTab == FilterCategoryTab.ALL) {
-                        tabFilters.sortedWith(compareByDescending<FilterListEntity> { it.isEnabled }.thenBy { it.name })
+                val displayFilters = remember(filterLists, currentTab, starredUrls, isStore, selectedTag) {
+                    if (isStore) {
+                        val storeFilters = when (selectedTag) {
+                            null -> filterLists
+                            TAG_STARRED -> filterLists.filter { starredUrls.contains(it.url) }
+                            else -> filterLists.filter { it.category.equals(selectedTag, ignoreCase = true) }
+                        }
+                        storeFilters.sortedWith(compareByDescending<FilterListEntity> { it.isEnabled }.thenBy { it.name })
                     } else {
-                        tabFilters
+                        val tabFilters = filterLists.filter { it.matchesCategory(currentTab, starredUrls) }
+                        if (currentTab == FilterCategoryTab.ALL) {
+                            tabFilters.sortedWith(compareByDescending<FilterListEntity> { it.isEnabled }.thenBy { it.name })
+                        } else {
+                            tabFilters
+                        }
                     }
                 }
 
                 if (currentTab == FilterCategoryTab.CUSTOM) {
                     if (isSearching && displayFilters.isEmpty()) {
                         EmptyCategorySearch(searchQuery)
+                    } else if (isStore && selectedTag == TAG_STARRED && displayFilters.isEmpty()) {
+                        EmptyStarredFilter()
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
@@ -191,7 +231,8 @@ fun FilterSetupScreen(
                                     onFilterClick = onNavigateToFilterDetail,
                                     onShowAddDialog = { showAddDialog = true },
                                     starredUrls = starredUrls,
-                                    onToggleStar = { viewModel.toggleStarredFilter(it) }
+                                    onToggleStar = { viewModel.toggleStarredFilter(it) },
+                                    emptyText = if (selectedTag != null) stringResource(R.string.filter_tag_empty) else null
                                 )
                             }
                         }
@@ -229,21 +270,58 @@ fun FilterSetupScreen(
                         filterToEdit = null
                     }
                 },
-                onAdd = { name, url, buildLocally ->
+                onAdd = { name, url, category, buildLocally ->
                     if (!isAddingCustomFilter) {
-                        viewModel.addFilterList(name, url, buildLocally)
+                        viewModel.addFilterList(name, url, category, buildLocally)
                     }
                 },
                 filterToEdit = filterToEdit,
-                onEdit = { filter, name, url, buildLocally ->
+                onEdit = { filter, name, url, category, buildLocally ->
                     if (!isAddingCustomFilter) {
-                        viewModel.editFilterList(filter, name, url, buildLocally)
+                        viewModel.editFilterList(filter, name, url, category, buildLocally)
                     }
                 },
+                availableTags = customFilterTags,
+                defaultCategory = if (selectedTag != TAG_STARRED) (selectedTag ?: "") else "",
+                onCreateTag = { viewModel.createTag(it) },
                 existingUrls = filterLists.map { it.url },
                 isValidating = isAddingCustomFilter,
                 progress = addFilterProgress,
                 defaultBuildLocally = filterBuildMode == AppPreferences.BUILD_MODE_LOCAL
+            )
+        }
+
+        if (showCreateTagDialog) {
+            CreateFilterTagDialog(
+                onDismiss = { showCreateTagDialog = false },
+                onConfirm = { newTag ->
+                    viewModel.createTag(newTag)
+                    showCreateTagDialog = false
+                },
+                existingTags = customFilterTags
+            )
+        }
+
+        tagToDelete?.let { tag ->
+            AlertDialog(
+                onDismissRequest = { tagToDelete = null },
+                title = { Text(stringResource(R.string.filter_tag_delete)) },
+                text = { Text(stringResource(R.string.filter_tag_delete_confirm, tag)) },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            viewModel.deleteTag(tag)
+                            tagToDelete = null
+                        }
+                    ) {
+                        Text(stringResource(R.string.filter_tag_delete))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { tagToDelete = null }) {
+                        Text(stringResource(R.string.settings_cancel))
+                    }
+                }
             )
         }
 

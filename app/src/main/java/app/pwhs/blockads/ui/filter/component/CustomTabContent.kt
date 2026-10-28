@@ -39,7 +39,8 @@ fun CustomTabContent(
     onShowAddDialog: () -> Unit,
     modifier: Modifier = Modifier,
     starredUrls: Set<String> = emptySet(),
-    onToggleStar: ((FilterList) -> Unit)? = null
+    onToggleStar: ((FilterList) -> Unit)? = null,
+    emptyText: String? = null
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -58,7 +59,7 @@ fun CustomTabContent(
             Column {
                 if (customFilters.isEmpty()) {
                     Text(
-                        text = stringResource(R.string.filter_custom_empty),
+                        text = emptyText ?: stringResource(R.string.filter_custom_empty),
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextSecondary,
                         modifier = Modifier.padding(16.dp)

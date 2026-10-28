@@ -30,6 +30,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -99,13 +100,13 @@ class FilterSetupViewModelTest {
             vm.addFilterList("x", "  https://mine  ")
             assertEquals(UiEvent.ToastRes(R.string.filter_error_duplicate_url), awaitItem())
         }
-        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any(), any()) }
+        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any(), any(), any()) }
     }
 
     @Test
     fun `adding a remote filter saves the profile, reloads and signals success`() = runTest {
         coEvery { dao.getByUrl(any()) } returns null
-        coEvery { customFilters.addCustomFilter(listOf("https://new"), "New", any()) } returns Result.success(FilterList(name = "New", url = "https://new"))
+        coEvery { customFilters.addCustomFilter(listOf("https://new"), "New", any(), any()) } returns Result.success(FilterList(name = "New", url = "https://new"))
         vm.filterAddedEvent.test {
             vm.events.test {
                 vm.addFilterList(" New ", " https://new ")
@@ -121,7 +122,7 @@ class FilterSetupViewModelTest {
     @Test
     fun `a failed remote add reports failure and changes nothing`() = runTest {
         coEvery { dao.getByUrl(any()) } returns null
-        coEvery { customFilters.addCustomFilter(any<List<String>>(), any(), any()) } returns Result.failure(RuntimeException("404"))
+        coEvery { customFilters.addCustomFilter(any<List<String>>(), any(), any(), any()) } returns Result.failure(RuntimeException("404"))
         vm.events.test {
             vm.addFilterList("n", "https://bad")
             assertEquals(UiEvent.ToastRes(R.string.filter_update_failed), awaitItem())
@@ -139,8 +140,8 @@ class FilterSetupViewModelTest {
             }
             awaitItem()
         }
-        coVerify { customFilters.enqueueLocalCompile("https://local", "Local") }
-        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any()) }
+        coVerify { customFilters.enqueueLocalCompile("https://local", "Local", any()) }
+        coVerify(exactly = 0) { customFilters.addCustomFilter(any<List<String>>(), any(), any(), any()) }
     }
 
     @Test
@@ -256,5 +257,29 @@ class FilterSetupViewModelTest {
         val testVm = FilterSetupViewModel(repo, dao, customFilters, mockk<Application>(relaxed = true), appPrefs)
         keepHot(testVm.filterBuildMode)
         assertEquals(AppPreferences.BUILD_MODE_LOCAL, testVm.filterBuildMode.value)
+    }
+
+    @Test
+    fun `tag selection, creation and deletion works as expected`() = runTest {
+        val appPrefs: AppPreferences = mockk(relaxed = true) {
+            every { customFilterTags } returns flowOf(setOf("Ads", "Social"))
+        }
+        val testVm = FilterSetupViewModel(repo, dao, customFilters, mockk<Application>(relaxed = true), appPrefs)
+        keepHot(testVm.customFilterTags)
+
+        // Select tag
+        assertNull(testVm.selectedTag.value)
+        testVm.selectTag("Ads")
+        assertEquals("Ads", testVm.selectedTag.value)
+
+        // Create tag
+        testVm.createTag("Security")
+        coVerify(exactly = 1) { appPrefs.addCustomFilterTag("Security") }
+        assertEquals("Security", testVm.selectedTag.value)
+
+        // Delete selected tag
+        testVm.deleteTag("Security")
+        coVerify(exactly = 1) { appPrefs.removeCustomFilterTag("Security") }
+        assertNull(testVm.selectedTag.value)
     }
 }

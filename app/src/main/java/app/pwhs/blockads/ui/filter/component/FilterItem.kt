@@ -93,6 +93,23 @@ fun FilterItem(
                         )
                     }
                 }
+            } else if (filter.category.isNotBlank() && filter.category != FilterList.CATEGORY_AD) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .background(
+                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f),
+                            RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = filter.category,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
 
             if (filter.description.isNotBlank()) {

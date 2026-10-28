@@ -46,19 +46,25 @@ class CustomFilterManager(
      * @return The saved [FilterList] entity on success
      * @throws CustomFilterException on API errors
      */
-    suspend fun addCustomFilter(url: String, displayName: String? = null): Result<FilterList> =
-        addCustomFilter(listOf(url), displayName)
+    suspend fun addCustomFilter(
+        url: String,
+        displayName: String? = null,
+        category: String = FilterList.CATEGORY_AD
+    ): Result<FilterList> =
+        addCustomFilter(listOf(url), displayName, category)
 
     /**
      * Adds a custom filter by compiling or merging one or multiple raw filter list URLs.
      *
      * @param urls The list of raw filter URLs to merge
      * @param displayName Optional display name
+     * @param category Classification tag or category
      * @return The saved [FilterList] entity on success
      */
     suspend fun addCustomFilter(
         urls: List<String>,
         displayName: String? = null,
+        category: String = FilterList.CATEGORY_AD,
         onProgress: ((Int) -> Unit)? = null
     ): Result<FilterList> = withContext(Dispatchers.IO) {
         val cleanUrls = urls.map { it.trim() }.filter { it.isNotBlank() }
@@ -127,7 +133,7 @@ class CustomFilterManager(
                 description = if (cleanUrls.size > 1) "Merged from ${cleanUrls.size} filter lists" else "Custom filter: $finalName",
                 isEnabled = true,
                 isBuiltIn = false,
-                category = FilterList.CATEGORY_AD,
+                category = category.ifBlank { FilterList.CATEGORY_AD },
                 ruleCount = filterInfo.ruleCount,
                 domainCount = filterInfo.ruleCount, // Set domainCount so UI updates immediately
                 bloomUrl = "",   // Will be set after file copy
@@ -216,16 +222,22 @@ class CustomFilterManager(
         filter: FilterList,
         newName: String,
         newUrl: String,
+        newCategory: String? = null,
         onProgress: ((Int) -> Unit)? = null
     ): Result<FilterList> = withContext(Dispatchers.IO) {
         try {
             val trimmedUrl = newUrl.trim()
             val trimmedName = newName.trim()
+            val finalCategory = newCategory?.trim()?.ifBlank { filter.category } ?: filter.category
 
-            // If URL hasn't changed, just update name.
+            // If URL hasn't changed, just update name and category.
             if (trimmedUrl == filter.originalUrl || trimmedUrl == filter.url) {
-                if (trimmedName != filter.name) {
-                    val updated = filter.copy(name = trimmedName, lastUpdated = System.currentTimeMillis())
+                if (trimmedName != filter.name || finalCategory != filter.category) {
+                    val updated = filter.copy(
+                        name = trimmedName,
+                        category = finalCategory,
+                        lastUpdated = System.currentTimeMillis()
+                    )
                     filterListDao.update(updated)
                     onProgress?.invoke(100)
                     return@withContext Result.success(updated)
@@ -293,6 +305,7 @@ class CustomFilterManager(
                 name = finalName,
                 url = trimmedUrl,
                 originalUrl = trimmedUrl,
+                category = finalCategory,
                 ruleCount = ruleCount,
                 domainCount = ruleCount,
                 bloomUrl = if (bloomFile != null) "local://${filter.id}.bloom" else filter.bloomUrl,
@@ -490,7 +503,11 @@ class CustomFilterManager(
      * Downloads a filter list and compiles .trie/.bloom locally using the Go compiler.
      * Used as fallback when the backend API is unreachable.
      */
-    suspend fun addCustomFilterLocally(urls: List<String>, displayName: String?): Result<FilterList> = withContext(Dispatchers.IO) {
+    suspend fun addCustomFilterLocally(
+        urls: List<String>,
+        displayName: String?,
+        category: String = FilterList.CATEGORY_AD
+    ): Result<FilterList> = withContext(Dispatchers.IO) {
         val cleanUrls = urls.map { it.trim() }.filter { it.isNotBlank() }
         if (cleanUrls.isEmpty()) {
             return@withContext Result.failure(CustomFilterException("URL cannot be empty"))
@@ -534,7 +551,7 @@ class CustomFilterManager(
                 description = "Custom filter: $finalName",
                 isEnabled = true,
                 isBuiltIn = false,
-                category = FilterList.CATEGORY_AD,
+                category = category.ifBlank { FilterList.CATEGORY_AD },
                 ruleCount = ruleCount,
                 domainCount = ruleCount,
                 bloomUrl = "",
@@ -570,8 +587,12 @@ class CustomFilterManager(
         }
     }
 
-    suspend fun addCustomFilterLocally(url: String, displayName: String?): Result<FilterList> =
-        addCustomFilterLocally(listOf(url), displayName)
+    suspend fun addCustomFilterLocally(
+        url: String,
+        displayName: String?,
+        category: String = FilterList.CATEGORY_AD
+    ): Result<FilterList> =
+        addCustomFilterLocally(listOf(url), displayName, category)
 
     // ── WorkManager-based local compile ────────────────────────────────
 
@@ -580,7 +601,11 @@ class CustomFilterManager(
      * Inserts a placeholder DB entry immediately so the filter shows in the UI,
      * then the worker updates it with the actual rule count when done.
      */
-    suspend fun enqueueLocalCompile(url: String, name: String) {
+    suspend fun enqueueLocalCompile(
+        url: String,
+        name: String,
+        category: String = FilterList.CATEGORY_AD
+    ) {
         // Insert placeholder so it shows in the list immediately
         val placeholder = FilterList(
             name = name,
@@ -588,7 +613,7 @@ class CustomFilterManager(
             description = "Compiling…",
             isEnabled = true,
             isBuiltIn = false,
-            category = FilterList.CATEGORY_AD,
+            category = category.ifBlank { FilterList.CATEGORY_AD },
             ruleCount = 0,
             domainCount = 0,
             bloomUrl = "local://pending.bloom",

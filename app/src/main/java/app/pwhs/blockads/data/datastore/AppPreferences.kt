@@ -179,6 +179,9 @@ class AppPreferences internal constructor(
     val geoIpCustomUrl: Flow<String> get() = filter.geoIpCustomUrl
     val geoIpAutoUpdate: Flow<Boolean> get() = filter.geoIpAutoUpdate
     val filterBuildMode: Flow<String> get() = filter.filterBuildMode
+    val customFilterTags: Flow<Set<String>> get() = filter.customFilterTags
+    suspend fun addCustomFilterTag(tag: String) = filter.addCustomFilterTag(tag)
+    suspend fun removeCustomFilterTag(tag: String) = filter.removeCustomFilterTag(tag)
 
     // ── WireGuard Flows ──────────────────────────────────────────────────
     val routingMode: Flow<String> get() = wireguard.routingMode

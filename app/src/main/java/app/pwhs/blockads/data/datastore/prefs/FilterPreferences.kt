@@ -25,6 +25,9 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
         val KEY_GEOIP_CUSTOM_URL = stringPreferencesKey("geoip_custom_url")
         val KEY_GEOIP_AUTO_UPDATE = booleanPreferencesKey("geoip_auto_update")
         val KEY_FILTER_BUILD_MODE = stringPreferencesKey("filter_build_mode")
+        val KEY_CUSTOM_FILTER_TAGS = stringSetPreferencesKey("custom_filter_tags")
+
+        val DEFAULT_CUSTOM_TAGS = emptySet<String>()
 
         const val DEFAULT_FILTER_URL =
             "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
@@ -172,6 +175,26 @@ class FilterPreferences(private val dataStore: DataStore<Preferences>) {
             } else {
                 current + url
             }
+        }
+    }
+
+    val customFilterTags: Flow<Set<String>> = dataStore.data.map { prefs ->
+        prefs[KEY_CUSTOM_FILTER_TAGS] ?: DEFAULT_CUSTOM_TAGS
+    }
+
+    suspend fun addCustomFilterTag(tag: String) {
+        val trimmed = tag.trim()
+        if (trimmed.isBlank()) return
+        dataStore.edit { prefs ->
+            val current = prefs[KEY_CUSTOM_FILTER_TAGS] ?: DEFAULT_CUSTOM_TAGS
+            prefs[KEY_CUSTOM_FILTER_TAGS] = current + trimmed
+        }
+    }
+
+    suspend fun removeCustomFilterTag(tag: String) {
+        dataStore.edit { prefs ->
+            val current = prefs[KEY_CUSTOM_FILTER_TAGS] ?: DEFAULT_CUSTOM_TAGS
+            prefs[KEY_CUSTOM_FILTER_TAGS] = current - tag
         }
     }
 }

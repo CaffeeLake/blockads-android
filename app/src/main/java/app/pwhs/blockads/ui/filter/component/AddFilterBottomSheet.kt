@@ -75,16 +75,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import app.pwhs.blockads.R
 import app.pwhs.blockads.data.entities.FilterList
+import app.pwhs.blockads.ui.filter.dialog.CreateFilterTagDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFilterBottomSheet(
     onDismiss: () -> Unit,
-    onAdd: (name: String, url: String, buildLocally: Boolean) -> Unit,
+    onAdd: (name: String, url: String, category: String, buildLocally: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     filterToEdit: FilterList? = null,
-    onEdit: ((filter: FilterList, name: String, url: String, buildLocally: Boolean) -> Unit)? = null,
+    onEdit: ((filter: FilterList, name: String, url: String, category: String, buildLocally: Boolean) -> Unit)? = null,
+    availableTags: Set<String> = emptySet(),
+    defaultCategory: String = "",
+    onCreateTag: ((String) -> Unit)? = null,
     existingUrls: List<String> = emptyList(),
     isValidating: Boolean = false,
     progress: Int? = null,
@@ -96,6 +100,13 @@ fun AddFilterBottomSheet(
 
     val isEditMode = filterToEdit != null
     var name by remember(filterToEdit) { mutableStateOf(filterToEdit?.name ?: "") }
+    var category by remember(filterToEdit, defaultCategory) {
+        mutableStateOf(
+            filterToEdit?.category?.takeIf { it.isNotBlank() && it != FilterList.CATEGORY_AD }
+                ?: defaultCategory
+        )
+    }
+    var showCreateTagDialog by remember { mutableStateOf(false) }
     var urlInput by remember { mutableStateOf("") }
     var urlList by remember(filterToEdit) {
         mutableStateOf(
@@ -177,63 +188,11 @@ fun AddFilterBottomSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Header: Icon + Title + Help '?' toggle button
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .background(
-                                MaterialTheme.colorScheme.primaryContainer,
-                                RoundedCornerShape(14.dp)
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = if (isEditMode) Icons.Outlined.Edit else Icons.AutoMirrored.Outlined.PlaylistAdd,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                    Column {
-                        Text(
-                            text = if (isEditMode) stringResource(R.string.filter_edit_title) else stringResource(R.string.settings_add_filter_title),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = stringResource(R.string.filter_custom),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-
-                // Help Button '?'
-                FilledTonalIconButton(
-                    onClick = { showFormatsHelp = !showFormatsHelp },
-                    colors = if (showFormatsHelp) {
-                        IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    } else {
-                        IconButtonDefaults.filledTonalIconButtonColors()
-                    }
-                ) {
-                    Icon(
-                        imageVector = if (showFormatsHelp) Icons.AutoMirrored.Filled.Help else Icons.AutoMirrored.Outlined.HelpOutline,
-                        contentDescription = stringResource(R.string.filter_supported_formats_title)
-                    )
-                }
-            }
+            AddFilterSheetHeader(
+                isEditMode = isEditMode,
+                showFormatsHelp = showFormatsHelp,
+                onToggleFormatsHelp = { showFormatsHelp = !showFormatsHelp }
+            )
 
             // Expandable Help Card detailing supported formats
             AnimatedVisibility(
@@ -272,6 +231,14 @@ fun AddFilterBottomSheet(
                     capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Next
                 )
+            )
+
+            // Filter Classification Tag Selector
+            FilterTagSelector(
+                tags = availableTags,
+                selectedTag = category,
+                onSelectTag = { category = it },
+                onCreateNewTag = { showCreateTagDialog = true }
             )
 
             // URL Input Row + Add Button
@@ -427,10 +394,11 @@ fun AddFilterBottomSheet(
                     onClick = {
                         if (isValid && !isValidating) {
                             val targetUrls = effectiveUrls.joinToString("\n")
+                            val finalCategory = category.ifBlank { FilterList.CATEGORY_AD }
                             if (filterToEdit != null) {
-                                onEdit?.invoke(filterToEdit, nameTrimmed, targetUrls, buildLocally)
+                                onEdit?.invoke(filterToEdit, nameTrimmed, targetUrls, finalCategory, buildLocally)
                             } else {
-                                onAdd(nameTrimmed, targetUrls, buildLocally)
+                                onAdd(nameTrimmed, targetUrls, finalCategory, buildLocally)
                             }
                         }
                     },
@@ -469,5 +437,17 @@ fun AddFilterBottomSheet(
                 }
             }
         }
+    }
+
+    if (showCreateTagDialog) {
+        CreateFilterTagDialog(
+            onDismiss = { showCreateTagDialog = false },
+            onConfirm = { newTag ->
+                onCreateTag?.invoke(newTag)
+                category = newTag
+                showCreateTagDialog = false
+            },
+            existingTags = availableTags
+        )
     }
 }
