@@ -52,8 +52,8 @@ fun CertificateStatusCard(
         colors = CardDefaults.cardColors(
             containerColor = when (certStatus) {
                 CertStatus.INSTALLED -> MaterialTheme.colorScheme.surface
-                CertStatus.CHECKING -> MaterialTheme.colorScheme.surface
-                CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
+                CertStatus.CHECKING, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.surface
+                CertStatus.NOT_INSTALLED -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
             }
         )
     ) {
@@ -70,8 +70,8 @@ fun CertificateStatusCard(
                         .background(
                             when (certStatus) {
                                 CertStatus.INSTALLED -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                CertStatus.CHECKING -> MaterialTheme.colorScheme.surfaceVariant
-                                CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
+                                CertStatus.CHECKING, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.surfaceVariant
+                                CertStatus.NOT_INSTALLED -> MaterialTheme.colorScheme.error.copy(alpha = 0.15f)
                             }
                         ),
                     contentAlignment = Alignment.Center
@@ -85,13 +85,13 @@ fun CertificateStatusCard(
                                 modifier = Modifier.size(24.dp)
                             )
                         }
-                        CertStatus.CHECKING -> {
+                        CertStatus.CHECKING, CertStatus.UNKNOWN -> {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
                                 strokeWidth = 2.5.dp
                             )
                         }
-                        CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> {
+                        CertStatus.NOT_INSTALLED -> {
                             Icon(
                                 imageVector = Icons.Default.WarningAmber,
                                 contentDescription = null,
@@ -114,14 +114,14 @@ fun CertificateStatusCard(
                     Text(
                         text = when (certStatus) {
                             CertStatus.INSTALLED -> stringResource(R.string.https_filtering_cert_installed)
-                            CertStatus.CHECKING -> stringResource(R.string.https_filtering_cert_checking)
-                            CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> stringResource(R.string.https_filtering_cert_not_installed)
+                            CertStatus.CHECKING, CertStatus.UNKNOWN -> stringResource(R.string.https_filtering_cert_checking)
+                            CertStatus.NOT_INSTALLED -> stringResource(R.string.https_filtering_cert_not_installed)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = when (certStatus) {
                             CertStatus.INSTALLED -> MaterialTheme.colorScheme.primary
-                            CertStatus.CHECKING -> MaterialTheme.colorScheme.onSurfaceVariant
-                            CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.error
+                            CertStatus.CHECKING, CertStatus.UNKNOWN -> MaterialTheme.colorScheme.onSurfaceVariant
+                            CertStatus.NOT_INSTALLED -> MaterialTheme.colorScheme.error
                         },
                         fontWeight = FontWeight.Medium
                     )
@@ -133,8 +133,8 @@ fun CertificateStatusCard(
             Text(
                 text = when (certStatus) {
                     CertStatus.INSTALLED -> androidx.compose.ui.res.stringResource(app.pwhs.blockads.R.string.cert_status_installed)
-                    CertStatus.CHECKING -> androidx.compose.ui.res.stringResource(app.pwhs.blockads.R.string.cert_status_checking)
-                    CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> androidx.compose.ui.res.stringResource(app.pwhs.blockads.R.string.cert_status_not_installed)
+                    CertStatus.CHECKING, CertStatus.UNKNOWN -> androidx.compose.ui.res.stringResource(app.pwhs.blockads.R.string.cert_status_checking)
+                    CertStatus.NOT_INSTALLED -> androidx.compose.ui.res.stringResource(app.pwhs.blockads.R.string.cert_status_not_installed)
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -181,10 +181,10 @@ fun CertificateStatusCard(
                         }
                     }
                 }
-                CertStatus.CHECKING -> {
+                CertStatus.CHECKING, CertStatus.UNKNOWN -> {
                     // Just wait
                 }
-                CertStatus.NOT_INSTALLED, CertStatus.UNKNOWN -> {
+                CertStatus.NOT_INSTALLED -> {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)

@@ -146,6 +146,23 @@ class HttpsFilteringViewModelTest {
     }
 
     @Test
+    fun `enabling when cert is marked not installed emits CertNotInstalled without starting proxy`() {
+        val f = HttpsTestFixtures()
+        val vm = HttpsFilteringViewModel(f.app)
+        vm.awaitLoaded()
+        vm.verifyCert()
+        awaitTrue { vm.certStatus.value == CertStatus.NOT_INSTALLED }
+
+        val events = vm.recordEvents()
+        vm.toggleEnabled(true)
+        awaitTrue { HttpsFilteringEvent.CertNotInstalled in events }
+
+        assertFalse(vm.isEnabled.value)
+        assertFalse(vm.isProxyRunning.value)
+        coVerify(exactly = 0) { f.prefs.setHttpsFilteringEnabled(true) }
+    }
+
+    @Test
     fun `enabling in direct mode leaves routing alone and skips UIDs when none are selected`() {
         val f = HttpsTestFixtures()
         every { f.engine.startStackMitm(any()) } returns TEST_PEM

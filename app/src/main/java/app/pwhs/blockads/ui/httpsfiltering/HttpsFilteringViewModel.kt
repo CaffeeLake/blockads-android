@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.service.AdBlockVpnService
 import app.pwhs.blockads.service.ServiceController
+import app.pwhs.blockads.utils.CaCertHelper
 import app.pwhs.blockads.utils.SystemCertificateInstaller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -104,6 +105,10 @@ class HttpsFilteringViewModel(
                 _events.emit(HttpsFilteringEvent.ProxyVpnActiveConflict)
                 return@launch
             }
+            if (enabled && _certStatus.value == CertStatus.NOT_INSTALLED) {
+                _events.emit(HttpsFilteringEvent.CertNotInstalled)
+                return@launch
+            }
             _isEnabled.value = enabled
             appPrefs.setHttpsFilteringEnabled(enabled)
 
@@ -160,9 +165,11 @@ class HttpsFilteringViewModel(
      * Checks the Android trust store for a certificate matching our
      * Root CA's byte encoding. Works for both User and System (Root) stores.
      */
-    fun verifyCert() {
+    fun verifyCert(showLoading: Boolean = false) {
         viewModelScope.launch {
-            _certStatus.value = CertStatus.CHECKING
+            if (showLoading || _certStatus.value == CertStatus.UNKNOWN) {
+                _certStatus.value = CertStatus.CHECKING
+            }
             val installed = withContext(Dispatchers.IO) { checkCertInTrustStore() }
             _certStatus.value = if (installed) CertStatus.INSTALLED else CertStatus.NOT_INSTALLED
         }
@@ -170,67 +177,21 @@ class HttpsFilteringViewModel(
 
     /**
      * Checks if our Root CA is installed in the Android trust store (user or system).
-     *
-     * Approach: Load the "AndroidCAStore" KeyStore, iterate all aliases,
-     * and compare each certificate's raw DER bytes with our CA's bytes.
      */
     fun checkCertInTrustStore(): Boolean {
-        try {
-            // Get our CA cert PEM
-            val certDir = getApplication<Application>().filesDir.absolutePath
-            var caPem = engine.getMitmCACert(certDir)
-            if (caPem.isNullOrEmpty()) {
-                caPem = engine.startStackMitm(certDir)
-                if (caPem.isNotEmpty()) {
-                    _caCertPem.value = caPem
-                }
-            }
-            if (caPem.isNullOrEmpty()) {
-                Timber.d("Cert verification: no CA cert generated yet")
-                return false
-            }
-
-            // Parse our CA cert
-            val certFactory = java.security.cert.CertificateFactory.getInstance("X.509")
-            val ourCert = certFactory.generateCertificate(
-                caPem.byteInputStream()
-            ) as java.security.cert.X509Certificate
-            val ourEncoded = ourCert.encoded
-
-            // Check Android trust store (contains both "user:" and "system:" certs)
-            val ks = java.security.KeyStore.getInstance("AndroidCAStore")
-            ks.load(null)
-
-            for (alias in ks.aliases()) {
-                val cert = ks.getCertificate(alias) as? java.security.cert.X509Certificate
-                    ?: continue
-
-                if (cert.encoded.contentEquals(ourEncoded)) {
-                    val isSystem = alias.startsWith("system:")
-                    Timber.d("Cert verification: found matching CA in trust store (alias=$alias, isSystem=$isSystem)")
-                    return true
-                }
-            }
-
-            if (SystemCertificateInstaller.isModuleInstalled(caPem)) {
-                Timber.d("Cert verification: found matching CA in Magisk module")
-                return true
-            }
-
-            Timber.d("Cert verification: CA not found in user/system trust store")
-            return false
-        } catch (e: Exception) {
-            Timber.e(e, "Cert verification failed")
-            return false
-        }
+        val caPem = ensureCaCertPem()
+        return CaCertHelper.checkCertInTrustStore(caPem)
     }
 
     private fun ensureCaCertPem(): String? {
         var pem = _caCertPem.value
         if (pem.isNullOrEmpty()) {
             val certDir = getApplication<Application>().filesDir.absolutePath
-            pem = engine.startStackMitm(certDir)
-            if (pem.isNotEmpty()) _caCertPem.value = pem
+            pem = engine.getMitmCACert(certDir)
+            if (pem.isNullOrEmpty()) {
+                pem = engine.startStackMitm(certDir)
+            }
+            if (!pem.isNullOrEmpty()) _caCertPem.value = pem
         }
         return pem?.takeIf { it.isNotEmpty() }
     }
@@ -345,16 +306,7 @@ class HttpsFilteringViewModel(
     /**
      * Open Android Security Settings where user can install the certificate.
      */
-    fun createSecuritySettingsIntent(): Intent {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Android 11+: direct to "Install from storage"
-            Intent("android.settings.SECURITY_SETTINGS")
-        } else {
-            Intent("android.credentials.INSTALL").apply {
-                type = "application/x-x509-ca-cert"
-            }
-        }
-    }
+    fun createSecuritySettingsIntent(): Intent = CaCertHelper.createSecuritySettingsIntent()
 
     // ── Internal ─────────────────────────────────────────────────────────
 

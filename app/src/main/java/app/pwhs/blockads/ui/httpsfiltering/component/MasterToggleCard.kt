@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -36,11 +37,17 @@ fun MasterToggleCard(
     isProxyRunning: Boolean,
     onToggle: (Boolean) -> Unit,
     isToggleEnabled: Boolean = true,
+    isChecking: Boolean = false,
     disabledMessage: String? = null
 ) {
     val active = isEnabled && isProxyRunning && isToggleEnabled
+    val hasDisabledError = !isToggleEnabled && !isChecking && disabledMessage != null
     val statusColor by animateColorAsState(
-        targetValue = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+        targetValue = when {
+            active -> MaterialTheme.colorScheme.primary
+            hasDisabledError -> MaterialTheme.colorScheme.error
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        },
         label = "statusColor"
     )
 
@@ -66,21 +73,34 @@ fun MasterToggleCard(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = if (active) Icons.Default.CheckCircle else Icons.Default.Error,
-                        contentDescription = null,
-                        tint = statusColor,
-                        modifier = Modifier.size(14.dp)
-                    )
+                    if (isChecking) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(13.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    } else {
+                        Icon(
+                            imageVector = when {
+                                active -> Icons.Default.CheckCircle
+                                hasDisabledError -> Icons.Default.Error
+                                else -> Icons.Default.CheckCircle
+                            },
+                            contentDescription = null,
+                            tint = statusColor,
+                            modifier = Modifier.size(14.dp)
+                        )
+                    }
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = when {
+                            isChecking -> stringResource(R.string.https_filtering_cert_checking)
                             !isToggleEnabled && disabledMessage != null -> disabledMessage
                             active -> stringResource(R.string.https_filtering_status_active)
                             else -> stringResource(R.string.https_filtering_status_inactive)
                         },
                         style = MaterialTheme.typography.bodySmall,
-                        color = statusColor
+                        color = if (isChecking) MaterialTheme.colorScheme.primary else statusColor
                     )
                 }
             }

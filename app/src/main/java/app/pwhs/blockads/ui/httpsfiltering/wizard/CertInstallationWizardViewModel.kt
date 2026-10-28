@@ -12,6 +12,7 @@ import app.pwhs.blockads.R
 import app.pwhs.blockads.data.datastore.AppPreferences
 import app.pwhs.blockads.service.ServiceController
 import app.pwhs.blockads.ui.httpsfiltering.CertStatus
+import app.pwhs.blockads.utils.CaCertHelper
 import app.pwhs.blockads.utils.DeviceManager
 import app.pwhs.blockads.utils.SystemCertificateInstaller
 import kotlinx.coroutines.Dispatchers
@@ -28,9 +29,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.File
-import java.security.KeyStore
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 
 class CertInstallationWizardViewModel(
     application: Application
@@ -98,7 +96,7 @@ class CertInstallationWizardViewModel(
             if (caPem.isNullOrEmpty()) {
                 caPem = engine.startStackMitm(certDir)
             }
-            val installed = checkCertInTrustStore(caPem)
+            val installed = CaCertHelper.checkCertInTrustStore(caPem)
             _uiState.update {
                 it.copy(
                     certStatus = if (installed) CertStatus.INSTALLED else CertStatus.NOT_INSTALLED
@@ -206,13 +204,7 @@ class CertInstallationWizardViewModel(
     }
 
     private fun openSecuritySettings() {
-        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Intent("android.settings.SECURITY_SETTINGS")
-        } else {
-            Intent("android.credentials.INSTALL").apply {
-                type = "application/x-x509-ca-cert"
-            }
-        }
+        val intent = CaCertHelper.createSecuritySettingsIntent()
         viewModelScope.launch {
             _uiEffect.emit(CertInstallationWizardUiEffect.OpenSettings(intent))
         }
@@ -223,39 +215,10 @@ class CertInstallationWizardViewModel(
             _uiState.update { it.copy(certStatus = CertStatus.CHECKING) }
             val certDir = getApplication<Application>().filesDir.absolutePath
             val caPem = engine.getMitmCACert(certDir)
-            val installed = withContext(Dispatchers.IO) { checkCertInTrustStore(caPem) }
+            val installed = withContext(Dispatchers.IO) { CaCertHelper.checkCertInTrustStore(caPem) }
             _uiState.update {
                 it.copy(certStatus = if (installed) CertStatus.INSTALLED else CertStatus.NOT_INSTALLED)
             }
-        }
-    }
-
-    private fun checkCertInTrustStore(caPem: String?): Boolean {
-        if (caPem.isNullOrEmpty()) return false
-        return try {
-            val certFactory = CertificateFactory.getInstance("X.509")
-            val ourCert = certFactory.generateCertificate(caPem.byteInputStream()) as X509Certificate
-            val ourEncoded = ourCert.encoded
-
-            val ks = KeyStore.getInstance("AndroidCAStore")
-            ks.load(null)
-
-            for (alias in ks.aliases()) {
-                val cert = ks.getCertificate(alias) as? X509Certificate ?: continue
-                if (cert.encoded.contentEquals(ourEncoded)) {
-                    Timber.d("Wizard: found matching CA in trust store (alias=$alias)")
-                    return true
-                }
-            }
-
-            if (SystemCertificateInstaller.isModuleInstalled(caPem)) {
-                Timber.d("Wizard: found matching CA in Magisk module")
-                return true
-            }
-            false
-        } catch (e: Exception) {
-            Timber.e(e, "Wizard: verification failed")
-            false
         }
     }
 

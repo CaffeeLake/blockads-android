@@ -38,4 +38,6 @@ sealed class HttpsFilteringEvent {
     data object WireGuardDisabledForHttps : HttpsFilteringEvent()
     /** Cannot enable HTTPS filtering while Proxy & VPN mode is active. */
     data object ProxyVpnActiveConflict : HttpsFilteringEvent()
+    /** Cannot enable HTTPS filtering because CA certificate is not installed. */
+    data object CertNotInstalled : HttpsFilteringEvent()
 }

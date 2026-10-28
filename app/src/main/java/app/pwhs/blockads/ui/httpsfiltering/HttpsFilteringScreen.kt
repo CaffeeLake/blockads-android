@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,6 +47,9 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.pwhs.blockads.R
 import app.pwhs.blockads.ui.httpsfiltering.component.BrowserRow
@@ -76,22 +80,30 @@ fun HttpsFilteringScreen(
 
     val wgDisabledMsg = stringResource(R.string.https_filtering_wireguard_disabled)
     val proxyVpnConflictMsg = stringResource(R.string.https_filtering_proxy_vpn_conflict)
+    val certNotInstalledMsg = stringResource(R.string.https_filtering_cert_required_desc)
+    val certNotInstalledErrorMsg = stringResource(R.string.https_filtering_cert_not_installed_error)
     val certSavedLegacyMsg = stringResource(R.string.https_filtering_cert_saved_legacy)
     val proxyStartedMsg = stringResource(R.string.https_filtering_started)
     val proxyStoppedMsg = stringResource(R.string.https_filtering_stopped)
 
-    // Re-verify when the user returns from Android's Security Settings.
-    // They likely just installed (or removed) the certificate.
+    // Re-verify when the user returns from Android's Security Settings or the app resumes
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         viewModel.verifyCert()
     }
 
-    // Auto-verify on first composition when filtering is on, so users
-    // see the install status without having to tap the button.
-    LaunchedEffect(isEnabled) {
-        if (isEnabled) viewModel.verifyCert()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.verifyCert()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     // Collect one-shot events
@@ -133,6 +145,10 @@ fun HttpsFilteringScreen(
                 is HttpsFilteringEvent.ProxyVpnActiveConflict -> {
                     snackbarHostState.showSnackbar(proxyVpnConflictMsg)
                 }
+
+                is HttpsFilteringEvent.CertNotInstalled -> {
+                    snackbarHostState.showSnackbar(certNotInstalledErrorMsg)
+                }
             }
         }
     }
@@ -168,6 +184,9 @@ fun HttpsFilteringScreen(
                 CircularProgressIndicator()
             }
         } else {
+            val isCertInstalled = certStatus == CertStatus.INSTALLED
+            val isCheckingCert = certStatus == CertStatus.CHECKING
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -181,8 +200,13 @@ fun HttpsFilteringScreen(
                         isEnabled = isEnabled,
                         isProxyRunning = isProxyRunning,
                         onToggle = { viewModel.toggleEnabled(it) },
-                        isToggleEnabled = !isProxyVpnActive,
-                        disabledMessage = proxyVpnConflictMsg
+                        isToggleEnabled = if (isEnabled) true else (!isProxyVpnActive && isCertInstalled),
+                        isChecking = isCheckingCert,
+                        disabledMessage = when {
+                            isProxyVpnActive -> proxyVpnConflictMsg
+                            !isCertInstalled -> certNotInstalledMsg
+                            else -> null
+                        }
                     )
                 }
 
@@ -196,7 +220,7 @@ fun HttpsFilteringScreen(
                     CertificateStatusCard(
                         certStatus = certStatus,
                         onOpenWizard = onNavigateToWizard,
-                        onVerifyCert = { viewModel.verifyCert() }
+                        onVerifyCert = { viewModel.verifyCert(showLoading = true) }
                     )
                 }
 

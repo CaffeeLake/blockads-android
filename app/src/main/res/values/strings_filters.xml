@@ -90,6 +90,8 @@
     <string name="https_filtering_wireguard_disabled">WireGuard disabled (incompatible with HTTPS filtering)</string>
     <string name="https_filtering_proxy_vpn_conflict">Cannot enable HTTPS filtering while Proxy &amp; VPN mode is active</string>
     <string name="https_filtering_cert_saved_downloads">✅ Certificate saved to Downloads/%1$s</string>
+    <string name="https_filtering_cert_required_desc">Install CA certificate to enable</string>
+    <string name="https_filtering_cert_not_installed_error">CA certificate must be installed before enabling HTTPS filtering</string>
     <string name="https_filtering_cert_saved_legacy">Certificate saved. Install from file manager.</string>
     <string name="https_filtering_started">HTTPS filtering started</string>
     <string name="https_filtering_stopped">HTTPS filtering stopped</string>
