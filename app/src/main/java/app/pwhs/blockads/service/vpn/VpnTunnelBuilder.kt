@@ -230,7 +230,8 @@ class VpnTunnelBuilder(
                 b
             }
 
-            for (appPackage in whitelistedApps) {
+            val allExcludedApps = (whitelistedApps + vpnService.packageName)
+            for (appPackage in allExcludedApps) {
                 try {
                     builder.addDisallowedApplication(appPackage)
                     Timber.d("Excluded from VPN: $appPackage")

@@ -321,13 +321,17 @@ class FilterListRepository(
             }
         }
 
-    suspend fun forceUpdateAllEnabledFilters(): Result<Int> = withContext(Dispatchers.IO) {
+    suspend fun forceUpdateAllEnabledFilters(
+        onProgress: ((completed: Int, total: Int) -> Unit)? = null
+    ): Result<Int> = withContext(Dispatchers.IO) {
         try {
             // Sync the latest metadata for all built-in filters to the DB
             fetchAndSyncRemoteFilterLists()
 
             // Fetch the enabled built-in filters (now with updated ruleCounts and URLs)
             val enabledBuiltIn = filterListDao.getEnabled().filter { it.isBuiltIn }
+            val total = enabledBuiltIn.size
+            var completed = 0
 
             var totalCount = 0
 
@@ -344,6 +348,8 @@ class FilterListRepository(
                 } else {
                     Timber.e("Failed to force update built-in filter: ${filter.name}")
                 }
+                completed++
+                onProgress?.invoke(completed, total)
             }
 
             // Reload into the Go engine

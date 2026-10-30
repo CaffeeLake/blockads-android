@@ -307,15 +307,21 @@ class FilterSetupViewModel(
             var totalCount = 0
             var hasLocalFilters = false
 
+            val enabledBuiltIn = filterListDao.getEnabled().filter { it.isBuiltIn }
             val customFilters = filterListDao.getAllNonBuiltIn().filter { it.isEnabled }
-            val totalSteps = 1 + customFilters.size
+            val totalSteps = (enabledBuiltIn.size + customFilters.size).coerceAtLeast(1)
             var completedSteps = 0
 
-            // 1. Update remote built-in filters
-            val result = filterRepo.forceUpdateAllEnabledFilters()
+            // 1. Update remote built-in filters with per-filter progress
+            val result = filterRepo.forceUpdateAllEnabledFilters(
+                onProgress = { completed, _ ->
+                    completedSteps = completed
+                    _updateProgress.value = ((completedSteps * 100) / totalSteps).coerceIn(0, 100)
+                }
+            )
             result.onSuccess { count -> totalCount += count }
-            completedSteps++
-            _updateProgress.value = (completedSteps * 100) / totalSteps
+            completedSteps = enabledBuiltIn.size
+            _updateProgress.value = ((completedSteps * 100) / totalSteps).coerceIn(0, 100)
 
             // 2. Update all enabled custom filters
             for (filter in customFilters) {

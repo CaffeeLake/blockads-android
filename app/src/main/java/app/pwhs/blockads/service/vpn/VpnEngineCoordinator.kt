@@ -3,6 +3,7 @@ package app.pwhs.blockads.service.vpn
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.LinkProperties
+import android.net.NetworkCapabilities
 import android.os.ParcelFileDescriptor
 import app.pwhs.blockads.data.dao.FirewallRuleDao
 import app.pwhs.blockads.data.datastore.AppPreferences
@@ -238,7 +239,7 @@ class VpnEngineCoordinator(
         val onTrustedWithSystemDns = isTrustedNetworkWithSystemDns()
         if (providerId == "system" || onTrustedWithSystemDns) {
             val newDns = linkProperties?.dnsServers?.mapNotNull { it.hostAddress }
-                ?.filter { it.isNotEmpty() } ?: emptyList()
+                ?.filter { it.isNotEmpty() && !isInternalVpnDns(it) } ?: emptyList()
             val configuredFallback = appPrefs.fallbackDns.first()
             val (primary, fallback) = resolveSystemDnsPair(newDns, configuredFallback)
             Timber.d("Network LinkProperties changed, hot-reloading System DNS primary: $primary, fallback: $fallback")
@@ -268,19 +269,24 @@ class VpnEngineCoordinator(
         }
     }
 
+    private fun isInternalVpnDns(ip: String): Boolean {
+        return ip == "100.64.100.1" || ip == "fd00::1" || ip.startsWith("100.64.100.") || ip.startsWith("fd00:")
+    }
+
     private fun resolveSystemDnsPair(dnsList: List<String>, configuredFallback: String): Pair<String, String> {
-        if (dnsList.isEmpty()) {
+        val filtered = dnsList.filter { !isInternalVpnDns(it) }
+        if (filtered.isEmpty()) {
             return Pair("8.8.8.8", configuredFallback.ifEmpty { "1.1.1.1" })
         }
-        val ipv4List = dnsList.filter { !it.contains(":") }
-        val ipv6List = dnsList.filter { it.contains(":") }
+        val ipv4List = filtered.filter { !it.contains(":") }
+        val ipv6List = filtered.filter { it.contains(":") }
 
         // Prefer IPv4 as primary for stability when ISP doesn't prefer or support IPv6
-        val primary = ipv4List.firstOrNull() ?: dnsList.first()
+        val primary = ipv4List.firstOrNull() ?: filtered.first()
         val fallback = if (primary in ipv4List) {
             ipv4List.getOrNull(1) ?: ipv6List.firstOrNull() ?: configuredFallback.ifEmpty { "1.1.1.1" }
         } else {
-            ipv4List.firstOrNull() ?: dnsList.getOrNull(1) ?: configuredFallback.ifEmpty { "1.1.1.1" }
+            ipv4List.firstOrNull() ?: filtered.getOrNull(1) ?: configuredFallback.ifEmpty { "1.1.1.1" }
         }
         return Pair(primary, fallback)
     }
@@ -288,8 +294,40 @@ class VpnEngineCoordinator(
     private fun getSystemDnsServers(context: Context): List<String> {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-        val activeNetwork = connectivityManager?.activeNetwork ?: return emptyList()
-        val linkProperties = connectivityManager.getLinkProperties(activeNetwork) ?: return emptyList()
-        return linkProperties.dnsServers.mapNotNull { it.hostAddress }.filter { it.isNotEmpty() }
+                ?: return emptyList()
+
+        // 1. Prefer physical networks (WiFi / Cellular) that are NOT VPN
+        try {
+            val physicalNetworks = connectivityManager.allNetworks.filter { network ->
+                val caps = connectivityManager.getNetworkCapabilities(network) ?: return@filter false
+                caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            }
+
+            for (network in physicalNetworks) {
+                val lp = connectivityManager.getLinkProperties(network) ?: continue
+                val servers = lp.dnsServers.mapNotNull { it.hostAddress }
+                    .filter { it.isNotEmpty() && !isInternalVpnDns(it) }
+                if (servers.isNotEmpty()) {
+                    return servers
+                }
+            }
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to query physical networks for DNS")
+        }
+
+        // 2. Fallback to activeNetwork (if not the synthetic VPN DNS)
+        val activeNetwork = connectivityManager.activeNetwork
+        if (activeNetwork != null) {
+            val lp = connectivityManager.getLinkProperties(activeNetwork)
+            val servers = lp?.dnsServers?.mapNotNull { it.hostAddress }
+                ?.filter { it.isNotEmpty() && !isInternalVpnDns(it) }
+                ?: emptyList()
+            if (servers.isNotEmpty()) {
+                return servers
+            }
+        }
+
+        return emptyList()
     }
 }

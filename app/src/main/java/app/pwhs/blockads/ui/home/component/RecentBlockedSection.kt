@@ -153,7 +153,8 @@ fun RecentBlockedSection(
                         val recentAppIcon: Drawable? = remember(entry.packageName) {
                             if (entry.packageName.isNotEmpty() && entry.packageName.contains(".")) {
                                 try {
-                                    context.packageManager.getApplicationIcon(entry.packageName)
+                                    val icon = context.packageManager.getApplicationIcon(entry.packageName)
+                                    if (icon.intrinsicWidth > 0 && icon.intrinsicHeight > 0) icon else null
                                 } catch (_: Exception) {
                                     null
                                 }

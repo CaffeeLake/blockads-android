@@ -169,7 +169,7 @@ class FilterSetupViewModelTest {
         val remote = custom(3)
         val local = custom(4, local = true)
         val disabled = custom(5, enabled = false)
-        coEvery { repo.forceUpdateAllEnabledFilters() } returns Result.success(100)
+        coEvery { repo.forceUpdateAllEnabledFilters(any()) } returns Result.success(100)
         coEvery { dao.getAllNonBuiltIn() } returns listOf(remote, local, disabled)
         coEvery { customFilters.updateCustomFilter(remote) } returns Result.success(remote.copy(ruleCount = 7))
         return Triple(remote, local, disabled)
@@ -192,7 +192,7 @@ class FilterSetupViewModelTest {
     @Test
     fun `update all without local lists reports the summed built-in and custom counts`() = runTest {
         val remote = custom(3)
-        coEvery { repo.forceUpdateAllEnabledFilters() } returns Result.success(100)
+        coEvery { repo.forceUpdateAllEnabledFilters(any()) } returns Result.success(100)
         coEvery { dao.getAllNonBuiltIn() } returns listOf(remote)
         coEvery { customFilters.updateCustomFilter(remote) } returns Result.success(remote.copy(ruleCount = 7))
         vm.events.test {
@@ -214,7 +214,7 @@ class FilterSetupViewModelTest {
 
     @Test
     fun `update all reports failure when nothing updated`() = runTest {
-        coEvery { repo.forceUpdateAllEnabledFilters() } returns Result.failure(RuntimeException("offline"))
+        coEvery { repo.forceUpdateAllEnabledFilters(any()) } returns Result.failure(RuntimeException("offline"))
         coEvery { dao.getAllNonBuiltIn() } returns emptyList()
         vm.events.test {
             vm.updateAllFilters()
@@ -225,7 +225,7 @@ class FilterSetupViewModelTest {
     @Test
     fun `update all still reports custom successes when the built-in update fails`() = runTest {
         val remote = custom(3)
-        coEvery { repo.forceUpdateAllEnabledFilters() } returns Result.failure(RuntimeException("offline"))
+        coEvery { repo.forceUpdateAllEnabledFilters(any()) } returns Result.failure(RuntimeException("offline"))
         coEvery { dao.getAllNonBuiltIn() } returns listOf(remote)
         coEvery { customFilters.updateCustomFilter(remote) } returns Result.success(remote.copy(ruleCount = 5))
         vm.events.test {

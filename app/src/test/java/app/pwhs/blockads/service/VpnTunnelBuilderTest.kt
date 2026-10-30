@@ -112,7 +112,7 @@ class VpnTunnelBuilderTest {
         assertEquals(listOf("BlockAds"), sessions)
         assertEquals(1350, mtu)
         assertTrue(routes.containsAll(listOf("0.0.0.0/0", "::/0", "100.64.100.1/32", "fd00::1/128")))
-        assertEquals(listOf("com.bank"), disallowed)
+        assertEquals(listOf("com.bank", "app.pwhs.blockads"), disallowed)
         assertEquals(false, bypass)
     }
 
