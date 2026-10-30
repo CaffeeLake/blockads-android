@@ -45,6 +45,7 @@ import app.pwhs.blockads.ui.theme.DangerRed
 import app.pwhs.blockads.ui.theme.TextSecondary
 import app.pwhs.blockads.ui.theme.WhitelistAmber
 import app.pwhs.blockads.utils.formatTimestamp
+import app.pwhs.blockads.utils.toDisplayInfo
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +62,11 @@ fun DomainDetailBottomSheet(
     viewModel: app.pwhs.blockads.ui.logs.LogViewModel,
     modifier: Modifier = Modifier
 ) {
+    val unknownLabel = stringResource(R.string.log_unknown_app)
+    val displayInfo = remember(entry, unknownLabel) {
+        entry.toDisplayInfo(unknownLabel)
+    }
+
     val statusColor = when {
         isWhitelisted -> WhitelistAmber
         entry.isBlocked -> DangerRed
@@ -121,7 +127,7 @@ fun DomainDetailBottomSheet(
                 }
                 Column {
                     Text(
-                        text = entry.domain,
+                        text = displayInfo.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
@@ -153,7 +159,7 @@ fun DomainDetailBottomSheet(
                 ) {
                     DetailRow(
                         label = stringResource(R.string.log_detail_query_type),
-                        value = entry.queryType
+                        value = displayInfo.protocolOrType
                     )
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     DetailRow(
@@ -166,11 +172,11 @@ fun DomainDetailBottomSheet(
                         label = stringResource(R.string.log_detail_timestamp),
                         value = formatTimestamp(entry.timestamp)
                     )
-                    if (entry.appName.isNotEmpty()) {
+                    if (displayInfo.displayAppName.isNotEmpty()) {
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                         DetailRow(
                             label = stringResource(R.string.log_detail_app),
-                            value = entry.appName
+                            value = displayInfo.displayAppName
                         )
                     }
                     if (entry.resolvedIp.isNotEmpty()) {

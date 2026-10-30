@@ -63,17 +63,6 @@ object IpDomainResolver {
         if (extractedIp.isNotEmpty()) {
             val cached = ipToDomain.get(extractedIp)
             if (cached != null) return cached
-
-            // 3. Try reverse DNS lookup (non-blocking when called in background)
-            try {
-                val host = InetAddress.getByName(extractedIp).hostName
-                if (!host.isNullOrBlank() && host != extractedIp) {
-                    ipToDomain.put(extractedIp, host)
-                    return host
-                }
-            } catch (_: Exception) {
-                // Ignore network resolution failures
-            }
         }
 
         return domain

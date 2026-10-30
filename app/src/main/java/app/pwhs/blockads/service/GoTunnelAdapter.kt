@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
 import android.system.OsConstants
+import app.pwhs.blockads.R
 import app.pwhs.blockads.data.dao.DnsLogDao
 import app.pwhs.blockads.data.entities.DnsLogEntry
 import app.pwhs.blockads.data.repository.FilterListRepository
@@ -202,30 +203,60 @@ class GoTunnelAdapter(
      */
     private fun setupLogCallback() {
         engine.setConnLogEnabled(recordLogProvider())
+        val ownPackage = context.packageName
+        val ownAppName = runCatching {
+            val pm = context.packageManager
+            pm.getApplicationLabel(context.applicationInfo).toString()
+        }.getOrDefault("BlockAds")
+
         engine.setLogCallback { domain, blocked, queryType, responseTimeMs, packageNameOrAppName, resolvedIP, blockedBy ->
             if (!recordLogProvider()) return@setLogCallback
+            if (packageNameOrAppName == ownPackage || packageNameOrAppName == ownAppName) return@setLogCallback
 
             scope.launch(Dispatchers.IO) {
                 try {
-                    val friendlyAppName = if (packageNameOrAppName.contains(".")) {
-                        runCatching {
-                            val pm = context.packageManager
-                            pm.getApplicationLabel(pm.getApplicationInfo(packageNameOrAppName, 0)).toString()
-                        }.getOrDefault(packageNameOrAppName)
-                    } else {
-                        packageNameOrAppName
+                    val (friendlyAppName, cleanPackageName) = when {
+                        packageNameOrAppName == "uid:0" || packageNameOrAppName.equals("unknown", ignoreCase = true) -> {
+                            context.getString(R.string.log_unknown_app) to ""
+                        }
+                        packageNameOrAppName.startsWith("uid:") -> {
+                            val uid = packageNameOrAppName.removePrefix("uid:").toIntOrNull()
+                            if (uid != null) {
+                                val pkg = appNameResolver.getPackageNameForUid(uid)
+                                val name = appNameResolver.getAppNameForUid(uid)
+                                (if (name.isNotEmpty() && name != "uid:$uid") name else context.getString(R.string.log_unknown_app)) to pkg
+                            } else {
+                                context.getString(R.string.log_unknown_app) to ""
+                            }
+                        }
+                        packageNameOrAppName.contains(".") -> {
+                            val label = runCatching {
+                                val pm = context.packageManager
+                                pm.getApplicationLabel(pm.getApplicationInfo(packageNameOrAppName, 0)).toString()
+                            }.getOrDefault(packageNameOrAppName)
+                            label to packageNameOrAppName
+                        }
+                        else -> {
+                            packageNameOrAppName to ""
+                        }
                     }
 
                     val resolvedDomain = IpDomainResolver.resolve(domain, resolvedIP)
                     IpDomainResolver.remember(domain, resolvedIP)
                     val countryCode = app.pwhs.blockads.data.geoip.GeoIpLookup.getCountryCode(resolvedIP, resolvedDomain)
+                    val isConnection = blockedBy == "connection" || domain.startsWith("TCP ", ignoreCase = true) || domain.startsWith("UDP ", ignoreCase = true)
+                    val effectiveQueryType = if (isConnection) {
+                        if (domain.startsWith("UDP ", ignoreCase = true)) "UDP" else "TCP"
+                    } else {
+                        dnsQueryTypeToString(queryType.toInt())
+                    }
                     val entry = DnsLogEntry(
                         domain = resolvedDomain,
                         isBlocked = blocked,
-                        queryType = dnsQueryTypeToString(queryType.toInt()),
+                        queryType = effectiveQueryType,
                         responseTimeMs = responseTimeMs,
                         appName = friendlyAppName,
-                        packageName = packageNameOrAppName,
+                        packageName = cleanPackageName,
                         resolvedIp = resolvedIP,
                         blockedBy = blockedBy,
                         countryCode = countryCode,

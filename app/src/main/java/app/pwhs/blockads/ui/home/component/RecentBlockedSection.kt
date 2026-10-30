@@ -43,6 +43,7 @@ import app.pwhs.blockads.ui.theme.DangerRed
 import app.pwhs.blockads.ui.theme.SecurityOrange
 import app.pwhs.blockads.ui.theme.TextSecondary
 import app.pwhs.blockads.utils.formatTimeSince
+import app.pwhs.blockads.utils.toDisplayInfo
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
@@ -158,6 +159,10 @@ fun RecentBlockedSection(
                                 }
                             } else null
                         }
+                        val unknownLabel = stringResource(R.string.log_unknown_app)
+                        val displayInfo = remember(entry, unknownLabel) {
+                            entry.toDisplayInfo(unknownLabel)
+                        }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -168,7 +173,7 @@ fun RecentBlockedSection(
                             if (recentAppIcon != null) {
                                 Image(
                                     painter = rememberDrawablePainter(drawable = recentAppIcon),
-                                    contentDescription = entry.appName,
+                                    contentDescription = displayInfo.displayAppName,
                                     modifier = Modifier
                                         .size(24.dp)
                                         .clip(RoundedCornerShape(4.dp))
@@ -184,15 +189,15 @@ fun RecentBlockedSection(
                             Spacer(modifier = Modifier.width(12.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = entry.domain,
+                                    text = displayInfo.title,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onBackground,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
-                                if (entry.appName.isNotEmpty()) {
+                                if (displayInfo.displayAppName.isNotEmpty()) {
                                     Text(
-                                        text = entry.appName,
+                                        text = displayInfo.displayAppName,
                                         style = MaterialTheme.typography.labelSmall,
                                         color = TextSecondary,
                                         maxLines = 1,
